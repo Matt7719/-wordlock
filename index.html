@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>WORDLOCK</title>
 
 <style>
 :root{
-  --cream:#f5f0e5;
+  --cream:#f5f0e6;
   --ink:#171717;
   --paper:#fffdf8;
-  --green:#79a77b;
-  --gold:#d8aa43;
-  --muted:#9d998f;
+  --green:#87ad86;
+  --gold:#d6a63f;
+  --muted:#817d74;
+  --metal:#292929;
 }
 
 *{
@@ -31,97 +32,160 @@ body{
 }
 
 .game{
-  width:min(100%,460px);
-  padding:28px 18px 45px;
+  width:min(100%,450px);
+  padding:25px 18px 45px;
   text-align:center;
 }
 
 h1{
-  margin:4px 0 2px;
-  font-size:38px;
+  margin:2px 0 2px;
+  font-size:36px;
   letter-spacing:5px;
-  font-weight:900;
+  font-weight:950;
 }
 
 .subhead{
-  font-size:12px;
+  color:#7b776f;
+  font-size:11px;
   font-weight:800;
   letter-spacing:2px;
+  margin-bottom:14px;
+}
+
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+  margin-bottom:15px;
+}
+
+.stat{
+  font-size:11px;
+  letter-spacing:1px;
   color:#777269;
-  margin-bottom:20px;
+  font-weight:750;
 }
 
-/* ---------- LOCK ---------- */
+.stat strong{
+  display:block;
+  color:var(--ink);
+  font-size:19px;
+  margin-bottom:1px;
+}
 
-.lock-area{
+.clue-card{
+  background:rgba(255,255,255,.56);
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:15px;
+  padding:12px 15px 13px;
+  margin-bottom:17px;
+}
+
+.clue-count{
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:1.7px;
+  color:#8a857c;
+  margin-bottom:4px;
+}
+
+.clue{
+  font-size:22px;
+  font-weight:800;
+}
+
+/* =========================
+   THREE HORIZONTAL LOCKS
+   ========================= */
+
+.locks{
   position:relative;
-  width:100%;
-  padding-top:67px;
-  margin-bottom:20px;
+  margin:6px 0 17px;
+  padding:4px 0;
 }
 
-.shackle{
+.lock-row{
+  position:relative;
+  height:90px;
+  margin:12px 0;
+  display:flex;
+  align-items:center;
+}
+
+.lock-bar{
   position:absolute;
-  z-index:0;
-  width:154px;
-  height:118px;
-  left:50%;
-  top:4px;
-  transform:translateX(-50%);
-  border:15px solid var(--ink);
-  border-bottom:0;
-  border-radius:78px 78px 0 0;
+  left:3px;
+  right:3px;
+  height:70px;
+  top:10px;
+  background:var(--metal);
+  border-radius:35px;
+  box-shadow:
+    0 5px 0 rgba(0,0,0,.14),
+    inset 0 1px 0 rgba(255,255,255,.08);
   transition:
-    transform .55s cubic-bezier(.2,.9,.3,1.2),
-    top .55s cubic-bezier(.2,.9,.3,1.2);
+    transform .5s cubic-bezier(.2,.8,.25,1.15),
+    opacity .4s;
 }
 
-.lock-area[data-progress="1"] .shackle{
-  top:-3px;
+.lock-row.cracked .lock-bar{
+  transform:translateX(13px);
 }
 
-.lock-area[data-progress="2"] .shackle{
-  top:-11px;
+.lock-end{
+  position:absolute;
+  width:28px;
+  height:28px;
+  top:31px;
+  border:5px solid var(--ink);
+  border-radius:50%;
+  background:var(--cream);
+  z-index:1;
 }
 
-.lock-area[data-progress="3"] .shackle{
-  top:-20px;
+.lock-end.left{left:-3px}
+.lock-end.right{right:-3px}
+
+.lock-row.cracked .lock-end.right{
+  transform:translateX(13px);
 }
 
-.lock-area[data-progress="4"] .shackle{
-  top:-42px;
-  transform:translateX(-50%) rotate(8deg);
-}
-
-.lock-body{
+.reels{
   position:relative;
-  z-index:2;
-  background:var(--ink);
-  border-radius:22px;
-  padding:15px;
-  box-shadow:0 8px 0 rgba(0,0,0,.13);
-}
-
-.grid{
+  z-index:3;
+  width:calc(100% - 68px);
+  margin:auto;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:7px;
+  gap:5px;
 }
 
-/* ---------- LETTER REELS ---------- */
+/* =========================
+   REELS
+   ========================= */
 
 .reel{
   position:relative;
-  height:94px;
-  background:var(--paper);
-  border-radius:10px;
+  height:78px;
   overflow:hidden;
+  background:var(--paper);
+  border-left:1px solid rgba(0,0,0,.16);
+  border-right:1px solid rgba(0,0,0,.16);
   touch-action:none;
   user-select:none;
+  cursor:grab;
   transition:
-    background .3s,
-    transform .18s,
-    box-shadow .3s;
+    background .28s,
+    transform .15s,
+    box-shadow .25s;
+}
+
+.reel:first-child{
+  border-radius:7px 2px 2px 7px;
+}
+
+.reel:last-child{
+  border-radius:2px 7px 7px 2px;
 }
 
 .reel.green{
@@ -130,40 +194,45 @@ h1{
 
 .reel.gold{
   background:var(--gold);
-  box-shadow:inset 0 0 0 3px rgba(0,0,0,.13);
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.12);
+  cursor:default;
+}
+
+.reel.trace{
+  background:#242424 !important;
+  color:white;
+  transform:scale(1.04);
 }
 
 .letter{
   position:absolute;
   left:0;
   width:100%;
-  height:44px;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   font-weight:900;
-  transition:
-    top .13s ease,
-    opacity .13s ease,
-    transform .13s ease;
+  pointer-events:none;
 }
 
-.letter.prev{
-  top:-13px;
-  font-size:20px;
-  opacity:.24;
+.prev{
+  top:-14px;
+  height:31px;
+  font-size:18px;
+  opacity:.23;
 }
 
-.letter.current{
-  top:25px;
-  font-size:35px;
-  opacity:1;
+.current{
+  top:19px;
+  height:40px;
+  font-size:32px;
 }
 
-.letter.next{
-  top:64px;
-  font-size:20px;
-  opacity:.24;
+.next{
+  top:60px;
+  height:31px;
+  font-size:18px;
+  opacity:.23;
 }
 
 .reel.gold .prev,
@@ -171,170 +240,304 @@ h1{
   opacity:0;
 }
 
-.reel.gold .current{
-  top:25px;
+.reel.moving{
+  transition:transform .08s linear;
 }
 
-.reel.flash{
-  transform:scale(1.06);
+/* =========================
+   PROGRESS BOLTS
+   ========================= */
+
+.bolts{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin:5px 0 13px;
 }
 
-.reel.trace{
-  background:#242424 !important;
-  color:white;
-  transform:scale(1.05);
+.bolt{
+  width:28px;
+  height:6px;
+  border-radius:999px;
+  background:#d4cfc5;
+  transition:.35s;
 }
 
-.reel.rollback{
-  animation:tick .17s ease;
+.bolt.open{
+  background:var(--gold);
+  transform:translateY(-2px);
 }
 
-@keyframes tick{
-  0%{transform:translateY(0)}
-  45%{transform:translateY(4px)}
-  100%{transform:translateY(0)}
+/* =========================
+   CONTROLS
+   ========================= */
+
+.controls{
+  display:flex;
+  gap:8px;
 }
-
-/* ---------- CLUE ---------- */
-
-.clue-card{
-  background:rgba(255,255,255,.55);
-  border:1px solid rgba(0,0,0,.08);
-  border-radius:16px;
-  padding:15px 18px 16px;
-  margin-bottom:16px;
-}
-
-.clue-count{
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:1.7px;
-  color:#8c877d;
-  margin-bottom:5px;
-}
-
-.clue{
-  font-size:23px;
-  font-weight:750;
-}
-
-.instruction{
-  font-size:12px;
-  color:#777269;
-  margin:12px 0 14px;
-  min-height:16px;
-}
-
-/* ---------- BUTTON ---------- */
 
 .unlock{
+  flex:1;
   border:0;
-  width:100%;
   border-radius:999px;
-  padding:16px 20px;
+  padding:15px 18px;
   background:var(--ink);
   color:white;
-  font-size:17px;
+  font-size:16px;
   font-weight:900;
-  letter-spacing:2px;
-  cursor:pointer;
-  box-shadow:0 5px 0 rgba(0,0,0,.15);
+  letter-spacing:1.8px;
+  box-shadow:0 4px 0 rgba(0,0,0,.15);
 }
 
-.unlock:active{
-  transform:translateY(2px);
-  box-shadow:0 3px 0 rgba(0,0,0,.15);
+.reset{
+  width:86px;
+  border:1.5px solid var(--ink);
+  border-radius:999px;
+  background:transparent;
+  font-size:11px;
+  font-weight:850;
+  letter-spacing:.8px;
 }
 
-.unlock:disabled{
-  opacity:.55;
+button:disabled{
+  opacity:.5;
 }
 
 .message{
-  height:34px;
-  padding-top:11px;
+  min-height:34px;
+  padding-top:10px;
   font-size:14px;
   font-weight:750;
 }
 
-.answer{
-  color:#456e48;
-}
-
-/* ---------- KEY ---------- */
-
-.key{
+.legend{
   display:flex;
   justify-content:center;
-  gap:18px;
-  margin-top:7px;
-  font-size:11px;
+  gap:17px;
+  margin-top:2px;
   color:#777269;
+  font-size:10px;
 }
 
-.key-item{
+.legend span{
   display:flex;
   align-items:center;
   gap:5px;
 }
 
-.dot{
-  width:10px;
-  height:10px;
+.swatch{
+  width:9px;
+  height:9px;
   border-radius:3px;
   background:white;
   border:1px solid #bbb;
 }
 
-.dot.green{
+.swatch.green{
   background:var(--green);
   border:0;
 }
 
-.dot.gold{
+.swatch.gold{
   background:var(--gold);
   border:0;
 }
 
-/* ---------- FINISH ---------- */
+/* =========================
+   KEY
+   ========================= */
 
-.finish{
+.key-stage{
   display:none;
-  padding:16px 5px 0;
+  margin-top:14px;
+  animation:fadeIn .45s ease;
 }
 
-.finish.show{
+.key-stage.show{
   display:block;
 }
 
-.finish-title{
-  font-size:29px;
-  font-weight:950;
+.key-title{
+  font-size:12px;
+  font-weight:900;
   letter-spacing:2px;
   margin-bottom:5px;
 }
 
-.finish-copy{
-  color:#69655d;
-  font-size:14px;
-  line-height:1.45;
+.key-copy{
+  color:#706c64;
+  font-size:13px;
+  margin-bottom:12px;
 }
 
-.restart{
-  margin-top:15px;
-  border:1.5px solid var(--ink);
-  background:transparent;
+.key-letters{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin-bottom:14px;
+}
+
+.key-letter{
+  width:49px;
+  height:55px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:var(--gold);
+  border-radius:8px;
+  font-size:27px;
+  font-weight:950;
+  box-shadow:0 3px 0 rgba(0,0,0,.13);
+}
+
+.key-input{
+  width:190px;
+  border:2px solid var(--ink);
+  border-radius:10px;
+  padding:11px 12px;
+  background:var(--paper);
+  text-align:center;
+  text-transform:uppercase;
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:5px;
+  outline:none;
+}
+
+.key-button{
+  display:block;
+  margin:10px auto 0;
+  border:0;
   border-radius:999px;
-  padding:10px 20px;
-  font-weight:800;
+  background:var(--ink);
+  color:white;
+  padding:12px 26px;
   font-size:13px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+/* =========================
+   VAULT
+   ========================= */
+
+.vault{
+  display:none;
+  margin-top:20px;
+  animation:fadeIn .7s ease;
+}
+
+.vault.show{
+  display:block;
+}
+
+.vault-door{
+  position:relative;
+  width:245px;
+  min-height:205px;
+  margin:0 auto 16px;
+  background:#222;
+  border:8px solid #333;
+  border-radius:18px;
+  padding:25px 20px 20px;
+  color:white;
+  box-shadow:0 8px 0 rgba(0,0,0,.14);
+  transform-origin:left center;
+  animation:vaultOpen .8s cubic-bezier(.2,.75,.2,1);
+}
+
+.vault-wheel{
+  width:55px;
+  height:55px;
+  border:6px solid var(--gold);
+  border-radius:50%;
+  margin:0 auto 16px;
+  position:relative;
+}
+
+.vault-wheel:before,
+.vault-wheel:after{
+  content:"";
+  position:absolute;
+  background:var(--gold);
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+}
+
+.vault-wheel:before{
+  width:76px;
+  height:5px;
+}
+
+.vault-wheel:after{
+  width:5px;
+  height:76px;
+}
+
+.vault-title{
+  color:var(--gold);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:2px;
+  margin-bottom:10px;
+}
+
+.vault-fact{
+  font-family:Georgia,serif;
+  font-size:17px;
+  line-height:1.4;
+}
+
+.source{
+  font-size:10px;
+  color:#aaa;
+  margin-top:12px;
+}
+
+.result{
+  font-size:13px;
+  font-weight:800;
+  margin-top:12px;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes vaultOpen{
+  0%{transform:perspective(600px) rotateY(0)}
+  45%{transform:perspective(600px) rotateY(-8deg)}
+  100%{transform:perspective(600px) rotateY(0)}
+}
+
+/* =========================
+   FINAL LOCK RELEASE
+   ========================= */
+
+.locks.final-open .lock-row:nth-child(1){
+  transform:translateX(18px);
+}
+.locks.final-open .lock-row:nth-child(2){
+  transform:translateX(-18px);
+}
+.locks.final-open .lock-row:nth-child(3){
+  transform:translateX(18px);
+}
+
+.lock-row{
+  transition:transform .6s cubic-bezier(.2,.8,.2,1.15);
 }
 
 @media(max-width:370px){
-  h1{font-size:32px}
-  .reel{height:86px}
-  .letter.current{top:22px}
-  .letter.next{top:58px}
+  h1{font-size:31px}
+  .reels{width:calc(100% - 58px)}
+  .reel{height:73px}
+  .current{top:17px}
+  .next{top:56px}
 }
 </style>
 </head>
@@ -344,95 +547,165 @@ h1{
 <main class="game">
 
   <h1>WORDLOCK</h1>
-  <div class="subhead">PROTOTYPE #002 · EASY</div>
+  <div class="subhead">PROTOTYPE #003 · EASY</div>
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="turnCount">0</strong>
+      TURNS
+    </div>
+    <div class="stat">
+      <strong id="attemptCount">0</strong>
+      ATTEMPTS
+    </div>
+  </div>
 
   <div class="clue-card" id="clueCard">
     <div class="clue-count" id="clueCount">LOCK 1 OF 4</div>
     <div class="clue" id="clue">Very angry</div>
   </div>
 
-  <div class="lock-area" id="lockArea" data-progress="0">
+  <div class="locks" id="locks">
 
-    <div class="shackle"></div>
+    <div class="lock-row" id="lockRow0">
+      <div class="lock-bar"></div>
+      <div class="lock-end left"></div>
+      <div class="lock-end right"></div>
+      <div class="reels" id="row0"></div>
+    </div>
 
-    <div class="lock-body">
-      <div class="grid" id="grid"></div>
+    <div class="lock-row" id="lockRow1">
+      <div class="lock-bar"></div>
+      <div class="lock-end left"></div>
+      <div class="lock-end right"></div>
+      <div class="reels" id="row1"></div>
+    </div>
+
+    <div class="lock-row" id="lockRow2">
+      <div class="lock-bar"></div>
+      <div class="lock-end left"></div>
+      <div class="lock-end right"></div>
+      <div class="reels" id="row2"></div>
     </div>
 
   </div>
 
-  <div class="instruction" id="instruction">
-    Flick a reel — or tap the letters above and below.
+  <div class="bolts">
+    <div class="bolt" id="bolt0"></div>
+    <div class="bolt" id="bolt1"></div>
+    <div class="bolt" id="bolt2"></div>
+    <div class="bolt" id="bolt3"></div>
   </div>
 
-  <button class="unlock" id="unlockBtn">UNLOCK</button>
-
-  <div class="message" id="message"></div>
-
-  <div class="key">
-    <div class="key-item">
-      <span class="dot"></span> Live
-    </div>
-    <div class="key-item">
-      <span class="dot green"></span> Useful
-    </div>
-    <div class="key-item">
-      <span class="dot gold"></span> Locked
-    </div>
+  <div class="controls" id="controls">
+    <button class="reset" id="resetBtn">RESET</button>
+    <button class="unlock" id="unlockBtn">UNLOCK</button>
   </div>
 
-  <div class="finish" id="finish">
-    <div class="finish-title">WORDLOCK CRACKED</div>
-    <div class="finish-copy">
-      Four locks opened.<br>
-      The mechanism is yours.
-    </div>
-    <button class="restart" onclick="restartGame()">PLAY AGAIN</button>
+  <div class="message" id="message">
+    Drag the reels up or down.
   </div>
+
+  <div class="legend" id="legend">
+    <span><i class="swatch"></i>Live</span>
+    <span><i class="swatch green"></i>Needed again</span>
+    <span><i class="swatch gold"></i>Locked</span>
+  </div>
+
+  <section class="key-stage" id="keyStage">
+
+    <div class="key-title">THE KEY</div>
+
+    <div class="key-copy">
+      These four letters unlock the final mechanism.
+      Unscramble them.
+    </div>
+
+    <div class="key-letters">
+      <div class="key-letter">F</div>
+      <div class="key-letter">A</div>
+      <div class="key-letter">S</div>
+      <div class="key-letter">E</div>
+    </div>
+
+    <input
+      class="key-input"
+      id="keyInput"
+      maxlength="4"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+      inputmode="text"
+      placeholder="••••"
+    >
+
+    <button class="key-button" id="keyButton">
+      TURN KEY
+    </button>
+
+  </section>
+
+  <section class="vault" id="vault">
+
+    <div class="vault-door">
+
+      <div class="vault-wheel"></div>
+
+      <div class="vault-title">TODAY'S VAULT</div>
+
+      <div class="vault-fact">
+        Wild giant panda numbers rose by about 17% in a decade.
+        Decades of conservation helped move the species from
+        Endangered to Vulnerable.
+      </div>
+
+      <div class="source">
+        Source: WWF
+      </div>
+
+    </div>
+
+    <div class="result" id="result"></div>
+
+  </section>
 
 </main>
 
 <script>
 
 /* =========================================================
-   WORDLOCK #002
+   WORDLOCK #003
+   =========================================================
+
+   Board positions:
+
+       0   1   2   3
+       4   5   6   7
+       8   9  10  11
+
+   Starting board:
+
+       F   U   A   I
+       S   U   O   L
+       S   T   N   O
+
+   Four answers:
+       FURIOUS
+       STEAL
+       STILL
+       FLEE
+
+   Final scrambled KEY:
+       F A S E
+
+   Answer:
+       SAFE
    ========================================================= */
 
-/*
-Board positions:
 
-  0   1   2   3
-  4   5   6   7
-  8   9  10  11
-
-Starting board:
-
-  F   U   A   I
-  S   U   O   L
-  S   T   N   O
-
-The intended progression is:
-
-FURIOUS
-F U R I
-S U O L
-S T N O
-
-STEAL
-F U R I
-S U O L
-S T E A
-
-STILL
-F U R I
-S U L L
-S T I A
-
-FLEE
-F U R I
-L E E L
-S T I A
-*/
+/* =========================
+   REEL CONTENTS
+   ========================= */
 
 const wheels = [
   ["F","B","M","C"],
@@ -457,6 +730,11 @@ const startLetters = [
   "S","T","N","O"
 ];
 
+
+/* =========================
+   PUZZLE
+   ========================= */
+
 const puzzles = [
 
   {
@@ -465,9 +743,9 @@ const puzzles = [
     path:[0,1,2,3,6,5,4],
 
     /*
-      Only A -> R is necessary.
-      R stays useful, but movable.
-      I becomes our first permanent lock.
+      A -> R
+      Position 2 will be needed again,
+      but R is not its final state.
     */
     green:[2],
     gold:[3]
@@ -481,9 +759,6 @@ const puzzles = [
     /*
       N -> E
       O -> A
-
-      E remains useful.
-      A locks.
     */
     green:[10],
     gold:[11]
@@ -497,9 +772,6 @@ const puzzles = [
     /*
       E -> I
       O -> L
-
-      I now locks.
-      L remains useful for the final clue.
     */
     green:[6],
     gold:[10]
@@ -522,269 +794,557 @@ const puzzles = [
 ];
 
 
-/* =========================================================
-   GAME STATE
-   ========================================================= */
+/* =========================
+   STATE
+   ========================= */
 
 let currentPuzzle = 0;
 
 let currentLetters = [...startLetters];
 
-/*
-canonicalLetters = the clean board state after the
-last successful clue.
-
-Experimental movements are compared with this.
-*/
 let canonicalLetters = [...startLetters];
 
 let states = Array(12).fill("live");
 
+/*
+This is crucial.
+
+Each reel remembers every direction the PLAYER
+has turned it during the current clue.
+
++1 = moved forward one notch
+-1 = moved backward one notch
+
+This lets RESET and automatic rollback genuinely
+retrace the player's movements in reverse.
+*/
+let moveHistory =
+  Array.from({length:12},()=>[]);
+
+let turns = 0;
+let attempts = 0;
+
 let busy = false;
 
-const grid = document.getElementById("grid");
-const clue = document.getElementById("clue");
-const clueCount = document.getElementById("clueCount");
-const message = document.getElementById("message");
-const instruction = document.getElementById("instruction");
-const unlockBtn = document.getElementById("unlockBtn");
-const lockArea = document.getElementById("lockArea");
-const finish = document.getElementById("finish");
+
+/* =========================
+   DOM
+   ========================= */
+
+const clue =
+  document.getElementById("clue");
+
+const clueCount =
+  document.getElementById("clueCount");
+
+const turnCount =
+  document.getElementById("turnCount");
+
+const attemptCount =
+  document.getElementById("attemptCount");
+
+const message =
+  document.getElementById("message");
+
+const unlockBtn =
+  document.getElementById("unlockBtn");
+
+const resetBtn =
+  document.getElementById("resetBtn");
+
+const controls =
+  document.getElementById("controls");
+
+const legend =
+  document.getElementById("legend");
+
+const keyStage =
+  document.getElementById("keyStage");
+
+const keyInput =
+  document.getElementById("keyInput");
+
+const keyButton =
+  document.getElementById("keyButton");
+
+const vault =
+  document.getElementById("vault");
+
+const locks =
+  document.getElementById("locks");
+
+const result =
+  document.getElementById("result");
+
+
+/* =========================
+   UTIL
+   ========================= */
+
+function wait(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
+function updateStats(){
+
+  turnCount.textContent = turns;
+  attemptCount.textContent = attempts;
+}
 
 
 /* =========================================================
-   SMALL SOUND
+   MECHANICAL SOUND
    ========================================================= */
 
 let audioContext = null;
 
-function tinyClick(frequency=520, duration=.025, volume=.035){
+function getAudio(){
+
+  if(!audioContext){
+
+    audioContext =
+      new (window.AudioContext ||
+           window.webkitAudioContext)();
+  }
+
+  return audioContext;
+}
+
+
+/*
+A tiny burst of filtered noise feels much more
+like a physical detent than a musical oscillator.
+*/
+
+function mechanicalTick(){
 
   try{
 
-    if(!audioContext){
-      audioContext =
-        new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudio();
+
+    const length =
+      Math.floor(ctx.sampleRate * .025);
+
+    const buffer =
+      ctx.createBuffer(1,length,ctx.sampleRate);
+
+    const data =
+      buffer.getChannelData(0);
+
+    for(let i=0;i<length;i++){
+
+      data[i] =
+        (Math.random()*2-1) *
+        Math.pow(1-i/length,4);
     }
 
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
+    const source =
+      ctx.createBufferSource();
 
-    oscillator.type = "square";
-    oscillator.frequency.value = frequency;
+    source.buffer = buffer;
 
-    gain.gain.value = volume;
+    const filter =
+      ctx.createBiquadFilter();
 
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
+    filter.type = "bandpass";
+    filter.frequency.value = 1250;
+    filter.Q.value = .8;
 
-    oscillator.start();
+    const gain =
+      ctx.createGain();
+
+    gain.gain.value = .12;
+
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    source.start();
+
+  }catch(e){}
+}
+
+
+function mechanicalClunk(strong=false){
+
+  try{
+
+    const ctx = getAudio();
+
+    const oscillator =
+      ctx.createOscillator();
+
+    const gain =
+      ctx.createGain();
+
+    oscillator.type = "triangle";
+    oscillator.frequency.value =
+      strong ? 72 : 92;
+
+    gain.gain.setValueAtTime(
+      strong ? .18 : .11,
+      ctx.currentTime
+    );
 
     gain.gain.exponentialRampToValueAtTime(
       .0001,
-      audioContext.currentTime + duration
+      ctx.currentTime + (strong ? .24 : .14)
     );
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.start();
 
     oscillator.stop(
-      audioContext.currentTime + duration
+      ctx.currentTime + (strong ? .25 : .15)
     );
 
-  }catch(e){
-    /* Sound is optional */
-  }
+    /*
+    Add a mechanical snap.
+    */
+
+    setTimeout(mechanicalTick,40);
+
+  }catch(e){}
 }
 
-function clunk(){
-  tinyClick(125,.11,.075);
 
-  setTimeout(()=>{
-    tinyClick(90,.12,.06);
-  },70);
+function wrongThunk(){
+
+  try{
+
+    const ctx = getAudio();
+
+    const oscillator =
+      ctx.createOscillator();
+
+    const gain =
+      ctx.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = 68;
+
+    gain.gain.setValueAtTime(
+      .08,
+      ctx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .0001,
+      ctx.currentTime+.11
+    );
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.start();
+    oscillator.stop(ctx.currentTime+.12);
+
+  }catch(e){}
 }
 
 
 /* =========================================================
-   REELS
+   REEL HELPERS
    ========================================================= */
 
-function indexOnWheel(position, letter){
+function wheelIndex(position,letter){
 
   return wheels[position].indexOf(letter);
 }
 
-function neighbourLetter(position, direction){
+
+function neighbour(position,direction){
 
   const wheel = wheels[position];
 
-  let i = indexOnWheel(
-    position,
-    currentLetters[position]
-  );
+  let index =
+    wheelIndex(
+      position,
+      currentLetters[position]
+    );
 
-  i = (i + direction + wheel.length) % wheel.length;
+  index =
+    (index + direction + wheel.length)
+    % wheel.length;
 
-  return wheel[i];
+  return wheel[index];
 }
 
-function turnReel(position, direction, makeSound=true){
+
+function getReel(position){
+
+  return document.querySelector(
+    `.reel[data-position="${position}"]`
+  );
+}
+
+
+function renderReel(position){
+
+  const reel = getReel(position);
+
+  if(!reel) return;
+
+  reel.className = "reel";
+
+  if(states[position] === "green"){
+    reel.classList.add("green");
+  }
+
+  if(states[position] === "gold"){
+    reel.classList.add("gold");
+  }
+
+  const current =
+    currentLetters[position];
+
+  reel.innerHTML = `
+    <div class="letter prev">
+      ${neighbour(position,-1)}
+    </div>
+
+    <div class="letter current">
+      ${current}
+    </div>
+
+    <div class="letter next">
+      ${neighbour(position,1)}
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   PLAYER TURN
+   ========================================================= */
+
+function turnReel(
+  position,
+  direction,
+  record=true
+){
 
   if(busy) return;
-  if(states[position] === "gold") return;
 
-  const wheel = wheels[position];
-
-  let i = indexOnWheel(
-    position,
-    currentLetters[position]
-  );
-
-  i = (i + direction + wheel.length) % wheel.length;
-
-  currentLetters[position] = wheel[i];
-
-  if(makeSound){
-    tinyClick(480 + position*8);
+  if(states[position] === "gold"){
+    return;
   }
+
+  const wheel =
+    wheels[position];
+
+  let index =
+    wheelIndex(
+      position,
+      currentLetters[position]
+    );
+
+  index =
+    (index + direction + wheel.length)
+    % wheel.length;
+
+  currentLetters[position] =
+    wheel[index];
+
+  if(record){
+
+    moveHistory[position].push(direction);
+
+    turns++;
+
+    updateStats();
+  }
+
+  mechanicalTick();
 
   renderReel(position);
 }
 
-function renderReel(position){
 
-  const reel = document.querySelector(
-    `.reel[data-position="${position}"]`
-  );
+/* =========================================================
+   BUILD REELS
+   ========================================================= */
 
-  if(!reel) return;
+function buildReels(){
 
-  reel.className =
-    "reel " +
-    (states[position] === "green" ? "green" : "") +
-    (states[position] === "gold" ? "gold" : "");
+  for(let row=0;row<3;row++){
 
-  const current = currentLetters[position];
+    const holder =
+      document.getElementById(`row${row}`);
 
-  const prev = neighbourLetter(position,-1);
-  const next = neighbourLetter(position,1);
+    holder.innerHTML = "";
 
-  reel.innerHTML = `
-    <div class="letter prev">${prev}</div>
-    <div class="letter current">${current}</div>
-    <div class="letter next">${next}</div>
-  `;
-}
+    for(let column=0;column<4;column++){
 
-function buildGrid(){
+      const position =
+        row*4 + column;
 
-  grid.innerHTML = "";
+      const reel =
+        document.createElement("div");
 
-  for(let i=0;i<12;i++){
+      reel.className = "reel";
 
-    const reel = document.createElement("div");
+      reel.dataset.position = position;
 
-    reel.className = "reel";
-    reel.dataset.position = i;
+      let startY = null;
+      let lastY = null;
 
-    let touchStartY = null;
+      reel.addEventListener(
+        "touchstart",
+        e=>{
 
-    reel.addEventListener("touchstart",e=>{
+          if(
+            busy ||
+            states[position] === "gold"
+          ){
+            return;
+          }
 
-      if(states[i] === "gold" || busy) return;
+          startY =
+            e.touches[0].clientY;
 
-      touchStartY = e.touches[0].clientY;
+          lastY = startY;
 
-    },{passive:true});
+        },
+        {passive:true}
+      );
 
-    reel.addEventListener("touchend",e=>{
 
-      if(states[i] === "gold" || busy) return;
-      if(touchStartY === null) return;
+      reel.addEventListener(
+        "touchmove",
+        e=>{
 
-      const endY = e.changedTouches[0].clientY;
-      const distance = endY - touchStartY;
+          if(startY === null) return;
+
+          lastY =
+            e.touches[0].clientY;
+
+          const distance =
+            lastY-startY;
+
+          /*
+          Give the reel a tiny physical response
+          while the finger is moving.
+          */
+
+          reel.style.transform =
+            `translateY(${Math.max(-8,Math.min(8,distance*.15))}px)`;
+
+        },
+        {passive:true}
+      );
+
+
+      reel.addEventListener(
+        "touchend",
+        e=>{
+
+          if(startY === null) return;
+
+          const endY =
+            e.changedTouches[0].clientY;
+
+          const distance =
+            endY-startY;
+
+          reel.style.transform = "";
+
+          /*
+          A TAP DOES NOTHING.
+
+          The player must genuinely drag.
+          */
+
+          if(Math.abs(distance) >= 18){
+
+            if(distance < 0){
+
+              turnReel(position,1);
+
+            }else{
+
+              turnReel(position,-1);
+            }
+          }
+
+          startY = null;
+          lastY = null;
+
+        },
+        {passive:true}
+      );
+
 
       /*
-      Finger moves UP:
-      advance to next letter.
-
-      Finger moves DOWN:
-      go to previous letter.
+      Mouse support for laptops.
       */
 
-      if(Math.abs(distance) > 16){
+      let mouseDown = false;
+      let mouseStart = 0;
 
-        if(distance < 0){
-          turnReel(i,1);
-        }else{
-          turnReel(i,-1);
+      reel.addEventListener(
+        "mousedown",
+        e=>{
+
+          if(
+            busy ||
+            states[position] === "gold"
+          ){
+            return;
+          }
+
+          mouseDown = true;
+          mouseStart = e.clientY;
         }
+      );
 
-      }else{
+      window.addEventListener(
+        "mouseup",
+        e=>{
 
-        /*
-        A tap:
-        top half = previous
-        bottom half = next
-        */
+          if(!mouseDown) return;
 
-        const rect = reel.getBoundingClientRect();
-        const localY = endY - rect.top;
+          const distance =
+            e.clientY-mouseStart;
 
-        if(localY < rect.height/2){
-          turnReel(i,-1);
-        }else{
-          turnReel(i,1);
+          if(Math.abs(distance)>=18){
+
+            if(distance<0){
+              turnReel(position,1);
+            }else{
+              turnReel(position,-1);
+            }
+          }
+
+          mouseDown=false;
         }
-      }
+      );
 
-      touchStartY = null;
+      holder.appendChild(reel);
 
-    },{passive:true});
-
-    /*
-    Desktop / laptop fallback.
-    Clicking top or bottom half turns the reel.
-    */
-
-    reel.addEventListener("click",e=>{
-
-      /*
-      On touch devices the touch handler already did it.
-      Prevent the synthetic click doing it twice.
-      */
-      if("ontouchstart" in window) return;
-
-      if(states[i] === "gold" || busy) return;
-
-      const rect = reel.getBoundingClientRect();
-      const localY = e.clientY - rect.top;
-
-      if(localY < rect.height/2){
-        turnReel(i,-1);
-      }else{
-        turnReel(i,1);
-      }
-
-    });
-
-    grid.appendChild(reel);
-
-    renderReel(i);
+      renderReel(position);
+    }
   }
 }
 
 
 /* =========================================================
-   WORD CHECKING
+   CHECK ANSWER
    ========================================================= */
 
-function pathSpellsAnswer(puzzle){
+function pathWord(puzzle){
 
-  const word = puzzle.path
+  return puzzle.path
     .map(position=>currentLetters[position])
     .join("");
+}
 
-  return word === puzzle.answer;
+
+function answerIsPresent(puzzle){
+
+  return pathWord(puzzle) === puzzle.answer;
 }
 
 
@@ -793,126 +1353,168 @@ function pathSpellsAnswer(puzzle){
    ========================================================= */
 
 /*
-Move one experimental reel back to its canonical letter,
-showing EVERY intermediate letter as it clicks backwards.
+This is the important #003 change.
+
+We don't merely return a reel to a target letter.
+
+We literally undo every movement the player made,
+in reverse order.
+
+If the player did:
+
+R -> T -> K
+
+the machine visibly does:
+
+K -> T -> R
 */
 
-async function clickBack(position){
+async function rollbackPosition(position){
 
-  const wheel = wheels[position];
+  const history =
+    moveHistory[position];
 
-  const target = canonicalLetters[position];
+  while(history.length){
 
-  let currentIndex =
-    wheel.indexOf(currentLetters[position]);
+    const originalDirection =
+      history.pop();
 
-  const targetIndex =
-    wheel.indexOf(target);
+    const reverseDirection =
+      -originalDirection;
 
-  /*
-  Work backwards through the reel because we want
-  to visibly undo the player's movements.
-  */
+    const wheel =
+      wheels[position];
 
-  let safety = 0;
+    let index =
+      wheelIndex(
+        position,
+        currentLetters[position]
+      );
 
-  while(
-    currentLetters[position] !== target &&
-    safety < wheel.length + 2
-  ){
-
-    currentIndex =
-      (currentIndex - 1 + wheel.length) % wheel.length;
+    index =
+      (
+        index +
+        reverseDirection +
+        wheel.length
+      ) % wheel.length;
 
     currentLetters[position] =
-      wheel[currentIndex];
-
-    const reel = document.querySelector(
-      `.reel[data-position="${position}"]`
-    );
-
-    reel.classList.add("rollback");
+      wheel[index];
 
     renderReel(position);
 
-    tinyClick(390);
+    mechanicalTick();
 
     await wait(145);
-
-    const freshReel = document.querySelector(
-      `.reel[data-position="${position}"]`
-    );
-
-    if(freshReel){
-      freshReel.classList.remove("rollback");
-    }
-
-    safety++;
   }
 }
 
-async function rollbackIrrelevantMoves(puzzle){
 
-  /*
-  Anything NOT on the successful answer path
-  is experimental and returns to the board state
-  from the beginning of this clue.
-  */
+/*
+After a successful answer, any experimental reel
+that was NOT part of the answer clicks back.
+*/
 
-  const answerPositions = new Set(puzzle.path);
+async function rollbackIrrelevant(puzzle){
 
-  const irrelevant = [];
+  const answerPositions =
+    new Set(puzzle.path);
 
-  for(let i=0;i<12;i++){
+  for(let position=0;
+      position<12;
+      position++){
 
     if(
-      !answerPositions.has(i) &&
-      states[i] !== "gold" &&
-      currentLetters[i] !== canonicalLetters[i]
+      !answerPositions.has(position) &&
+      states[position] !== "gold" &&
+      moveHistory[position].length
     ){
-      irrelevant.push(i);
+
+      await rollbackPosition(position);
+
+      await wait(65);
     }
-  }
-
-  /*
-  Click them back one after another so the player
-  can actually see the mechanism tidying itself.
-  */
-
-  for(const position of irrelevant){
-
-    await clickBack(position);
-    await wait(65);
   }
 }
 
 
 /* =========================================================
-   ANSWER ANIMATION
+   MANUAL RESET
+   ========================================================= */
+
+resetBtn.addEventListener(
+  "click",
+  async()=>{
+
+    if(busy) return;
+
+    busy=true;
+
+    unlockBtn.disabled=true;
+    resetBtn.disabled=true;
+
+    message.textContent =
+      "Resetting your turns…";
+
+    /*
+    Work through each reel in sequence.
+    */
+
+    for(let position=0;
+        position<12;
+        position++){
+
+      if(
+        states[position] !== "gold" &&
+        moveHistory[position].length
+      ){
+
+        await rollbackPosition(position);
+
+        await wait(45);
+      }
+    }
+
+    /*
+    Reset does NOT remove turns from the score.
+    They were genuine player turns.
+
+    It simply restores the board.
+    */
+
+    message.textContent =
+      "Ready.";
+
+    busy=false;
+
+    unlockBtn.disabled=false;
+    resetBtn.disabled=false;
+  }
+);
+
+
+/* =========================================================
+   TRACE
    ========================================================= */
 
 async function traceAnswer(puzzle){
 
   for(const position of puzzle.path){
 
-    const reel = document.querySelector(
-      `.reel[data-position="${position}"]`
-    );
+    const reel =
+      getReel(position);
 
     reel.classList.add("trace");
 
-    tinyClick(620,.025,.025);
-
-    await wait(105);
+    await wait(90);
   }
 
-  await wait(220);
+  await wait(240);
 
   for(const position of puzzle.path){
 
-    const reel = document.querySelector(
-      `.reel[data-position="${position}"]`
-    );
+    const reel =
+      getReel(position);
 
     reel.classList.remove("trace");
 
@@ -922,15 +1524,14 @@ async function traceAnswer(puzzle){
 
 
 /* =========================================================
-   APPLY GREEN / GOLD
+   STATE CHANGES
    ========================================================= */
 
 async function applyStates(puzzle){
 
   /*
-  Previous greens are not sacred.
-  If this clue has moved one, it can return to live
-  unless this clue declares it green/gold again.
+  Previous greens become ordinary live reels
+  unless the new clue marks them again.
   */
 
   for(let i=0;i<12;i++){
@@ -956,85 +1557,78 @@ async function applyStates(puzzle){
     renderReel(i);
   }
 
-  await wait(180);
+  await wait(160);
 
-  clunk();
+  mechanicalClunk();
 
-  lockArea.dataset.progress =
-    Math.min(currentPuzzle + 1,4);
+  /*
+  One progress bolt releases per clue.
+  */
+
+  document
+    .getElementById(
+      `bolt${currentPuzzle}`
+    )
+    .classList.add("open");
+
+  /*
+  Make the physical lock bars shift more
+  obviously as progress accumulates.
+  */
+
+  if(currentPuzzle === 0){
+
+    document
+      .getElementById("lockRow0")
+      .classList.add("cracked");
+  }
+
+  if(currentPuzzle === 1){
+
+    document
+      .getElementById("lockRow1")
+      .classList.add("cracked");
+  }
+
+  if(currentPuzzle === 2){
+
+    document
+      .getElementById("lockRow2")
+      .classList.add("cracked");
+  }
 }
 
 
 /* =========================================================
-   UNLOCK BUTTON
+   ACCEPT SUCCESSFUL ANSWER
    ========================================================= */
 
-unlockBtn.addEventListener("click",async()=>{
+async function successfulAnswer(puzzle){
 
-  if(busy) return;
-
-  const puzzle = puzzles[currentPuzzle];
-
-  /*
-  The clue is judged by whether its answer exists
-  on the intended path.
-
-  Irrelevant experimental changes DO NOT make
-  a correct answer wrong.
-  */
-
-  if(!pathSpellsAnswer(puzzle)){
-
-    message.textContent = "Still locked…";
-    message.className = "message";
-
-    tinyClick(175,.07,.055);
-
-    lockArea.animate(
-      [
-        {transform:"translateX(0)"},
-        {transform:"translateX(-4px)"},
-        {transform:"translateX(4px)"},
-        {transform:"translateX(-3px)"},
-        {transform:"translateX(0)"}
-      ],
-      {duration:260}
-    );
-
-    return;
-  }
-
-  busy = true;
-  unlockBtn.disabled = true;
-
-  message.textContent = "Checking the lock…";
-  message.className = "message";
-
-  await wait(320);
-
-  /*
-  First show the player the word they found.
-  */
+  message.textContent =
+    `${puzzle.answer} ✓`;
 
   await traceAnswer(puzzle);
 
-  message.textContent = puzzle.answer + "  ✓";
-  message.className = "message answer";
-
-  await wait(350);
-
   /*
-  Then visibly undo any irrelevant experiments.
+  NOW clean up experimentation.
   */
 
-  await rollbackIrrelevantMoves(puzzle);
+  await rollbackIrrelevant(puzzle);
 
   /*
-  Everything left on the board is now the clean,
-  accepted state.
+  Movements on answer reels are accepted
+  as part of the new canonical board.
+  Their histories are therefore cleared.
   */
 
-  canonicalLetters = [...currentLetters];
+  for(let i=0;i<12;i++){
+
+    moveHistory[i] = [];
+  }
+
+  canonicalLetters =
+    [...currentLetters];
 
   await applyStates(puzzle);
 
@@ -1044,107 +1638,234 @@ unlockBtn.addEventListener("click",async()=>{
 
   if(currentPuzzle >= puzzles.length){
 
-    finishGame();
+    showKey();
     return;
   }
 
   loadPuzzle();
 
-  busy = false;
-  unlockBtn.disabled = false;
-});
+  busy=false;
+
+  unlockBtn.disabled=false;
+  resetBtn.disabled=false;
+}
 
 
 /* =========================================================
-   LOAD NEXT CLUE
+   UNLOCK
+   ========================================================= */
+
+unlockBtn.addEventListener(
+  "click",
+  async()=>{
+
+    if(busy) return;
+
+    attempts++;
+
+    updateStats();
+
+    const puzzle =
+      puzzles[currentPuzzle];
+
+    if(!answerIsPresent(puzzle)){
+
+      message.textContent =
+        "LOCKED";
+
+      wrongThunk();
+
+      /*
+      Small physical resistance rather
+      than arcade-style failure.
+      */
+
+      locks.animate(
+        [
+          {transform:"translateX(0)"},
+          {transform:"translateX(2px)"},
+          {transform:"translateX(-2px)"},
+          {transform:"translateX(0)"}
+        ],
+        {duration:180}
+      );
+
+      return;
+    }
+
+    busy=true;
+
+    unlockBtn.disabled=true;
+    resetBtn.disabled=true;
+
+    message.textContent =
+      "Checking…";
+
+    await wait(260);
+
+    await successfulAnswer(puzzle);
+  }
+);
+
+
+/* =========================================================
+   LOAD CLUE
    ========================================================= */
 
 function loadPuzzle(){
 
-  const puzzle = puzzles[currentPuzzle];
-
-  clue.textContent = puzzle.clue;
+  const puzzle =
+    puzzles[currentPuzzle];
 
   clueCount.textContent =
-    `LOCK ${currentPuzzle + 1} OF ${puzzles.length}`;
+    `LOCK ${currentPuzzle+1} OF ${puzzles.length}`;
 
-  message.textContent = "";
+  clue.textContent =
+    puzzle.clue;
 
-  instruction.textContent =
-    "Flick a reel — or tap the letters above and below.";
+  message.textContent =
+    "Drag the reels up or down.";
 }
 
 
 /* =========================================================
-   FINISH
+   KEY STAGE
    ========================================================= */
 
-async function finishGame(){
+function showKey(){
 
-  lockArea.dataset.progress = "4";
+  busy=true;
 
-  clunk();
+  clueCount.textContent =
+    "FOUR LOCKS CRACKED";
 
-  await wait(600);
+  clue.textContent =
+    "One lock remains.";
 
-  message.textContent = "FLEE  ✓";
-  message.className = "message answer";
+  controls.style.display =
+    "none";
 
-  clueCount.textContent = "ALL FOUR LOCKS OPEN";
-  clue.textContent = "Cracked.";
+  legend.style.display =
+    "none";
 
-  instruction.textContent = "";
+  message.textContent =
+    "";
 
-  unlockBtn.style.display = "none";
+  keyStage.classList.add("show");
 
-  finish.classList.add("show");
-
-  busy = false;
+  /*
+  Don't automatically focus on iPhone:
+  we don't want the keyboard covering
+  the little reveal immediately.
+  */
 }
 
 
 /* =========================================================
-   RESTART
+   KEY GUESS
    ========================================================= */
 
-function restartGame(){
+let keyAttempts = 0;
 
-  currentPuzzle = 0;
+keyButton.addEventListener(
+  "click",
+  async()=>{
 
-  currentLetters = [...startLetters];
-  canonicalLetters = [...startLetters];
+    const guess =
+      keyInput.value
+        .trim()
+        .toUpperCase();
 
-  states = Array(12).fill("live");
+    if(!guess) return;
 
-  busy = false;
+    keyAttempts++;
 
-  lockArea.dataset.progress = "0";
+    if(guess !== "SAFE"){
 
-  unlockBtn.style.display = "block";
-  unlockBtn.disabled = false;
+      wrongThunk();
 
-  finish.classList.remove("show");
+      keyInput.animate(
+        [
+          {transform:"translateX(0)"},
+          {transform:"translateX(-4px)"},
+          {transform:"translateX(4px)"},
+          {transform:"translateX(0)"}
+        ],
+        {duration:220}
+      );
 
-  buildGrid();
-  loadPuzzle();
-}
+      keyInput.select();
+
+      return;
+    }
+
+    keyButton.disabled=true;
+    keyInput.disabled=true;
+
+    keyButton.textContent =
+      "KEY ACCEPTED";
+
+    await wait(300);
+
+    /*
+    BIG final mechanical release.
+    */
+
+    mechanicalClunk(true);
+
+    locks.classList.add(
+      "final-open"
+    );
+
+    await wait(750);
+
+    keyStage.style.display =
+      "none";
+
+    clueCount.textContent =
+      "MASTER LOCK OPEN";
+
+    clue.textContent =
+      "The Vault";
+
+    vault.classList.add("show");
+
+    mechanicalClunk(true);
+
+    result.textContent =
+      `${turns} turns · ${attempts} unlock attempts · ` +
+      `${keyAttempts} key ${keyAttempts===1 ? "guess" : "guesses"}`;
+
+    window.scrollTo({
+      top:document.body.scrollHeight,
+      behavior:"smooth"
+    });
+  }
+);
 
 
-/* =========================================================
-   UTIL
-   ========================================================= */
+/*
+Allow Return on keyboard.
+*/
 
-function wait(ms){
-  return new Promise(resolve=>setTimeout(resolve,ms));
-}
+keyInput.addEventListener(
+  "keydown",
+  e=>{
+
+    if(e.key === "Enter"){
+      keyButton.click();
+    }
+  }
+);
 
 
 /* =========================================================
    START
    ========================================================= */
 
-buildGrid();
+buildReels();
 loadPuzzle();
+updateStats();
 
 </script>
 
