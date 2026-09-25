@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>WORDLOCK</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f6f2e8;
+  color: #202020;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.game {
+  width: min(94vw, 520px);
+  margin: 0 auto;
+  padding: 34px 14px 50px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 38px;
+  letter-spacing: 4px;
+  font-weight: 900;
+}
+
+.prototype {
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #777;
+  text-transform: uppercase;
+}
+
+.progress {
+  margin-top: 30px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  color: #777;
+}
+
+.clue-card {
+  margin: 9px auto 25px;
+  padding: 18px 15px;
+  max-width: 390px;
+  border-top: 1px solid #bcb8af;
+  border-bottom: 1px solid #bcb8af;
+}
+
+.clue-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #888;
+  font-weight: 800;
+}
+
+#clue {
+  margin-top: 7px;
+  font-family: Georgia, serif;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+  max-width: 390px;
+  margin: 0 auto;
+}
+
+.tumbler {
+  position: relative;
+  height: 102px;
+  border: 2px solid #222;
+  border-radius: 11px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 3px 0 rgba(0,0,0,.12);
+  transition: background .35s, transform .18s, border-color .35s;
+}
+
+.tumbler.green {
+  background: #a9d7a5;
+}
+
+.tumbler.gold {
+  background: #e3bd55;
+  border-color: #9a761c;
+}
+
+.letter {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+  font-weight: 900;
+  user-select: none;
+}
+
+.controls {
+  height: 38px;
+  border-top: 1px solid #d1d1d1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.controls button {
+  border: 0;
+  background: rgba(0,0,0,.035);
+  font-size: 17px;
+  color: #333;
+  padding: 0;
+  touch-action: manipulation;
+}
+
+.controls button:first-child {
+  border-right: 1px solid #d1d1d1;
+}
+
+.controls button:active {
+  background: rgba(0,0,0,.14);
+}
+
+.gold .controls button {
+  color: #94721d;
+  opacity: .28;
+}
+
+.changed {
+  transform: translateY(-2px);
+}
+
+.trace {
+  transform: scale(1.07);
+  background: #222 !important;
+  color: white;
+  border-color: #222 !important;
+  box-shadow: 0 0 0 4px rgba(32,32,32,.12);
+}
+
+.trace .controls {
+  visibility: hidden;
+}
+
+.lock-pop {
+  animation: lockPop .42s ease;
+}
+
+@keyframes lockPop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.wrong {
+  animation: wrong .45s ease;
+}
+
+@keyframes wrong {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-7px) rotate(-2deg); }
+  50% { transform: translateX(7px) rotate(2deg); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+.unlock {
+  width: min(390px, 100%);
+  margin-top: 24px;
+  border: 0;
+  border-radius: 999px;
+  padding: 17px;
+  background: #202020;
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.unlock:disabled {
+  opacity: .45;
+}
+
+#message {
+  min-height: 48px;
+  margin: 17px auto 0;
+  max-width: 390px;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.key {
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #777;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin: 0 4px 0 10px;
+  border: 1px solid #999;
+  background: white;
+}
+
+.dot.green { background: #a9d7a5; border-color: #7eac7a; }
+.dot.gold { background: #e3bd55; border-color: #a78528; }
+
+.restart {
+  margin-top: 23px;
+  border: 0;
+  background: transparent;
+  text-decoration: underline;
+  color: #777;
+  font-size: 12px;
+}
+
+.complete {
+  font-size: 25px !important;
+}
+
+@media (max-width: 390px) {
+  .game { padding-left: 10px; padding-right: 10px; }
+  .board { gap: 6px; }
+  .tumbler { height: 96px; }
+  .letter { height: 58px; font-size: 32px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+  <h1>WORDLOCK</h1>
+  <div class="prototype">Prototype #001 · Easy</div>
+
+  <div class="progress" id="progress">CLUE 1 OF 4</div>
+
+  <div class="clue-card">
+    <div class="clue-label">CRACK THE CLUE</div>
+    <div id="clue">Afraid</div>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <button class="unlock" id="unlock">UNLOCK</button>
+
+  <div id="message">Turn the letters. Then try the lock.</div>
+
+  <div class="key">
+    <span class="dot"></span> LIVE
+    <span class="dot green"></span> RIGHT, BUT MOVABLE
+    <span class="dot gold"></span> LOCKED
+  </div>
+
+  <button class="restart" onclick="restartGame()">Restart prototype</button>
+</div>
+
+<script>
+const START = [
+  "S","T","A","R",
+  "I","D","E","A",
+  "N","G","L","E"
+];
+
+/*
+Each position has its own little combination wheel.
+The first visible letter is the starting state.
+*/
+const WHEELS = [
+  ["S","F","B","M"],
+  ["T","N","C","H"],
+  ["A","O","U","E"],
+  ["R","P","T","K"],
+
+  ["I","O","A","U"],
+  ["D","T","M","R"],
+  ["E","A","O","I"],
+  ["A","E","O","U"],
+
+  ["N","S","B","F"],
+  ["G","S","T","M"],
+  ["L","R","N","P"],
+  ["E","P","T","D"]
+];
+
+/*
+The prototype checks the whole board configuration.
+
+path = cells that illuminate to reveal the answer.
+changed = cells that must have been manipulated for this clue.
+gold = changed cells that become permanently locked.
+green = changed cells that are correct now, but may move later.
+*/
+const PUZZLES = [
+  {
+    clue: "Afraid",
+    answer: "SCARED",
+    target: [
+      "S","C","A","R",
+      "I","D","E","A",
+      "N","G","L","E"
+    ],
+    changed: [1],
+    path: [0,1,2,3,6,5],
+    gold: [1],
+    green: []
+  },
+
+  {
+    clue: "Doze",
+    answer: "SLEEP",
+    target: [
+      "S","C","A","P",
+      "I","D","E","A",
+      "N","S","L","E"
+    ],
+    changed: [3,9],
+    path: [9,10,11,6,3],
+    gold: [3],
+    green: [9]
+  },
+
+  {
+    clue: "Not difficult",
+    answer: "EASY",
+    target: [
+      "S","C","A","P",
+      "I","D","E","A",
+      "N","S","L","E"
+    ],
+    changed: [],
+    path: [6,7,9,8],
+    gold: [],
+    green: []
+  },
+
+  {
+    clue: "Move quickly",
+    answer: "SPEED",
+    target: [
+      "S","C","A","P",
+      "I","D","E","A",
+      "N","S","L","E"
+    ],
+    changed: [],
+    path: [9,3,6,11,5],
+    gold: [],
+    green: []
+  }
+];
+
+let letters = [...START];
+let wheelIndex = [];
+let states = Array(12).fill("live");
+let clueIndex = 0;
+let snapshot = [...START];
+let busy = false;
+
+function setupWheelIndexes() {
+  wheelIndex = letters.map((letter, i) => {
+    const found = WHEELS[i].indexOf(letter);
+    return found >= 0 ? found : 0;
+  });
+}
+
+function render() {
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+
+  letters.forEach((letter, i) => {
+    const cell = document.createElement("div");
+    cell.className = "tumbler " + (states[i] === "live" ? "" : states[i]);
+    cell.dataset.index = i;
+
+    const letterDiv = document.createElement("div");
+    letterDiv.className = "letter";
+    letterDiv.textContent = letter;
+
+    const controls = document.createElement("div");
+    controls.className = "controls";
+
+    const up = document.createElement("button");
+    up.textContent = "▲";
+    up.onclick = () => turn(i, 1);
+
+    const down = document.createElement("button");
+    down.textContent = "▼";
+    down.onclick = () => turn(i, -1);
+
+    controls.appendChild(up);
+    controls.appendChild(down);
+    cell.appendChild(letterDiv);
+    cell.appendChild(controls);
+    board.appendChild(cell);
+  });
+}
+
+function turn(i, direction) {
+  if (busy || states[i] === "gold") return;
+
+  const wheel = WHEELS[i];
+  wheelIndex[i] =
+    (wheelIndex[i] + direction + wheel.length) % wheel.length;
+
+  letters[i] = wheel[wheelIndex[i]];
+  render();
+
+  const cell = document.querySelector(`[data-index="${i}"]`);
+  cell.classList.add("changed");
+  setTimeout(() => cell && cell.classList.remove("changed"), 150);
+}
+
+function sameBoard(a, b) {
+  return a.every((v, i) => v === b[i]);
+}
+
+function changedSinceSnapshot() {
+  const result = [];
+  letters.forEach((v, i) => {
+    if (v !== snapshot[i]) result.push(i);
+  });
+  return result;
+}
+
+function unlock() {
+  if (busy) return;
+
+  busy = true;
+  document.getElementById("unlock").disabled = true;
+  const puzzle = PUZZLES[clueIndex];
+  const message = document.getElementById("message");
+
+  message.textContent = "Checking the lock…";
+
+  setTimeout(() => {
+    if (sameBoard(letters, puzzle.target)) {
+      revealAnswer(puzzle);
+    } else {
+      rejectAttempt();
+    }
+  }, 700);
+}
+
+function revealAnswer(puzzle) {
+  const message = document.getElementById("message");
+  message.textContent = "…";
+
+  puzzle.path.forEach((cellIndex, step) => {
+    setTimeout(() => {
+      const cell = document.querySelector(`[data-index="${cellIndex}"]`);
+      if (cell) cell.classList.add("trace");
+    }, step * 180);
+  });
+
+  const revealTime = puzzle.path.length * 180 + 250;
+
+  setTimeout(() => {
+    message.textContent = puzzle.answer + " ✓";
+  }, revealTime);
+
+  setTimeout(() => {
+    document.querySelectorAll(".trace").forEach(el => {
+      el.classList.remove("trace");
+    });
+
+    puzzle.green.forEach(i => {
+      if (states[i] !== "gold") states[i] = "green";
+    });
+
+    puzzle.gold.forEach(i => {
+      states[i] = "gold";
+    });
+
+    render();
+
+    puzzle.gold.forEach(i => {
+      const cell = document.querySelector(`[data-index="${i}"]`);
+      if (cell) cell.classList.add("lock-pop");
+    });
+
+    setTimeout(nextClue, 1000);
+  }, revealTime + 800);
+}
+
+function rejectAttempt() {
+  const changed = changedSinceSnapshot();
+  const message = document.getElementById("message");
+
+  message.textContent = "The lock doesn't open.";
+
+  changed.forEach(i => {
+    const cell = document.querySelector(`[data-index="${i}"]`);
+    if (cell) cell.classList.add("wrong");
+  });
+
+  setTimeout(() => {
+    letters = [...snapshot];
+    setupWheelIndexes();
+    render();
+    message.textContent = "Try another combination.";
+    busy = false;
+    document.getElementById("unlock").disabled = false;
+  }, 850);
+}
+
+function nextClue() {
+  clueIndex++;
+
+  if (clueIndex >= PUZZLES.length) {
+    finishGame();
+    return;
+  }
+
+  snapshot = [...letters];
+
+  document.getElementById("progress").textContent =
+    `CLUE ${clueIndex + 1} OF ${PUZZLES.length}`;
+
+  document.getElementById("clue").textContent =
+    PUZZLES[clueIndex].clue;
+
+  document.getElementById("message").textContent =
+    "Crack the next clue.";
+
+  busy = false;
+  document.getElementById("unlock").disabled = false;
+}
+
+function finishGame() {
+  document.getElementById("progress").textContent = "LOCK CRACKED";
+  document.getElementById("clue").textContent = "You opened WORDLOCK.";
+  document.getElementById("message").textContent =
+    "Prototype #001 complete 🔓";
+  document.getElementById("message").classList.add("complete");
+  document.getElementById("unlock").style.display = "none";
+  busy = false;
+}
+
+function restartGame() {
+  letters = [...START];
+  states = Array(12).fill("live");
+  clueIndex = 0;
+  snapshot = [...START];
+  busy = false;
+
+  setupWheelIndexes();
+  render();
+
+  document.getElementById("progress").textContent = "CLUE 1 OF 4";
+  document.getElementById("clue").textContent = "Afraid";
+  document.getElementById("message").textContent =
+    "Turn the letters. Then try the lock.";
+  document.getElementById("message").classList.remove("complete");
+
+  const unlockButton = document.getElementById("unlock");
+  unlockButton.style.display = "block";
+  unlockButton.disabled = false;
+}
+
+document.getElementById("unlock").onclick = unlock;
+
+setupWheelIndexes();
+render();
+</script>
+
+</body>
+</html>
