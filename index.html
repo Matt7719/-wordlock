@@ -2,18 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
 <title>WORDLOCK</title>
 
 <style>
+
 :root{
-  --cream:#f5f0e6;
-  --ink:#171717;
+  --cream:#f3eee4;
+  --ink:#181818;
+  --safe:#343638;
+  --safe2:#292b2d;
   --paper:#fffdf8;
-  --green:#87ad86;
-  --gold:#d6a63f;
-  --muted:#817d74;
-  --metal:#292929;
+  --blue:#9ab9ce;
+  --gold:#d4a640;
+  --muted:#77736c;
 }
 
 *{
@@ -32,132 +36,226 @@ body{
 }
 
 .game{
-  width:min(100%,450px);
-  padding:25px 18px 45px;
+  width:min(100%,460px);
+  padding:22px 15px 50px;
   text-align:center;
 }
 
 h1{
-  margin:2px 0 2px;
-  font-size:36px;
+  margin:0 0 2px;
+  font-size:35px;
   letter-spacing:5px;
   font-weight:950;
 }
 
 .subhead{
-  color:#7b776f;
-  font-size:11px;
-  font-weight:800;
+  color:#77736b;
+  font-size:10px;
+  font-weight:850;
   letter-spacing:2px;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
+
+/* =========================
+   STATS
+   ========================= */
 
 .stats{
   display:flex;
   justify-content:center;
-  gap:28px;
-  margin-bottom:15px;
+  gap:35px;
+  margin-bottom:13px;
 }
 
 .stat{
-  font-size:11px;
+  color:#77736b;
+  font-size:10px;
+  font-weight:800;
   letter-spacing:1px;
-  color:#777269;
-  font-weight:750;
 }
 
 .stat strong{
   display:block;
   color:var(--ink);
-  font-size:19px;
+  font-size:18px;
   margin-bottom:1px;
 }
 
+/* =========================
+   CLUE
+   ========================= */
+
 .clue-card{
-  background:rgba(255,255,255,.56);
-  border:1px solid rgba(0,0,0,.08);
-  border-radius:15px;
-  padding:12px 15px 13px;
-  margin-bottom:17px;
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(0,0,0,.07);
+  border-radius:14px;
+  padding:11px 15px 12px;
+  margin-bottom:13px;
 }
 
 .clue-count{
   font-size:10px;
-  font-weight:850;
-  letter-spacing:1.7px;
-  color:#8a857c;
-  margin-bottom:4px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  color:#8a857d;
+  margin-bottom:3px;
 }
 
 .clue{
-  font-size:22px;
-  font-weight:800;
+  font-size:21px;
+  font-weight:850;
 }
 
 /* =========================
-   THREE HORIZONTAL LOCKS
+   SAFE
    ========================= */
 
-.locks{
+.safe-shell{
   position:relative;
-  margin:6px 0 17px;
-  padding:4px 0;
+  width:100%;
+  margin:0 auto 13px;
+  perspective:1000px;
+}
+
+.safe-frame{
+  position:relative;
+  background:#202224;
+  border-radius:20px;
+  padding:9px;
+  box-shadow:
+    0 8px 0 rgba(0,0,0,.13),
+    0 13px 24px rgba(0,0,0,.08);
+}
+
+.safe-door{
+  position:relative;
+  min-height:414px;
+  background:
+    linear-gradient(145deg,#3c3f41,#2e3032);
+  border-radius:14px;
+  border:2px solid #4c4f51;
+  padding:18px 15px 16px;
+  transform-origin:left center;
+  transition:
+    transform 1.15s cubic-bezier(.2,.7,.15,1),
+    box-shadow 1s;
+  overflow:hidden;
+}
+
+.safe-door.open{
+  transform:
+    perspective(900px)
+    rotateY(-78deg);
+  box-shadow:20px 5px 25px rgba(0,0,0,.25);
+}
+
+.safe-label{
+  color:#aaa;
+  font-size:9px;
+  letter-spacing:2.3px;
+  font-weight:850;
+  margin-bottom:12px;
+}
+
+/* =========================
+   LOCK ROWS
+   ========================= */
+
+.lock-stack{
+  position:relative;
+  z-index:3;
 }
 
 .lock-row{
   position:relative;
-  height:90px;
-  margin:12px 0;
+  height:70px;
+  margin:3px 0;
   display:flex;
   align-items:center;
+  transition:
+    opacity .35s,
+    transform .45s;
 }
 
-.lock-bar{
+/*
+The row is now a mechanism mounted on the safe,
+rather than a floating tube.
+*/
+
+.lock-bed{
   position:absolute;
   left:3px;
-  right:3px;
-  height:70px;
-  top:10px;
-  background:var(--metal);
-  border-radius:35px;
+  right:34px;
+  top:6px;
+  bottom:6px;
+  border-radius:9px;
+  background:#1f2021;
+  border:1px solid rgba(255,255,255,.07);
   box-shadow:
-    0 5px 0 rgba(0,0,0,.14),
-    inset 0 1px 0 rgba(255,255,255,.08);
-  transition:
-    transform .5s cubic-bezier(.2,.8,.25,1.15),
-    opacity .4s;
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 2px 2px rgba(0,0,0,.2);
 }
 
-.lock-row.cracked .lock-bar{
-  transform:translateX(13px);
-}
-
-.lock-end{
+.lock-number{
   position:absolute;
-  width:28px;
-  height:28px;
-  top:31px;
-  border:5px solid var(--ink);
-  border-radius:50%;
-  background:var(--cream);
-  z-index:1;
-}
-
-.lock-end.left{left:-3px}
-.lock-end.right{right:-3px}
-
-.lock-row.cracked .lock-end.right{
-  transform:translateX(13px);
+  left:8px;
+  z-index:5;
+  color:#858585;
+  font-size:8px;
+  font-weight:900;
 }
 
 .reels{
   position:relative;
-  z-index:3;
-  width:calc(100% - 68px);
-  margin:auto;
+  z-index:4;
+  width:calc(100% - 75px);
+  margin-left:28px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:5px;
+  gap:3px;
+}
+
+/* =========================
+   SAFE BOLTS
+   ========================= */
+
+.safe-bolt{
+  position:absolute;
+  right:3px;
+  top:23px;
+  width:38px;
+  height:24px;
+  background:#b9b8b3;
+  border-radius:4px 12px 12px 4px;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.35),
+    0 2px 2px rgba(0,0,0,.3);
+  transition:
+    transform .55s cubic-bezier(.2,.8,.25,1.2),
+    background .35s;
+  z-index:2;
+}
+
+.safe-bolt:after{
+  content:"";
+  position:absolute;
+  right:6px;
+  top:7px;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#6e6e6a;
+}
+
+.lock-row.released .safe-bolt{
+  transform:translateX(-29px);
+  background:#d0a743;
+}
+
+.lock-row.released .lock-bed{
+  box-shadow:
+    inset 0 0 0 1px rgba(212,166,64,.35),
+    0 2px 2px rgba(0,0,0,.2);
 }
 
 /* =========================
@@ -166,42 +264,26 @@ h1{
 
 .reel{
   position:relative;
-  height:78px;
+  height:59px;
   overflow:hidden;
   background:var(--paper);
-  border-left:1px solid rgba(0,0,0,.16);
-  border-right:1px solid rgba(0,0,0,.16);
+  border-left:1px solid rgba(0,0,0,.15);
+  border-right:1px solid rgba(0,0,0,.15);
   touch-action:none;
   user-select:none;
   cursor:grab;
   transition:
-    background .28s,
-    transform .15s,
+    background .3s,
+    transform .16s,
     box-shadow .25s;
 }
 
 .reel:first-child{
-  border-radius:7px 2px 2px 7px;
+  border-radius:5px 1px 1px 5px;
 }
 
 .reel:last-child{
-  border-radius:2px 7px 7px 2px;
-}
-
-.reel.green{
-  background:var(--green);
-}
-
-.reel.gold{
-  background:var(--gold);
-  box-shadow:inset 0 0 0 2px rgba(0,0,0,.12);
-  cursor:default;
-}
-
-.reel.trace{
-  background:#242424 !important;
-  color:white;
-  transform:scale(1.04);
+  border-radius:1px 5px 5px 1px;
 }
 
 .letter{
@@ -209,30 +291,41 @@ h1{
   left:0;
   width:100%;
   display:flex;
-  align-items:center;
   justify-content:center;
-  font-weight:900;
+  align-items:center;
   pointer-events:none;
+  font-weight:950;
 }
 
 .prev{
-  top:-14px;
-  height:31px;
-  font-size:18px;
-  opacity:.23;
+  top:-15px;
+  height:25px;
+  font-size:16px;
+  opacity:.25;
 }
 
 .current{
-  top:19px;
-  height:40px;
-  font-size:32px;
+  top:13px;
+  height:33px;
+  font-size:27px;
 }
 
 .next{
-  top:60px;
-  height:31px;
-  font-size:18px;
-  opacity:.23;
+  top:48px;
+  height:25px;
+  font-size:16px;
+  opacity:.25;
+}
+
+.reel.blue{
+  background:var(--blue);
+}
+
+.reel.gold{
+  background:var(--gold);
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,.11);
+  cursor:default;
 }
 
 .reel.gold .prev,
@@ -240,33 +333,90 @@ h1{
   opacity:0;
 }
 
-.reel.moving{
-  transition:transform .08s linear;
+.reel.trace{
+  background:#111 !important;
+  color:white;
+  transform:scale(1.055);
+  z-index:10;
 }
 
 /* =========================
-   PROGRESS BOLTS
+   EASY START PULSE
    ========================= */
 
-.bolts{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:8px;
-  margin:5px 0 13px;
+.reel.start-pulse .current{
+  animation:letterPulse .72s ease-in-out 2;
 }
 
-.bolt{
-  width:28px;
-  height:6px;
-  border-radius:999px;
-  background:#d4cfc5;
-  transition:.35s;
+@keyframes letterPulse{
+  0%,100%{
+    transform:scale(1);
+  }
+  50%{
+    transform:scale(1.38);
+    text-shadow:0 0 9px rgba(212,166,64,.7);
+  }
 }
 
-.bolt.open{
+/* =========================
+   MASTER WHEEL
+   ========================= */
+
+.master-area{
+  position:relative;
+  z-index:3;
+  margin:12px auto 1px;
+  width:76px;
+  height:76px;
+}
+
+.master-wheel{
+  width:66px;
+  height:66px;
+  margin:auto;
+  border-radius:50%;
+  border:7px solid #999b9c;
+  background:#252729;
+  position:relative;
+  transition:
+    transform 1s cubic-bezier(.2,.8,.2,1),
+    border-color .5s;
+  box-shadow:
+    0 3px 4px rgba(0,0,0,.3),
+    inset 0 0 0 3px #1c1d1e;
+}
+
+.master-wheel:before,
+.master-wheel:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  background:#999b9c;
+  transform:translate(-50%,-50%);
+}
+
+.master-wheel:before{
+  width:48px;
+  height:5px;
+}
+
+.master-wheel:after{
+  width:5px;
+  height:48px;
+}
+
+.master-wheel.ready{
+  border-color:var(--gold);
+}
+
+.master-wheel.ready:before,
+.master-wheel.ready:after{
   background:var(--gold);
-  transform:translateY(-2px);
+}
+
+.master-wheel.turn{
+  transform:rotate(135deg);
 }
 
 /* =========================
@@ -285,19 +435,20 @@ h1{
   padding:15px 18px;
   background:var(--ink);
   color:white;
-  font-size:16px;
+  font-size:15px;
   font-weight:900;
-  letter-spacing:1.8px;
-  box-shadow:0 4px 0 rgba(0,0,0,.15);
+  letter-spacing:1.6px;
+  box-shadow:0 4px 0 rgba(0,0,0,.14);
 }
 
 .reset{
-  width:86px;
+  width:87px;
   border:1.5px solid var(--ink);
   border-radius:999px;
   background:transparent;
-  font-size:11px;
-  font-weight:850;
+  color:var(--ink);
+  font-size:10px;
+  font-weight:900;
   letter-spacing:.8px;
 }
 
@@ -306,19 +457,19 @@ button:disabled{
 }
 
 .message{
-  min-height:34px;
-  padding-top:10px;
-  font-size:14px;
+  min-height:33px;
+  padding-top:9px;
+  font-size:13px;
   font-weight:750;
 }
 
 .legend{
   display:flex;
   justify-content:center;
-  gap:17px;
-  margin-top:2px;
-  color:#777269;
-  font-size:10px;
+  gap:16px;
+  color:#77736b;
+  font-size:9px;
+  margin-top:1px;
 }
 
 .legend span{
@@ -330,13 +481,13 @@ button:disabled{
 .swatch{
   width:9px;
   height:9px;
-  border-radius:3px;
+  border-radius:2px;
   background:white;
   border:1px solid #bbb;
 }
 
-.swatch.green{
-  background:var(--green);
+.swatch.blue{
+  background:var(--blue);
   border:0;
 }
 
@@ -346,199 +497,183 @@ button:disabled{
 }
 
 /* =========================
-   KEY
+   KEY REVEAL
    ========================= */
 
 .key-stage{
   display:none;
-  margin-top:14px;
-  animation:fadeIn .45s ease;
+  margin-top:17px;
+  animation:fadeUp .5s ease;
 }
 
 .key-stage.show{
   display:block;
 }
 
-.key-title{
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:2px;
+.key-heading{
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:2.2px;
   margin-bottom:5px;
 }
 
 .key-copy{
-  color:#706c64;
   font-size:13px;
-  margin-bottom:12px;
+  line-height:1.4;
+  color:#6f6b64;
+  margin:0 auto 13px;
+  max-width:300px;
 }
 
 .key-letters{
   display:flex;
   justify-content:center;
   gap:7px;
-  margin-bottom:14px;
+  min-height:54px;
+  margin-bottom:13px;
 }
 
 .key-letter{
-  width:49px;
-  height:55px;
+  width:48px;
+  height:52px;
+  border-radius:7px;
   display:flex;
   justify-content:center;
   align-items:center;
   background:var(--gold);
-  border-radius:8px;
-  font-size:27px;
+  color:var(--ink);
+  font-size:25px;
   font-weight:950;
   box-shadow:0 3px 0 rgba(0,0,0,.13);
+  opacity:0;
+  transform:translateY(-8px) scale(.85);
+}
+
+.key-letter.arrive{
+  animation:keyArrive .45s forwards;
+}
+
+@keyframes keyArrive{
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
 }
 
 .key-input{
   width:190px;
+  padding:11px 10px;
   border:2px solid var(--ink);
   border-radius:10px;
-  padding:11px 12px;
   background:var(--paper);
   text-align:center;
   text-transform:uppercase;
-  font-size:21px;
-  font-weight:900;
+  font-size:20px;
+  font-weight:950;
   letter-spacing:5px;
   outline:none;
 }
 
 .key-button{
   display:block;
-  margin:10px auto 0;
+  margin:9px auto 0;
   border:0;
   border-radius:999px;
+  padding:12px 25px;
   background:var(--ink);
   color:white;
-  padding:12px 26px;
-  font-size:13px;
-  font-weight:900;
-  letter-spacing:1px;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:1.2px;
 }
 
 /* =========================
-   VAULT
+   VAULT INTERIOR
    ========================= */
 
-.vault{
+.vault-interior{
   display:none;
-  margin-top:20px;
-  animation:fadeIn .7s ease;
-}
-
-.vault.show{
-  display:block;
-}
-
-.vault-door{
-  position:relative;
-  width:245px;
-  min-height:205px;
-  margin:0 auto 16px;
-  background:#222;
-  border:8px solid #333;
-  border-radius:18px;
-  padding:25px 20px 20px;
-  color:white;
-  box-shadow:0 8px 0 rgba(0,0,0,.14);
-  transform-origin:left center;
-  animation:vaultOpen .8s cubic-bezier(.2,.75,.2,1);
-}
-
-.vault-wheel{
-  width:55px;
-  height:55px;
-  border:6px solid var(--gold);
-  border-radius:50%;
-  margin:0 auto 16px;
-  position:relative;
-}
-
-.vault-wheel:before,
-.vault-wheel:after{
-  content:"";
   position:absolute;
-  background:var(--gold);
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
+  inset:9px;
+  border-radius:14px;
+  background:
+    radial-gradient(circle at center,#292b2c,#171819);
+  padding:30px 27px;
+  color:white;
+  z-index:0;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
 }
 
-.vault-wheel:before{
-  width:76px;
-  height:5px;
+.vault-interior.show{
+  display:flex;
 }
 
-.vault-wheel:after{
-  width:5px;
-  height:76px;
-}
-
-.vault-title{
+.vault-heading{
   color:var(--gold);
-  font-size:12px;
-  font-weight:900;
+  font-size:11px;
+  font-weight:950;
   letter-spacing:2px;
-  margin-bottom:10px;
+  margin-bottom:14px;
 }
 
 .vault-fact{
   font-family:Georgia,serif;
-  font-size:17px;
-  line-height:1.4;
+  font-size:19px;
+  line-height:1.42;
+  max-width:300px;
 }
 
-.source{
+.vault-source{
+  margin-top:15px;
   font-size:10px;
-  color:#aaa;
-  margin-top:12px;
+  color:#a8a8a8;
 }
 
-.result{
-  font-size:13px;
+.final-result{
+  margin-top:15px;
+  color:#d0d0d0;
+  font-size:11px;
   font-weight:800;
-  margin-top:12px;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(7px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-@keyframes vaultOpen{
-  0%{transform:perspective(600px) rotateY(0)}
-  45%{transform:perspective(600px) rotateY(-8deg)}
-  100%{transform:perspective(600px) rotateY(0)}
 }
 
 /* =========================
-   FINAL LOCK RELEASE
+   TRANSITIONS
    ========================= */
 
-.locks.final-open .lock-row:nth-child(1){
-  transform:translateX(18px);
-}
-.locks.final-open .lock-row:nth-child(2){
-  transform:translateX(-18px);
-}
-.locks.final-open .lock-row:nth-child(3){
-  transform:translateX(18px);
-}
-
-.lock-row{
-  transition:transform .6s cubic-bezier(.2,.8,.2,1.15);
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(7px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
-@media(max-width:370px){
-  h1{font-size:31px}
-  .reels{width:calc(100% - 58px)}
-  .reel{height:73px}
-  .current{top:17px}
-  .next{top:56px}
+@media(max-width:380px){
+
+  .game{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  h1{
+    font-size:31px;
+  }
+
+  .safe-door{
+    padding-left:9px;
+    padding-right:9px;
+  }
+
+  .reels{
+    width:calc(100% - 70px);
+  }
 }
+
 </style>
 </head>
 
@@ -546,194 +681,269 @@ button:disabled{
 
 <main class="game">
 
-  <h1>WORDLOCK</h1>
-  <div class="subhead">PROTOTYPE #003 · EASY</div>
+<h1>WORDLOCK</h1>
+<div class="subhead">PROTOTYPE #004 · EASY</div>
 
-  <div class="stats">
-    <div class="stat">
-      <strong id="turnCount">0</strong>
-      TURNS
-    </div>
-    <div class="stat">
-      <strong id="attemptCount">0</strong>
-      ATTEMPTS
-    </div>
+<div class="stats">
+
+  <div class="stat">
+    <strong id="turnCount">0</strong>
+    TURNS
   </div>
 
-  <div class="clue-card" id="clueCard">
-    <div class="clue-count" id="clueCount">LOCK 1 OF 4</div>
-    <div class="clue" id="clue">Very angry</div>
+  <div class="stat">
+    <strong id="attemptCount">0</strong>
+    ATTEMPTS
   </div>
 
-  <div class="locks" id="locks">
+</div>
 
-    <div class="lock-row" id="lockRow0">
-      <div class="lock-bar"></div>
-      <div class="lock-end left"></div>
-      <div class="lock-end right"></div>
-      <div class="reels" id="row0"></div>
-    </div>
+<div class="clue-card">
 
-    <div class="lock-row" id="lockRow1">
-      <div class="lock-bar"></div>
-      <div class="lock-end left"></div>
-      <div class="lock-end right"></div>
-      <div class="reels" id="row1"></div>
-    </div>
-
-    <div class="lock-row" id="lockRow2">
-      <div class="lock-bar"></div>
-      <div class="lock-end left"></div>
-      <div class="lock-end right"></div>
-      <div class="reels" id="row2"></div>
-    </div>
-
+  <div class="clue-count" id="clueCount">
+    LOCK 1 OF 4
   </div>
 
-  <div class="bolts">
-    <div class="bolt" id="bolt0"></div>
-    <div class="bolt" id="bolt1"></div>
-    <div class="bolt" id="bolt2"></div>
-    <div class="bolt" id="bolt3"></div>
+  <div class="clue" id="clue">
+    Very angry
   </div>
 
-  <div class="controls" id="controls">
-    <button class="reset" id="resetBtn">RESET</button>
-    <button class="unlock" id="unlockBtn">UNLOCK</button>
-  </div>
+</div>
 
-  <div class="message" id="message">
-    Drag the reels up or down.
-  </div>
+<div class="safe-shell">
 
-  <div class="legend" id="legend">
-    <span><i class="swatch"></i>Live</span>
-    <span><i class="swatch green"></i>Needed again</span>
-    <span><i class="swatch gold"></i>Locked</span>
-  </div>
+  <div class="safe-frame">
 
-  <section class="key-stage" id="keyStage">
+    <!-- The reward actually lives behind the door -->
+    <div class="vault-interior" id="vaultInterior">
 
-    <div class="key-title">THE KEY</div>
-
-    <div class="key-copy">
-      These four letters unlock the final mechanism.
-      Unscramble them.
-    </div>
-
-    <div class="key-letters">
-      <div class="key-letter">F</div>
-      <div class="key-letter">A</div>
-      <div class="key-letter">S</div>
-      <div class="key-letter">E</div>
-    </div>
-
-    <input
-      class="key-input"
-      id="keyInput"
-      maxlength="4"
-      autocomplete="off"
-      autocorrect="off"
-      spellcheck="false"
-      inputmode="text"
-      placeholder="••••"
-    >
-
-    <button class="key-button" id="keyButton">
-      TURN KEY
-    </button>
-
-  </section>
-
-  <section class="vault" id="vault">
-
-    <div class="vault-door">
-
-      <div class="vault-wheel"></div>
-
-      <div class="vault-title">TODAY'S VAULT</div>
-
-      <div class="vault-fact">
-        Wild giant panda numbers rose by about 17% in a decade.
-        Decades of conservation helped move the species from
-        Endangered to Vulnerable.
+      <div class="vault-heading">
+        TODAY'S VAULT
       </div>
 
-      <div class="source">
+      <div class="vault-fact">
+        Wild giant panda numbers rose by about
+        17% in a decade. Decades of conservation
+        helped move the species from Endangered
+        to Vulnerable.
+      </div>
+
+      <div class="vault-source">
         Source: WWF
       </div>
 
+      <div class="final-result" id="finalResult"></div>
+
     </div>
 
-    <div class="result" id="result"></div>
+    <!-- The playable board IS the safe door -->
+    <div class="safe-door" id="safeDoor">
 
-  </section>
+      <div class="safe-label">
+        FOUR LOCKS · ONE VAULT
+      </div>
+
+      <div class="lock-stack">
+
+        <div class="lock-row" id="lockRow0">
+          <div class="lock-bed"></div>
+          <div class="lock-number">1</div>
+          <div class="reels" id="row0"></div>
+          <div class="safe-bolt"></div>
+        </div>
+
+        <div class="lock-row" id="lockRow1">
+          <div class="lock-bed"></div>
+          <div class="lock-number">2</div>
+          <div class="reels" id="row1"></div>
+          <div class="safe-bolt"></div>
+        </div>
+
+        <div class="lock-row" id="lockRow2">
+          <div class="lock-bed"></div>
+          <div class="lock-number">3</div>
+          <div class="reels" id="row2"></div>
+          <div class="safe-bolt"></div>
+        </div>
+
+        <div class="lock-row" id="lockRow3">
+          <div class="lock-bed"></div>
+          <div class="lock-number">4</div>
+          <div class="reels" id="row3"></div>
+          <div class="safe-bolt"></div>
+        </div>
+
+      </div>
+
+      <div class="master-area">
+        <div class="master-wheel" id="masterWheel"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="controls" id="controls">
+
+  <button class="reset" id="resetBtn">
+    RESET
+  </button>
+
+  <button class="unlock" id="unlockBtn">
+    UNLOCK
+  </button>
+
+</div>
+
+<div class="message" id="message">
+  Drag the reels up or down.
+</div>
+
+<div class="legend" id="legend">
+
+  <span>
+    <i class="swatch"></i>
+    Live
+  </span>
+
+  <span>
+    <i class="swatch blue"></i>
+    Changes later
+  </span>
+
+  <span>
+    <i class="swatch gold"></i>
+    Key letter
+  </span>
+
+</div>
+
+<section class="key-stage" id="keyStage">
+
+  <div class="key-heading">
+    THE KEY
+  </div>
+
+  <div class="key-copy">
+    The gold letters have released the key.
+    Unscramble them to open the Vault.
+  </div>
+
+  <div class="key-letters" id="keyLetters"></div>
+
+  <input
+    class="key-input"
+    id="keyInput"
+    maxlength="4"
+    autocomplete="off"
+    autocorrect="off"
+    spellcheck="false"
+    placeholder="••••"
+  >
+
+  <button class="key-button" id="keyButton">
+    TURN KEY
+  </button>
+
+</section>
 
 </main>
 
 <script>
 
 /* =========================================================
-   WORDLOCK #003
+   WORDLOCK #004
    =========================================================
 
-   Board positions:
+   4 x 4 board
 
        0   1   2   3
        4   5   6   7
        8   9  10  11
+      12  13  14  15
 
-   Starting board:
+   IMPORTANT #004 PRINCIPLES
 
-       F   U   A   I
-       S   U   O   L
-       S   T   N   O
-
-   Four answers:
-       FURIOUS
-       STEAL
-       STILL
-       FLEE
-
-   Final scrambled KEY:
-       F A S E
-
-   Answer:
-       SAFE
+   - One clue = one physical lock
+   - Four clues = four locks
+   - First answer letter is already showing
+   - EASY pulses the first letter every time
+   - Blue means "correct now, changes later"
+   - Gold letters become the actual final Key
+   - Every clue snapshots its starting board
+   - Irrelevant experimentation ALWAYS resets
    ========================================================= */
 
 
-/* =========================
-   REEL CONTENTS
-   ========================= */
+/* =========================================================
+   WHEELS
+   ========================================================= */
 
 const wheels = [
-  ["F","B","M","C"],
-  ["U","A","E","O"],
-  ["A","R","N","T"],
-  ["I","O","E","F"],
 
-  ["S","N","L","B"],
-  ["U","A","E","I"],
-  ["O","A","L","E"],
-  ["L","R","N","T"],
+  ["F","B","M","C"],       // 0
+  ["U","A","E","O"],       // 1
+  ["A","R","N","T"],       // 2
+  ["I","O","E","F"],       // 3
 
-  ["S","C","B","M"],
-  ["T","N","R","P"],
-  ["N","E","I","O"],
-  ["O","A","E","U"]
+  ["S","L","N","B"],       // 4
+  ["U","E","A","I"],       // 5
+  ["O","L","E","A"],       // 6
+  ["L","R","N","T"],       // 7
+
+  ["S","C","B","M"],       // 8
+  ["T","N","R","P"],       // 9
+  ["N","E","I","O"],       // 10
+  ["O","A","E","U"],       // 11
+
+  ["B","D","P","G"],       // 12
+  ["E","O","I","U"],       // 13
+  ["A","C","R","N"],       // 14
+  ["R","L","T","S"]        // 15
 ];
 
-const startLetters = [
+
+const initialBoard = [
+
   "F","U","A","I",
   "S","U","O","L",
-  "S","T","N","O"
+  "S","T","N","O",
+  "B","E","A","R"
+
 ];
 
 
-/* =========================
+/* =========================================================
    PUZZLE
-   ========================= */
+   =========================================================
+
+   Notice the blue logic is now real.
+
+   After FURIOUS:
+   S/U/O at 4,5,6 are used correctly now
+   but must later become L/E/E for FLEE.
+
+   After STEAL:
+   position 10 is E now but becomes I for STILL.
+
+   After STILL:
+   position 6 is L now but becomes E for FLEE.
+
+   GOLD KEY POSITIONS AT END:
+
+   position 0  = F
+   position 5  = E
+   position 8  = S
+   position 11 = A
+
+   Read in board order:
+
+        F E S A
+
+   which must be unscrambled.
+   ========================================================= */
 
 const puzzles = [
 
@@ -741,26 +951,17 @@ const puzzles = [
     clue:"Very angry",
     answer:"FURIOUS",
     path:[0,1,2,3,6,5,4],
-
-    /*
-      A -> R
-      Position 2 will be needed again,
-      but R is not its final state.
-    */
-    green:[2],
-    gold:[3]
+    start:0,
+    blue:[4,5,6],
+    gold:[]
   },
 
   {
     clue:"A bargain",
     answer:"STEAL",
     path:[8,9,10,11,7],
-
-    /*
-      N -> E
-      O -> A
-    */
-    green:[10],
+    start:8,
+    blue:[10],
     gold:[11]
   },
 
@@ -768,68 +969,52 @@ const puzzles = [
     clue:"Not moving",
     answer:"STILL",
     path:[8,9,10,6,7],
-
-    /*
-      E -> I
-      O -> L
-    */
-    green:[6],
-    gold:[10]
+    start:8,
+    blue:[6],
+    gold:[8]
   },
 
   {
     clue:"Leave quickly",
     answer:"FLEE",
     path:[0,4,5,6],
-
-    /*
-      S -> L
-      U -> E
-      L -> E
-    */
-    green:[],
-    gold:[0,4,5,6]
+    start:0,
+    blue:[],
+    gold:[0,5]
   }
 
 ];
 
 
-/* =========================
-   STATE
-   ========================= */
+const KEY_POSITIONS = [0,5,8,11];
+const KEY_ANSWER = "SAFE";
+
+
+/* =========================================================
+   GAME STATE
+   ========================================================= */
 
 let currentPuzzle = 0;
 
-let currentLetters = [...startLetters];
+let currentLetters =
+  [...initialBoard];
 
-let canonicalLetters = [...startLetters];
+let clueSnapshot =
+  [...initialBoard];
 
-let states = Array(12).fill("live");
-
-/*
-This is crucial.
-
-Each reel remembers every direction the PLAYER
-has turned it during the current clue.
-
-+1 = moved forward one notch
--1 = moved backward one notch
-
-This lets RESET and automatic rollback genuinely
-retrace the player's movements in reverse.
-*/
-let moveHistory =
-  Array.from({length:12},()=>[]);
+let states =
+  Array(16).fill("live");
 
 let turns = 0;
 let attempts = 0;
+let keyAttempts = 0;
 
 let busy = false;
 
 
-/* =========================
-   DOM
-   ========================= */
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
 
 const clue =
   document.getElementById("clue");
@@ -861,29 +1046,39 @@ const legend =
 const keyStage =
   document.getElementById("keyStage");
 
+const keyLetters =
+  document.getElementById("keyLetters");
+
 const keyInput =
   document.getElementById("keyInput");
 
 const keyButton =
   document.getElementById("keyButton");
 
-const vault =
-  document.getElementById("vault");
+const safeDoor =
+  document.getElementById("safeDoor");
 
-const locks =
-  document.getElementById("locks");
+const vaultInterior =
+  document.getElementById("vaultInterior");
 
-const result =
-  document.getElementById("result");
+const masterWheel =
+  document.getElementById("masterWheel");
+
+const finalResult =
+  document.getElementById("finalResult");
 
 
-/* =========================
-   UTIL
-   ========================= */
+/* =========================================================
+   GENERAL HELPERS
+   ========================================================= */
 
 function wait(ms){
-  return new Promise(resolve=>setTimeout(resolve,ms));
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
 }
+
 
 function updateStats(){
 
@@ -892,19 +1087,36 @@ function updateStats(){
 }
 
 
+function wheelIndex(position,letter){
+
+  return wheels[position].indexOf(letter);
+}
+
+
+function getReel(position){
+
+  return document.querySelector(
+    `.reel[data-position="${position}"]`
+  );
+}
+
+
 /* =========================================================
-   MECHANICAL SOUND
+   AUDIO
    ========================================================= */
 
 let audioContext = null;
+
 
 function getAudio(){
 
   if(!audioContext){
 
     audioContext =
-      new (window.AudioContext ||
-           window.webkitAudioContext)();
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
   }
 
   return audioContext;
@@ -912,21 +1124,25 @@ function getAudio(){
 
 
 /*
-A tiny burst of filtered noise feels much more
-like a physical detent than a musical oscillator.
+Short filtered noise rather than an electronic
+musical beep.
 */
 
-function mechanicalTick(){
+function tick(){
 
   try{
 
     const ctx = getAudio();
 
     const length =
-      Math.floor(ctx.sampleRate * .025);
+      Math.floor(ctx.sampleRate*.022);
 
     const buffer =
-      ctx.createBuffer(1,length,ctx.sampleRate);
+      ctx.createBuffer(
+        1,
+        length,
+        ctx.sampleRate
+      );
 
     const data =
       buffer.getChannelData(0);
@@ -941,19 +1157,19 @@ function mechanicalTick(){
     const source =
       ctx.createBufferSource();
 
-    source.buffer = buffer;
-
     const filter =
       ctx.createBiquadFilter();
-
-    filter.type = "bandpass";
-    filter.frequency.value = 1250;
-    filter.Q.value = .8;
 
     const gain =
       ctx.createGain();
 
-    gain.gain.value = .12;
+    source.buffer = buffer;
+
+    filter.type = "bandpass";
+    filter.frequency.value = 1100;
+    filter.Q.value = .7;
+
+    gain.gain.value = .11;
 
     source.connect(filter);
     filter.connect(gain);
@@ -965,46 +1181,45 @@ function mechanicalTick(){
 }
 
 
-function mechanicalClunk(strong=false){
+function clunk(big=false){
 
   try{
 
     const ctx = getAudio();
 
-    const oscillator =
+    const osc =
       ctx.createOscillator();
 
     const gain =
       ctx.createGain();
 
-    oscillator.type = "triangle";
-    oscillator.frequency.value =
-      strong ? 72 : 92;
+    osc.type = "triangle";
+
+    osc.frequency.value =
+      big ? 58 : 82;
 
     gain.gain.setValueAtTime(
-      strong ? .18 : .11,
+      big ? .22 : .13,
       ctx.currentTime
     );
 
     gain.gain.exponentialRampToValueAtTime(
       .0001,
-      ctx.currentTime + (strong ? .24 : .14)
+      ctx.currentTime +
+      (big ? .30 : .18)
     );
 
-    oscillator.connect(gain);
+    osc.connect(gain);
     gain.connect(ctx.destination);
 
-    oscillator.start();
+    osc.start();
 
-    oscillator.stop(
-      ctx.currentTime + (strong ? .25 : .15)
+    osc.stop(
+      ctx.currentTime +
+      (big ? .31 : .19)
     );
 
-    /*
-    Add a mechanical snap.
-    */
-
-    setTimeout(mechanicalTick,40);
+    setTimeout(tick,45);
 
   }catch(e){}
 }
@@ -1016,48 +1231,43 @@ function wrongThunk(){
 
     const ctx = getAudio();
 
-    const oscillator =
+    const osc =
       ctx.createOscillator();
 
     const gain =
       ctx.createGain();
 
-    oscillator.type = "sine";
-    oscillator.frequency.value = 68;
+    osc.type = "sine";
+    osc.frequency.value = 63;
 
     gain.gain.setValueAtTime(
-      .08,
+      .07,
       ctx.currentTime
     );
 
     gain.gain.exponentialRampToValueAtTime(
       .0001,
-      ctx.currentTime+.11
+      ctx.currentTime+.10
     );
 
-    oscillator.connect(gain);
+    osc.connect(gain);
     gain.connect(ctx.destination);
 
-    oscillator.start();
-    oscillator.stop(ctx.currentTime+.12);
+    osc.start();
+    osc.stop(ctx.currentTime+.11);
 
   }catch(e){}
 }
 
 
 /* =========================================================
-   REEL HELPERS
+   RENDERING REELS
    ========================================================= */
-
-function wheelIndex(position,letter){
-
-  return wheels[position].indexOf(letter);
-}
-
 
 function neighbour(position,direction){
 
-  const wheel = wheels[position];
+  const wheel =
+    wheels[position];
 
   let index =
     wheelIndex(
@@ -1066,67 +1276,71 @@ function neighbour(position,direction){
     );
 
   index =
-    (index + direction + wheel.length)
-    % wheel.length;
+    (
+      index +
+      direction +
+      wheel.length
+    ) % wheel.length;
 
   return wheel[index];
 }
 
 
-function getReel(position){
-
-  return document.querySelector(
-    `.reel[data-position="${position}"]`
-  );
-}
-
-
 function renderReel(position){
 
-  const reel = getReel(position);
+  const reel =
+    getReel(position);
 
   if(!reel) return;
 
+  /*
+  Preserve pulse while rebuilding content.
+  */
+
+  const pulsing =
+    reel.classList.contains("start-pulse");
+
   reel.className = "reel";
 
-  if(states[position] === "green"){
-    reel.classList.add("green");
+  if(states[position] === "blue"){
+    reel.classList.add("blue");
   }
 
   if(states[position] === "gold"){
     reel.classList.add("gold");
   }
 
-  const current =
-    currentLetters[position];
+  if(pulsing){
+    reel.classList.add("start-pulse");
+  }
 
   reel.innerHTML = `
+
     <div class="letter prev">
       ${neighbour(position,-1)}
     </div>
 
     <div class="letter current">
-      ${current}
+      ${currentLetters[position]}
     </div>
 
     <div class="letter next">
       ${neighbour(position,1)}
     </div>
+
   `;
 }
 
 
 /* =========================================================
-   PLAYER TURN
+   PLAYER MOVEMENT
    ========================================================= */
 
-function turnReel(
+function moveOneNotch(
   position,
   direction,
-  record=true
+  countTurn=true
 ){
-
-  if(busy) return;
 
   if(states[position] === "gold"){
     return;
@@ -1142,54 +1356,61 @@ function turnReel(
     );
 
   index =
-    (index + direction + wheel.length)
-    % wheel.length;
+    (
+      index +
+      direction +
+      wheel.length
+    ) % wheel.length;
 
   currentLetters[position] =
     wheel[index];
 
-  if(record){
-
-    moveHistory[position].push(direction);
+  if(countTurn){
 
     turns++;
-
     updateStats();
   }
 
-  mechanicalTick();
-
+  tick();
   renderReel(position);
 }
 
 
 /* =========================================================
-   BUILD REELS
+   BUILD BOARD
    ========================================================= */
 
-function buildReels(){
+function buildBoard(){
 
-  for(let row=0;row<3;row++){
+  for(let row=0;row<4;row++){
 
     const holder =
-      document.getElementById(`row${row}`);
+      document.getElementById(
+        `row${row}`
+      );
 
     holder.innerHTML = "";
 
-    for(let column=0;column<4;column++){
+    for(let column=0;
+        column<4;
+        column++){
 
       const position =
-        row*4 + column;
+        row*4+column;
 
       const reel =
         document.createElement("div");
 
       reel.className = "reel";
 
-      reel.dataset.position = position;
+      reel.dataset.position =
+        position;
+
+      /*
+      TOUCH / IPHONE
+      */
 
       let startY = null;
-      let lastY = null;
 
       reel.addEventListener(
         "touchstart",
@@ -1205,8 +1426,6 @@ function buildReels(){
           startY =
             e.touches[0].clientY;
 
-          lastY = startY;
-
         },
         {passive:true}
       );
@@ -1218,19 +1437,22 @@ function buildReels(){
 
           if(startY === null) return;
 
-          lastY =
+          const y =
             e.touches[0].clientY;
 
           const distance =
-            lastY-startY;
-
-          /*
-          Give the reel a tiny physical response
-          while the finger is moving.
-          */
+            y-startY;
 
           reel.style.transform =
-            `translateY(${Math.max(-8,Math.min(8,distance*.15))}px)`;
+            `translateY(${
+              Math.max(
+                -7,
+                Math.min(
+                  7,
+                  distance*.14
+                )
+              )
+            }px)`;
 
         },
         {passive:true}
@@ -1252,25 +1474,31 @@ function buildReels(){
           reel.style.transform = "";
 
           /*
-          A TAP DOES NOTHING.
-
-          The player must genuinely drag.
+          TAP DOES NOTHING.
+          Must actually swipe.
           */
 
-          if(Math.abs(distance) >= 18){
+          if(Math.abs(distance)>=18){
 
-            if(distance < 0){
+            if(distance<0){
 
-              turnReel(position,1);
+              moveOneNotch(
+                position,
+                1,
+                true
+              );
 
             }else{
 
-              turnReel(position,-1);
+              moveOneNotch(
+                position,
+                -1,
+                true
+              );
             }
           }
 
-          startY = null;
-          lastY = null;
+          startY=null;
 
         },
         {passive:true}
@@ -1278,11 +1506,11 @@ function buildReels(){
 
 
       /*
-      Mouse support for laptops.
+      DESKTOP MOUSE
       */
 
-      let mouseDown = false;
-      let mouseStart = 0;
+      let mouseDown=false;
+      let mouseStart=0;
 
       reel.addEventListener(
         "mousedown",
@@ -1295,12 +1523,13 @@ function buildReels(){
             return;
           }
 
-          mouseDown = true;
-          mouseStart = e.clientY;
+          mouseDown=true;
+          mouseStart=e.clientY;
         }
       );
 
-      window.addEventListener(
+
+      reel.addEventListener(
         "mouseup",
         e=>{
 
@@ -1312,15 +1541,27 @@ function buildReels(){
           if(Math.abs(distance)>=18){
 
             if(distance<0){
-              turnReel(position,1);
+
+              moveOneNotch(
+                position,
+                1,
+                true
+              );
+
             }else{
-              turnReel(position,-1);
+
+              moveOneNotch(
+                position,
+                -1,
+                true
+              );
             }
           }
 
           mouseDown=false;
         }
       );
+
 
       holder.appendChild(reel);
 
@@ -1331,109 +1572,117 @@ function buildReels(){
 
 
 /* =========================================================
-   CHECK ANSWER
+   ANSWER
    ========================================================= */
 
 function pathWord(puzzle){
 
   return puzzle.path
-    .map(position=>currentLetters[position])
+    .map(
+      position=>
+        currentLetters[position]
+    )
     .join("");
 }
 
 
-function answerIsPresent(puzzle){
+function answerIsCorrect(puzzle){
 
-  return pathWord(puzzle) === puzzle.answer;
+  return (
+    pathWord(puzzle) ===
+    puzzle.answer
+  );
 }
 
 
 /* =========================================================
-   ROLLBACK
+   ROBUST SNAPSHOT RESET
    ========================================================= */
 
 /*
-This is the important #003 change.
+#003 tried to infer rollback from movement history.
 
-We don't merely return a reel to a target letter.
+#004 has a stronger rule:
 
-We literally undo every movement the player made,
-in reverse order.
+At the beginning of EVERY clue we take an exact
+snapshot of all sixteen reels.
 
-If the player did:
+If an irrelevant reel has moved, we KNOW exactly
+where it belongs.
 
-R -> T -> K
-
-the machine visibly does:
-
-K -> T -> R
+So automatic reset cannot "forget".
 */
 
-async function rollbackPosition(position){
 
-  const history =
-    moveHistory[position];
+function shortestDirection(
+  position,
+  target
+){
 
-  while(history.length){
+  const wheel =
+    wheels[position];
 
-    const originalDirection =
-      history.pop();
+  const currentIndex =
+    wheelIndex(
+      position,
+      currentLetters[position]
+    );
 
-    const reverseDirection =
-      -originalDirection;
+  const targetIndex =
+    wheelIndex(
+      position,
+      target
+    );
 
-    const wheel =
-      wheels[position];
+  const forward =
+    (
+      targetIndex -
+      currentIndex +
+      wheel.length
+    ) % wheel.length;
 
-    let index =
-      wheelIndex(
-        position,
-        currentLetters[position]
-      );
+  const backward =
+    (
+      currentIndex -
+      targetIndex +
+      wheel.length
+    ) % wheel.length;
 
-    index =
-      (
-        index +
-        reverseDirection +
-        wheel.length
-      ) % wheel.length;
-
-    currentLetters[position] =
-      wheel[index];
-
-    renderReel(position);
-
-    mechanicalTick();
-
-    await wait(145);
+  if(forward<=backward){
+    return 1;
   }
+
+  return -1;
 }
 
 
-/*
-After a successful answer, any experimental reel
-that was NOT part of the answer clicks back.
-*/
+async function returnToSnapshot(position){
 
-async function rollbackIrrelevant(puzzle){
+  const target =
+    clueSnapshot[position];
 
-  const answerPositions =
-    new Set(puzzle.path);
+  let safety=0;
 
-  for(let position=0;
-      position<12;
-      position++){
+  while(
+    currentLetters[position] !== target &&
+    safety<12
+  ){
 
-    if(
-      !answerPositions.has(position) &&
-      states[position] !== "gold" &&
-      moveHistory[position].length
-    ){
+    const direction =
+      shortestDirection(
+        position,
+        target
+      );
 
-      await rollbackPosition(position);
+    moveOneNotch(
+      position,
+      direction,
+      false
+    );
 
-      await wait(65);
-    }
+    await wait(130);
+
+    safety++;
   }
 }
 
@@ -1454,33 +1703,25 @@ resetBtn.addEventListener(
     resetBtn.disabled=true;
 
     message.textContent =
-      "Resetting your turns…";
-
-    /*
-    Work through each reel in sequence.
-    */
+      "Resetting…";
 
     for(let position=0;
-        position<12;
+        position<16;
         position++){
 
       if(
         states[position] !== "gold" &&
-        moveHistory[position].length
+        currentLetters[position] !==
+        clueSnapshot[position]
       ){
 
-        await rollbackPosition(position);
+        await returnToSnapshot(
+          position
+        );
 
-        await wait(45);
+        await wait(35);
       }
     }
-
-    /*
-    Reset does NOT remove turns from the score.
-    They were genuine player turns.
-
-    It simply restores the board.
-    */
 
     message.textContent =
       "Ready.";
@@ -1489,12 +1730,45 @@ resetBtn.addEventListener(
 
     unlockBtn.disabled=false;
     resetBtn.disabled=false;
+
   }
 );
 
 
 /* =========================================================
-   TRACE
+   AUTOMATIC CLEAN-UP
+   ========================================================= */
+
+async function rollbackIrrelevant(
+  puzzle
+){
+
+  const relevant =
+    new Set(puzzle.path);
+
+  for(let position=0;
+      position<16;
+      position++){
+
+    if(
+      !relevant.has(position) &&
+      states[position] !== "gold" &&
+      currentLetters[position] !==
+      clueSnapshot[position]
+    ){
+
+      await returnToSnapshot(
+        position
+      );
+
+      await wait(45);
+    }
+  }
+}
+
+
+/* =========================================================
+   TRACE ANSWER
    ========================================================= */
 
 async function traceAnswer(puzzle){
@@ -1504,12 +1778,16 @@ async function traceAnswer(puzzle){
     const reel =
       getReel(position);
 
+    reel.classList.remove(
+      "start-pulse"
+    );
+
     reel.classList.add("trace");
 
-    await wait(90);
+    await wait(105);
   }
 
-  await wait(240);
+  await wait(260);
 
   for(const position of puzzle.path){
 
@@ -1524,27 +1802,28 @@ async function traceAnswer(puzzle){
 
 
 /* =========================================================
-   STATE CHANGES
+   BLUE + GOLD STATES
    ========================================================= */
 
-async function applyStates(puzzle){
+function applyPuzzleStates(puzzle){
 
   /*
-  Previous greens become ordinary live reels
-  unless the new clue marks them again.
+  Old blue states disappear unless
+  this clue says they're still blue.
+  Gold never disappears.
   */
 
-  for(let i=0;i<12;i++){
+  for(let i=0;i<16;i++){
 
-    if(states[i] === "green"){
+    if(states[i] === "blue"){
       states[i] = "live";
     }
   }
 
-  for(const position of puzzle.green){
+  for(const position of puzzle.blue){
 
     if(states[position] !== "gold"){
-      states[position] = "green";
+      states[position] = "blue";
     }
   }
 
@@ -1553,57 +1832,40 @@ async function applyStates(puzzle){
     states[position] = "gold";
   }
 
-  for(let i=0;i<12;i++){
+  for(let i=0;i<16;i++){
     renderReel(i);
-  }
-
-  await wait(160);
-
-  mechanicalClunk();
-
-  /*
-  One progress bolt releases per clue.
-  */
-
-  document
-    .getElementById(
-      `bolt${currentPuzzle}`
-    )
-    .classList.add("open");
-
-  /*
-  Make the physical lock bars shift more
-  obviously as progress accumulates.
-  */
-
-  if(currentPuzzle === 0){
-
-    document
-      .getElementById("lockRow0")
-      .classList.add("cracked");
-  }
-
-  if(currentPuzzle === 1){
-
-    document
-      .getElementById("lockRow1")
-      .classList.add("cracked");
-  }
-
-  if(currentPuzzle === 2){
-
-    document
-      .getElementById("lockRow2")
-      .classList.add("cracked");
   }
 }
 
 
 /* =========================================================
-   ACCEPT SUCCESSFUL ANSWER
+   RELEASE ONE SAFE LOCK
    ========================================================= */
 
-async function successfulAnswer(puzzle){
+async function releaseLock(index){
+
+  await wait(250);
+
+  clunk(false);
+
+  const row =
+    document.getElementById(
+      `lockRow${index}`
+    );
+
+  row.classList.add("released");
+
+  await wait(650);
+}
+
+
+/* =========================================================
+   SUCCESS
+   ========================================================= */
+
+async function successfulAnswer(
+  puzzle
+){
 
   message.textContent =
     `${puzzle.answer} ✓`;
@@ -1611,34 +1873,31 @@ async function successfulAnswer(puzzle){
   await traceAnswer(puzzle);
 
   /*
-  NOW clean up experimentation.
+  Irrelevant experimentation cleans itself up.
   */
 
-  await rollbackIrrelevant(puzzle);
+  await rollbackIrrelevant(
+    puzzle
+  );
+
+  await wait(180);
+
+  applyPuzzleStates(puzzle);
 
   /*
-  Movements on answer reels are accepted
-  as part of the new canonical board.
-  Their histories are therefore cleared.
+  One clue.
+  One physical lock.
   */
 
-  for(let i=0;i<12;i++){
-
-    moveHistory[i] = [];
-  }
-
-  canonicalLetters =
-    [...currentLetters];
-
-  await applyStates(puzzle);
-
-  await wait(650);
+  await releaseLock(
+    currentPuzzle
+  );
 
   currentPuzzle++;
 
   if(currentPuzzle >= puzzles.length){
 
-    showKey();
+    await beginKeySequence();
     return;
   }
 
@@ -1652,7 +1911,7 @@ async function successfulAnswer(puzzle){
 
 
 /* =========================================================
-   UNLOCK
+   UNLOCK BUTTON
    ========================================================= */
 
 unlockBtn.addEventListener(
@@ -1668,26 +1927,23 @@ unlockBtn.addEventListener(
     const puzzle =
       puzzles[currentPuzzle];
 
-    if(!answerIsPresent(puzzle)){
-
-      message.textContent =
-        "LOCKED";
+    if(!answerIsCorrect(puzzle)){
 
       wrongThunk();
 
-      /*
-      Small physical resistance rather
-      than arcade-style failure.
-      */
+      message.textContent =
+        "Still locked.";
 
-      locks.animate(
+      safeDoor.animate(
         [
           {transform:"translateX(0)"},
           {transform:"translateX(2px)"},
           {transform:"translateX(-2px)"},
           {transform:"translateX(0)"}
         ],
-        {duration:180}
+        {
+          duration:180
+        }
       );
 
       return;
@@ -1701,11 +1957,65 @@ unlockBtn.addEventListener(
     message.textContent =
       "Checking…";
 
-    await wait(260);
+    await wait(220);
 
-    await successfulAnswer(puzzle);
+    await successfulAnswer(
+      puzzle
+    );
+
   }
 );
+
+
+/* =========================================================
+   EASY PULSE
+   ========================================================= */
+
+async function pulseStart(position){
+
+  /*
+  Give the new clue a moment to arrive
+  before quietly drawing attention
+  to its first letter.
+  */
+
+  await wait(500);
+
+  if(
+    busy ||
+    currentPuzzle >= puzzles.length
+  ){
+    return;
+  }
+
+  const reel =
+    getReel(position);
+
+  if(!reel) return;
+
+  reel.classList.remove(
+    "start-pulse"
+  );
+
+  /*
+  Force browser to restart animation.
+  */
+
+  void reel.offsetWidth;
+
+  reel.classList.add(
+    "start-pulse"
+  );
+
+  setTimeout(
+    ()=>{
+      reel.classList.remove(
+        "start-pulse"
+      );
+    },
+    1550
+  );
+}
 
 
 /* =========================================================
@@ -1717,6 +2027,14 @@ function loadPuzzle(){
   const puzzle =
     puzzles[currentPuzzle];
 
+  /*
+  THIS is the authoritative starting
+  position for the new clue.
+  */
+
+  clueSnapshot =
+    [...currentLetters];
+
   clueCount.textContent =
     `LOCK ${currentPuzzle+1} OF ${puzzles.length}`;
 
@@ -1725,22 +2043,29 @@ function loadPuzzle(){
 
   message.textContent =
     "Drag the reels up or down.";
+
+  /*
+  EASY MODE:
+  correct starting letter pulses twice.
+  */
+
+  pulseStart(
+    puzzle.start
+  );
 }
 
 
 /* =========================================================
-   KEY STAGE
+   GOLD LETTER -> KEY SEQUENCE
    ========================================================= */
 
-function showKey(){
+async function beginKeySequence(){
 
-  busy=true;
-
-  clueCount.textContent =
-    "FOUR LOCKS CRACKED";
-
-  clue.textContent =
-    "One lock remains.";
+  /*
+  This is deliberately slower than #003.
+  Finishing clue four should have a moment
+  to breathe.
+  */
 
   controls.style.display =
     "none";
@@ -1748,28 +2073,111 @@ function showKey(){
   legend.style.display =
     "none";
 
-  message.textContent =
-    "";
+  message.textContent = "";
 
-  keyStage.classList.add("show");
+  clueCount.textContent =
+    "ALL FOUR LOCKS OPEN";
+
+  clue.textContent =
+    "But the Vault is still locked.";
+
+  await wait(1100);
 
   /*
-  Don't automatically focus on iPhone:
-  we don't want the keyboard covering
-  the little reveal immediately.
+  Draw attention back to the GOLD reels.
   */
+
+  for(const position of KEY_POSITIONS){
+
+    const reel =
+      getReel(position);
+
+    reel.animate(
+      [
+        {transform:"scale(1)"},
+        {transform:"scale(1.12)"},
+        {transform:"scale(1)"}
+      ],
+      {
+        duration:480
+      }
+    );
+
+    tick();
+
+    await wait(330);
+  }
+
+  await wait(500);
+
+  clueCount.textContent =
+    "THE FINAL MECHANISM";
+
+  clue.textContent =
+    "Make the Key.";
+
+  masterWheel.classList.add(
+    "ready"
+  );
+
+  keyStage.classList.add(
+    "show"
+  );
+
+  /*
+  IMPORTANT:
+
+  We don't invent separate Key letters.
+
+  We physically READ THEM from the four
+  gold reels on the actual board.
+  */
+
+  const letters =
+    KEY_POSITIONS.map(
+      position=>
+        currentLetters[position]
+    );
+
+  keyLetters.innerHTML = "";
+
+  for(let i=0;i<letters.length;i++){
+
+    const tile =
+      document.createElement("div");
+
+    tile.className =
+      "key-letter";
+
+    tile.textContent =
+      letters[i];
+
+    keyLetters.appendChild(tile);
+
+    await wait(220);
+
+    tile.classList.add(
+      "arrive"
+    );
+
+    tick();
+  }
+
+  await wait(300);
+
+  busy=false;
 }
 
 
 /* =========================================================
-   KEY GUESS
+   KEY
    ========================================================= */
-
-let keyAttempts = 0;
 
 keyButton.addEventListener(
   "click",
   async()=>{
+
+    if(busy) return;
 
     const guess =
       keyInput.value
@@ -1780,7 +2188,7 @@ keyButton.addEventListener(
 
     keyAttempts++;
 
-    if(guess !== "SAFE"){
+    if(guess !== KEY_ANSWER){
 
       wrongThunk();
 
@@ -1791,7 +2199,9 @@ keyButton.addEventListener(
           {transform:"translateX(4px)"},
           {transform:"translateX(0)"}
         ],
-        {duration:220}
+        {
+          duration:220
+        }
       );
 
       keyInput.select();
@@ -1799,54 +2209,71 @@ keyButton.addEventListener(
       return;
     }
 
-    keyButton.disabled=true;
+    busy=true;
+
     keyInput.disabled=true;
+    keyButton.disabled=true;
 
     keyButton.textContent =
       "KEY ACCEPTED";
 
-    await wait(300);
+    await wait(450);
 
     /*
-    BIG final mechanical release.
+    Turn the central safe mechanism.
     */
 
-    mechanicalClunk(true);
+    clunk(true);
 
-    locks.classList.add(
-      "final-open"
+    masterWheel.classList.add(
+      "turn"
     );
 
-    await wait(750);
+    await wait(850);
+
+    /*
+    Pause.
+
+    Then the actual safe opens.
+    */
+
+    clueCount.textContent =
+      "VAULT UNLOCKED";
+
+    clue.textContent =
+      "Open.";
+
+    await wait(650);
+
+    /*
+    The reward already exists behind
+    the door before it opens.
+    */
+
+    vaultInterior.classList.add(
+      "show"
+    );
+
+    clunk(true);
+
+    safeDoor.classList.add(
+      "open"
+    );
+
+    await wait(1150);
 
     keyStage.style.display =
       "none";
 
-    clueCount.textContent =
-      "MASTER LOCK OPEN";
+    finalResult.textContent =
+      `${turns} turns · ` +
+      `${attempts} unlock attempts · ` +
+      `${keyAttempts} key ` +
+      `${keyAttempts===1 ? "guess" : "guesses"}`;
 
-    clue.textContent =
-      "The Vault";
-
-    vault.classList.add("show");
-
-    mechanicalClunk(true);
-
-    result.textContent =
-      `${turns} turns · ${attempts} unlock attempts · ` +
-      `${keyAttempts} key ${keyAttempts===1 ? "guess" : "guesses"}`;
-
-    window.scrollTo({
-      top:document.body.scrollHeight,
-      behavior:"smooth"
-    });
   }
 );
 
-
-/*
-Allow Return on keyboard.
-*/
 
 keyInput.addEventListener(
   "keydown",
@@ -1863,9 +2290,9 @@ keyInput.addEventListener(
    START
    ========================================================= */
 
-buildReels();
-loadPuzzle();
+buildBoard();
 updateStats();
+loadPuzzle();
 
 </script>
 
