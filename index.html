@@ -5,7 +5,7 @@
 <meta name="viewport"
 content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>WORDLOCK #013</title>
+<title>WORDLOCK #014</title>
 
 <style>
 
@@ -13,12 +13,11 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   --cream:#f3eee4;
   --ink:#181818;
   --paper:#fffdf8;
-  --steel:#303234;
 
   --sage:#b8c9c0;
   --sage-dark:#31594d;
   --sage-line:#78998e;
-  --sage-path:#76988d;
+  --sage-path:#71978a;
 
   --gold:#d4a640;
   --wrong:#8d5149;
@@ -101,22 +100,7 @@ h1{
   font-weight:850;
 }
 
-/* FIRST PLAY PERMISSION */
-
-.path-note{
-  margin:-1px auto 10px;
-  color:#77736b;
-  font-family:Georgia,serif;
-  font-size:12px;
-  line-height:1.4;
-  min-height:17px;
-}
-
-.path-note strong{
-  color:#5e746c;
-}
-
-/* BANKED ANSWERS */
+/* BANK */
 
 .answer-bank{
   min-height:38px;
@@ -255,23 +239,14 @@ h1{
   right:-19px;
   width:28px;
   background:
-    linear-gradient(
-      90deg,
-      #141516,
-      #55585a,
-      #252729
-    );
+    linear-gradient(90deg,#141516,#55585a,#252729);
   border-radius:0 8px 8px 0;
-  transform:
-    rotateY(90deg)
-    translateZ(14px);
+  transform:rotateY(90deg) translateZ(14px);
   transform-origin:left center;
 }
 
 .safe-frame.opened .door-wrap{
-  transform:
-    translateX(-3px)
-    rotateY(-112deg);
+  transform:translateX(-3px) rotateY(-112deg);
 }
 
 .safe-label{
@@ -288,66 +263,68 @@ h1{
   width:16px;
   height:48px;
   border-radius:5px;
-  background:
-    linear-gradient(
-      90deg,
-      #777,
-      #b6b6b3,
-      #656565
-    );
+  background:linear-gradient(90deg,#777,#b6b6b3,#656565);
   z-index:7;
 }
 
 .hinge.one{top:78px;}
 .hinge.two{bottom:78px;}
 
-/*
-========================================================
-BOARD + PATH LAYER
-========================================================
-
-The SVG sits OVER the spaces between the selectors but
-UNDER the selectors themselves.
-
-Each solved word leaves its actual route behind.
-*/
+/* ======================================================
+   BOARD
+   ====================================================== */
 
 .board-area{
   position:relative;
 }
+
+/*
+The route layer is now ABOVE the reel surfaces.
+
+That is deliberate.
+
+#013 allowed the selectors to obscure the path.
+#014 treats each selector as a PLACE THROUGH WHICH
+the path visibly travels.
+
+pointer-events:none means it never interferes with swipes.
+*/
 
 .path-svg{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
-  z-index:3;
+  z-index:12;
   pointer-events:none;
   overflow:visible;
+}
+
+.path-underlay{
+  fill:none;
+  stroke:rgba(255,253,248,.80);
+  stroke-width:7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 
 .path-line{
   fill:none;
   stroke:var(--sage-path);
-  stroke-width:4;
+  stroke-width:3.5;
   stroke-linecap:round;
   stroke-linejoin:round;
-  opacity:.92;
-  filter:drop-shadow(0 1px 0 rgba(255,255,255,.15));
+  opacity:.98;
 }
 
-.path-glow{
-  fill:none;
-  stroke:rgba(184,201,192,.32);
-  stroke-width:9;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-}
-
-.path-node{
-  fill:var(--sage-path);
-  stroke:#dce6e1;
+.path-node-outer{
+  fill:var(--paper);
+  stroke:var(--sage-path);
   stroke-width:2;
+}
+
+.path-node-inner{
+  fill:var(--sage-path);
 }
 
 /* LOCKS */
@@ -421,7 +398,9 @@ Each solved word leaves its actual route behind.
   background:var(--sage);
 }
 
-/* REELS */
+/* ======================================================
+   REELS
+   ====================================================== */
 
 .reel{
   position:relative;
@@ -456,29 +435,49 @@ Each solved word leaves its actual route behind.
   pointer-events:none;
 }
 
+/*
+Three visual states:
+
+1. current       = large, heavy black
+2. remembered    = small, dark, medium-heavy
+3. unused option = small, pale grey
+*/
+
 .choice{
   display:flex;
   align-items:center;
   justify-content:center;
   height:100%;
-  font-weight:900;
+  font-weight:650;
 }
 
 .choice.left,
 .choice.right{
   font-size:13px;
-  opacity:.5;
+  color:#aaa69f;
+  opacity:.62;
+}
+
+.choice.left.remembered,
+.choice.right.remembered{
+  color:#272725;
+  opacity:1;
+  font-weight:850;
 }
 
 .choice.current{
   font-size:27px;
+  color:#181818;
+  font-weight:950;
 }
 
 /*
-A visited selector remains fully alive.
+Used place border remains.
 
-The border records history.
-The path line records movement.
+It now means:
+"A successful path has passed through this place."
+
+It does NOT mean frozen.
 */
 
 .reel.used{
@@ -495,17 +494,19 @@ The path line records movement.
   border:1px solid rgba(49,89,77,.15);
 }
 
-/* TRACE */
-
 .reel.trace{
   background:#111 !important;
   color:white !important;
   transform:scale(1.055);
-  z-index:10;
+  z-index:15;
   box-shadow:none !important;
 }
 
-/* START LETTER */
+.reel.trace .choice{
+  color:white !important;
+}
+
+/* START */
 
 .reel.start-pulse .choice.current{
   animation:startLetter .72s ease-in-out 2;
@@ -516,7 +517,6 @@ The path line records movement.
     transform:scale(1);
     color:#181818;
   }
-
   50%{
     transform:scale(1.55);
     color:#a26d00;
@@ -599,7 +599,7 @@ button:disabled{
   margin-top:4px;
 }
 
-/* KEY STAGE */
+/* KEY */
 
 .key-stage{
   display:none;
@@ -619,7 +619,6 @@ button:disabled{
     transform:translateY(8px);
     opacity:0;
   }
-
   to{
     transform:none;
     opacity:1;
@@ -709,8 +708,6 @@ button:disabled{
   font-size:12px;
   font-weight:850;
 }
-
-/* CONNECTION */
 
 .connection-stage{
   display:none;
@@ -808,7 +805,7 @@ button:disabled{
 <h1>WORDLOCK</h1>
 
 <div class="subhead">
-  PROTOTYPE #013 · YOUR PATH
+  PROTOTYPE #014 · TRACES
 </div>
 
 <div class="stats">
@@ -831,14 +828,8 @@ button:disabled{
 </div>
 
 <div class="clue-card">
-
   <div id="clueCount" class="clue-count"></div>
   <div id="clue" class="clue"></div>
-
-</div>
-
-<div id="pathNote" class="path-note">
-  <strong>There is no perfect route.</strong> Find yours.
 </div>
 
 <div id="answerBank" class="answer-bank"></div>
@@ -879,13 +870,13 @@ button:disabled{
 
 <div id="boardArea" class="board-area">
 
+  <div id="lockStack"></div>
+
   <svg
     id="pathSvg"
     class="path-svg"
     aria-hidden="true">
   </svg>
-
-  <div id="lockStack"></div>
 
 </div>
 
@@ -925,8 +916,7 @@ button:disabled{
     YOUR PATH
   </div>
 
-  <div id="yourPathNumber" class="your-path-number">
-  </div>
+  <div id="yourPathNumber" class="your-path-number"></div>
 
   <div class="your-path-copy">
     There are many ways through a WORDLOCK.
@@ -991,25 +981,19 @@ button:disabled{
 
 <script>
 
-/*
-========================================================
-WORDLOCK #013 — YOUR PATH
-========================================================
+/* ======================================================
+   WORDLOCK #014 · TRACES
 
-ONE MAIN EXPERIMENT:
+   Experimental questions:
 
-Does watching the player's ACTUAL route accumulate
-across the four solved words feel intrinsically satisfying?
+   1. Does a successful route feel better when it visibly
+      travels THROUGH the selectors?
 
-No coverage score.
-No percentage.
-No "better" path.
+   2. Does remembering previously successful LETTERS make
+      the board feel like a record of where you've been?
 
-We simply record:
-YOUR PATH · X OF 16 PLACES VISITED.
-
-========================================================
-*/
+   Everything else is deliberately kept close to #013.
+   ====================================================== */
 
 const wheels=[
 
@@ -1078,6 +1062,22 @@ const KEY="LIGHT";
 
 let letters=[...initialBoard];
 
+/*
+Successful letters are remembered PER POSITION.
+
+Example:
+position 3 might eventually remember both E and R.
+
+Map:
+position -> Set(["E","R"])
+*/
+
+const rememberedLetters=
+  Array.from(
+    {length:16},
+    ()=>new Set()
+  );
+
 let usedPositions=new Set();
 let successfulPaths=[];
 
@@ -1091,7 +1091,6 @@ let hints=0;
 
 let busy=false;
 let interacted=false;
-
 let pulseTimer=null;
 
 let banked=[];
@@ -1148,11 +1147,9 @@ function updateStats(){
 
 }
 
-/*
-========================================================
-AUDIO
-========================================================
-*/
+/* ======================================================
+   AUDIO
+   ====================================================== */
 
 let audio=null;
 
@@ -1196,12 +1193,14 @@ async function clickSound(volume=.09,pitch=500){
   osc.type="triangle";
 
   osc.frequency.setValueAtTime(pitch,now);
+
   osc.frequency.exponentialRampToValueAtTime(
     pitch*.56,
     now+.025
   );
 
   gain.gain.setValueAtTime(volume,now);
+
   gain.gain.exponentialRampToValueAtTime(
     .001,
     now+.035
@@ -1295,11 +1294,9 @@ async function wrongSound(heavy=false){
 
 }
 
-/*
-========================================================
-BUILD LOCKS
-========================================================
-*/
+/* ======================================================
+   BUILD LOCKS
+   ====================================================== */
 
 function buildLocks(){
 
@@ -1307,7 +1304,8 @@ function buildLocks(){
 
   for(let row=0;row<4;row++){
 
-    const lock=document.createElement("div");
+    const lock=
+      document.createElement("div");
 
     lock.className="lock-row";
     lock.id=`lockRow${row}`;
@@ -1333,13 +1331,16 @@ function buildLocks(){
 
   for(let p=0;p<16;p++){
 
-    const reel=document.createElement("div");
+    const reel=
+      document.createElement("div");
 
     reel.className="reel";
     reel.dataset.position=p;
 
     document
-      .getElementById(`row${Math.floor(p/4)}`)
+      .getElementById(
+        `row${Math.floor(p/4)}`
+      )
       .appendChild(reel);
 
     addSwipe(reel,p);
@@ -1350,11 +1351,9 @@ function buildLocks(){
 
 }
 
-/*
-========================================================
-RENDER
-========================================================
-*/
+/* ======================================================
+   RENDER
+   ====================================================== */
 
 function wheelIndex(p){
 
@@ -1382,6 +1381,12 @@ function getReel(p){
   return document.querySelector(
     `.reel[data-position="${p}"]`
   );
+
+}
+
+function isRemembered(p,letter){
+
+  return rememberedLetters[p].has(letter);
 
 }
 
@@ -1415,11 +1420,21 @@ function render(p){
     reel.classList.add("start-pulse");
   }
 
+  const leftClass=
+    isRemembered(p,left)
+      ? "choice left remembered"
+      : "choice left";
+
+  const rightClass=
+    isRemembered(p,right)
+      ? "choice right remembered"
+      : "choice right";
+
   reel.innerHTML=`
 
     <div class="choice-strip">
 
-      <div class="choice left">
+      <div class="${leftClass}">
         ${left}
       </div>
 
@@ -1427,7 +1442,7 @@ function render(p){
         ${current}
       </div>
 
-      <div class="choice right">
+      <div class="${rightClass}">
         ${right}
       </div>
 
@@ -1445,13 +1460,15 @@ function renderAll(){
 
 }
 
-/*
-========================================================
-MOVEMENT
-========================================================
-*/
+/* ======================================================
+   MOVEMENT
+   ====================================================== */
 
-async function moveOne(p,direction,countTurn=true){
+async function moveOne(
+  p,
+  direction,
+  countTurn=true
+){
 
   if(busy) return;
 
@@ -1485,7 +1502,9 @@ async function moveOne(p,direction,countTurn=true){
   const reel=getReel(p);
 
   reel.style.transform=
-    `translateX(${direction>0 ? -7 : 7}px)`;
+    `translateX(${
+      direction>0 ? -7 : 7
+    }px)`;
 
   await wait(75);
 
@@ -1495,11 +1514,9 @@ async function moveOne(p,direction,countTurn=true){
 
 }
 
-/*
-========================================================
-SWIPE
-========================================================
-*/
+/* ======================================================
+   SWIPE
+   ====================================================== */
 
 function addSwipe(reel,p){
 
@@ -1513,7 +1530,8 @@ function addSwipe(reel,p){
 
       if(busy) return;
 
-      startX=event.touches[0].clientX;
+      startX=
+        event.touches[0].clientX;
 
     },
     {passive:true}
@@ -1526,11 +1544,15 @@ function addSwipe(reel,p){
       if(startX===null) return;
 
       const dx=
-        event.touches[0].clientX-startX;
+        event.touches[0].clientX-
+        startX;
 
       reel.style.transform=
         `translateX(${
-          Math.max(-8,Math.min(8,dx*.13))
+          Math.max(
+            -8,
+            Math.min(8,dx*.13)
+          )
         }px)`;
 
     },
@@ -1544,7 +1566,8 @@ function addSwipe(reel,p){
       if(startX===null) return;
 
       const dx=
-        event.changedTouches[0].clientX-startX;
+        event.changedTouches[0].clientX-
+        startX;
 
       reel.style.transform="";
 
@@ -1566,11 +1589,9 @@ function addSwipe(reel,p){
 
 }
 
-/*
-========================================================
-SPATIAL SEARCH
-========================================================
-*/
+/* ======================================================
+   SPATIAL SEARCH
+   ====================================================== */
 
 function neighbours(p){
 
@@ -1622,26 +1643,40 @@ function findAllPaths(word){
     path
   ){
 
-    if(letters[p]!==word[index]){
+    if(
+      letters[p] !==
+      word[index]
+    ){
       return;
     }
 
-    const nextPath=[...path,p];
+    const nextPath=[
+      ...path,
+      p
+    ];
 
-    if(index===word.length-1){
+    if(
+      index===
+      word.length-1
+    ){
 
       results.push(nextPath);
       return;
 
     }
 
-    const nextUsed=new Set(used);
+    const nextUsed=
+      new Set(used);
 
     nextUsed.add(p);
 
-    for(const next of neighbours(p)){
+    for(
+      const next of neighbours(p)
+    ){
 
-      if(nextUsed.has(next)){
+      if(
+        nextUsed.has(next)
+      ){
         continue;
       }
 
@@ -1665,7 +1700,9 @@ function findAllPaths(word){
 
   for(let p=0;p<16;p++){
 
-    if(letters[p]===word[0]){
+    if(
+      letters[p]===word[0]
+    ){
 
       search(
         p,
@@ -1683,10 +1720,11 @@ function findAllPaths(word){
 }
 
 /*
-If the displayed board contains several identical valid
-routes, choose the route adding the most new places.
+Same experimental rule as #013:
+if several routes exist simultaneously,
+prefer the one adding the most new places.
 
-This remains an experimental implementation choice.
+Not yet product doctrine.
 */
 
 function choosePath(paths){
@@ -1704,7 +1742,9 @@ function choosePath(paths){
 
     for(const p of path){
 
-      if(!usedPositions.has(p)){
+      if(
+        !usedPositions.has(p)
+      ){
         fresh++;
       }
 
@@ -1723,11 +1763,9 @@ function choosePath(paths){
 
 }
 
-/*
-========================================================
-ROLLBACK
-========================================================
-*/
+/* ======================================================
+   ROLLBACK
+   ====================================================== */
 
 function directionTo(p,target){
 
@@ -1739,7 +1777,9 @@ function directionTo(p,target){
   const wanted=
     wheel.indexOf(target);
 
-  if((current+1)%3===wanted){
+  if(
+    (current+1)%3===wanted
+  ){
     return 1;
   }
 
@@ -1778,7 +1818,9 @@ async function returnTo(p,target){
     const reel=getReel(p);
 
     reel.style.transform=
-      `translateX(${direction>0 ? -6 : 6}px)`;
+      `translateX(${
+        direction>0 ? -6 : 6
+      }px)`;
 
     await wait(75);
 
@@ -1816,7 +1858,8 @@ async function rollbackAll(){
 
 async function rollbackIrrelevant(path){
 
-  const keep=new Set(path);
+  const keep=
+    new Set(path);
 
   for(let p=0;p<16;p++){
 
@@ -1837,11 +1880,9 @@ async function rollbackIrrelevant(path){
 
 }
 
-/*
-========================================================
-RESET
-========================================================
-*/
+/* ======================================================
+   RESET
+   ====================================================== */
 
 resetBtn.addEventListener(
   "click",
@@ -1855,11 +1896,13 @@ resetBtn.addEventListener(
 
     disableControls(true);
 
-    message.textContent="Resetting…";
+    message.textContent=
+      "Resetting…";
 
     await rollbackAll();
 
-    message.textContent="Ready.";
+    message.textContent=
+      "Ready.";
 
     busy=false;
 
@@ -1868,11 +1911,9 @@ resetBtn.addEventListener(
   }
 );
 
-/*
-========================================================
-EASY START PULSE
-========================================================
-*/
+/* ======================================================
+   EASY START PULSE
+   ====================================================== */
 
 function stopEasyPulse(){
 
@@ -1884,7 +1925,9 @@ function stopEasyPulse(){
   }
 
   document
-    .querySelectorAll(".start-pulse")
+    .querySelectorAll(
+      ".start-pulse"
+    )
     .forEach(
       el=>
         el.classList.remove(
@@ -1904,15 +1947,20 @@ function pulseStart(){
     return;
   }
 
-  const p=puzzles[puzzleIndex].start;
+  const p=
+    puzzles[puzzleIndex].start;
 
   const reel=getReel(p);
 
-  reel.classList.remove("start-pulse");
+  reel.classList.remove(
+    "start-pulse"
+  );
 
   void reel.offsetWidth;
 
-  reel.classList.add("start-pulse");
+  reel.classList.add(
+    "start-pulse"
+  );
 
   setTimeout(
     ()=>{
@@ -1943,14 +1991,9 @@ function startEasyPulse(){
 
 }
 
-/*
-========================================================
-HINT
-========================================================
-
-Still prototype-only.
-The final hint model must account for player-owned routes.
-*/
+/* ======================================================
+   HINT
+   ====================================================== */
 
 hintBtn.addEventListener(
   "click",
@@ -1963,7 +2006,8 @@ hintBtn.addEventListener(
       return;
     }
 
-    const puzzle=puzzles[puzzleIndex];
+    const puzzle=
+      puzzles[puzzleIndex];
 
     let target=null;
 
@@ -1973,7 +2017,8 @@ hintBtn.addEventListener(
       i++
     ){
 
-      const p=puzzle.intendedPath[i];
+      const p=
+        puzzle.intendedPath[i];
 
       if(
         letters[p] !==
@@ -2000,7 +2045,8 @@ hintBtn.addEventListener(
 
     updateStats();
 
-    const reel=getReel(target);
+    const reel=
+      getReel(target);
 
     reel.animate(
       [
@@ -2029,11 +2075,9 @@ hintBtn.addEventListener(
   }
 );
 
-/*
-========================================================
-TRACE
-========================================================
-*/
+/* ======================================================
+   TRACE
+   ====================================================== */
 
 async function trace(path){
 
@@ -2063,20 +2107,21 @@ async function trace(path){
 
 }
 
+/* ======================================================
+   PATH GEOMETRY
+   ====================================================== */
+
 /*
-========================================================
-PATH DRAWING
-========================================================
+#014 deliberately moves the route below the letters.
 
-This is the heart of #013.
+Instead of using the reel's vertical centre,
+we use a lower "path port".
 
-We calculate the visual centre of each reel relative
-to boardArea, then draw the ACTUAL successful route.
-
-The route grows into existence.
+That keeps the line visible THROUGH horizontal runs
+without striking through the current letter.
 */
 
-function reelCentre(p){
+function reelPathPoint(p){
 
   const reel=getReel(p);
 
@@ -2087,6 +2132,7 @@ function reelCentre(p){
     boardArea.getBoundingClientRect();
 
   return{
+
     x:
       reelRect.left -
       boardRect.left +
@@ -2095,7 +2141,8 @@ function reelCentre(p){
     y:
       reelRect.top -
       boardRect.top +
-      reelRect.height/2
+      reelRect.height*.78
+
   };
 
 }
@@ -2105,7 +2152,8 @@ function pathPoints(path){
   return path
     .map(p=>{
 
-      const point=reelCentre(p);
+      const point=
+        reelPathPoint(p);
 
       return `${point.x},${point.y}`;
 
@@ -2123,14 +2171,17 @@ function makeSvgElement(name){
 
 }
 
+/* ======================================================
+   DRAW PATH
+   ====================================================== */
+
 async function drawSuccessfulPath(path){
 
-  /*
-  Refresh SVG dimensions to match rendered board.
-  */
+  const width=
+    boardArea.clientWidth;
 
-  const width=boardArea.clientWidth;
-  const height=boardArea.clientHeight;
+  const height=
+    boardArea.clientHeight;
 
   pathSvg.setAttribute(
     "viewBox",
@@ -2138,27 +2189,24 @@ async function drawSuccessfulPath(path){
   );
 
   /*
-  Glow underneath.
+  Cream underlay makes the sage path legible
+  against both white selectors and dark safe.
   */
 
-  const glow=
+  const underlay=
     makeSvgElement("polyline");
 
-  glow.setAttribute(
+  underlay.setAttribute(
     "points",
     pathPoints(path)
   );
 
-  glow.setAttribute(
+  underlay.setAttribute(
     "class",
-    "path-glow"
+    "path-underlay"
   );
 
-  pathSvg.appendChild(glow);
-
-  /*
-  Main route.
-  */
+  pathSvg.appendChild(underlay);
 
   const line=
     makeSvgElement("polyline");
@@ -2175,72 +2223,108 @@ async function drawSuccessfulPath(path){
 
   pathSvg.appendChild(line);
 
-  /*
-  Animate line drawing.
-  */
-
   const length=
     line.getTotalLength();
 
-  line.style.strokeDasharray=
-    `${length}`;
+  /*
+  Animate BOTH layers together.
+  */
 
-  line.style.strokeDashoffset=
-    `${length}`;
+  for(
+    const element of
+    [underlay,line]
+  ){
 
-  line.getBoundingClientRect();
+    element.style.strokeDasharray=
+      `${length}`;
 
-  line.style.transition=
-    "stroke-dashoffset .85s cubic-bezier(.2,.7,.2,1)";
+    element.style.strokeDashoffset=
+      `${length}`;
 
-  line.style.strokeDashoffset="0";
+    element.getBoundingClientRect();
+
+    element.style.transition=
+      "stroke-dashoffset .85s cubic-bezier(.2,.7,.2,1)";
+
+    element.style.strokeDashoffset="0";
+
+  }
 
   /*
-  Add tiny nodes sequentially.
+  Small waypoint markers.
+
+  These should feel more like places/junctions
+  than scoring dots.
   */
 
   for(const p of path){
 
-    const point=reelCentre(p);
+    const point=
+      reelPathPoint(p);
 
-    const node=
+    const outer=
       makeSvgElement("circle");
 
-    node.setAttribute(
+    outer.setAttribute(
       "cx",
       point.x
     );
 
-    node.setAttribute(
+    outer.setAttribute(
       "cy",
       point.y
     );
 
-    node.setAttribute(
+    outer.setAttribute(
       "r",
-      "4"
+      "5"
     );
 
-    node.setAttribute(
+    outer.setAttribute(
       "class",
-      "path-node"
+      "path-node-outer"
     );
 
-    node.style.opacity="0";
-    node.style.transformOrigin=
-      `${point.x}px ${point.y}px`;
+    outer.style.opacity="0";
 
-    pathSvg.appendChild(node);
+    pathSvg.appendChild(outer);
 
-    node.animate(
+    const inner=
+      makeSvgElement("circle");
+
+    inner.setAttribute(
+      "cx",
+      point.x
+    );
+
+    inner.setAttribute(
+      "cy",
+      point.y
+    );
+
+    inner.setAttribute(
+      "r",
+      "2.4"
+    );
+
+    inner.setAttribute(
+      "class",
+      "path-node-inner"
+    );
+
+    inner.style.opacity="0";
+
+    pathSvg.appendChild(inner);
+
+    outer.animate(
       [
         {
           opacity:0,
-          transform:"scale(.2)"
+          transform:"scale(.3)"
         },
         {
           opacity:1,
-          transform:"scale(1.45)"
+          transform:"scale(1.35)"
         },
         {
           opacity:1,
@@ -2253,6 +2337,21 @@ async function drawSuccessfulPath(path){
       }
     );
 
+    inner.animate(
+      [
+        {
+          opacity:0
+        },
+        {
+          opacity:1
+        }
+      ],
+      {
+        duration:250,
+        fill:"forwards"
+      }
+    );
+
     await wait(115);
 
   }
@@ -2261,23 +2360,48 @@ async function drawSuccessfulPath(path){
 
 }
 
-/*
-========================================================
-RECORD PATH
-========================================================
-*/
+/* ======================================================
+   RECORD SUCCESS
+   ====================================================== */
 
-async function recordPath(path,answer){
+async function recordPath(
+  path,
+  answer
+){
 
-  successfulPaths.push([...path]);
+  successfulPaths.push(
+    [...path]
+  );
 
   /*
-  Draw the route FIRST.
+  First store the LETTER history.
 
-  Then the visited selector borders settle in.
+  Each position remembers the actual successful letter
+  that was selected there for this word.
+  */
+
+  for(
+    let i=0;
+    i<path.length;
+    i++
+  ){
+
+    const p=path[i];
+
+    rememberedLetters[p]
+      .add(answer[i]);
+
+  }
+
+  /*
+  Draw the journey.
   */
 
   await drawSuccessfulPath(path);
+
+  /*
+  Then record the visited places.
+  */
 
   for(const p of path){
 
@@ -2331,7 +2455,9 @@ function renderBank(){
     const item=
       document.createElement("div");
 
-    item.className="banked-word";
+    item.className=
+      "banked-word";
+
     item.textContent=word;
 
     answerBank.appendChild(item);
@@ -2340,21 +2466,22 @@ function renderBank(){
 
 }
 
-/*
-========================================================
-LOAD CLUE
-========================================================
-*/
+/* ======================================================
+   LOAD CLUE
+   ====================================================== */
 
 function loadClue(){
 
-  clueSnapshot=[...letters];
+  clueSnapshot=[
+    ...letters
+  ];
 
   interacted=false;
 
   renderAll();
 
-  const puzzle=puzzles[puzzleIndex];
+  const puzzle=
+    puzzles[puzzleIndex];
 
   clueCount.textContent=
     `LOCK ${puzzleIndex+1} OF 4`;
@@ -2365,17 +2492,15 @@ function loadClue(){
   message.textContent=
     puzzleIndex===0
       ? "Find the word. Turn the reels."
-      : "Your previous paths remain live.";
+      : "Find your next word.";
 
   startEasyPulse();
 
 }
 
-/*
-========================================================
-CONTROLS
-========================================================
-*/
+/* ======================================================
+   CONTROLS
+   ====================================================== */
 
 function disableControls(value){
 
@@ -2385,11 +2510,9 @@ function disableControls(value){
 
 }
 
-/*
-========================================================
-UNLOCK
-========================================================
-*/
+/* ======================================================
+   UNLOCK
+   ====================================================== */
 
 unlockBtn.addEventListener(
   "click",
@@ -2402,10 +2525,13 @@ unlockBtn.addEventListener(
     attempts++;
     updateStats();
 
-    const puzzle=puzzles[puzzleIndex];
+    const puzzle=
+      puzzles[puzzleIndex];
 
     const paths=
-      findAllPaths(puzzle.answer);
+      findAllPaths(
+        puzzle.answer
+      );
 
     const actualPath=
       choosePath(paths);
@@ -2417,6 +2543,7 @@ unlockBtn.addEventListener(
     if(!actualPath){
 
       busy=true;
+
       disableControls(true);
 
       wrongSound();
@@ -2436,6 +2563,7 @@ unlockBtn.addEventListener(
       interacted=false;
 
       busy=false;
+
       disableControls(false);
 
       startEasyPulse();
@@ -2449,6 +2577,7 @@ unlockBtn.addEventListener(
     */
 
     busy=true;
+
     disableControls(true);
 
     stopEasyPulse();
@@ -2490,16 +2619,15 @@ unlockBtn.addEventListener(
     loadClue();
 
     busy=false;
+
     disableControls(false);
 
   }
 );
 
-/*
-========================================================
-FOUR PATHS COMPLETE
-========================================================
-*/
+/* ======================================================
+   FOUR WORDS COMPLETE
+   ====================================================== */
 
 async function finishLocks(){
 
@@ -2515,14 +2643,10 @@ async function finishLocks(){
     "This is your path.";
 
   /*
-  Let the player's network sit on screen.
-
-  No fill.
-  No percentage.
-  No judgement.
+  Let the network breathe before showing the text.
   */
 
-  await wait(900);
+  await wait(1100);
 
   const visited=
     usedPositions.size;
@@ -2532,19 +2656,19 @@ async function finishLocks(){
 
   pathStage.classList.add("show");
 
-  await wait(1000);
+  await wait(950);
 
-  masterWheel.classList.add("ready");
+  masterWheel.classList.add(
+    "ready"
+  );
 
   await beginKeyStage();
 
 }
 
-/*
-========================================================
-CONNECTION
-========================================================
-*/
+/* ======================================================
+   CONNECTION
+   ====================================================== */
 
 async function beginKeyStage(){
 
@@ -2555,7 +2679,9 @@ async function beginKeyStage(){
     const tile=
       document.createElement("div");
 
-    tile.className="final-word";
+    tile.className=
+      "final-word";
+
     tile.textContent=word;
 
     finalWords.appendChild(tile);
@@ -2574,11 +2700,9 @@ async function beginKeyStage(){
 
 }
 
-/*
-========================================================
-WRONG CONNECTION
-========================================================
-*/
+/* ======================================================
+   WRONG CONNECTION
+   ====================================================== */
 
 async function rejectKey(){
 
@@ -2587,11 +2711,15 @@ async function rejectKey(){
   keyFeedback.textContent=
     "That doesn't connect them.";
 
-  keyInput.classList.remove("wrong");
+  keyInput.classList.remove(
+    "wrong"
+  );
 
   void keyInput.offsetWidth;
 
-  keyInput.classList.add("wrong");
+  keyInput.classList.add(
+    "wrong"
+  );
 
   await wait(500);
 
@@ -2601,7 +2729,10 @@ async function rejectKey(){
   setTimeout(
     ()=>{
 
-      keyInput.classList.remove("wrong");
+      keyInput.classList.remove(
+        "wrong"
+      );
+
       keyFeedback.textContent="";
 
     },
@@ -2610,11 +2741,9 @@ async function rejectKey(){
 
 }
 
-/*
-========================================================
-CONNECT
-========================================================
-*/
+/* ======================================================
+   CONNECT
+   ====================================================== */
 
 keyButton.addEventListener(
   "click",
@@ -2647,18 +2776,26 @@ keyButton.addEventListener(
     keyButton.disabled=true;
 
     keyFeedback.textContent="";
-    keyButton.textContent="CONNECTED";
 
-    connectionStage.classList.add("show");
+    keyButton.textContent=
+      "CONNECTED";
+
+    connectionStage.classList.add(
+      "show"
+    );
 
     const connections=
       document.querySelectorAll(
         ".connection"
       );
 
-    for(const item of connections){
+    for(
+      const item of connections
+    ){
 
-      item.classList.add("reveal");
+      item.classList.add(
+        "reveal"
+      );
 
       clickSound(.075,500);
 
@@ -2668,7 +2805,9 @@ keyButton.addEventListener(
 
     await wait(500);
 
-    masterWheel.classList.add("turn");
+    masterWheel.classList.add(
+      "turn"
+    );
 
     clunk(true);
 
@@ -2684,12 +2823,17 @@ keyButton.addEventListener(
 
     clunk(true);
 
-    safeFrame.classList.add("opened");
+    safeFrame.classList.add(
+      "opened"
+    );
 
     await wait(1300);
 
-    keyStage.style.display="none";
-    pathStage.style.display="none";
+    keyStage.style.display=
+      "none";
+
+    pathStage.style.display=
+      "none";
 
     finalResult.innerHTML=
       `${turns} Turns · `+
@@ -2700,7 +2844,8 @@ keyButton.addEventListener(
           : "Hints"
       }`+
       `<br>`+
-      `Your Path · ${usedPositions.size} of 16 places visited`;
+      `Your Path · `+
+      `${usedPositions.size} of 16 places visited`;
 
   }
 );
@@ -2716,46 +2861,52 @@ keyInput.addEventListener(
   }
 );
 
-/*
-========================================================
-RESIZE
-========================================================
-
-If Safari changes viewport geometry, redraw all completed
-paths so lines continue to hit reel centres correctly.
-*/
+/* ======================================================
+   REDRAW PATHS
+   ====================================================== */
 
 function redrawPaths(){
 
   pathSvg.innerHTML="";
 
-  const width=boardArea.clientWidth;
-  const height=boardArea.clientHeight;
+  const width=
+    boardArea.clientWidth;
+
+  const height=
+    boardArea.clientHeight;
 
   pathSvg.setAttribute(
     "viewBox",
     `0 0 ${width} ${height}`
   );
 
-  for(const path of successfulPaths){
+  for(
+    const path of successfulPaths
+  ){
 
-    const glow=
-      makeSvgElement("polyline");
+    const underlay=
+      makeSvgElement(
+        "polyline"
+      );
 
-    glow.setAttribute(
+    underlay.setAttribute(
       "points",
       pathPoints(path)
     );
 
-    glow.setAttribute(
+    underlay.setAttribute(
       "class",
-      "path-glow"
+      "path-underlay"
     );
 
-    pathSvg.appendChild(glow);
+    pathSvg.appendChild(
+      underlay
+    );
 
     const line=
-      makeSvgElement("polyline");
+      makeSvgElement(
+        "polyline"
+      );
 
     line.setAttribute(
       "points",
@@ -2767,24 +2918,72 @@ function redrawPaths(){
       "path-line"
     );
 
-    pathSvg.appendChild(line);
+    pathSvg.appendChild(
+      line
+    );
 
     for(const p of path){
 
-      const point=reelCentre(p);
+      const point=
+        reelPathPoint(p);
 
-      const node=
-        makeSvgElement("circle");
+      const outer=
+        makeSvgElement(
+          "circle"
+        );
 
-      node.setAttribute("cx",point.x);
-      node.setAttribute("cy",point.y);
-      node.setAttribute("r","4");
-      node.setAttribute(
-        "class",
-        "path-node"
+      outer.setAttribute(
+        "cx",
+        point.x
       );
 
-      pathSvg.appendChild(node);
+      outer.setAttribute(
+        "cy",
+        point.y
+      );
+
+      outer.setAttribute(
+        "r",
+        "5"
+      );
+
+      outer.setAttribute(
+        "class",
+        "path-node-outer"
+      );
+
+      pathSvg.appendChild(
+        outer
+      );
+
+      const inner=
+        makeSvgElement(
+          "circle"
+        );
+
+      inner.setAttribute(
+        "cx",
+        point.x
+      );
+
+      inner.setAttribute(
+        "cy",
+        point.y
+      );
+
+      inner.setAttribute(
+        "r",
+        "2.4"
+      );
+
+      inner.setAttribute(
+        "class",
+        "path-node-inner"
+      );
+
+      pathSvg.appendChild(
+        inner
+      );
 
     }
 
@@ -2795,17 +2994,19 @@ function redrawPaths(){
 window.addEventListener(
   "resize",
   ()=>{
-    if(successfulPaths.length){
+
+    if(
+      successfulPaths.length
+    ){
       redrawPaths();
     }
+
   }
 );
 
-/*
-========================================================
-START
-========================================================
-*/
+/* ======================================================
+   START
+   ====================================================== */
 
 buildLocks();
 updateStats();
