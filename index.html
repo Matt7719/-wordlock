@@ -5,13 +5,13 @@
 <meta name="viewport"
 content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>WORDLOCK #015</title>
+<title>WORDLOCK #016 · THE PLACE</title>
 
 <style>
 
 :root{
-  --cream:#f3eee4;
-  --ink:#181818;
+  --cream:#f2eee4;
+  --ink:#1b1b19;
   --paper:#fffdf8;
 
   --sage:#b9cec3;
@@ -20,7 +20,10 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   --mauve:#cbbac9;
 
   --sage-dark:#31594d;
-  --gold:#d4a640;
+  --stone:#d8d0bf;
+  --stone-dark:#a9a08e;
+  --water:#c9d8d5;
+  --moss:#b8c3a8;
   --wrong:#8d5149;
 }
 
@@ -32,7 +35,8 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 body{
   margin:0;
   min-height:100vh;
-  background:var(--cream);
+  background:
+    radial-gradient(circle at 50% -10%,#faf8f1 0%,var(--cream) 55%);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
   display:flex;
@@ -41,7 +45,7 @@ body{
 
 .game{
   width:min(100%,460px);
-  padding:20px 15px 45px;
+  padding:20px 15px 55px;
   text-align:center;
 }
 
@@ -82,10 +86,11 @@ h1{
 
 .clue-card{
   background:rgba(255,255,255,.62);
-  border:1px solid rgba(0,0,0,.07);
-  border-radius:14px;
-  padding:11px 15px 12px;
+  border:1px solid rgba(0,0,0,.055);
+  border-radius:18px;
+  padding:12px 15px 13px;
   margin-bottom:10px;
+  box-shadow:0 4px 18px rgba(75,68,55,.035);
 }
 
 .clue-count{
@@ -101,16 +106,16 @@ h1{
   font-weight:850;
 }
 
-/* BANK */
+/* ANSWER BANK */
 
 .answer-bank{
-  min-height:38px;
+  min-height:39px;
   display:flex;
   justify-content:center;
   align-items:center;
   flex-wrap:wrap;
   gap:6px;
-  margin-bottom:10px;
+  margin-bottom:11px;
 }
 
 .banked-word{
@@ -120,7 +125,8 @@ h1{
   font-weight:900;
   letter-spacing:1px;
   color:#3e4743;
-  border:1px solid rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.07);
+  box-shadow:0 2px 6px rgba(0,0,0,.025);
   animation:bankIn .7s ease-out;
 }
 
@@ -135,166 +141,349 @@ h1{
   }
 }
 
-/* SAFE */
+/* ======================================================
+   THE PLACE
+   ====================================================== */
 
-.safe-shell{
+.place-shell{
   position:relative;
   width:100%;
-  perspective:1200px;
-  margin-bottom:13px;
-}
-
-.safe-frame{
-  position:relative;
-  background:#202224;
-  border-radius:20px;
-  padding:9px;
-  min-height:432px;
-  box-shadow:
-    0 8px 0 rgba(0,0,0,.13),
-    0 13px 24px rgba(0,0,0,.08);
-}
-
-.vault-interior{
-  position:absolute;
-  inset:9px;
-  border-radius:14px;
-  background:
-    radial-gradient(circle at 50% 40%,#303335,#151617 72%);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:32px 28px;
-  color:white;
-  z-index:0;
-}
-
-.vault-content{
-  opacity:0;
-  transform:scale(.96);
-  transition:
-    opacity 1s .8s,
-    transform 1s .8s;
-  position:relative;
-  z-index:2;
-}
-
-.safe-frame.opened .vault-content{
-  opacity:1;
-  transform:scale(1);
-}
-
-.vault-heading{
-  color:var(--gold);
-  font-size:11px;
-  font-weight:950;
-  letter-spacing:2px;
   margin-bottom:14px;
+  overflow:hidden;
+  border-radius:30px;
+  background:#ded7c8;
+  box-shadow:
+    0 15px 35px rgba(67,59,44,.11),
+    0 3px 8px rgba(67,59,44,.06);
+  transition:
+    transform 2.4s cubic-bezier(.2,.7,.2,1),
+    box-shadow 2.4s ease;
 }
 
-.vault-fact{
-  font-family:Georgia,serif;
-  font-size:19px;
-  line-height:1.43;
+.place-shell.revealed{
+  transform:scale(.965);
+  box-shadow:
+    0 20px 45px rgba(67,59,44,.08),
+    0 4px 10px rgba(67,59,44,.04);
 }
 
-.final-result{
-  margin-top:15px;
-  color:#d0d0d0;
-  font-size:11px;
-  font-weight:800;
-  line-height:1.7;
+.landscape{
+  position:relative;
+  min-height:510px;
+  padding:27px 18px 30px;
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      ellipse at 15% 18%,
+      rgba(255,255,255,.72) 0%,
+      rgba(255,255,255,0) 31%
+    ),
+    radial-gradient(
+      ellipse at 83% 75%,
+      rgba(190,205,194,.34) 0%,
+      rgba(190,205,194,0) 34%
+    ),
+    linear-gradient(
+      145deg,
+      #e8e1d2 0%,
+      #d9d1c0 45%,
+      #e6dfd0 100%
+    );
 }
 
-/* DOOR */
+/* soft distant light */
 
-.door-wrap{
+.landscape:before{
+  content:"";
+  position:absolute;
+  width:310px;
+  height:210px;
+  border-radius:50%;
+  top:-95px;
+  right:-75px;
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255,255,255,.8),
+      rgba(255,255,255,0) 70%
+    );
+  pointer-events:none;
+}
+
+/* subtle low haze */
+
+.landscape:after{
+  content:"";
+  position:absolute;
+  left:-20%;
+  right:-20%;
+  height:150px;
+  bottom:-70px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255,255,255,.72),
+      rgba(255,255,255,0) 72%
+    );
+  pointer-events:none;
+  z-index:8;
+}
+
+/* CONTOURS */
+
+.contour{
+  position:absolute;
+  border:1px solid rgba(117,108,89,.17);
+  border-radius:48% 52% 55% 45% / 52% 46% 54% 48%;
+  pointer-events:none;
+}
+
+.c1{
+  width:310px;
+  height:160px;
+  left:-100px;
+  top:24px;
+  transform:rotate(-12deg);
+}
+
+.c2{
+  width:250px;
+  height:125px;
+  left:-58px;
+  top:52px;
+  transform:rotate(-9deg);
+}
+
+.c3{
+  width:340px;
+  height:175px;
+  right:-145px;
+  top:125px;
+  transform:rotate(18deg);
+}
+
+.c4{
+  width:270px;
+  height:137px;
+  right:-108px;
+  top:151px;
+  transform:rotate(17deg);
+}
+
+.c5{
+  width:380px;
+  height:190px;
+  left:-125px;
+  bottom:2px;
+  transform:rotate(11deg);
+}
+
+.c6{
+  width:300px;
+  height:145px;
+  left:-76px;
+  bottom:28px;
+  transform:rotate(9deg);
+}
+
+/* STONE FORMS */
+
+.stone-form{
+  position:absolute;
+  pointer-events:none;
+  opacity:.72;
+}
+
+.stone-a{
+  width:110px;
+  height:47px;
+  top:71px;
+  right:-20px;
+  border-radius:70% 20% 55% 25%;
+  background:
+    linear-gradient(
+      150deg,
+      rgba(238,233,222,.9),
+      rgba(177,166,145,.42)
+    );
+  transform:rotate(-7deg);
+}
+
+.stone-b{
+  width:85px;
+  height:35px;
+  left:-24px;
+  bottom:92px;
+  border-radius:30% 70% 30% 65%;
+  background:
+    linear-gradient(
+      160deg,
+      rgba(234,228,216,.75),
+      rgba(171,161,141,.35)
+    );
+  transform:rotate(12deg);
+}
+
+.stone-c{
+  width:58px;
+  height:82px;
+  right:18px;
+  bottom:33px;
+  border-radius:45% 40% 25% 55%;
+  background:
+    linear-gradient(
+      130deg,
+      rgba(228,221,207,.78),
+      rgba(158,148,129,.34)
+    );
+  transform:rotate(16deg);
+}
+
+/* HINT OF WATER */
+
+.water-fragment{
+  position:absolute;
+  width:170px;
+  height:34px;
+  left:30px;
+  bottom:43px;
+  border-radius:60% 40% 65% 35%;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(192,211,207,0),
+      rgba(192,211,207,.52),
+      rgba(192,211,207,.08)
+    );
+  transform:rotate(-7deg);
+  filter:blur(.2px);
+  opacity:.72;
+  pointer-events:none;
+}
+
+/* HINT OF VEGETATION */
+
+.moss-fragment{
+  position:absolute;
+  width:115px;
+  height:58px;
+  right:-25px;
+  top:278px;
+  border-radius:60% 35% 65% 40%;
+  background:
+    radial-gradient(
+      ellipse at 30% 40%,
+      rgba(162,181,146,.45),
+      rgba(162,181,146,0) 70%
+    );
+  transform:rotate(-13deg);
+  pointer-events:none;
+}
+
+/* tiny ambiguous marks */
+
+.map-mark{
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:rgba(93,84,68,.28);
+  pointer-events:none;
+}
+
+.mark1{left:11%;top:22%;}
+.mark2{right:13%;top:39%;}
+.mark3{left:17%;bottom:21%;}
+.mark4{right:22%;bottom:12%;}
+
+/* PLACE HEADING */
+
+.place-heading{
   position:relative;
   z-index:5;
-  transform-style:preserve-3d;
-  transform-origin:left center;
-  transition:
-    transform 1.8s cubic-bezier(.22,.7,.18,1);
+  margin-bottom:19px;
 }
 
-.safe-door{
+.place-kicker{
+  font-size:8px;
+  letter-spacing:2.8px;
+  font-weight:900;
+  color:#81796b;
+  margin-bottom:4px;
+}
+
+.place-name{
+  font-family:Georgia,serif;
+  font-size:18px;
+  letter-spacing:.4px;
+  color:#4b463d;
+}
+
+/* ======================================================
+   FOUR STRATA
+   ====================================================== */
+
+.board{
   position:relative;
-  min-height:414px;
-  background:linear-gradient(145deg,#3c3f41,#2e3032);
-  border-radius:14px;
-  border:2px solid #4c4f51;
-  padding:18px 15px 16px;
-  overflow:hidden;
-  backface-visibility:hidden;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.06),
-    inset -6px 0 10px rgba(0,0,0,.2);
+  z-index:5;
 }
-
-.door-edge{
-  position:absolute;
-  top:7px;
-  bottom:7px;
-  right:-19px;
-  width:28px;
-  background:linear-gradient(90deg,#141516,#55585a,#252729);
-  border-radius:0 8px 8px 0;
-  transform:rotateY(90deg) translateZ(14px);
-  transform-origin:left center;
-}
-
-.safe-frame.opened .door-wrap{
-  transform:translateX(-3px) rotateY(-112deg);
-}
-
-.safe-label{
-  color:#aaa;
-  font-size:9px;
-  letter-spacing:2.3px;
-  font-weight:850;
-  margin-bottom:12px;
-}
-
-.hinge{
-  position:absolute;
-  left:-10px;
-  width:16px;
-  height:48px;
-  border-radius:5px;
-  background:linear-gradient(90deg,#777,#b6b6b3,#656565);
-  z-index:7;
-}
-
-.hinge.one{top:78px;}
-.hinge.two{bottom:78px;}
-
-/* LOCKS */
 
 .lock-row{
   position:relative;
-  height:70px;
-  margin:3px 0;
+  height:75px;
+  margin:7px 0;
   display:flex;
   align-items:center;
 }
 
-.lock-bed{
+/*
+No black lock bed.
+
+Instead each row sits on a quiet stone stratum.
+*/
+
+.row-bed{
   position:absolute;
-  left:3px;
-  right:34px;
-  top:6px;
-  bottom:6px;
-  border-radius:9px;
-  background:#1f2021;
-  border:1px solid rgba(255,255,255,.07);
-  z-index:1;
+  left:1px;
+  right:1px;
+  top:7px;
+  bottom:7px;
+  border-radius:14px 19px 13px 18px;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(187,177,158,.28),
+      rgba(255,255,255,.23),
+      rgba(169,159,141,.22)
+    );
+  border:
+    1px solid rgba(115,105,88,.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+.lock-row:nth-child(2) .row-bed{
+  border-radius:19px 13px 20px 12px;
+  transform:translateX(3px);
+}
+
+.lock-row:nth-child(3) .row-bed{
+  border-radius:13px 21px 14px 18px;
+  transform:translateX(-2px);
+}
+
+.lock-row:nth-child(4) .row-bed{
+  border-radius:20px 15px 19px 13px;
+  transform:translateX(2px);
 }
 
 .lock-number{
   position:absolute;
   left:8px;
   z-index:5;
-  color:#858585;
+  color:#827a6c;
   font-size:8px;
   font-weight:900;
 }
@@ -302,66 +491,38 @@ h1{
 .reels{
   position:relative;
   z-index:4;
-  width:calc(100% - 75px);
-  margin-left:28px;
+  width:calc(100% - 48px);
+  margin-left:30px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:3px;
-}
-
-.safe-bolt{
-  position:absolute;
-  right:3px;
-  top:23px;
-  width:38px;
-  height:24px;
-  background:#b9b8b3;
-  border-radius:4px 12px 12px 4px;
-  transition:
-    transform .85s cubic-bezier(.22,.75,.25,1),
-    background .65s ease;
-  z-index:2;
-}
-
-.safe-bolt:after{
-  content:"";
-  position:absolute;
-  right:6px;
-  top:7px;
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:#6e6e6a;
-}
-
-.lock-row.released .safe-bolt{
-  transform:translateX(-29px);
-  background:#c5ccc8;
+  gap:4px;
 }
 
 /* REELS */
 
 .reel{
   position:relative;
-  height:59px;
+  height:61px;
   overflow:hidden;
-  background:var(--paper);
-  border-left:1px solid rgba(0,0,0,.13);
-  border-right:1px solid rgba(0,0,0,.13);
+  background:rgba(255,253,248,.92);
+  border:1px solid rgba(79,73,62,.11);
   touch-action:none;
   user-select:none;
   transition:
     background 1s ease,
-    transform .24s cubic-bezier(.22,.65,.3,1),
+    transform .27s cubic-bezier(.22,.65,.3,1),
     box-shadow .8s ease;
+  box-shadow:
+    0 2px 5px rgba(69,61,48,.045),
+    inset 0 1px 0 rgba(255,255,255,.7);
 }
 
 .reel:first-child{
-  border-radius:5px 1px 1px 5px;
+  border-radius:11px 5px 5px 11px;
 }
 
 .reel:last-child{
-  border-radius:1px 5px 5px 1px;
+  border-radius:5px 11px 11px 5px;
 }
 
 .choice-strip{
@@ -392,13 +553,6 @@ h1{
   font-weight:650;
 }
 
-/*
-A letter which has previously appeared in a successful
-answer at THIS place stays dark.
-
-It is history, not a hint.
-*/
-
 .choice.left.remembered,
 .choice.right.remembered{
   color:#282826;
@@ -412,46 +566,28 @@ It is history, not a hint.
   font-weight:950;
 }
 
-/*
-The colour wash lives underneath the letters.
-*/
-
 .reel-wash{
   position:absolute;
   inset:0;
   z-index:1;
-  opacity:1;
   pointer-events:none;
   transition:
-    opacity 1s ease,
-    background 1s ease;
+    opacity 1.1s ease,
+    background 1.1s ease;
 }
-
-/*
-A very soft internal edge replaces the old sage border.
-The reel is coloured because a journey has passed through it,
-but it never looks disabled.
-*/
 
 .reel.visited{
   box-shadow:
-    inset 0 0 0 1px rgba(40,60,52,.16);
+    0 2px 5px rgba(69,61,48,.04),
+    inset 0 0 0 1px rgba(40,60,52,.09);
 }
-
-/* Correct-word confirmation */
 
 .reel.trace{
-  transform:scale(1.035);
+  transform:scale(1.03);
 }
-
-.reel.trace .choice.current{
-  color:#0d0d0d;
-}
-
-/* START PULSE */
 
 .reel.start-pulse .choice.current{
-  animation:startLetter .85s ease-in-out 2;
+  animation:startLetter .9s ease-in-out 2;
 }
 
 @keyframes startLetter{
@@ -460,9 +596,30 @@ but it never looks disabled.
     color:#181818;
   }
   50%{
-    transform:scale(1.42);
-    color:#936c18;
+    transform:scale(1.4);
+    color:#8c6b2c;
   }
+}
+
+/* AFTER ALL FOUR */
+
+.landscape-glow{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+  background:
+    radial-gradient(
+      ellipse at 50% 47%,
+      rgba(255,255,255,.23),
+      rgba(255,255,255,0) 55%
+    );
+  transition:opacity 2s ease;
+  z-index:4;
+}
+
+.place-shell.complete .landscape-glow{
+  opacity:1;
 }
 
 /* CONTROLS */
@@ -512,13 +669,13 @@ button:disabled{
   display:none;
   margin-top:15px;
   padding:14px;
-  border-radius:16px;
-  background:rgba(255,255,255,.6);
+  border-radius:18px;
+  background:rgba(255,255,255,.59);
 }
 
 .path-stage.show{
   display:block;
-  animation:stageIn .7s ease-out;
+  animation:stageIn .8s ease-out;
 }
 
 .your-path-label{
@@ -541,19 +698,19 @@ button:disabled{
   margin-top:4px;
 }
 
-/* KEY */
+/* CONNECTION */
 
 .key-stage{
   display:none;
   margin-top:12px;
   padding:18px 14px;
-  border-radius:16px;
-  background:rgba(255,255,255,.6);
+  border-radius:18px;
+  background:rgba(255,255,255,.59);
 }
 
 .key-stage.show{
   display:block;
-  animation:stageIn .8s ease-out;
+  animation:stageIn .9s ease-out;
 }
 
 @keyframes stageIn{
@@ -568,7 +725,7 @@ button:disabled{
 }
 
 .key-heading{
-  color:#7b5c12;
+  color:#76664d;
   font-size:11px;
   font-weight:950;
   letter-spacing:2px;
@@ -602,7 +759,7 @@ button:disabled{
   font-weight:950;
   letter-spacing:1px;
   color:#303733;
-  border:1px solid rgba(0,0,0,.07);
+  border:1px solid rgba(0,0,0,.06);
 }
 
 .key-input{
@@ -669,11 +826,11 @@ button:disabled{
 }
 
 .connection.reveal{
-  animation:connectionIn .65s forwards;
+  animation:connectionIn .7s forwards;
 }
 
 .connection .key{
-  color:#9a710c;
+  color:#8b6c35;
 }
 
 @keyframes connectionIn{
@@ -683,58 +840,57 @@ button:disabled{
   }
 }
 
-/* MASTER WHEEL */
+/* FINAL PLACE REVEAL */
 
-.master-area{
-  margin:12px auto 1px;
-  width:76px;
-  height:76px;
+.place-reveal{
+  display:none;
+  margin-top:13px;
+  padding:18px 16px;
+  border-radius:20px;
+  background:rgba(255,255,255,.61);
 }
 
-.master-wheel{
-  width:66px;
-  height:66px;
-  margin:auto;
-  border-radius:50%;
-  border:7px solid #999b9c;
-  background:#252729;
-  position:relative;
-  transition:
-    transform 1.4s cubic-bezier(.2,.7,.2,1),
-    border-color .8s;
+.place-reveal.show{
+  display:block;
+  animation:placeReveal 1.4s ease-out;
 }
 
-.master-wheel:before,
-.master-wheel:after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  background:#999b9c;
-  transform:translate(-50%,-50%);
+@keyframes placeReveal{
+  from{
+    opacity:0;
+    transform:translateY(9px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
 
-.master-wheel:before{
-  width:48px;
-  height:5px;
+.reveal-kicker{
+  font-size:9px;
+  letter-spacing:2.4px;
+  font-weight:900;
+  color:#81796b;
 }
 
-.master-wheel:after{
-  width:5px;
-  height:48px;
+.reveal-title{
+  font-family:Georgia,serif;
+  font-size:24px;
+  margin:5px 0 7px;
 }
 
-.master-wheel.ready{
-  border-color:var(--gold);
+.reveal-copy{
+  font-size:12px;
+  color:#746f66;
+  line-height:1.5;
 }
 
-.master-wheel.ready:before,
-.master-wheel.ready:after{
-  background:var(--gold);
-}
-
-.master-wheel.turn{
-  transform:rotate(145deg);
+.final-result{
+  margin-top:11px;
+  font-size:11px;
+  font-weight:800;
+  color:#666158;
+  line-height:1.7;
 }
 
 </style>
@@ -747,7 +903,7 @@ button:disabled{
 <h1>WORDLOCK</h1>
 
 <div class="subhead">
-  PROTOTYPE #015 · COLOUR TRACES
+  PROTOTYPE #016 · THE PLACE
 </div>
 
 <div class="stats">
@@ -776,48 +932,43 @@ button:disabled{
 
 <div id="answerBank" class="answer-bank"></div>
 
-<div class="safe-shell">
+<!-- THE PLACE -->
 
-<div class="safe-frame" id="safeFrame">
+<div id="placeShell" class="place-shell">
 
-<div class="vault-interior">
+<div class="landscape">
 
-<div class="vault-content">
+  <div class="contour c1"></div>
+  <div class="contour c2"></div>
+  <div class="contour c3"></div>
+  <div class="contour c4"></div>
+  <div class="contour c5"></div>
+  <div class="contour c6"></div>
 
-  <div class="vault-heading">
-    TODAY'S VAULT
+  <div class="stone-form stone-a"></div>
+  <div class="stone-form stone-b"></div>
+  <div class="stone-form stone-c"></div>
+
+  <div class="water-fragment"></div>
+  <div class="moss-fragment"></div>
+
+  <div class="map-mark mark1"></div>
+  <div class="map-mark mark2"></div>
+  <div class="map-mark mark3"></div>
+  <div class="map-mark mark4"></div>
+
+  <div class="landscape-glow"></div>
+
+  <div class="place-heading">
+    <div class="place-kicker">
+      SOMEWHERE NEAR THE BEGINNING
+    </div>
+    <div class="place-name">
+      Stone · water · first traces
+    </div>
   </div>
 
-  <div class="vault-fact">
-    Four words. One connection.
-  </div>
-
-  <div id="finalResult" class="final-result"></div>
-
-</div>
-</div>
-
-<div class="door-wrap">
-
-<div class="door-edge"></div>
-
-<div class="hinge one"></div>
-<div class="hinge two"></div>
-
-<div class="safe-door">
-
-<div class="safe-label">
-  UNLOCK · CONNECT
-</div>
-
-<div id="lockStack"></div>
-
-<div class="master-area">
-  <div id="masterWheel" class="master-wheel"></div>
-</div>
-
-</div>
-</div>
+  <div id="lockStack" class="board"></div>
 
 </div>
 </div>
@@ -909,22 +1060,35 @@ button:disabled{
 
 </section>
 
+<section id="placeReveal" class="place-reveal">
+
+  <div class="reveal-kicker">
+    PLACE VISITED
+  </div>
+
+  <div class="reveal-title">
+    A first trace
+  </div>
+
+  <div class="reveal-copy">
+    Your path has become part of this place.
+  </div>
+
+  <div id="finalResult" class="final-result"></div>
+
+</section>
+
 </main>
 
 <script>
 
 /* ======================================================
-   WORDLOCK #015 · COLOUR TRACES
+   WORDLOCK #016 · THE PLACE
 
-   NO PATH LINES.
+   The question:
+   does WORDLOCK belong in a PLACE rather than a SAFE?
 
-   Each successful answer leaves a coloured trace in the
-   PLACES it visited.
-
-   Shared places retain all their previous colours.
-
-   Successful LETTERS are also remembered separately.
-
+   Core puzzle deliberately retained from #015.
    ====================================================== */
 
 const wheels=[
@@ -998,25 +1162,11 @@ const KEY="LIGHT";
 
 let letters=[...initialBoard];
 
-/*
-LETTER MEMORY:
-which successful letters have previously occupied each place?
-*/
-
 const rememberedLetters=
   Array.from(
     {length:16},
     ()=>new Set()
   );
-
-/*
-COLOUR MEMORY:
-which successful answers have travelled through each place?
-
-Stores puzzle indices, e.g.
-placeColours[3] might be Set([0,1])
-meaning SABER + HOUSE.
-*/
 
 const placeColours=
   Array.from(
@@ -1025,9 +1175,10 @@ const placeColours=
   );
 
 let usedPositions=new Set();
-let successfulPaths=[];
 
-let clueSnapshot=[...letters];
+let clueSnapshot=[
+  ...letters
+];
 
 let puzzleIndex=0;
 
@@ -1041,7 +1192,8 @@ let pulseTimer=null;
 
 let banked=[];
 
-const $=id=>document.getElementById(id);
+const $=id=>
+  document.getElementById(id);
 
 const lockStack=$("lockStack");
 
@@ -1072,15 +1224,18 @@ const keyInput=$("keyInput");
 const keyButton=$("keyButton");
 const keyFeedback=$("keyFeedback");
 
-const connectionStage=$("connectionStage");
+const connectionStage=
+  $("connectionStage");
 
-const masterWheel=$("masterWheel");
-const safeFrame=$("safeFrame");
+const placeShell=$("placeShell");
+const placeReveal=$("placeReveal");
 
 const finalResult=$("finalResult");
 
 const wait=ms=>
-  new Promise(resolve=>setTimeout(resolve,ms));
+  new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
 
 function updateStats(){
 
@@ -1091,7 +1246,10 @@ function updateStats(){
 }
 
 /* ======================================================
-   AUDIO — deliberately gentler
+   AUDIO
+
+   Softer again than #015.
+   No safe clunks.
    ====================================================== */
 
 let audio=null;
@@ -1123,16 +1281,9 @@ async function getAudio(){
 
 }
 
-/*
-Soft movement tone.
-
-Still synthetic for prototype simplicity, but deliberately
-lower, quieter and less "arcade click".
-*/
-
 async function softTock(
-  volume=.032,
-  pitch=235
+  volume=.024,
+  pitch=220
 ){
 
   const ctx=await getAudio();
@@ -1151,8 +1302,8 @@ async function softTock(
   );
 
   osc.frequency.exponentialRampToValueAtTime(
-    pitch*.72,
-    now+.075
+    pitch*.78,
+    now+.09
   );
 
   gain.gain.setValueAtTime(
@@ -1162,19 +1313,19 @@ async function softTock(
 
   gain.gain.exponentialRampToValueAtTime(
     volume,
-    now+.012
+    now+.018
   );
 
   gain.gain.exponentialRampToValueAtTime(
     .001,
-    now+.095
+    now+.12
   );
 
   osc.connect(gain);
   gain.connect(ctx.destination);
 
   osc.start(now);
-  osc.stop(now+.11);
+  osc.stop(now+.13);
 
 }
 
@@ -1191,7 +1342,7 @@ async function revealTone(step=0){
   osc.type="sine";
 
   const pitch=
-    260+(step*18);
+    245+(step*15);
 
   osc.frequency.setValueAtTime(
     pitch,
@@ -1199,122 +1350,143 @@ async function revealTone(step=0){
   );
 
   osc.frequency.exponentialRampToValueAtTime(
-    pitch*.92,
-    now+.16
-  );
-
-  gain.gain.setValueAtTime(
-    .001,
-    now
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .035,
-    now+.025
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
-    now+.18
-  );
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start(now);
-  osc.stop(now+.2);
-
-}
-
-async function clunk(big=false){
-
-  const ctx=await getAudio();
-  if(!ctx) return;
-
-  const now=ctx.currentTime;
-
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-
-  osc.type="sine";
-
-  osc.frequency.setValueAtTime(
-    big ? 72 : 92,
-    now
-  );
-
-  osc.frequency.exponentialRampToValueAtTime(
-    big ? 42 : 58,
-    now+(big ? .32 : .22)
-  );
-
-  gain.gain.setValueAtTime(
-    big ? .13 : .075,
-    now
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
-    now+(big ? .34 : .24)
-  );
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start(now);
-  osc.stop(now+(big ? .35 : .25));
-
-}
-
-async function wrongSound(heavy=false){
-
-  const ctx=await getAudio();
-  if(!ctx) return;
-
-  const now=ctx.currentTime;
-
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-
-  osc.type="sine";
-
-  osc.frequency.setValueAtTime(
-    heavy ? 64 : 76,
-    now
-  );
-
-  osc.frequency.exponentialRampToValueAtTime(
-    heavy ? 47 : 58,
-    now+.18
-  );
-
-  gain.gain.setValueAtTime(
-    heavy ? .09 : .055,
-    now
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
+    pitch*.94,
     now+.2
   );
 
+  gain.gain.setValueAtTime(
+    .001,
+    now
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .027,
+    now+.035
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    now+.22
+  );
+
   osc.connect(gain);
   gain.connect(ctx.destination);
 
   osc.start(now);
-  osc.stop(now+.21);
+  osc.stop(now+.23);
+
+}
+
+async function connectionTone(step=0){
+
+  const ctx=await getAudio();
+  if(!ctx) return;
+
+  const now=ctx.currentTime;
+
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+
+  osc.type="sine";
+
+  const notes=[
+    261.6,
+    293.7,
+    329.6,
+    392
+  ];
+
+  const pitch=
+    notes[
+      Math.min(
+        step,
+        notes.length-1
+      )
+    ];
+
+  osc.frequency.setValueAtTime(
+    pitch,
+    now
+  );
+
+  gain.gain.setValueAtTime(
+    .001,
+    now
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .03,
+    now+.04
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    now+.34
+  );
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now+.35);
+
+}
+
+async function wrongSound(
+  heavy=false
+){
+
+  const ctx=await getAudio();
+  if(!ctx) return;
+
+  const now=ctx.currentTime;
+
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+
+  osc.type="sine";
+
+  osc.frequency.setValueAtTime(
+    heavy ? 63 : 74,
+    now
+  );
+
+  osc.frequency.exponentialRampToValueAtTime(
+    heavy ? 48 : 59,
+    now+.19
+  );
+
+  gain.gain.setValueAtTime(
+    heavy ? .075 : .045,
+    now
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    now+.22
+  );
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now+.23);
 
 }
 
 /* ======================================================
-   BUILD
+   BUILD FOUR ROWS
    ====================================================== */
 
 function buildLocks(){
 
   lockStack.innerHTML="";
 
-  for(let row=0;row<4;row++){
+  for(
+    let row=0;
+    row<4;
+    row++
+  ){
 
     const lock=
       document.createElement("div");
@@ -1324,16 +1496,16 @@ function buildLocks(){
 
     lock.innerHTML=`
 
-      <div class="lock-bed"></div>
+      <div class="row-bed"></div>
 
       <div class="lock-number">
         ${row+1}
       </div>
 
-      <div class="reels" id="row${row}">
+      <div
+        class="reels"
+        id="row${row}">
       </div>
-
-      <div class="safe-bolt"></div>
 
     `;
 
@@ -1341,7 +1513,11 @@ function buildLocks(){
 
   }
 
-  for(let p=0;p<16;p++){
+  for(
+    let p=0;
+    p<16;
+    p++
+  ){
 
     const reel=
       document.createElement("div");
@@ -1364,22 +1540,8 @@ function buildLocks(){
 }
 
 /* ======================================================
-   COLOUR WASH
+   COLOUR MEMORY
    ====================================================== */
-
-/*
-For one answer:
-solid soft colour.
-
-For two:
-a broad blended diagonal transition.
-
-For three/four:
-a restrained conic blend.
-
-The aim is NOT to divide the tile into score wedges.
-The colours should feel as though histories have accumulated.
-*/
 
 function washForPosition(p){
 
@@ -1402,13 +1564,16 @@ function washForPosition(p){
 
   if(colours.length===2){
 
+    /*
+    Slightly softer blend than #015.
+    */
+
     return `
       linear-gradient(
         135deg,
         ${colours[0]} 0%,
-        ${colours[0]} 34%,
-        color-mix(in srgb, ${colours[0]} 50%, ${colours[1]} 50%) 50%,
-        ${colours[1]} 66%,
+        ${colours[0]} 32%,
+        ${colours[1]} 68%,
         ${colours[1]} 100%
       )
     `;
@@ -1446,13 +1611,17 @@ function washForPosition(p){
 
 function wheelIndex(p){
 
-  return wheels[p].indexOf(
-    letters[p]
-  );
+  return wheels[p]
+    .indexOf(
+      letters[p]
+    );
 
 }
 
-function optionAt(p,offset){
+function optionAt(
+  p,
+  offset
+){
 
   const wheel=wheels[p];
 
@@ -1491,9 +1660,14 @@ function render(p){
 
   if(!reel) return;
 
-  const left=optionAt(p,-1);
-  const current=letters[p];
-  const right=optionAt(p,1);
+  const left=
+    optionAt(p,-1);
+
+  const current=
+    letters[p];
+
+  const right=
+    optionAt(p,1);
 
   const hadTrace=
     reel.classList.contains(
@@ -1541,7 +1715,10 @@ function render(p){
 
     <div
       class="reel-wash"
-      style="background:${washForPosition(p)}">
+      style="
+        background:
+        ${washForPosition(p)}
+      ">
     </div>
 
     <div class="choice-strip">
@@ -1566,7 +1743,11 @@ function render(p){
 
 function renderAll(){
 
-  for(let p=0;p<16;p++){
+  for(
+    let p=0;
+    p<16;
+    p++
+  ){
     render(p);
   }
 
@@ -1615,10 +1796,12 @@ async function moveOne(
 
   reel.style.transform=
     `translateX(${
-      direction>0 ? -5 : 5
+      direction>0
+        ? -4
+        : 4
     }px)`;
 
-  await wait(120);
+  await wait(135);
 
   reel.style.transform="";
 
@@ -1630,7 +1813,10 @@ async function moveOne(
    SWIPE
    ====================================================== */
 
-function addSwipe(reel,p){
+function addSwipe(
+  reel,
+  p
+){
 
   let startX=null;
 
@@ -1643,7 +1829,8 @@ function addSwipe(reel,p){
       if(busy) return;
 
       startX=
-        event.touches[0].clientX;
+        event.touches[0]
+          .clientX;
 
     },
     {passive:true}
@@ -1653,17 +1840,25 @@ function addSwipe(reel,p){
     "touchmove",
     event=>{
 
-      if(startX===null) return;
+      if(
+        startX===null
+      ){
+        return;
+      }
 
       const dx=
-        event.touches[0].clientX-
+        event.touches[0]
+          .clientX-
         startX;
 
       reel.style.transform=
         `translateX(${
           Math.max(
             -6,
-            Math.min(6,dx*.1)
+            Math.min(
+              6,
+              dx*.1
+            )
           )
         }px)`;
 
@@ -1675,15 +1870,22 @@ function addSwipe(reel,p){
     "touchend",
     event=>{
 
-      if(startX===null) return;
+      if(
+        startX===null
+      ){
+        return;
+      }
 
       const dx=
-        event.changedTouches[0].clientX-
+        event.changedTouches[0]
+          .clientX-
         startX;
 
       reel.style.transform="";
 
-      if(Math.abs(dx)>=18){
+      if(
+        Math.abs(dx)>=18
+      ){
 
         moveOne(
           p,
@@ -1702,19 +1904,29 @@ function addSwipe(reel,p){
 }
 
 /* ======================================================
-   SEARCH
+   SPATIAL SEARCH
    ====================================================== */
 
 function neighbours(p){
 
-  const row=Math.floor(p/4);
+  const row=
+    Math.floor(p/4);
+
   const col=p%4;
 
   const result=[];
 
-  for(let dr=-1;dr<=1;dr++){
+  for(
+    let dr=-1;
+    dr<=1;
+    dr++
+  ){
 
-    for(let dc=-1;dc<=1;dc++){
+    for(
+      let dc=-1;
+      dc<=1;
+      dc++
+    ){
 
       if(
         dr===0 &&
@@ -1749,7 +1961,8 @@ function neighbours(p){
 
 function findAllPaths(word){
 
-  word=word.toUpperCase();
+  word=
+    word.toUpperCase();
 
   const results=[];
 
@@ -1819,7 +2032,11 @@ function findAllPaths(word){
 
   }
 
-  for(let p=0;p<16;p++){
+  for(
+    let p=0;
+    p<16;
+    p++
+  ){
 
     if(
       letters[p]===
@@ -1842,29 +2059,36 @@ function findAllPaths(word){
 }
 
 /*
-Still experimental.
+Still NOT settled product behaviour.
 
-If identical displayed letters create several possible
-routes, this currently chooses the route adding most new places.
+If one displayed state contains multiple valid routes,
+the prototype currently prefers the route adding most
+new places.
 
-We should NOT treat this as settled if route identity becomes
-central to WORDLOCK.
+If "your path" survives as a core concept, this ambiguity
+must eventually be designed out or explicitly resolved.
 */
 
 function choosePath(paths){
 
-  if(paths.length===0){
+  if(
+    paths.length===0
+  ){
     return null;
   }
 
   let best=paths[0];
   let bestNew=-1;
 
-  for(const path of paths){
+  for(
+    const path of paths
+  ){
 
     let fresh=0;
 
-    for(const p of path){
+    for(
+      const p of path
+    ){
 
       if(
         !usedPositions.has(p)
@@ -1874,7 +2098,9 @@ function choosePath(paths){
 
     }
 
-    if(fresh>bestNew){
+    if(
+      fresh>bestNew
+    ){
 
       bestNew=fresh;
       best=path;
@@ -1953,22 +2179,25 @@ async function returnTo(
 
     letters[p]=wheel[index];
 
-    softTock(.018,205);
+    softTock(.014,195);
 
-    const reel=getReel(p);
+    const reel=
+      getReel(p);
 
     reel.style.transform=
       `translateX(${
-        direction>0 ? -4 : 4
+        direction>0
+          ? -3
+          : 3
       }px)`;
 
-    await wait(145);
+    await wait(160);
 
     reel.style.transform="";
 
     render(p);
 
-    await wait(75);
+    await wait(85);
 
     safety++;
 
@@ -1978,7 +2207,11 @@ async function returnTo(
 
 async function rollbackAll(){
 
-  for(let p=0;p<16;p++){
+  for(
+    let p=0;
+    p<16;
+    p++
+  ){
 
     if(
       letters[p] !==
@@ -2003,7 +2236,11 @@ async function rollbackIrrelevant(
   const keep=
     new Set(path);
 
-  for(let p=0;p<16;p++){
+  for(
+    let p=0;
+    p<16;
+    p++
+  ){
 
     if(
       !keep.has(p) &&
@@ -2038,7 +2275,7 @@ resetBtn.addEventListener(
     disableControls(true);
 
     message.textContent=
-      "Resetting…";
+      "Returning…";
 
     await rollbackAll();
 
@@ -2052,7 +2289,7 @@ resetBtn.addEventListener(
 );
 
 /* ======================================================
-   START PULSE
+   EASY START PULSE
    ====================================================== */
 
 function stopEasyPulse(){
@@ -2091,9 +2328,11 @@ function pulseStart(){
   }
 
   const p=
-    puzzles[puzzleIndex].start;
+    puzzles[puzzleIndex]
+      .start;
 
-  const reel=getReel(p);
+  const reel=
+    getReel(p);
 
   reel.classList.remove(
     "start-pulse"
@@ -2111,13 +2350,13 @@ function pulseStart(){
         "start-pulse"
       );
     },
-    1750
+    1800
   );
 
   pulseTimer=
     setTimeout(
       pulseStart,
-      4000
+      4200
     );
 
 }
@@ -2129,7 +2368,7 @@ function startEasyPulse(){
   pulseTimer=
     setTimeout(
       pulseStart,
-      450
+      500
     );
 
 }
@@ -2156,7 +2395,8 @@ hintBtn.addEventListener(
 
     for(
       let i=0;
-      i<puzzle.intendedPath.length;
+      i<
+      puzzle.intendedPath.length;
       i++
     ){
 
@@ -2175,7 +2415,9 @@ hintBtn.addEventListener(
 
     }
 
-    if(target===null){
+    if(
+      target===null
+    ){
 
       message.textContent=
         "You have what you need. Look again…";
@@ -2194,39 +2436,32 @@ hintBtn.addEventListener(
       [
         {
           boxShadow:
-            "0 0 0 0 rgba(212,166,64,0)"
+            "0 0 0 0 rgba(166,139,82,0)"
         },
         {
           boxShadow:
-            "0 0 0 4px rgba(212,166,64,.65)"
+            "0 0 0 4px rgba(166,139,82,.48)"
         },
         {
           boxShadow:
-            "0 0 0 0 rgba(212,166,64,0)"
+            "0 0 0 0 rgba(166,139,82,0)"
         }
       ],
       {
-        duration:1200,
+        duration:1350,
         iterations:2
       }
     );
 
     message.textContent=
-      "This reel can help.";
+      "This place can help.";
 
   }
 );
 
 /* ======================================================
-   SOFT CORRECT TRACE
+   CORRECT WORD ACKNOWLEDGEMENT
    ====================================================== */
-
-/*
-No black flashing sequence now.
-
-The selected letters gently acknowledge the route,
-then colour blooms through it.
-*/
 
 async function trace(path){
 
@@ -2237,7 +2472,9 @@ async function trace(path){
   ){
 
     const p=path[i];
-    const reel=getReel(p);
+
+    const reel=
+      getReel(p);
 
     reel.classList.add(
       "trace"
@@ -2251,25 +2488,27 @@ async function trace(path){
           transform:"scale(1)"
         },
         {
-          transform:"scale(1.045)"
+          transform:"scale(1.035)"
         },
         {
           transform:"scale(1)"
         }
       ],
       {
-        duration:420,
+        duration:480,
         easing:"ease-in-out"
       }
     );
 
-    await wait(185);
+    await wait(205);
 
   }
 
-  await wait(220);
+  await wait(260);
 
-  for(const p of path){
+  for(
+    const p of path
+  ){
 
     getReel(p)
       .classList
@@ -2289,12 +2528,8 @@ async function recordPath(
   answerIndex
 ){
 
-  successfulPaths.push(
-    [...path]
-  );
-
   /*
-  Remember successful LETTERS immediately.
+  Remember successful letters.
   */
 
   for(
@@ -2312,9 +2547,7 @@ async function recordPath(
   }
 
   /*
-  Now reveal the successful journey PLACE BY PLACE.
-
-  This is deliberately slow enough to watch.
+  Colour settles through the places one by one.
   */
 
   for(
@@ -2333,7 +2566,8 @@ async function recordPath(
 
     render(p);
 
-    const reel=getReel(p);
+    const reel=
+      getReel(p);
 
     const wash=
       reel.querySelector(
@@ -2345,12 +2579,12 @@ async function recordPath(
       wash.animate(
         [
           {
-            opacity:.18,
-            transform:"scale(.97)"
+            opacity:.12,
+            transform:"scale(.975)"
           },
           {
-            opacity:1,
-            transform:"scale(1.015)"
+            opacity:.88,
+            transform:"scale(1.012)"
           },
           {
             opacity:1,
@@ -2358,7 +2592,7 @@ async function recordPath(
           }
         ],
         {
-          duration:650,
+          duration:800,
           easing:
             "cubic-bezier(.2,.7,.2,1)"
         }
@@ -2366,7 +2600,7 @@ async function recordPath(
 
     }
 
-    await wait(210);
+    await wait(235);
 
   }
 
@@ -2429,14 +2663,14 @@ function loadClue(){
     puzzles[puzzleIndex];
 
   clueCount.textContent=
-    `LOCK ${puzzleIndex+1} OF 4`;
+    `WORD ${puzzleIndex+1} OF 4`;
 
   clueEl.textContent=
     `${puzzle.clue} (${puzzle.answer.length})`;
 
   message.textContent=
     puzzleIndex===0
-      ? "Find the word. Turn the reels."
+      ? "Find the word. Turn the letters."
       : "Find your next word.";
 
   startEasyPulse();
@@ -2481,6 +2715,10 @@ unlockBtn.addEventListener(
     const actualPath=
       choosePath(paths);
 
+    /*
+    WRONG
+    */
+
     if(!actualPath){
 
       busy=true;
@@ -2489,16 +2727,16 @@ unlockBtn.addEventListener(
       wrongSound();
 
       message.textContent=
-        "Still locked.";
+        "Not quite.";
 
-      await wait(650);
+      await wait(700);
 
       await rollbackAll();
 
-      await wait(220);
+      await wait(250);
 
       message.textContent=
-        "Try again.";
+        "Try another way.";
 
       interacted=false;
 
@@ -2510,6 +2748,10 @@ unlockBtn.addEventListener(
       return;
 
     }
+
+    /*
+    CORRECT
+    */
 
     busy=true;
     disableControls(true);
@@ -2533,15 +2775,6 @@ unlockBtn.addEventListener(
       puzzleIndex
     );
 
-    document
-      .getElementById(
-        `lockRow${puzzleIndex}`
-      )
-      .classList
-      .add("released");
-
-    clunk(false);
-
     await wait(850);
 
     puzzleIndex++;
@@ -2550,7 +2783,7 @@ unlockBtn.addEventListener(
       puzzleIndex===4
     ){
 
-      await finishLocks();
+      await finishWords();
       return;
 
     }
@@ -2567,7 +2800,7 @@ unlockBtn.addEventListener(
    FOUR WORDS COMPLETE
    ====================================================== */
 
-async function finishLocks(){
+async function finishWords(){
 
   stopEasyPulse();
 
@@ -2582,12 +2815,15 @@ async function finishLocks(){
   clueEl.textContent=
     "This is your path.";
 
+  placeShell.classList.add(
+    "complete"
+  );
+
   /*
-  Longer pause now:
-  let the completed coloured board simply exist.
+  Let the coloured place breathe.
   */
 
-  await wait(1500);
+  await wait(1700);
 
   yourPathNumber.textContent=
     `${usedPositions.size} of 16 places visited`;
@@ -2596,11 +2832,7 @@ async function finishLocks(){
     "show"
   );
 
-  await wait(1250);
-
-  masterWheel.classList.add(
-    "ready"
-  );
+  await wait(1350);
 
   await beginKeyStage();
 
@@ -2655,7 +2887,7 @@ async function beginKeyStage(){
 }
 
 /* ======================================================
-   WRONG KEY
+   WRONG CONNECTION
    ====================================================== */
 
 async function rejectKey(){
@@ -2675,7 +2907,7 @@ async function rejectKey(){
     "wrong"
   );
 
-  await wait(600);
+  await wait(650);
 
   keyInput.focus();
   keyInput.select();
@@ -2690,13 +2922,13 @@ async function rejectKey(){
       keyFeedback.textContent="";
 
     },
-    1350
+    1400
   );
 
 }
 
 /* ======================================================
-   CONNECT
+   FINAL CONNECTION
    ====================================================== */
 
 keyButton.addEventListener(
@@ -2717,7 +2949,9 @@ keyButton.addEventListener(
     attempts++;
     updateStats();
 
-    if(guess!==KEY){
+    if(
+      guess!==KEY
+    ){
 
       await rejectKey();
       return;
@@ -2743,6 +2977,8 @@ keyButton.addEventListener(
         ".connection"
       );
 
+    let note=0;
+
     for(
       const item of connections
     ){
@@ -2751,43 +2987,45 @@ keyButton.addEventListener(
         "reveal"
       );
 
-      revealTone(2);
+      connectionTone(note);
 
-      await wait(520);
+      note++;
+
+      await wait(620);
 
     }
 
-    await wait(700);
+    /*
+    No vault opens.
 
-    masterWheel.classList.add(
-      "turn"
-    );
+    Instead the PLACE settles and pulls back.
+    */
 
-    clunk(true);
-
-    await wait(1200);
+    await wait(950);
 
     clueCount.textContent=
-      "VAULT UNLOCKED";
+      "CONNECTED";
 
     clueEl.textContent=
-      "Connected.";
+      "A place visited.";
 
-    await wait(700);
+    await wait(850);
 
-    clunk(true);
-
-    safeFrame.classList.add(
-      "opened"
+    placeShell.classList.add(
+      "revealed"
     );
 
-    await wait(1600);
+    await wait(1250);
 
     keyStage.style.display=
       "none";
 
     pathStage.style.display=
       "none";
+
+    placeReveal.classList.add(
+      "show"
+    );
 
     finalResult.innerHTML=
       `${turns} Turns · `+
