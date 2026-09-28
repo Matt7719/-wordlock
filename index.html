@@ -3,262 +3,284 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#e9e4d9">
-
-<title>WORDLOCK 017</title>
+<meta name="theme-color" content="#e8e1d2">
+<title>WORDLOCK 018</title>
 
 <style>
 :root{
-  --ink:#242522;
-  --charcoal:#3f413d;
-  --grey:#777a74;
-  --paper:#eee9df;
-  --cream:rgba(250,248,241,.88);
+  --ink:#20211f;
+  --remembered:#353733;
+  --alternative:#6d716c;
+  --cream:rgba(248,246,237,.91);
 
-  --sage:#aebca5;
-  --blue:#a9bec4;
-  --ochre:#c8b48c;
-  --mauve:#b8a8b5;
+  --sage:#aec1ad;
+  --blue:#a9c3ca;
+  --ochre:#d0b77f;
+  --mauve:#bca9be;
 }
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
 html,body{
   margin:0;
   min-height:100%;
-  background:#d9d4c9;
+  background:#e7dfcf;
   color:var(--ink);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Avenir Next",
-    "Segoe UI",
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif;
 }
 
-body{
-  min-height:100vh;
-  overflow-x:hidden;
-}
+body{overflow-x:hidden}
 
-button,input{
-  font:inherit;
-}
+button,input{font:inherit}
+button{touch-action:manipulation}
 
-button{
-  touch-action:manipulation;
-}
-
-#world{
+#place{
   min-height:100vh;
   position:relative;
   overflow:hidden;
 
   background:
-    radial-gradient(
-      ellipse at 17% 18%,
-      rgba(185,196,190,.38) 0%,
-      rgba(185,196,190,.14) 24%,
-      transparent 47%
-    ),
-    radial-gradient(
-      ellipse at 87% 69%,
-      rgba(175,166,145,.30) 0%,
-      rgba(175,166,145,.10) 27%,
-      transparent 52%
-    ),
-    linear-gradient(
-      154deg,
-      #e8e4d9 0%,
-      #ddd9cd 45%,
-      #d5d0c3 100%
-    );
+    linear-gradient(145deg,#eadfc9 0%,#ddd1b7 55%,#d6c9aa 100%);
 }
 
-/* -------------------------------------------------
-   TERRAIN
-   Everything is deliberately expressed through the
-   same cartographic/topographical visual language.
--------------------------------------------------- */
+/* =====================================================
+   THE PLACE
+   One continuous landscape, not wallpaper behind a card
+===================================================== */
 
 .terrain{
   position:absolute;
-  inset:-7%;
+  inset:0;
   pointer-events:none;
-  opacity:.92;
+  overflow:hidden;
 }
 
-.contours{
+/* subtle overall land variation */
+.landwash{
   position:absolute;
   inset:0;
-  opacity:.47;
-  background-image:
-    repeating-radial-gradient(
-      ellipse at 14% 28%,
-      transparent 0 24px,
-      rgba(82,88,81,.18) 25px 26px,
-      transparent 27px 43px
-    ),
-    repeating-radial-gradient(
-      ellipse at 82% 63%,
-      transparent 0 31px,
-      rgba(82,88,81,.13) 32px 33px,
-      transparent 34px 52px
-    );
-  transform:rotate(-7deg) scale(1.15);
+  background:
+    radial-gradient(ellipse at 76% 19%,
+      rgba(174,185,156,.23) 0%,
+      rgba(174,185,156,.08) 28%,
+      transparent 50%),
+    radial-gradient(ellipse at 18% 72%,
+      rgba(178,157,122,.19) 0%,
+      transparent 45%);
 }
 
-/* subtle water-like basin */
-.basin{
+/* Actual contour lines */
+.contour-svg{
   position:absolute;
-  width:56%;
-  height:25%;
-  left:-8%;
-  top:50%;
-  border-radius:48% 52% 55% 45%;
-  transform:rotate(-11deg);
+  width:150%;
+  height:1100px;
+  left:-25%;
+  top:100px;
+  opacity:.58;
+}
+
+.contour-svg path{
+  fill:none;
+  stroke:#706e61;
+  stroke-width:1.25;
+  vector-effect:non-scaling-stroke;
+}
+
+.contour-svg path.fine{
+  stroke-width:.75;
+  opacity:.55;
+}
+
+/* WATER: recognisable, but part of terrain */
+.water{
+  position:absolute;
+  left:-5%;
+  top:700px;
+  width:67%;
+  height:220px;
+  transform:rotate(-8deg);
+  border-radius:46% 54% 49% 51%;
+
   background:
     repeating-linear-gradient(
       3deg,
-      rgba(110,139,143,.00) 0 11px,
-      rgba(110,139,143,.12) 12px,
-      rgba(110,139,143,.00) 13px 23px
+      transparent 0 14px,
+      rgba(88,137,145,.13) 15px,
+      transparent 16px 28px
     ),
     radial-gradient(
-      ellipse,
-      rgba(133,158,159,.18),
-      rgba(133,158,159,.04) 58%,
-      transparent 73%
+      ellipse at 45% 52%,
+      rgba(90,153,164,.48),
+      rgba(112,157,160,.30) 52%,
+      rgba(118,150,150,.08) 72%,
+      transparent 76%
     );
-  filter:blur(.15px);
+
+  border-top:1px solid rgba(77,112,114,.27);
+  border-bottom:1px solid rgba(77,112,114,.18);
 }
 
-/* fine organic texture rather than a green blob */
-.growth{
-  position:absolute;
-  right:-4%;
-  top:9%;
-  width:49%;
-  height:42%;
-  opacity:.38;
-  background-image:
-    radial-gradient(circle,rgba(91,107,86,.28) 0 1px,transparent 1.5px),
-    radial-gradient(circle,rgba(91,107,86,.17) 0 1px,transparent 1.4px);
-  background-size:17px 19px,29px 31px;
-  background-position:0 0,8px 12px;
-  mask-image:radial-gradient(ellipse at 65% 35%,black 0 32%,transparent 72%);
-  -webkit-mask-image:radial-gradient(ellipse at 65% 35%,black 0 32%,transparent 72%);
-}
-
-/* possible track — ambiguous rather than illustrated */
-.track,
-.track:after{
-  position:absolute;
+/* shoreline echoes */
+.water::before,
+.water::after{
   content:"";
-  width:68%;
-  height:42%;
-  left:34%;
-  top:61%;
-  border-top:1px solid rgba(92,91,81,.23);
-  border-radius:50%;
-  transform:rotate(-14deg);
-}
-
-.track:after{
-  width:100%;
-  height:100%;
-  left:0;
-  top:6px;
-  opacity:.65;
-}
-
-/* faint geological marks */
-.strata{
   position:absolute;
-  left:4%;
-  top:8%;
-  width:42%;
-  height:30%;
-  opacity:.25;
-  background:
-    repeating-linear-gradient(
-      164deg,
-      transparent 0 17px,
-      rgba(95,91,79,.22) 18px,
-      transparent 19px 31px
-    );
-  clip-path:polygon(0 15%,70% 0,100% 64%,58% 100%,8% 76%);
+  border:1px solid rgba(83,101,98,.22);
+  border-radius:50%;
+  inset:-15px -28px;
 }
 
-/* ------------------------------------------------- */
+.water::after{
+  inset:-29px -50px;
+  opacity:.55;
+}
+
+/* VEGETATION: texture rather than green paint */
+.vegetation{
+  position:absolute;
+  right:-8%;
+  top:390px;
+  width:55%;
+  height:430px;
+
+  background:
+    radial-gradient(circle at 70% 45%,
+      rgba(107,137,91,.30),
+      rgba(120,145,101,.13) 42%,
+      transparent 70%);
+}
+
+.vegetation::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background-image:
+    radial-gradient(circle,rgba(67,92,61,.34) 0 1.1px,transparent 1.5px),
+    radial-gradient(circle,rgba(83,106,72,.25) 0 1px,transparent 1.4px);
+
+  background-size:19px 21px,31px 27px;
+  background-position:0 0,11px 7px;
+
+  mask-image:radial-gradient(ellipse at 65% 45%,black 5%,transparent 72%);
+  -webkit-mask-image:radial-gradient(ellipse at 65% 45%,black 5%,transparent 72%);
+}
+
+/* subtle exposed stone */
+.stone{
+  position:absolute;
+  width:150px;
+  height:210px;
+  right:-28px;
+  top:810px;
+
+  border-radius:54% 46% 57% 43%;
+
+  background:
+    linear-gradient(135deg,
+      rgba(154,137,110,.20),
+      rgba(120,111,95,.35));
+
+  box-shadow:
+    inset 14px 9px 25px rgba(255,255,255,.10),
+    inset -10px -12px 25px rgba(79,73,63,.10);
+}
+
+.stone2{
+  position:absolute;
+  width:120px;
+  height:105px;
+  left:-35px;
+  top:590px;
+  border-radius:45% 55% 48% 52%;
+
+  background:
+    linear-gradient(150deg,
+      rgba(150,136,112,.25),
+      rgba(117,108,92,.30));
+}
+
+/* ambiguous old track */
+.track{
+  position:absolute;
+  width:90%;
+  height:390px;
+  left:25%;
+  top:520px;
+  border-left:2px solid rgba(236,229,207,.33);
+  border-radius:48%;
+  transform:rotate(24deg);
+}
+
+.track::after{
+  content:"";
+  position:absolute;
+  inset:0 0 0 8px;
+  border-left:1px solid rgba(236,229,207,.23);
+  border-radius:48%;
+}
+
+/* ===================================================== */
 
 .wrap{
   position:relative;
   z-index:2;
   width:min(94vw,520px);
   margin:0 auto;
+
   padding:
-    max(25px,env(safe-area-inset-top))
+    max(32px,env(safe-area-inset-top))
     0
-    max(34px,env(safe-area-inset-bottom));
+    max(45px,env(safe-area-inset-bottom));
 }
 
-.mast{
+header{
   text-align:center;
-  margin-bottom:15px;
+  margin:25px 0 27px;
 }
 
 .brand{
-  font-size:13px;
-  letter-spacing:.34em;
-  font-weight:750;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.36em;
 }
 
-.place{
-  margin-top:8px;
+.where{
+  margin-top:12px;
   font-family:Georgia,serif;
   font-size:11px;
-  letter-spacing:.19em;
+  letter-spacing:.22em;
   text-transform:uppercase;
-  color:#65675f;
 }
 
-.place-detail{
+.terrain-note{
   margin-top:5px;
   font-family:Georgia,serif;
-  font-style:italic;
-  font-size:12px;
-  color:#7b7b70;
+  font-size:15px;
+  color:#5e5d54;
 }
 
-.panel{
-  background:rgba(243,240,231,.58);
-  border:1px solid rgba(76,76,67,.16);
-  border-radius:25px;
-  padding:17px 14px 16px;
-  box-shadow:
-    0 18px 50px rgba(57,55,48,.10),
-    inset 0 1px rgba(255,255,255,.55);
-  backdrop-filter:blur(2px);
-  -webkit-backdrop-filter:blur(2px);
+/* No containing game card */
+
+.clue-area{
+  text-align:center;
+  min-height:112px;
+  padding:12px 10px;
 }
 
 .progress{
   display:flex;
   justify-content:center;
-  gap:8px;
-  margin-bottom:13px;
+  gap:10px;
+  margin-bottom:14px;
 }
 
 .progress-dot{
-  width:7px;
-  height:7px;
+  width:8px;
+  height:8px;
   border-radius:50%;
-  border:1px solid #797b75;
-  background:rgba(255,255,255,.38);
+  border:1px solid rgba(61,63,58,.65);
+  background:rgba(250,247,237,.52);
 }
 
 .progress-dot.done:nth-child(1){background:var(--sage);border-color:transparent}
@@ -267,61 +289,93 @@ button{
 .progress-dot.done:nth-child(4){background:var(--mauve);border-color:transparent}
 
 .clue-label{
-  text-align:center;
   font-size:9px;
-  font-weight:750;
-  letter-spacing:.24em;
-  color:#74766f;
+  font-weight:800;
+  letter-spacing:.25em;
+  color:#62645e;
 }
 
 #clue{
-  min-height:44px;
-  margin:5px auto 3px;
-  max-width:370px;
-  text-align:center;
+  margin:7px auto 4px;
+  max-width:390px;
+  min-height:29px;
+
   font-family:Georgia,serif;
-  font-size:18px;
+  font-size:20px;
   line-height:1.25;
 }
 
 #length{
-  text-align:center;
   font-size:10px;
-  letter-spacing:.20em;
-  color:#74766f;
-  margin-bottom:15px;
+  letter-spacing:.22em;
+  color:#666861;
 }
 
+/* =====================================================
+   REELS
+===================================================== */
+
 .board{
+  position:relative;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:8px;
+  gap:12px 8px;
+  padding:10px 9px 6px;
+}
+
+/* subtle terrain visibility immediately beneath board */
+.board::before{
+  content:"";
+  position:absolute;
+  inset:-16px -10px;
+  border-radius:32px;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(239,231,211,.11),
+      transparent 73%
+    );
+
+  pointer-events:none;
 }
 
 .reel{
   position:relative;
-  height:65px;
-  border:1px solid rgba(57,59,54,.18);
-  border-radius:14px;
-  background:rgba(252,250,244,.84);
+  z-index:1;
+
+  height:76px;
+
+  /*
+    Softer than 017, but still geometric.
+    Definitely not pills.
+  */
+  border-radius:17px;
+
+  border:1px solid rgba(64,66,60,.22);
+
+  background:var(--cream);
+
   box-shadow:
-    0 4px 10px rgba(54,52,45,.08),
-    inset 0 1px rgba(255,255,255,.8);
+    0 5px 12px rgba(55,51,43,.11),
+    inset 0 1px 0 rgba(255,255,255,.82);
+
   overflow:hidden;
+
   user-select:none;
   -webkit-user-select:none;
   touch-action:pan-y;
 
   transition:
     background .55s ease,
-    transform .14s ease,
-    box-shadow .3s ease;
+    transform .25s ease,
+    box-shadow .35s ease;
 }
 
 .reel-inner{
   height:100%;
   display:grid;
-  grid-template-columns:1fr 1.25fr 1fr;
+  grid-template-columns:1fr 1.28fr 1fr;
   align-items:center;
   text-align:center;
 }
@@ -333,41 +387,57 @@ button{
   line-height:1;
 }
 
-/* UNUSED alternatives:
-   deliberately readable, not ghosted away */
+/* unused but CLEAR */
 .letter.alt{
   font-size:17px;
   font-weight:500;
-  color:var(--grey);
+  color:var(--alternative);
 }
 
-/* Previously successful letter:
-   NO BROWN. Typography alone carries the meaning. */
+/* previously used */
 .letter.alt.remembered{
-  color:#30322f;
+  color:var(--remembered);
   font-weight:800;
 }
 
-/* Current */
+/* current */
 .letter.current{
-  font-size:30px;
+  font-size:31px;
   font-weight:850;
-  color:#1f211f;
-  letter-spacing:-.03em;
+  color:var(--ink);
 }
 
-.reel.used1{background:rgba(174,188,165,.88)}
-.reel.used2{background:rgba(169,190,196,.88)}
-.reel.used3{background:rgba(200,180,140,.88)}
-.reel.used4{background:rgba(184,168,181,.88)}
+/* colour history */
+.reel.used1{background:rgba(174,193,173,.92)}
+.reel.used2{background:rgba(169,195,202,.92)}
+.reel.used3{background:rgba(208,183,127,.92)}
+.reel.used4{background:rgba(188,169,190,.92)}
 
-/* overlap approximations */
-.reel.mix12{background:linear-gradient(135deg,rgba(174,188,165,.90),rgba(169,190,196,.90))}
-.reel.mix13{background:linear-gradient(135deg,rgba(174,188,165,.90),rgba(200,180,140,.90))}
-.reel.mix14{background:linear-gradient(135deg,rgba(174,188,165,.90),rgba(184,168,181,.90))}
-.reel.mix23{background:linear-gradient(135deg,rgba(169,190,196,.90),rgba(200,180,140,.90))}
-.reel.mix24{background:linear-gradient(135deg,rgba(169,190,196,.90),rgba(184,168,181,.90))}
-.reel.mix34{background:linear-gradient(135deg,rgba(200,180,140,.90),rgba(184,168,181,.90))}
+.reel.mix12{
+  background:linear-gradient(135deg,var(--sage),var(--blue));
+}
+.reel.mix13{
+  background:linear-gradient(135deg,var(--sage),var(--ochre));
+}
+.reel.mix14{
+  background:linear-gradient(135deg,var(--sage),var(--mauve));
+}
+.reel.mix23{
+  background:linear-gradient(135deg,var(--blue),var(--ochre));
+}
+.reel.mix24{
+  background:linear-gradient(135deg,var(--blue),var(--mauve));
+}
+.reel.mix34{
+  background:linear-gradient(135deg,var(--ochre),var(--mauve));
+}
+
+.reel.confirming{
+  transform:scale(1.045);
+  box-shadow:
+    0 0 0 3px rgba(255,255,255,.36),
+    0 7px 16px rgba(50,48,42,.13);
+}
 
 .reel.pulse{
   animation:pulse 1.05s ease-in-out 2;
@@ -377,33 +447,39 @@ button{
   50%{
     transform:scale(1.055);
     box-shadow:
-      0 0 0 4px rgba(70,75,68,.10),
-      0 7px 16px rgba(54,52,45,.12);
+      0 0 0 4px rgba(60,65,58,.11),
+      0 7px 16px rgba(50,48,42,.13);
   }
 }
 
+/* ===================================================== */
+
 .controls{
   display:grid;
-  grid-template-columns:1fr 1.6fr 1fr;
-  gap:8px;
-  margin-top:14px;
+  grid-template-columns:1fr 1.65fr 1fr;
+  gap:9px;
+  padding:0 9px;
+  margin-top:16px;
 }
 
 .btn{
-  border:1px solid rgba(54,56,52,.22);
-  border-radius:13px;
-  min-height:45px;
-  background:rgba(248,246,239,.78);
-  color:#3b3d39;
+  min-height:49px;
+  border:1px solid rgba(52,54,50,.42);
+  border-radius:16px;
+
+  background:rgba(247,243,232,.83);
+
+  color:#343632;
+
   font-size:10px;
   font-weight:800;
-  letter-spacing:.13em;
+  letter-spacing:.14em;
 }
 
 .btn.primary{
-  background:#333631;
-  color:#f7f5ee;
-  border-color:#333631;
+  background:#30322e;
+  color:#f8f5eb;
+  border-color:#30322e;
 }
 
 .btn:active{
@@ -411,29 +487,47 @@ button{
 }
 
 #message{
-  min-height:28px;
-  padding-top:9px;
+  min-height:36px;
+  padding-top:10px;
+
   text-align:center;
+
   font-family:Georgia,serif;
   font-style:italic;
-  font-size:13px;
-  color:#676960;
+  font-size:14px;
+
+  color:#55584f;
 }
 
 .bank{
-  margin-top:13px;
+  min-height:38px;
+  margin-top:5px;
+
   display:flex;
-  flex-wrap:wrap;
   justify-content:center;
+  flex-wrap:wrap;
   gap:7px;
 }
 
 .pill{
-  padding:7px 11px;
+  opacity:0;
+  transform:translateY(5px);
+
+  padding:7px 12px;
   border-radius:999px;
+
   font-size:11px;
   font-weight:800;
   letter-spacing:.08em;
+
+  animation:pillIn .55s ease forwards;
+}
+
+@keyframes pillIn{
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
 
 .pill.c1{background:var(--sage)}
@@ -442,187 +536,279 @@ button{
 .pill.c4{background:var(--mauve)}
 
 .stats{
-  margin-top:13px;
   display:flex;
   justify-content:center;
-  gap:20px;
-  color:#666860;
+  gap:22px;
+
+  margin-top:8px;
+
   font-size:9px;
+  font-weight:800;
   letter-spacing:.14em;
-  font-weight:750;
+
+  color:#565951;
 }
+
+/* =====================================================
+   CONNECTION
+===================================================== */
 
 .connection{
   display:none;
-  margin-top:17px;
-  padding-top:17px;
-  border-top:1px solid rgba(65,66,60,.16);
+
+  margin:28px 10px 0;
+  padding:25px 12px 22px;
+
+  border-top:1px solid rgba(64,66,59,.25);
+
   text-align:center;
 }
 
 .connection.show{
   display:block;
+  animation:gentleIn .75s ease both;
+}
+
+@keyframes gentleIn{
+  from{
+    opacity:0;
+    transform:translateY(7px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
 
 .connection-title{
   font-size:9px;
   font-weight:800;
-  letter-spacing:.24em;
-  color:#696b65;
+  letter-spacing:.27em;
+  color:#5c5f58;
 }
 
 .connection-copy{
-  margin:7px 0 9px;
+  margin:8px 0 12px;
+
   font-family:Georgia,serif;
-  font-size:16px;
+  font-size:20px;
 }
 
 .connection-words{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
-  gap:6px;
-  margin:10px 0;
+  gap:7px;
 }
 
 .connection-length{
-  height:23px;
-  margin:7px 0 8px;
+  margin:15px 0 6px;
+
   font-size:20px;
-  letter-spacing:.30em;
-  font-weight:700;
-  color:#555850;
+  font-weight:800;
+  letter-spacing:.32em;
+
+  color:#55584f;
 }
 
 .connection-input{
-  width:min(230px,80%);
+  width:min(250px,82%);
+
   border:0;
-  border-bottom:1px solid #777970;
+  border-bottom:1px solid #696b63;
   border-radius:0;
+
   background:transparent;
+
+  padding:8px;
+
+  outline:none;
+
   text-align:center;
   text-transform:uppercase;
-  font-size:22px;
-  font-weight:750;
-  letter-spacing:.15em;
-  color:#272925;
-  outline:none;
-  padding:7px;
+
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:.14em;
+
+  color:#252724;
 }
 
 .connection-actions{
   display:flex;
   justify-content:center;
+  flex-wrap:wrap;
   gap:8px;
-  margin-top:12px;
+
+  margin-top:14px;
 }
 
 .connection-actions .btn{
-  padding:0 16px;
+  padding:0 17px;
 }
 
 #connectionHint{
-  min-height:39px;
   max-width:340px;
-  margin:10px auto 0;
+  min-height:46px;
+
+  margin:13px auto 0;
+
   font-family:Georgia,serif;
   font-style:italic;
-  font-size:13px;
-  line-height:1.35;
-  color:#5f615a;
+  font-size:14px;
+  line-height:1.4;
+
+  color:#55584f;
 }
+
+/* =====================================================
+   COMPLETION
+===================================================== */
 
 .final{
   display:none;
+  margin:27px 12px 0;
+  padding:25px 10px;
   text-align:center;
-  padding:23px 8px 8px;
 }
 
 .final.show{
   display:block;
-  animation:rise .8s ease both;
-}
-
-@keyframes rise{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:none}
+  animation:gentleIn 1.2s ease both;
 }
 
 .final-kicker{
   font-size:9px;
   font-weight:800;
-  letter-spacing:.24em;
-  color:#686a63;
+  letter-spacing:.27em;
 }
 
 .final-title{
-  margin-top:7px;
+  margin-top:8px;
+
   font-family:Georgia,serif;
-  font-size:26px;
+  font-size:28px;
 }
 
 .final-copy{
-  max-width:310px;
   margin:8px auto;
+  max-width:320px;
+
   font-family:Georgia,serif;
   font-size:15px;
-  line-height:1.45;
-  color:#55574f;
+  line-height:1.5;
+
+  color:#50534c;
 }
 
 .final-path{
-  margin-top:14px;
+  margin-top:16px;
+
   font-size:10px;
   font-weight:800;
   letter-spacing:.15em;
-  color:#555750;
 }
+
+/* ===================================================== */
 
 .shake{
   animation:shake .28s linear;
 }
 
 @keyframes shake{
-  25%{transform:translateX(-5px)}
-  50%{transform:translateX(5px)}
-  75%{transform:translateX(-3px)}
-}
-
-/* landscape becomes fractionally clearer after completion */
-body.complete .terrain{
-  opacity:1;
-  transition:opacity 1.4s ease;
+  25%{transform:translateX(-4px)}
+  50%{transform:translateX(4px)}
+  75%{transform:translateX(-2px)}
 }
 
 @media(max-width:390px){
-  .reel{height:61px}
+  .board{gap:10px 7px}
+  .reel{height:70px;border-radius:15px}
   .letter.alt{font-size:16px}
-  .letter.current{font-size:28px}
-  #clue{font-size:17px}
+  .letter.current{font-size:29px}
+  #clue{font-size:19px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
 }
 </style>
 </head>
 
 <body>
-<div id="world">
+
+<div id="place">
 
   <div class="terrain">
-    <div class="contours"></div>
-    <div class="basin"></div>
-    <div class="growth"></div>
+
+    <div class="landwash"></div>
+
+    <svg class="contour-svg"
+         viewBox="0 0 700 1100"
+         preserveAspectRatio="none"
+         aria-hidden="true">
+
+      <path d="M-50 150
+               C100 45 280 60 365 160
+               C450 260 600 230 760 110"/>
+
+      <path d="M-60 190
+               C105 85 260 90 340 185
+               C425 285 585 280 760 155"/>
+
+      <path class="fine"
+            d="M-80 235
+               C90 130 245 135 320 220
+               C405 315 570 330 770 200"/>
+
+      <path d="M-80 390
+               C80 320 175 360 250 430
+               C345 520 490 485 760 350"/>
+
+      <path class="fine"
+            d="M-90 425
+               C65 355 170 400 235 465
+               C330 555 500 525 770 390"/>
+
+      <path d="M-90 610
+               C80 525 245 535 355 640
+               C470 750 600 735 770 610"/>
+
+      <path class="fine"
+            d="M-90 650
+               C85 570 245 575 335 675
+               C445 795 605 775 770 650"/>
+
+      <path d="M-100 835
+               C85 745 280 750 390 860
+               C500 970 630 950 780 820"/>
+
+      <path d="M-100 890
+               C80 800 265 805 365 905
+               C475 1015 620 1010 780 875"/>
+
+    </svg>
+
+    <div class="vegetation"></div>
     <div class="track"></div>
-    <div class="strata"></div>
+    <div class="stone2"></div>
+    <div class="water"></div>
+    <div class="stone"></div>
+
   </div>
 
   <main class="wrap">
 
-    <header class="mast">
+    <header>
       <div class="brand">WORDLOCK</div>
-      <div class="place">Somewhere near the beginning</div>
-      <div class="place-detail">Stone · water · first traces</div>
+      <div class="where">Somewhere near the beginning</div>
+      <div class="terrain-note">Stone · water · first traces</div>
     </header>
 
-    <section class="panel">
+    <section class="clue-area" id="clueArea">
 
       <div class="progress">
         <div class="progress-dot"></div>
@@ -631,69 +817,75 @@ body.complete .terrain{
         <div class="progress-dot"></div>
       </div>
 
-      <div id="gameArea">
+      <div class="clue-label" id="clueLabel">CLUE 1</div>
+      <div id="clue"></div>
+      <div id="length"></div>
 
-        <div class="clue-label" id="clueLabel">CLUE 1</div>
-        <div id="clue"></div>
-        <div id="length"></div>
+    </section>
 
-        <div class="board" id="board"></div>
+    <div class="board" id="board"></div>
 
-        <div class="controls" id="controls">
-          <button class="btn" id="resetBtn">RESET</button>
-          <button class="btn primary" id="unlockBtn">UNLOCK</button>
-          <button class="btn" id="hintBtn">HINT</button>
-        </div>
+    <div class="controls" id="controls">
+      <button class="btn" id="resetBtn">RESET</button>
+      <button class="btn primary" id="unlockBtn">UNLOCK</button>
+      <button class="btn" id="hintBtn">HINT</button>
+    </div>
 
-        <div id="message"></div>
+    <div id="message"></div>
 
-        <div class="bank" id="bank"></div>
+    <div class="bank" id="bank"></div>
 
-        <div class="stats">
-          <span id="turnStat">0 TURNS</span>
-          <span id="attemptStat">0 ATTEMPTS</span>
-          <span id="hintStat">0 HINTS</span>
-        </div>
+    <div class="stats">
+      <span id="turnStat">0 TURNS</span>
+      <span id="attemptStat">0 ATTEMPTS</span>
+      <span id="hintStat">0 HINTS</span>
+    </div>
 
+    <section class="connection" id="connection">
+
+      <div class="connection-title">THE CONNECTION</div>
+
+      <div class="connection-copy">
+        What connects all four?
       </div>
 
-      <section class="connection" id="connection">
-        <div class="connection-title">CONNECT</div>
-        <div class="connection-copy">
-          What connects all four?
-        </div>
+      <div class="connection-words" id="connectionWords"></div>
 
-        <div class="connection-words" id="connectionWords"></div>
+      <div class="connection-length" id="connectionLength"></div>
 
-        <div class="connection-length" id="connectionLength"></div>
+      <input
+        id="connectionInput"
+        class="connection-input"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        maxlength="12"
+        aria-label="Connecting word"
+      >
 
-        <input
-          id="connectionInput"
-          class="connection-input"
-          autocomplete="off"
-          autocapitalize="characters"
-          spellcheck="false"
-          maxlength="12"
-          aria-label="Connecting word"
-        >
+      <div class="connection-actions">
+        <button class="btn primary" id="connectBtn">CONNECT</button>
+        <button class="btn" id="connectionHintBtn">HINT</button>
+        <button class="btn" id="revealBtn">REVEAL</button>
+      </div>
 
-        <div class="connection-actions">
-          <button class="btn primary" id="connectBtn">CONNECT</button>
-          <button class="btn" id="connectionHintBtn">HINT</button>
-          <button class="btn" id="revealBtn">REVEAL</button>
-        </div>
+      <div id="connectionHint"></div>
 
-        <div id="connectionHint"></div>
-      </section>
+    </section>
 
-      <section class="final" id="final">
-        <div class="final-kicker">A FIRST TRACE</div>
-        <div class="final-title">The place remembers.</div>
-        <div class="final-copy">
-          Your path has become part of this place.
-        </div>
-        <div class="final-path" id="finalPath"></div>
-      </section>
+    <section class="final" id="final">
+
+      <div class="final-kicker">A FIRST TRACE</div>
+
+      <div class="final-title">
+        Your path remains.
+      </div>
+
+      <div class="final-copy">
+        This place is a little different because you passed through it.
+      </div>
+
+      <div class="final-path" id="finalPath"></div>
 
     </section>
 
@@ -701,236 +893,247 @@ body.complete .terrain{
 </div>
 
 <script>
+
 /* =========================================================
-   WORDLOCK 017
-   ========================================================= */
+   WORDLOCK 018
+========================================================= */
 
-/*
-   Fresh puzzle data.
-
-   Important:
-   - Three choices are visible at every place.
-   - A successful word is found by an adjacent path.
-   - Horizontal, vertical and diagonal adjacency all count.
-   - No position may be used twice in one word.
-*/
-
-const PUZZLE = {
+const PUZZLE={
 
   wheels:[
-    ["C","N","Q"],
-    ["L","J","F"],
-    ["A","H","D"],
-    ["S","Q","I"],
 
-    ["E","R","B"],
-    ["Z","G","S"],
-    ["K","R","S"],
-    ["N","J","H"],
+    ["M","N","C"],
+    ["I","A","R"],
+    ["F","O","D"],
+    ["T","S","P"],
 
-    ["T","U","E"],
-    ["K","Q","D"],
-    ["S","L","W"],
-    ["P","O","B"],
+    ["E","G","B"],
+    ["L","E","Y"],
+    ["K","X","V"],
+    ["O","J","U"],
 
-    ["M","H","B"],
-    ["Q","A","H"],
-    ["C","T","I"],
-    ["X","H","T"]
+    ["L","Q","H"],
+    ["I","X","A"],
+    ["M","U","S"],
+    ["R","W","N"],
+
+    ["R","D","F"],
+    ["B","N","G"],
+    ["C","T","P"],
+    ["H","V","K"]
   ],
 
   clues:[
+
     {
-      answer:"CLASS",
-      clue:"A group learning together",
+      answer:"MILE",
+      clue:"A unit used to measure distance",
       start:0,
       colour:1
     },
+
     {
-      answer:"BED",
-      clue:"A place made ready for sleep",
+      answer:"GEM",
+      clue:"A precious or beautiful stone",
       start:4,
       colour:2
     },
+
     {
-      answer:"BATH",
-      clue:"A place to soak in warm water",
-      start:12,
+      answer:"LIME",
+      clue:"A small green citrus fruit",
+      start:8,
       colour:3
     },
+
     {
-      answer:"SHOW",
-      clue:"A performance for an audience",
+      answer:"TOUCH",
+      clue:"A light contact with a hand or finger",
       start:3,
       colour:4
     }
+
   ],
 
   connection:{
-    answer:"ROOM",
 
-    /* Stage 1: relationship structure */
-    hint1:"The connecting word comes after all four answers.",
+    answer:"STONE",
 
-    /* Stage 2: cryptic / associative */
-    hint2:"Think of spaces with very different purposes.",
+    hint1:
+      "The connecting word comes after all four answers.",
 
-    /* Stage 3: deliberately much closer */
-    hint3:"You might learn in one, sleep in one, wash in one — or visit one to see something displayed."
+    hint2:
+      "Think of something ancient, solid and shaped by time.",
+
+    hint3:
+      "It can mark a distance, be precious, form rock — or become a point of reference."
   }
+
 };
 
 
 /* =========================================================
    STATE
-   ========================================================= */
+========================================================= */
 
-let clueIndex = 0;
+let clueIndex=0;
 
-let current = PUZZLE.wheels.map(w => 1);
-/* each value is the INDEX within that reel's 3 letters */
+let current=PUZZLE.wheels.map(()=>1);
 
-let clueSnapshot = [...current];
+let clueSnapshot=[...current];
 
-let remembered = PUZZLE.wheels.map(() => new Set());
+let remembered=PUZZLE.wheels.map(()=>new Set());
 
-let histories = PUZZLE.wheels.map(() => new Set());
+let histories=PUZZLE.wheels.map(()=>new Set());
 
-let solvedWords = [];
+let solvedWords=[];
 
-let turns = 0;
-let attempts = 0;
-let hints = 0;
+let turns=0;
+let attempts=0;
+let hints=0;
 
-let connectionHintLevel = 0;
+let connectionHintLevel=0;
 
-let audioReady = false;
-let audioCtx = null;
+let busy=false;
 
 
 /* =========================================================
    AUDIO
-   Reliable activation occurs on first genuine interaction.
-   ========================================================= */
+========================================================= */
 
-function activateAudio(){
-  if(audioReady) return;
+let audioCtx=null;
 
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if(!AC) return;
+function ensureAudio(){
 
-  audioCtx = new AC();
+  const AC=
+    window.AudioContext||
+    window.webkitAudioContext;
 
-  if(audioCtx.state === "suspended"){
-    audioCtx.resume();
+  if(!AC)return;
+
+  if(!audioCtx){
+    audioCtx=new AC();
   }
 
-  audioReady = true;
+  if(audioCtx.state==="suspended"){
+    audioCtx.resume();
+  }
 }
 
-document.addEventListener("pointerdown",activateAudio,{once:true});
-document.addEventListener("touchstart",activateAudio,{once:true});
+function tone(freq,duration=.06,volume=.025){
 
+  ensureAudio();
 
-function tone(freq=220,duration=.06,volume=.035,type="sine"){
-  if(!audioReady || !audioCtx) return;
+  if(!audioCtx)return;
 
-  if(audioCtx.state === "suspended"){
-    audioCtx.resume();
-  }
+  const o=audioCtx.createOscillator();
+  const g=audioCtx.createGain();
 
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
+  o.type="sine";
 
-  osc.type = type;
-  osc.frequency.setValueAtTime(freq,audioCtx.currentTime);
+  o.frequency.setValueAtTime(
+    freq,
+    audioCtx.currentTime
+  );
 
-  gain.gain.setValueAtTime(0.0001,audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(
+  g.gain.setValueAtTime(
+    .0001,
+    audioCtx.currentTime
+  );
+
+  g.gain.exponentialRampToValueAtTime(
     volume,
     audioCtx.currentTime+.008
   );
-  gain.gain.exponentialRampToValueAtTime(
-    0.0001,
+
+  g.gain.exponentialRampToValueAtTime(
+    .0001,
     audioCtx.currentTime+duration
   );
 
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
+  o.connect(g);
+  g.connect(audioCtx.destination);
 
-  osc.start();
-  osc.stop(audioCtx.currentTime+duration+.02);
+  o.start();
+
+  o.stop(
+    audioCtx.currentTime+
+    duration+.03
+  );
 }
 
 function moveSound(){
-  tone(155,.045,.025,"sine");
+  tone(145,.045,.018);
 }
 
 function wrongSound(){
-  tone(92,.12,.035,"sine");
+  tone(88,.13,.025);
 }
 
-function successSound(){
-  tone(196,.12,.025);
-  setTimeout(()=>tone(247,.15,.025),90);
+function pathSound(step){
+  tone(175+(step*18),.09,.018);
 }
 
-function connectionSound(){
-  tone(196,.18,.025);
-  setTimeout(()=>tone(247,.20,.025),110);
-  setTimeout(()=>tone(294,.28,.025),230);
+function finishSound(){
+  tone(196,.16,.02);
+  setTimeout(()=>tone(247,.18,.02),120);
+  setTimeout(()=>tone(294,.25,.018),260);
 }
 
 
 /* =========================================================
    HELPERS
-   ========================================================= */
+========================================================= */
 
 function letterAt(i){
   return PUZZLE.wheels[i][current[i]];
 }
 
-function indexOfLetter(i,letter){
-  return PUZZLE.wheels[i].indexOf(letter);
-}
-
 function adjacent(a,b){
+
   const ar=Math.floor(a/4);
   const ac=a%4;
+
   const br=Math.floor(b/4);
   const bc=b%4;
 
-  return (
-    Math.max(
-      Math.abs(ar-br),
-      Math.abs(ac-bc)
-    ) === 1
-  );
+  return Math.max(
+    Math.abs(ar-br),
+    Math.abs(ac-bc)
+  )===1;
 }
 
 
-/* Find every currently displayed path spelling a word. */
-
 function findPaths(word){
+
   const results=[];
 
-  function walk(position,letterIndex,path){
+  function walk(position,index,path){
 
-    if(letterIndex === word.length){
+    if(index===word.length){
       results.push([...path]);
       return;
     }
 
     for(let i=0;i<16;i++){
 
-      if(path.includes(i)) continue;
+      if(path.includes(i))continue;
 
-      if(letterAt(i)!==word[letterIndex]) continue;
+      if(letterAt(i)!==word[index])continue;
 
-      if(position!==null && !adjacent(position,i)) continue;
+      if(
+        position!==null &&
+        !adjacent(position,i)
+      )continue;
 
       path.push(i);
-      walk(i,letterIndex+1,path);
+
+      walk(
+        i,
+        index+1,
+        path
+      );
+
       path.pop();
     }
   }
@@ -942,76 +1145,103 @@ function findPaths(word){
 
 
 /* =========================================================
-   RENDER
-   ========================================================= */
+   BOARD
+========================================================= */
 
 function render(){
 
-  const board=document.getElementById("board");
+  const board=
+    document.getElementById("board");
+
   board.innerHTML="";
 
   PUZZLE.wheels.forEach((wheel,i)=>{
 
-    const reel=document.createElement("div");
+    const reel=
+      document.createElement("div");
+
     reel.className="reel";
 
-    applyHistoryClass(reel,i);
+    applyHistory(reel,i);
 
     const centre=current[i];
-
     const left=(centre+2)%3;
     const right=(centre+1)%3;
 
-    const inner=document.createElement("div");
+    const inner=
+      document.createElement("div");
+
     inner.className="reel-inner";
 
     [
-      {idx:left,kind:"alt"},
-      {idx:centre,kind:"current"},
-      {idx:right,kind:"alt"}
+      {idx:left,type:"alt"},
+      {idx:centre,type:"current"},
+      {idx:right,type:"alt"}
     ].forEach(item=>{
 
-      const el=document.createElement("div");
-      el.className="letter "+item.kind;
+      const el=
+        document.createElement("div");
 
-      const letter=wheel[item.idx];
+      el.className=
+        "letter "+item.type;
+
+      const letter=
+        wheel[item.idx];
 
       if(
-        item.kind==="alt" &&
+        item.type==="alt" &&
         remembered[i].has(letter)
       ){
         el.classList.add("remembered");
       }
 
       el.textContent=letter;
+
       inner.appendChild(el);
     });
 
     reel.appendChild(inner);
 
-    /* swipe / drag */
     let startX=null;
 
-    reel.addEventListener("pointerdown",e=>{
-      activateAudio();
-      startX=e.clientX;
-      reel.setPointerCapture?.(e.pointerId);
-    });
+    reel.addEventListener(
+      "pointerdown",
+      e=>{
 
-    reel.addEventListener("pointerup",e=>{
-      if(startX===null) return;
+        if(busy)return;
 
-      const dx=e.clientX-startX;
-      startX=null;
+        ensureAudio();
 
-      if(Math.abs(dx)<16) return;
+        startX=e.clientX;
 
-      if(dx<0){
-        turnReel(i,1);
-      }else{
-        turnReel(i,-1);
+        reel.setPointerCapture?.(
+          e.pointerId
+        );
       }
-    });
+    );
+
+    reel.addEventListener(
+      "pointerup",
+      e=>{
+
+        if(
+          busy ||
+          startX===null
+        )return;
+
+        const dx=
+          e.clientX-startX;
+
+        startX=null;
+
+        if(Math.abs(dx)<16)return;
+
+        turnReel(
+          i,
+          dx<0?1:-1
+        );
+      }
+    );
 
     board.appendChild(reel);
   });
@@ -1020,17 +1250,22 @@ function render(){
 }
 
 
-function applyHistoryClass(reel,i){
+function applyHistory(reel,i){
 
-  const colours=[...histories[i]];
+  const c=
+    [...histories[i]];
 
-  if(colours.length===1){
-    reel.classList.add("used"+colours[0]);
+  if(c.length===1){
+    reel.classList.add(
+      "used"+c[0]
+    );
+    return;
   }
 
-  if(colours.length>=2){
-    const a=Math.min(...colours);
-    const b=Math.max(...colours);
+  if(c.length>=2){
+
+    const a=Math.min(...c);
+    const b=Math.max(...c);
 
     const mix="mix"+a+b;
 
@@ -1039,8 +1274,6 @@ function applyHistoryClass(reel,i){
       "mix23","mix24","mix34"
     ].includes(mix)){
       reel.classList.add(mix);
-    }else{
-      reel.classList.add("used"+colours[colours.length-1]);
     }
   }
 }
@@ -1048,9 +1281,12 @@ function applyHistoryClass(reel,i){
 
 function turnReel(i,direction){
 
-  activateAudio();
+  if(busy)return;
 
-  current[i]=(current[i]+direction+3)%3;
+  ensureAudio();
+
+  current[i]=
+    (current[i]+direction+3)%3;
 
   turns++;
 
@@ -1060,268 +1296,426 @@ function turnReel(i,direction){
 }
 
 
+/* =========================================================
+   CLUES
+========================================================= */
+
 function renderClue(){
 
-  const c=PUZZLE.clues[clueIndex];
+  busy=false;
 
-  document.getElementById("clueLabel").textContent=
+  const clue=
+    PUZZLE.clues[clueIndex];
+
+  document.getElementById(
+    "clueLabel"
+  ).textContent=
     "CLUE "+(clueIndex+1);
 
-  document.getElementById("clue").textContent=c.clue;
+  document.getElementById(
+    "clue"
+  ).textContent=
+    clue.clue;
 
-  document.getElementById("length").textContent=
-    c.answer.length+" LETTERS";
+  document.getElementById(
+    "length"
+  ).textContent=
+    clue.answer.length+
+    " LETTERS";
 
-  document.getElementById("message").textContent="";
+  document.getElementById(
+    "message"
+  ).textContent="";
 
   render();
 
-  /* Easy-mode starting-place pulse */
   setTimeout(()=>{
-    const reels=document.querySelectorAll(".reel");
-    reels[c.start]?.classList.add("pulse");
-  },300);
+
+    const reels=
+      document.querySelectorAll(".reel");
+
+    reels[
+      clue.start
+    ]?.classList.add("pulse");
+
+  },350);
 }
 
 
 /* =========================================================
    UNLOCK
-   ========================================================= */
+========================================================= */
 
 function unlock(){
 
-  activateAudio();
+  if(busy)return;
+
+  ensureAudio();
 
   attempts++;
 
-  const clue=PUZZLE.clues[clueIndex];
-  const paths=findPaths(clue.answer);
-
   updateStats();
 
+  const clue=
+    PUZZLE.clues[clueIndex];
+
+  const paths=
+    findPaths(clue.answer);
+
   if(!paths.length){
+
     wrongSound();
 
-    document.getElementById("message").textContent=
+    const board=
+      document.getElementById("board");
+
+    board.classList.add("shake");
+
+    document.getElementById(
+      "message"
+    ).textContent=
       "Not quite. The place settles back.";
 
-    document.querySelector(".panel").classList.add("shake");
+    busy=true;
 
     setTimeout(()=>{
-      document.querySelector(".panel").classList.remove("shake");
-      rollback();
-    },520);
+
+      board.classList.remove("shake");
+
+      current=[
+        ...clueSnapshot
+      ];
+
+      render();
+
+      busy=false;
+
+    },650);
 
     return;
   }
 
   /*
-     For this prototype, if more than one currently displayed
-     path exists, favour the route containing the greatest
-     number of selectors changed since the clue began.
-
-     This is NOT being treated as the final production answer
-     to route ownership. That remains a design problem.
+    018 puzzle has been constructed so the
+    valid solution state has one route.
   */
 
-  let chosen=paths[0];
-
-  if(paths.length>1){
-
-    chosen=[...paths].sort((a,b)=>{
-
-      const score=p=>
-        p.reduce(
-          (n,i)=>n+(current[i]!==clueSnapshot[i]?1:0),
-          0
-        );
-
-      return score(b)-score(a);
-
-    })[0];
-  }
-
-  solve(clue,chosen);
+  solve(
+    clue,
+    paths[0]
+  );
 }
 
 
+/* =========================================================
+   SMOOTH SUCCESS SEQUENCE
+========================================================= */
+
 function solve(clue,path){
 
-  successSound();
+  busy=true;
+
+  document.getElementById(
+    "message"
+  ).textContent="";
+
+  /*
+    First record remembered letters.
+    Colour is added visually one place at a time.
+  */
 
   path.forEach((position,n)=>{
 
-    const letter=clue.answer[n];
+    remembered[position].add(
+      clue.answer[n]
+    );
 
-    remembered[position].add(letter);
-    histories[position].add(clue.colour);
   });
 
-  solvedWords.push(clue.answer);
+  let step=0;
 
-  document.getElementById("message").textContent=
-    clue.answer+" found.";
+  function colourNext(){
 
-  renderBank();
-  render();
+    if(step>=path.length){
 
-  document.querySelectorAll(".progress-dot")[clueIndex]
-    .classList.add("done");
+      setTimeout(
+        ()=>completeWord(clue,path),
+        320
+      );
 
-  clueIndex++;
+      return;
+    }
 
-  if(clueIndex>=PUZZLE.clues.length){
+    const position=
+      path[step];
 
-    setTimeout(showConnection,750);
-    return;
+    histories[position].add(
+      clue.colour
+    );
+
+    render();
+
+    const reel=
+      document.querySelectorAll(
+        ".reel"
+      )[position];
+
+    reel?.classList.add(
+      "confirming"
+    );
+
+    pathSound(step);
+
+    setTimeout(()=>{
+
+      reel?.classList.remove(
+        "confirming"
+      );
+
+    },230);
+
+    step++;
+
+    setTimeout(
+      colourNext,
+      125
+    );
   }
 
+  colourNext();
+}
+
+
+function completeWord(clue,path){
+
+  solvedWords.push(
+    clue.answer
+  );
+
+  renderBank();
+
+  document.querySelectorAll(
+    ".progress-dot"
+  )[clueIndex]
+    .classList.add("done");
+
+  document.getElementById(
+    "message"
+  ).textContent=
+    clue.answer+" found.";
+
   /*
-     Correct route remains.
-     Irrelevant experiments return to clue-start state.
+    Keep only the successful route's
+    changes. Other experimentation
+    settles back.
   */
 
-  const next=[...clueSnapshot];
+  const next=[
+    ...clueSnapshot
+  ];
 
   path.forEach(i=>{
     next[i]=current[i];
   });
 
   current=next;
-  clueSnapshot=[...current];
 
-  setTimeout(renderClue,650);
-}
+  clueSnapshot=[
+    ...current
+  ];
 
+  clueIndex++;
 
-function rollback(){
+  if(
+    clueIndex>=
+    PUZZLE.clues.length
+  ){
 
-  current=[...clueSnapshot];
-  render();
+    setTimeout(
+      showConnection,
+      850
+    );
 
-  setTimeout(()=>{
-    document.getElementById("message").textContent="";
-  },550);
-}
+    return;
+  }
 
-
-function manualReset(){
-  activateAudio();
-  current=[...clueSnapshot];
-  render();
-  document.getElementById("message").textContent="";
+  setTimeout(
+    renderClue,
+    800
+  );
 }
 
 
 /* =========================================================
-   CLUE-STAGE HINT
+   RESET / HINT
+========================================================= */
 
-   Still intentionally modest:
-   pulse the starting place.
-   It does not expose a constructor route.
-   ========================================================= */
+function reset(){
+
+  if(busy)return;
+
+  ensureAudio();
+
+  current=[
+    ...clueSnapshot
+  ];
+
+  render();
+
+  document.getElementById(
+    "message"
+  ).textContent="";
+}
+
 
 function clueHint(){
 
+  if(busy)return;
+
   hints++;
+
   updateStats();
 
-  const clue=PUZZLE.clues[clueIndex];
+  const clue=
+    PUZZLE.clues[clueIndex];
 
-  const reels=document.querySelectorAll(".reel");
+  const reels=
+    document.querySelectorAll(
+      ".reel"
+    );
 
-  reels[clue.start]?.classList.remove("pulse");
+  const r=
+    reels[clue.start];
 
-  void reels[clue.start]?.offsetWidth;
+  r?.classList.remove("pulse");
 
-  reels[clue.start]?.classList.add("pulse");
+  void r?.offsetWidth;
 
-  document.getElementById("message").textContent=
+  r?.classList.add("pulse");
+
+  document.getElementById(
+    "message"
+  ).textContent=
     "Start here.";
 }
 
 
 /* =========================================================
    BANK
-   ========================================================= */
+========================================================= */
 
 function renderBank(){
 
-  const bank=document.getElementById("bank");
+  const bank=
+    document.getElementById("bank");
+
   bank.innerHTML="";
 
-  solvedWords.forEach((word,i)=>{
+  solvedWords.forEach(
+    (word,i)=>{
 
-    const pill=document.createElement("div");
-    pill.className="pill c"+(i+1);
-    pill.textContent=word;
+      const p=
+        document.createElement("div");
 
-    bank.appendChild(pill);
-  });
+      p.className=
+        "pill c"+(i+1);
+
+      p.textContent=word;
+
+      bank.appendChild(p);
+    }
+  );
 }
 
 
 /* =========================================================
    CONNECTION
-   ========================================================= */
+========================================================= */
 
 function showConnection(){
 
-  document.getElementById("controls").style.display="none";
-  document.getElementById("clueLabel").style.display="none";
-  document.getElementById("clue").style.display="none";
-  document.getElementById("length").style.display="none";
-  document.getElementById("message").textContent="";
+  busy=false;
 
-  const section=document.getElementById("connection");
-  section.classList.add("show");
+  document.getElementById(
+    "controls"
+  ).style.display="none";
 
-  const words=document.getElementById("connectionWords");
+  document.getElementById(
+    "message"
+  ).textContent="";
+
+  document.getElementById(
+    "clueArea"
+  ).style.display="none";
+
+  const connection=
+    document.getElementById(
+      "connection"
+    );
+
+  connection.classList.add(
+    "show"
+  );
+
+  const words=
+    document.getElementById(
+      "connectionWords"
+    );
+
   words.innerHTML="";
 
-  solvedWords.forEach((word,i)=>{
+  solvedWords.forEach(
+    (word,i)=>{
 
-    const pill=document.createElement("div");
-    pill.className="pill c"+(i+1);
-    pill.textContent=word;
+      const p=
+        document.createElement("div");
 
-    words.appendChild(pill);
-  });
+      p.className=
+        "pill c"+(i+1);
 
-  /*
-     IMPORTANT:
-     The number of dots now genuinely equals
-     the number of letters in the Connection.
-  */
+      p.textContent=word;
 
-  document.getElementById("connectionLength").textContent=
-    "•".repeat(PUZZLE.connection.answer.length);
+      words.appendChild(p);
+    }
+  );
 
-  setTimeout(()=>{
-    document.getElementById("connectionInput").focus();
-  },350);
+  document.getElementById(
+    "connectionLength"
+  ).textContent=
+    "•".repeat(
+      PUZZLE.connection.answer.length
+    );
 }
 
 
 function connectionHint(){
 
-  activateAudio();
+  ensureAudio();
 
-  if(connectionHintLevel>=3) return;
+  if(
+    connectionHintLevel>=3
+  )return;
 
   connectionHintLevel++;
+
   hints++;
+
   updateStats();
 
-  const text=
+  document.getElementById(
+    "connectionHint"
+  ).textContent=
     PUZZLE.connection[
-      "hint"+connectionHintLevel
+      "hint"+
+      connectionHintLevel
     ];
 
-  document.getElementById("connectionHint").textContent=text;
-
-  if(connectionHintLevel===3){
-    document.getElementById("connectionHintBtn").textContent=
+  if(
+    connectionHintLevel===3
+  ){
+    document.getElementById(
+      "connectionHintBtn"
+    ).textContent=
       "NO MORE HINTS";
   }
 }
@@ -1329,146 +1723,303 @@ function connectionHint(){
 
 function tryConnection(){
 
-  activateAudio();
+  ensureAudio();
 
-  const input=document.getElementById("connectionInput");
-  const guess=input.value.trim().toUpperCase();
+  const input=
+    document.getElementById(
+      "connectionInput"
+    );
 
-  if(!guess) return;
+  const guess=
+    input.value
+      .trim()
+      .toUpperCase();
+
+  if(!guess)return;
 
   attempts++;
+
   updateStats();
 
-  if(guess===PUZZLE.connection.answer){
+  if(
+    guess===
+    PUZZLE.connection.answer
+  ){
 
-    completeConnection(false);
+    completeConnection();
 
   }else{
 
     wrongSound();
 
-    input.classList.add("shake");
+    input.classList.add(
+      "shake"
+    );
 
-    document.getElementById("connectionHint").textContent=
+    document.getElementById(
+      "connectionHint"
+    ).textContent=
       "That doesn't connect all four.";
 
-    setTimeout(()=>{
-      input.classList.remove("shake");
-    },350);
+    setTimeout(
+      ()=>input.classList.remove(
+        "shake"
+      ),
+      350
+    );
   }
 }
 
 
 function revealConnection(){
 
-  activateAudio();
+  ensureAudio();
 
-  const answer=PUZZLE.connection.answer;
+  const answer=
+    PUZZLE.connection.answer;
 
-  document.getElementById("connectionInput").value=answer;
+  document.getElementById(
+    "connectionInput"
+  ).value=
+    answer;
 
-  document.getElementById("connectionHint").textContent=
+  document.getElementById(
+    "connectionHint"
+  ).textContent=
     "There it is.";
 
-  setTimeout(()=>{
-    completeConnection(true);
-  },500);
+  setTimeout(
+    completeConnection,
+    550
+  );
 }
 
 
-function completeConnection(revealed){
+function completeConnection(){
 
-  connectionSound();
+  finishSound();
 
-  const answer=PUZZLE.connection.answer;
+  const answer=
+    PUZZLE.connection.answer;
 
-  document.getElementById("connectionInput").disabled=true;
+  const input=
+    document.getElementById(
+      "connectionInput"
+    );
 
-  document.getElementById("connectBtn").disabled=true;
-  document.getElementById("connectionHintBtn").disabled=true;
-  document.getElementById("revealBtn").disabled=true;
+  input.value=answer;
+  input.disabled=true;
 
-  document.getElementById("connectionLength").textContent=answer;
+  document.getElementById(
+    "connectBtn"
+  ).disabled=true;
 
-  document.getElementById("connectionHint").textContent=
-    solvedWords.map(word=>word+" "+answer).join("  ·  ");
+  document.getElementById(
+    "connectionHintBtn"
+  ).disabled=true;
 
-  setTimeout(()=>{
-    finish(revealed);
-  },1000);
+  document.getElementById(
+    "revealBtn"
+  ).disabled=true;
+
+  document.getElementById(
+    "connectionLength"
+  ).textContent=
+    answer;
+
+  /*
+    Reveal the four relationships
+    gently rather than replacing
+    the whole screen at once.
+  */
+
+  const forms=
+    solvedWords.map(
+      word=>word+answer
+    );
+
+  let i=0;
+
+  document.getElementById(
+    "connectionHint"
+  ).textContent="";
+
+  function revealNext(){
+
+    if(i>=forms.length){
+
+      setTimeout(
+        finish,
+        700
+      );
+
+      return;
+    }
+
+    const existing=
+      document.getElementById(
+        "connectionHint"
+      ).textContent;
+
+    document.getElementById(
+      "connectionHint"
+    ).textContent=
+      existing
+        ? existing+"  ·  "+forms[i]
+        : forms[i];
+
+    tone(
+      190+(i*28),
+      .10,
+      .016
+    );
+
+    i++;
+
+    setTimeout(
+      revealNext,
+      360
+    );
+  }
+
+  setTimeout(
+    revealNext,
+    350
+  );
 }
 
 
 /* =========================================================
    FINISH
-   ========================================================= */
+========================================================= */
 
-function finish(revealed){
-
-  document.body.classList.add("complete");
-
-  document.getElementById("connection").style.display="none";
+function finish(){
 
   const visited=
-    histories.filter(set=>set.size>0).length;
+    histories.filter(
+      h=>h.size>0
+    ).length;
 
-  document.getElementById("finalPath").textContent=
-    "YOUR PATH · "+visited+" OF 16 PLACES VISITED";
+  const connection=
+    document.getElementById(
+      "connection"
+    );
 
-  document.getElementById("final").classList.add("show");
+  connection.style.opacity="0";
+
+  connection.style.transition=
+    "opacity .65s ease";
+
+  setTimeout(()=>{
+
+    connection.style.display=
+      "none";
+
+    document.getElementById(
+      "finalPath"
+    ).textContent=
+      "YOUR PATH · "+
+      visited+
+      " OF 16 PLACES VISITED";
+
+    document.getElementById(
+      "final"
+    ).classList.add("show");
+
+  },650);
 }
 
 
 /* =========================================================
    STATS
-   ========================================================= */
+========================================================= */
 
 function updateStats(){
 
-  document.getElementById("turnStat").textContent=
-    turns+" TURN"+(turns===1?"":"S");
+  document.getElementById(
+    "turnStat"
+  ).textContent=
+    turns+
+    " TURN"+
+    (turns===1?"":"S");
 
-  document.getElementById("attemptStat").textContent=
-    attempts+" ATTEMPT"+(attempts===1?"":"S");
+  document.getElementById(
+    "attemptStat"
+  ).textContent=
+    attempts+
+    " ATTEMPT"+
+    (attempts===1?"":"S");
 
-  document.getElementById("hintStat").textContent=
-    hints+" HINT"+(hints===1?"":"S");
+  document.getElementById(
+    "hintStat"
+  ).textContent=
+    hints+
+    " HINT"+
+    (hints===1?"":"S");
 }
 
 
 /* =========================================================
    BUTTONS
-   ========================================================= */
+========================================================= */
 
-document.getElementById("unlockBtn")
-  .addEventListener("click",unlock);
+document.getElementById(
+  "unlockBtn"
+).addEventListener(
+  "click",
+  unlock
+);
 
-document.getElementById("resetBtn")
-  .addEventListener("click",manualReset);
+document.getElementById(
+  "resetBtn"
+).addEventListener(
+  "click",
+  reset
+);
 
-document.getElementById("hintBtn")
-  .addEventListener("click",clueHint);
+document.getElementById(
+  "hintBtn"
+).addEventListener(
+  "click",
+  clueHint
+);
 
-document.getElementById("connectBtn")
-  .addEventListener("click",tryConnection);
+document.getElementById(
+  "connectBtn"
+).addEventListener(
+  "click",
+  tryConnection
+);
 
-document.getElementById("connectionHintBtn")
-  .addEventListener("click",connectionHint);
+document.getElementById(
+  "connectionHintBtn"
+).addEventListener(
+  "click",
+  connectionHint
+);
 
-document.getElementById("revealBtn")
-  .addEventListener("click",revealConnection);
+document.getElementById(
+  "revealBtn"
+).addEventListener(
+  "click",
+  revealConnection
+);
 
-document.getElementById("connectionInput")
-  .addEventListener("keydown",e=>{
+document.getElementById(
+  "connectionInput"
+).addEventListener(
+  "keydown",
+  e=>{
     if(e.key==="Enter"){
       tryConnection();
     }
-  });
+  }
+);
 
 
 /* =========================================================
    START
-   ========================================================= */
+========================================================= */
 
 renderClue();
 
