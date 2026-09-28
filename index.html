@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>WORDLOCK #016c · THE PLACE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#e9e4d9">
+
+<title>WORDLOCK 017</title>
 
 <style>
 :root{
-  --cream:#eee8dc;
-  --ink:#1b1b19;
-  --paper:#fffdf8;
-  --sage:#b6cdbf;
-  --blue:#aec8d0;
-  --ochre:#d8bd82;
-  --mauve:#c9aec5;
-  --wrong:#8d5149;
+  --ink:#242522;
+  --charcoal:#3f413d;
+  --grey:#777a74;
+  --paper:#eee9df;
+  --cream:rgba(250,248,241,.88);
+
+  --sage:#aebca5;
+  --blue:#a9bec4;
+  --ochre:#c8b48c;
+  --mauve:#b8a8b5;
 }
 
 *{
@@ -22,2455 +26,1452 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
   margin:0;
+  min-height:100%;
+  background:#d9d4c9;
+  color:var(--ink);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Avenir Next",
+    "Segoe UI",
+    sans-serif;
+}
+
+body{
   min-height:100vh;
-  background:
-    radial-gradient(circle at 50% -10%,#faf7ef 0%,#e9e1d3 62%,#ddd3c3 100%);
-  color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
-  display:flex;
-  justify-content:center;
+  overflow-x:hidden;
 }
 
-.game{
-  width:min(100%,460px);
-  padding:20px 15px 55px;
-  text-align:center;
+button,input{
+  font:inherit;
 }
 
-h1{
-  margin:0 0 2px;
-  font-size:35px;
-  letter-spacing:5px;
-  font-weight:950;
+button{
+  touch-action:manipulation;
 }
 
-.subhead{
-  color:#777067;
-  font-size:10px;
-  font-weight:850;
-  letter-spacing:2px;
-  margin-bottom:12px;
-}
-
-.stats{
-  display:flex;
-  justify-content:center;
-  gap:30px;
-  margin-bottom:12px;
-}
-
-.stat{
-  color:#777067;
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:1px;
-}
-
-.stat strong{
-  display:block;
-  color:var(--ink);
-  font-size:18px;
-}
-
-.clue-card{
-  background:rgba(255,255,255,.7);
-  border:1px solid rgba(0,0,0,.06);
-  border-radius:18px;
-  padding:12px 15px 13px;
-  margin-bottom:10px;
-}
-
-.clue-count{
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1.5px;
-  color:#837d74;
-  margin-bottom:3px;
-}
-
-.clue{
-  font-size:21px;
-  font-weight:850;
-}
-
-.answer-bank{
-  min-height:39px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-bottom:11px;
-}
-
-.banked-word{
-  border-radius:999px;
-  padding:6px 10px;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1px;
-  color:#303733;
-  border:1px solid rgba(0,0,0,.07);
-  animation:bankIn .7s ease-out;
-}
-
-@keyframes bankIn{
-  from{transform:translateY(4px);opacity:0}
-  to{transform:none;opacity:1}
-}
-
-/* ======================================================
-   THE PLACE — stronger #016c landscape
-   ====================================================== */
-
-.place-shell{
+#world{
+  min-height:100vh;
   position:relative;
-  width:100%;
-  margin-bottom:14px;
-  overflow:hidden;
-  border-radius:30px;
-  background:#c8b89c;
-  box-shadow:
-    0 16px 38px rgba(67,59,44,.16),
-    0 3px 8px rgba(67,59,44,.08);
-  transition:
-    transform 2.4s cubic-bezier(.2,.7,.2,1),
-    box-shadow 2.4s ease;
-}
-
-.place-shell.revealed{
-  transform:scale(.965);
-  box-shadow:
-    0 22px 48px rgba(67,59,44,.11),
-    0 4px 10px rgba(67,59,44,.05);
-}
-
-.landscape{
-  position:relative;
-  min-height:515px;
-  padding:26px 18px 31px;
   overflow:hidden;
 
   background:
     radial-gradient(
-      ellipse at 12% 12%,
-      rgba(255,247,225,.94) 0%,
-      rgba(255,247,225,0) 30%
+      ellipse at 17% 18%,
+      rgba(185,196,190,.38) 0%,
+      rgba(185,196,190,.14) 24%,
+      transparent 47%
     ),
     radial-gradient(
-      ellipse at 91% 67%,
-      rgba(112,151,94,.62) 0%,
-      rgba(112,151,94,0) 31%
+      ellipse at 87% 69%,
+      rgba(175,166,145,.30) 0%,
+      rgba(175,166,145,.10) 27%,
+      transparent 52%
     ),
     linear-gradient(
-      145deg,
-      #eadbc4 0%,
-      #bfae91 46%,
-      #ddc9a9 100%
+      154deg,
+      #e8e4d9 0%,
+      #ddd9cd 45%,
+      #d5d0c3 100%
     );
 }
 
-/* contour lines */
+/* -------------------------------------------------
+   TERRAIN
+   Everything is deliberately expressed through the
+   same cartographic/topographical visual language.
+-------------------------------------------------- */
 
-.contour{
+.terrain{
   position:absolute;
-  border:1.5px solid rgba(77,66,49,.40);
-  border-radius:48% 52% 55% 45% / 52% 46% 54% 48%;
+  inset:-7%;
   pointer-events:none;
+  opacity:.92;
 }
 
-.c1{
-  width:310px;height:160px;
-  left:-100px;top:24px;
-  transform:rotate(-12deg);
-}
-
-.c2{
-  width:250px;height:125px;
-  left:-58px;top:52px;
-  transform:rotate(-9deg);
-}
-
-.c3{
-  width:340px;height:175px;
-  right:-145px;top:125px;
-  transform:rotate(18deg);
-}
-
-.c4{
-  width:270px;height:137px;
-  right:-108px;top:151px;
-  transform:rotate(17deg);
-}
-
-.c5{
-  width:380px;height:190px;
-  left:-125px;bottom:2px;
-  transform:rotate(11deg);
-}
-
-.c6{
-  width:300px;height:145px;
-  left:-76px;bottom:28px;
-  transform:rotate(9deg);
-}
-
-/* clearer stone forms */
-
-.stone-form{
+.contours{
   position:absolute;
-  pointer-events:none;
-  opacity:.96;
-  box-shadow:
-    inset 0 1px rgba(255,255,255,.38),
-    0 5px 14px rgba(80,67,48,.08);
-}
-
-.stone-a{
-  width:135px;
-  height:59px;
-  top:67px;
-  right:-20px;
-  border-radius:70% 20% 55% 25%;
-  background:linear-gradient(150deg,#e5d4b9,#9c896b);
-  transform:rotate(-7deg);
-}
-
-.stone-b{
-  width:103px;
-  height:46px;
-  left:-26px;
-  bottom:86px;
-  border-radius:30% 70% 30% 65%;
-  background:linear-gradient(160deg,#dec9a9,#948064);
-  transform:rotate(12deg);
-}
-
-.stone-c{
-  width:69px;
-  height:96px;
-  right:12px;
-  bottom:27px;
-  border-radius:45% 40% 25% 55%;
-  background:linear-gradient(130deg,#dac3a0,#8d785d);
-  transform:rotate(16deg);
-}
-
-/* clearer water */
-
-.water-fragment{
-  position:absolute;
-  width:225px;
-  height:57px;
-  left:9px;
-  bottom:37px;
-  border-radius:60% 40% 65% 35%;
-  background:
-    linear-gradient(
-      100deg,
-      rgba(78,158,171,.08),
-      rgba(78,158,171,.92),
-      rgba(78,158,171,.48)
+  inset:0;
+  opacity:.47;
+  background-image:
+    repeating-radial-gradient(
+      ellipse at 14% 28%,
+      transparent 0 24px,
+      rgba(82,88,81,.18) 25px 26px,
+      transparent 27px 43px
+    ),
+    repeating-radial-gradient(
+      ellipse at 82% 63%,
+      transparent 0 31px,
+      rgba(82,88,81,.13) 32px 33px,
+      transparent 34px 52px
     );
-  transform:rotate(-7deg);
-  opacity:.94;
-  pointer-events:none;
-  box-shadow:
-    inset 0 5px 15px rgba(255,255,255,.22);
+  transform:rotate(-7deg) scale(1.15);
 }
 
-/* clearer first vegetation */
-
-.moss-fragment{
+/* subtle water-like basin */
+.basin{
   position:absolute;
-  width:155px;
-  height:88px;
-  right:-30px;
-  top:263px;
-  border-radius:60% 35% 65% 40%;
+  width:56%;
+  height:25%;
+  left:-8%;
+  top:50%;
+  border-radius:48% 52% 55% 45%;
+  transform:rotate(-11deg);
   background:
+    repeating-linear-gradient(
+      3deg,
+      rgba(110,139,143,.00) 0 11px,
+      rgba(110,139,143,.12) 12px,
+      rgba(110,139,143,.00) 13px 23px
+    ),
     radial-gradient(
-      ellipse at 30% 40%,
-      rgba(91,145,75,.82),
-      rgba(91,145,75,.26) 46%,
-      rgba(91,145,75,0) 72%
+      ellipse,
+      rgba(133,158,159,.18),
+      rgba(133,158,159,.04) 58%,
+      transparent 73%
     );
-  transform:rotate(-13deg);
-  pointer-events:none;
+  filter:blur(.15px);
 }
 
-/* a faint route/trail through the place */
-
-.trail{
+/* fine organic texture rather than a green blob */
+.growth{
   position:absolute;
-  width:310px;
-  height:125px;
-  left:57px;
-  top:162px;
-  border-top:8px solid rgba(226,210,181,.34);
-  border-radius:50%;
-  transform:rotate(24deg);
-  pointer-events:none;
+  right:-4%;
+  top:9%;
+  width:49%;
+  height:42%;
+  opacity:.38;
+  background-image:
+    radial-gradient(circle,rgba(91,107,86,.28) 0 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(91,107,86,.17) 0 1px,transparent 1.4px);
+  background-size:17px 19px,29px 31px;
+  background-position:0 0,8px 12px;
+  mask-image:radial-gradient(ellipse at 65% 35%,black 0 32%,transparent 72%);
+  -webkit-mask-image:radial-gradient(ellipse at 65% 35%,black 0 32%,transparent 72%);
 }
 
-.trail-two{
+/* possible track — ambiguous rather than illustrated */
+.track,
+.track:after{
   position:absolute;
-  width:230px;
-  height:110px;
-  left:126px;
-  top:208px;
-  border-bottom:6px solid rgba(226,210,181,.26);
+  content:"";
+  width:68%;
+  height:42%;
+  left:34%;
+  top:61%;
+  border-top:1px solid rgba(92,91,81,.23);
   border-radius:50%;
   transform:rotate(-14deg);
-  pointer-events:none;
 }
 
-.ridge{
+.track:after{
+  width:100%;
+  height:100%;
+  left:0;
+  top:6px;
+  opacity:.65;
+}
+
+/* faint geological marks */
+.strata{
   position:absolute;
-  width:180px;
-  height:38px;
-  left:76px;
-  top:115px;
-  border-top:3px solid rgba(91,72,48,.25);
-  border-radius:50%;
-  transform:rotate(-7deg);
-  pointer-events:none;
+  left:4%;
+  top:8%;
+  width:42%;
+  height:30%;
+  opacity:.25;
+  background:
+    repeating-linear-gradient(
+      164deg,
+      transparent 0 17px,
+      rgba(95,91,79,.22) 18px,
+      transparent 19px 31px
+    );
+  clip-path:polygon(0 15%,70% 0,100% 64%,58% 100%,8% 76%);
 }
 
-.map-mark{
-  position:absolute;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:rgba(74,65,51,.48);
-  pointer-events:none;
-}
+/* ------------------------------------------------- */
 
-.mark1{left:11%;top:22%}
-.mark2{right:13%;top:39%}
-.mark3{left:17%;bottom:21%}
-.mark4{right:22%;bottom:12%}
-
-.place-heading{
+.wrap{
   position:relative;
-  z-index:5;
-  margin-bottom:19px;
+  z-index:2;
+  width:min(94vw,520px);
+  margin:0 auto;
+  padding:
+    max(25px,env(safe-area-inset-top))
+    0
+    max(34px,env(safe-area-inset-bottom));
 }
 
-.place-kicker{
-  font-size:8px;
-  letter-spacing:2.8px;
-  font-weight:900;
-  color:#5e5549;
-  margin-bottom:4px;
+.mast{
+  text-align:center;
+  margin-bottom:15px;
 }
 
-.place-name{
+.brand{
+  font-size:13px;
+  letter-spacing:.34em;
+  font-weight:750;
+}
+
+.place{
+  margin-top:8px;
+  font-family:Georgia,serif;
+  font-size:11px;
+  letter-spacing:.19em;
+  text-transform:uppercase;
+  color:#65675f;
+}
+
+.place-detail{
+  margin-top:5px;
+  font-family:Georgia,serif;
+  font-style:italic;
+  font-size:12px;
+  color:#7b7b70;
+}
+
+.panel{
+  background:rgba(243,240,231,.58);
+  border:1px solid rgba(76,76,67,.16);
+  border-radius:25px;
+  padding:17px 14px 16px;
+  box-shadow:
+    0 18px 50px rgba(57,55,48,.10),
+    inset 0 1px rgba(255,255,255,.55);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+
+.progress{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:13px;
+}
+
+.progress-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  border:1px solid #797b75;
+  background:rgba(255,255,255,.38);
+}
+
+.progress-dot.done:nth-child(1){background:var(--sage);border-color:transparent}
+.progress-dot.done:nth-child(2){background:var(--blue);border-color:transparent}
+.progress-dot.done:nth-child(3){background:var(--ochre);border-color:transparent}
+.progress-dot.done:nth-child(4){background:var(--mauve);border-color:transparent}
+
+.clue-label{
+  text-align:center;
+  font-size:9px;
+  font-weight:750;
+  letter-spacing:.24em;
+  color:#74766f;
+}
+
+#clue{
+  min-height:44px;
+  margin:5px auto 3px;
+  max-width:370px;
+  text-align:center;
   font-family:Georgia,serif;
   font-size:18px;
-  letter-spacing:.4px;
-  color:#342f28;
+  line-height:1.25;
 }
 
-/* ======================================================
-   BOARD
-   ====================================================== */
+#length{
+  text-align:center;
+  font-size:10px;
+  letter-spacing:.20em;
+  color:#74766f;
+  margin-bottom:15px;
+}
 
 .board{
-  position:relative;
-  z-index:5;
-}
-
-.lock-row{
-  position:relative;
-  height:75px;
-  margin:7px 0;
-  display:flex;
-  align-items:center;
-}
-
-.row-bed{
-  position:absolute;
-  left:1px;
-  right:1px;
-  top:7px;
-  bottom:7px;
-  border-radius:16px;
-  background:
-    linear-gradient(
-      100deg,
-      rgba(118,99,70,.24),
-      rgba(255,255,255,.14),
-      rgba(100,84,62,.20)
-    );
-  border:1px solid rgba(74,62,45,.20);
-}
-
-.lock-number{
-  position:absolute;
-  left:8px;
-  z-index:5;
-  color:#5d554a;
-  font-size:8px;
-  font-weight:900;
-}
-
-.reels{
-  position:relative;
-  z-index:4;
-  width:calc(100% - 48px);
-  margin-left:30px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:4px;
+  gap:8px;
 }
 
 .reel{
   position:relative;
-  height:61px;
-  overflow:hidden;
-  background:rgba(255,253,248,.78);
-  border:1px solid rgba(65,57,45,.15);
-  touch-action:none;
-  user-select:none;
-  transition:
-    transform .27s cubic-bezier(.22,.65,.3,1),
-    box-shadow .8s ease;
+  height:65px;
+  border:1px solid rgba(57,59,54,.18);
+  border-radius:14px;
+  background:rgba(252,250,244,.84);
   box-shadow:
-    0 2px 5px rgba(69,61,48,.07),
-    inset 0 1px 0 rgba(255,255,255,.75);
+    0 4px 10px rgba(54,52,45,.08),
+    inset 0 1px rgba(255,255,255,.8);
+  overflow:hidden;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:pan-y;
+
+  transition:
+    background .55s ease,
+    transform .14s ease,
+    box-shadow .3s ease;
 }
 
-.reel:first-child{
-  border-radius:11px 5px 5px 11px;
-}
-
-.reel:last-child{
-  border-radius:5px 11px 11px 5px;
-}
-
-.choice-strip{
-  position:absolute;
-  inset:0;
+.reel-inner{
+  height:100%;
   display:grid;
-  grid-template-columns:1fr 1.42fr 1fr;
+  grid-template-columns:1fr 1.25fr 1fr;
   align-items:center;
-  pointer-events:none;
-  z-index:3;
+  text-align:center;
 }
 
-.choice{
+.letter{
   display:flex;
   align-items:center;
   justify-content:center;
-  height:100%;
-  transition:color .5s ease,opacity .5s ease;
+  line-height:1;
 }
 
-/* unused letter */
-
-.choice.left,
-.choice.right{
-  font-size:13px;
-  color:#bcb6ac;
-  opacity:.48;
-  font-weight:600;
+/* UNUSED alternatives:
+   deliberately readable, not ghosted away */
+.letter.alt{
+  font-size:17px;
+  font-weight:500;
+  color:var(--grey);
 }
 
-/* previously correctly used letter */
-
-.choice.left.remembered,
-.choice.right.remembered{
-  color:#292824;
-  opacity:1;
-  font-weight:950;
+/* Previously successful letter:
+   NO BROWN. Typography alone carries the meaning. */
+.letter.alt.remembered{
+  color:#30322f;
+  font-weight:800;
 }
 
-/* current letter */
-
-.choice.current{
-  font-size:27px;
-  color:#151513;
-  font-weight:950;
+/* Current */
+.letter.current{
+  font-size:30px;
+  font-weight:850;
+  color:#1f211f;
+  letter-spacing:-.03em;
 }
 
-.reel-wash{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-  transition:background 1.1s ease;
+.reel.used1{background:rgba(174,188,165,.88)}
+.reel.used2{background:rgba(169,190,196,.88)}
+.reel.used3{background:rgba(200,180,140,.88)}
+.reel.used4{background:rgba(184,168,181,.88)}
+
+/* overlap approximations */
+.reel.mix12{background:linear-gradient(135deg,rgba(174,188,165,.90),rgba(169,190,196,.90))}
+.reel.mix13{background:linear-gradient(135deg,rgba(174,188,165,.90),rgba(200,180,140,.90))}
+.reel.mix14{background:linear-gradient(135deg,rgba(174,188,165,.90),rgba(184,168,181,.90))}
+.reel.mix23{background:linear-gradient(135deg,rgba(169,190,196,.90),rgba(200,180,140,.90))}
+.reel.mix24{background:linear-gradient(135deg,rgba(169,190,196,.90),rgba(184,168,181,.90))}
+.reel.mix34{background:linear-gradient(135deg,rgba(200,180,140,.90),rgba(184,168,181,.90))}
+
+.reel.pulse{
+  animation:pulse 1.05s ease-in-out 2;
 }
 
-.reel.start-pulse .choice.current{
-  animation:startLetter .9s ease-in-out 2;
-}
-
-@keyframes startLetter{
-  0%,100%{
-    transform:scale(1);
-    color:#181818;
-  }
+@keyframes pulse{
   50%{
-    transform:scale(1.4);
-    color:#806020;
+    transform:scale(1.055);
+    box-shadow:
+      0 0 0 4px rgba(70,75,68,.10),
+      0 7px 16px rgba(54,52,45,.12);
   }
 }
-
-/* controls */
 
 .controls{
   display:grid;
-  grid-template-columns:80px 80px 1fr;
-  gap:7px;
-}
-
-.controls button{
-  border-radius:999px;
-  font-weight:900;
-}
-
-.reset,
-.hint{
-  border:1.5px solid var(--ink);
-  background:transparent;
-  color:var(--ink);
-  font-size:10px;
-}
-
-.unlock{
-  border:0;
-  padding:15px 12px;
-  background:var(--ink);
-  color:white;
-  font-size:14px;
-  letter-spacing:1.4px;
-}
-
-button:disabled{
-  opacity:.45;
-}
-
-.message{
-  min-height:35px;
-  padding-top:9px;
-  font-size:13px;
-  font-weight:750;
-}
-
-/* later stages */
-
-.path-stage,
-.key-stage,
-.place-reveal{
-  display:none;
-  margin-top:13px;
-  padding:16px 14px;
-  border-radius:18px;
-  background:rgba(255,255,255,.63);
-}
-
-.path-stage.show,
-.key-stage.show,
-.place-reveal.show{
-  display:block;
-  animation:stageIn .8s ease-out;
-}
-
-@keyframes stageIn{
-  from{transform:translateY(6px);opacity:0}
-  to{transform:none;opacity:1}
-}
-
-.your-path-label,
-.key-heading,
-.reveal-kicker{
-  color:#665f54;
-  font-size:10px;
-  font-weight:950;
-  letter-spacing:2px;
-}
-
-.your-path-number{
-  margin-top:5px;
-  font-family:Georgia,serif;
-  font-size:19px;
-  font-weight:bold;
-}
-
-.your-path-copy,
-.key-copy,
-.reveal-copy{
-  color:#706b63;
-  font-size:11px;
-  margin-top:4px;
-  line-height:1.5;
-}
-
-.key-question{
-  font-family:Georgia,serif;
-  font-size:22px;
-  font-weight:bold;
-  margin:8px 0 5px;
-}
-
-.final-words{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-  margin:12px auto 15px;
-  max-width:260px;
-}
-
-.final-word{
-  border-radius:7px;
-  padding:8px 5px;
-  font-size:13px;
-  font-weight:950;
-  letter-spacing:1px;
-  color:#303733;
-}
-
-.key-input{
-  width:190px;
-  padding:11px;
-  border:2px solid var(--ink);
-  border-radius:10px;
-  text-align:center;
-  text-transform:uppercase;
-  font-size:20px;
-  font-weight:950;
-  letter-spacing:5px;
-  background:white;
-}
-
-.key-input.wrong{
-  border-color:var(--wrong);
-  background:#fff8f7;
-  animation:keyShake .45s ease-in-out;
-}
-
-@keyframes keyShake{
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-6px)}
-  40%{transform:translateX(6px)}
-  60%{transform:translateX(-4px)}
-  80%{transform:translateX(4px)}
-}
-
-.key-button{
-  display:block;
-  margin:9px auto 0;
-  border:0;
-  border-radius:999px;
-  padding:12px 25px;
-  background:var(--ink);
-  color:white;
-  font-weight:950;
-}
-
-.key-feedback{
-  min-height:24px;
-  margin-top:8px;
-  color:var(--wrong);
-  font-size:12px;
-  font-weight:850;
-}
-
-.connection-stage{
-  display:none;
+  grid-template-columns:1fr 1.6fr 1fr;
+  gap:8px;
   margin-top:14px;
 }
 
-.connection-stage.show{
-  display:block;
+.btn{
+  border:1px solid rgba(54,56,52,.22);
+  border-radius:13px;
+  min-height:45px;
+  background:rgba(248,246,239,.78);
+  color:#3b3d39;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+
+.btn.primary{
+  background:#333631;
+  color:#f7f5ee;
+  border-color:#333631;
+}
+
+.btn:active{
+  transform:translateY(1px);
+}
+
+#message{
+  min-height:28px;
+  padding-top:9px;
+  text-align:center;
+  font-family:Georgia,serif;
+  font-style:italic;
+  font-size:13px;
+  color:#676960;
+}
+
+.bank{
+  margin-top:13px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:7px;
+}
+
+.pill{
+  padding:7px 11px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.pill.c1{background:var(--sage)}
+.pill.c2{background:var(--blue)}
+.pill.c3{background:var(--ochre)}
+.pill.c4{background:var(--mauve)}
+
+.stats{
+  margin-top:13px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  color:#666860;
+  font-size:9px;
+  letter-spacing:.14em;
+  font-weight:750;
 }
 
 .connection{
-  margin:5px auto;
-  font-size:15px;
-  font-weight:950;
-  opacity:0;
-  transform:translateY(3px);
+  display:none;
+  margin-top:17px;
+  padding-top:17px;
+  border-top:1px solid rgba(65,66,60,.16);
+  text-align:center;
 }
 
-.connection.reveal{
-  animation:connectionIn .7s forwards;
+.connection.show{
+  display:block;
 }
 
-.connection .key{
-  color:#806020;
+.connection-title{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.24em;
+  color:#696b65;
 }
 
-@keyframes connectionIn{
+.connection-copy{
+  margin:7px 0 9px;
+  font-family:Georgia,serif;
+  font-size:16px;
+}
+
+.connection-words{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:10px 0;
+}
+
+.connection-length{
+  height:23px;
+  margin:7px 0 8px;
+  font-size:20px;
+  letter-spacing:.30em;
+  font-weight:700;
+  color:#555850;
+}
+
+.connection-input{
+  width:min(230px,80%);
+  border:0;
+  border-bottom:1px solid #777970;
+  border-radius:0;
+  background:transparent;
+  text-align:center;
+  text-transform:uppercase;
+  font-size:22px;
+  font-weight:750;
+  letter-spacing:.15em;
+  color:#272925;
+  outline:none;
+  padding:7px;
+}
+
+.connection-actions{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:12px;
+}
+
+.connection-actions .btn{
+  padding:0 16px;
+}
+
+#connectionHint{
+  min-height:39px;
+  max-width:340px;
+  margin:10px auto 0;
+  font-family:Georgia,serif;
+  font-style:italic;
+  font-size:13px;
+  line-height:1.35;
+  color:#5f615a;
+}
+
+.final{
+  display:none;
+  text-align:center;
+  padding:23px 8px 8px;
+}
+
+.final.show{
+  display:block;
+  animation:rise .8s ease both;
+}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(8px)}
   to{opacity:1;transform:none}
 }
 
-.reveal-title{
-  font-family:Georgia,serif;
-  font-size:24px;
-  margin:5px 0 7px;
-}
-
-.final-result{
-  margin-top:11px;
-  font-size:11px;
+.final-kicker{
+  font-size:9px;
   font-weight:800;
-  color:#625d55;
-  line-height:1.7;
+  letter-spacing:.24em;
+  color:#686a63;
 }
 
+.final-title{
+  margin-top:7px;
+  font-family:Georgia,serif;
+  font-size:26px;
+}
+
+.final-copy{
+  max-width:310px;
+  margin:8px auto;
+  font-family:Georgia,serif;
+  font-size:15px;
+  line-height:1.45;
+  color:#55574f;
+}
+
+.final-path{
+  margin-top:14px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.15em;
+  color:#555750;
+}
+
+.shake{
+  animation:shake .28s linear;
+}
+
+@keyframes shake{
+  25%{transform:translateX(-5px)}
+  50%{transform:translateX(5px)}
+  75%{transform:translateX(-3px)}
+}
+
+/* landscape becomes fractionally clearer after completion */
+body.complete .terrain{
+  opacity:1;
+  transition:opacity 1.4s ease;
+}
+
+@media(max-width:390px){
+  .reel{height:61px}
+  .letter.alt{font-size:16px}
+  .letter.current{font-size:28px}
+  #clue{font-size:17px}
+}
 </style>
 </head>
 
 <body>
+<div id="world">
 
-<main class="game">
-
-<h1>WORDLOCK</h1>
-<div class="subhead">PROTOTYPE #016c · THE PLACE</div>
-
-<div class="stats">
-  <div class="stat"><strong id="turnCount">0</strong>TURNS</div>
-  <div class="stat"><strong id="attemptCount">0</strong>ATTEMPTS</div>
-  <div class="stat"><strong id="hintCount">0</strong>HINTS</div>
-</div>
-
-<div class="clue-card">
-  <div id="clueCount" class="clue-count"></div>
-  <div id="clue" class="clue"></div>
-</div>
-
-<div id="answerBank" class="answer-bank"></div>
-
-<div id="placeShell" class="place-shell">
-
-<div class="landscape">
-
-  <div class="contour c1"></div>
-  <div class="contour c2"></div>
-  <div class="contour c3"></div>
-  <div class="contour c4"></div>
-  <div class="contour c5"></div>
-  <div class="contour c6"></div>
-
-  <div class="stone-form stone-a"></div>
-  <div class="stone-form stone-b"></div>
-  <div class="stone-form stone-c"></div>
-
-  <div class="water-fragment"></div>
-  <div class="moss-fragment"></div>
-
-  <div class="trail"></div>
-  <div class="trail-two"></div>
-  <div class="ridge"></div>
-
-  <div class="map-mark mark1"></div>
-  <div class="map-mark mark2"></div>
-  <div class="map-mark mark3"></div>
-  <div class="map-mark mark4"></div>
-
-  <div class="place-heading">
-    <div class="place-kicker">SOMEWHERE NEAR THE BEGINNING</div>
-    <div class="place-name">Stone · water · first traces</div>
+  <div class="terrain">
+    <div class="contours"></div>
+    <div class="basin"></div>
+    <div class="growth"></div>
+    <div class="track"></div>
+    <div class="strata"></div>
   </div>
 
-  <div id="lockStack" class="board"></div>
+  <main class="wrap">
 
+    <header class="mast">
+      <div class="brand">WORDLOCK</div>
+      <div class="place">Somewhere near the beginning</div>
+      <div class="place-detail">Stone · water · first traces</div>
+    </header>
+
+    <section class="panel">
+
+      <div class="progress">
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+      </div>
+
+      <div id="gameArea">
+
+        <div class="clue-label" id="clueLabel">CLUE 1</div>
+        <div id="clue"></div>
+        <div id="length"></div>
+
+        <div class="board" id="board"></div>
+
+        <div class="controls" id="controls">
+          <button class="btn" id="resetBtn">RESET</button>
+          <button class="btn primary" id="unlockBtn">UNLOCK</button>
+          <button class="btn" id="hintBtn">HINT</button>
+        </div>
+
+        <div id="message"></div>
+
+        <div class="bank" id="bank"></div>
+
+        <div class="stats">
+          <span id="turnStat">0 TURNS</span>
+          <span id="attemptStat">0 ATTEMPTS</span>
+          <span id="hintStat">0 HINTS</span>
+        </div>
+
+      </div>
+
+      <section class="connection" id="connection">
+        <div class="connection-title">CONNECT</div>
+        <div class="connection-copy">
+          What connects all four?
+        </div>
+
+        <div class="connection-words" id="connectionWords"></div>
+
+        <div class="connection-length" id="connectionLength"></div>
+
+        <input
+          id="connectionInput"
+          class="connection-input"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          maxlength="12"
+          aria-label="Connecting word"
+        >
+
+        <div class="connection-actions">
+          <button class="btn primary" id="connectBtn">CONNECT</button>
+          <button class="btn" id="connectionHintBtn">HINT</button>
+          <button class="btn" id="revealBtn">REVEAL</button>
+        </div>
+
+        <div id="connectionHint"></div>
+      </section>
+
+      <section class="final" id="final">
+        <div class="final-kicker">A FIRST TRACE</div>
+        <div class="final-title">The place remembers.</div>
+        <div class="final-copy">
+          Your path has become part of this place.
+        </div>
+        <div class="final-path" id="finalPath"></div>
+      </section>
+
+    </section>
+
+  </main>
 </div>
-</div>
-
-<div id="controls" class="controls">
-  <button id="resetBtn" class="reset">RESET</button>
-  <button id="hintBtn" class="hint">HINT</button>
-  <button id="unlockBtn" class="unlock">UNLOCK</button>
-</div>
-
-<div id="message" class="message">Find the first word.</div>
-
-<section id="pathStage" class="path-stage">
-  <div class="your-path-label">YOUR PATH</div>
-  <div id="yourPathNumber" class="your-path-number"></div>
-  <div class="your-path-copy">There is no single perfect route.</div>
-</section>
-
-<section id="keyStage" class="key-stage">
-
-  <div class="key-heading">THE CONNECTION</div>
-  <div class="key-question">What connects all four?</div>
-  <div class="key-copy">One word works with every answer.</div>
-
-  <div id="finalWords" class="final-words"></div>
-
-  <input
-    id="keyInput"
-    class="key-input"
-    maxlength="8"
-    autocomplete="off"
-    autocorrect="off"
-    spellcheck="false"
-    placeholder="••••••"
-  >
-
-  <button id="keyButton" class="key-button">CONNECT</button>
-
-  <div id="keyFeedback" class="key-feedback"></div>
-  <div id="connectionStage" class="connection-stage"></div>
-
-</section>
-
-<section id="placeReveal" class="place-reveal">
-  <div class="reveal-kicker">PLACE VISITED</div>
-  <div class="reveal-title">A first trace</div>
-  <div class="reveal-copy">Your path has become part of this place.</div>
-  <div id="finalResult" class="final-result"></div>
-</section>
-
-</main>
 
 <script>
+/* =========================================================
+   WORDLOCK 017
+   ========================================================= */
 
 /*
-=========================================================
-WORDLOCK #016c
+   Fresh puzzle data.
 
-MATT:
-
-STOP READING HERE IF YOU WANT TO PLAY COLD.
-
-YES, THAT MEANS YOU. 😂
-=========================================================
+   Important:
+   - Three choices are visible at every place.
+   - A successful word is found by an adjacent path.
+   - Horizontal, vertical and diagonal adjacency all count.
+   - No position may be used twice in one word.
 */
 
-const wheels=[
+const PUZZLE = {
 
-  ["M","S","H"],
-  ["I","H","L"],
-  ["F","O","M"],
-  ["L","P","E"],
+  wheels:[
+    ["C","N","Q"],
+    ["L","J","F"],
+    ["A","H","D"],
+    ["S","Q","I"],
 
-  ["G","P","W"],
-  ["Y","E","B"],
-  ["K","R","C"],
-  ["W","O","E"],
+    ["E","R","B"],
+    ["Z","G","S"],
+    ["K","R","S"],
+    ["N","J","H"],
 
-  ["Q","U","H"],
-  ["X","N","Z"],
-  ["Z","C","E"],
-  ["V","H","W"],
+    ["T","U","E"],
+    ["K","Q","D"],
+    ["S","L","W"],
+    ["P","O","B"],
 
-  ["J","D","Q"],
-  ["V","A","G"],
-  ["B","T","M"],
-  ["C","E","U"]
+    ["M","H","B"],
+    ["Q","A","H"],
+    ["C","T","I"],
+    ["X","H","T"]
+  ],
 
-];
+  clues:[
+    {
+      answer:"CLASS",
+      clue:"A group learning together",
+      start:0,
+      colour:1
+    },
+    {
+      answer:"BED",
+      clue:"A place made ready for sleep",
+      start:4,
+      colour:2
+    },
+    {
+      answer:"BATH",
+      clue:"A place to soak in warm water",
+      start:12,
+      colour:3
+    },
+    {
+      answer:"SHOW",
+      clue:"A performance for an audience",
+      start:3,
+      colour:4
+    }
+  ],
 
-const initialBoard=[
-  "M","I","F","L",
-  "G","Y","K","W",
-  "Q","X","Z","V",
-  "J","V","B","C"
-];
+  connection:{
+    answer:"ROOM",
 
-const puzzles=[
+    /* Stage 1: relationship structure */
+    hint1:"The connecting word comes after all four answers.",
 
-  {
-    clue:"The edge of land beside the sea",
-    answer:"SHORE",
-    path:[0,1,2,6,5],
-    start:0,
-    colour:"#b6cdbf"
-  },
+    /* Stage 2: cryptic / associative */
+    hint2:"Think of spaces with very different purposes.",
 
-  {
-    clue:"A forceful hit with the fist",
-    answer:"PUNCH",
-    path:[4,8,9,10,11],
-    start:4,
-    colour:"#aec8d0"
-  },
+    /* Stage 3: deliberately much closer */
+    hint3:"You might learn in one, sleep in one, wash in one — or visit one to see something displayed."
+  }
+};
 
-  {
-    clue:"A particular day of the month",
-    answer:"DATE",
-    path:[12,13,14,15],
-    start:12,
-    colour:"#d8bd82"
-  },
 
-  {
-    clue:"Energy that makes machines work",
-    answer:"POWER",
-    path:[3,7,11,10,6],
-    start:3,
-    colour:"#c9aec5"
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let clueIndex = 0;
+
+let current = PUZZLE.wheels.map(w => 1);
+/* each value is the INDEX within that reel's 3 letters */
+
+let clueSnapshot = [...current];
+
+let remembered = PUZZLE.wheels.map(() => new Set());
+
+let histories = PUZZLE.wheels.map(() => new Set());
+
+let solvedWords = [];
+
+let turns = 0;
+let attempts = 0;
+let hints = 0;
+
+let connectionHintLevel = 0;
+
+let audioReady = false;
+let audioCtx = null;
+
+
+/* =========================================================
+   AUDIO
+   Reliable activation occurs on first genuine interaction.
+   ========================================================= */
+
+function activateAudio(){
+  if(audioReady) return;
+
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC) return;
+
+  audioCtx = new AC();
+
+  if(audioCtx.state === "suspended"){
+    audioCtx.resume();
   }
 
-];
-
-const KEY="LINE";
-
-let letters=[...initialBoard];
-let clueSnapshot=[...letters];
-
-let puzzleIndex=0;
-let turns=0;
-let attempts=0;
-let hints=0;
-
-let busy=false;
-let interacted=false;
-let pulseTimer=null;
-
-let banked=[];
-
-const rememberedLetters=
-  Array.from({length:16},()=>new Set());
-
-const placeColours=
-  Array.from({length:16},()=>new Set());
-
-const usedPositions=
-  new Set();
-
-const $=
-  id=>document.getElementById(id);
-
-const wait=
-  ms=>new Promise(resolve=>setTimeout(resolve,ms));
-
-const lockStack=$("lockStack");
-const clueEl=$("clue");
-const clueCount=$("clueCount");
-
-const turnCount=$("turnCount");
-const attemptCount=$("attemptCount");
-const hintCount=$("hintCount");
-
-const answerBank=$("answerBank");
-const message=$("message");
-
-const resetBtn=$("resetBtn");
-const hintBtn=$("hintBtn");
-const unlockBtn=$("unlockBtn");
-
-const controls=$("controls");
-
-const pathStage=$("pathStage");
-const yourPathNumber=$("yourPathNumber");
-
-const keyStage=$("keyStage");
-const finalWords=$("finalWords");
-const keyInput=$("keyInput");
-const keyButton=$("keyButton");
-const keyFeedback=$("keyFeedback");
-const connectionStage=$("connectionStage");
-
-const placeShell=$("placeShell");
-const placeReveal=$("placeReveal");
-const finalResult=$("finalResult");
-
-/* AUDIO */
-
-let audio=null;
-
-async function getAudio(){
-
-  try{
-
-    if(!audio){
-
-      audio=
-        new(
-          window.AudioContext ||
-          window.webkitAudioContext
-        )();
-
-    }
-
-    if(audio.state==="suspended"){
-      await audio.resume();
-    }
-
-    return audio;
-
-  }catch(error){
-
-    return null;
-
-  }
-
+  audioReady = true;
 }
 
-async function tone(
-  pitch=220,
-  volume=.022,
-  duration=.13
-){
+document.addEventListener("pointerdown",activateAudio,{once:true});
+document.addEventListener("touchstart",activateAudio,{once:true});
 
-  const ctx=
-    await getAudio();
 
-  if(!ctx){
-    return;
+function tone(freq=220,duration=.06,volume=.035,type="sine"){
+  if(!audioReady || !audioCtx) return;
+
+  if(audioCtx.state === "suspended"){
+    audioCtx.resume();
   }
 
-  const now=
-    ctx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
 
-  const osc=
-    ctx.createOscillator();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq,audioCtx.currentTime);
 
-  const gain=
-    ctx.createGain();
-
-  osc.type="sine";
-
-  osc.frequency
-    .setValueAtTime(
-      pitch,
-      now
-    );
-
-  osc.frequency
-    .exponentialRampToValueAtTime(
-      pitch*.8,
-      now+duration*.75
-    );
-
-  gain.gain
-    .setValueAtTime(
-      .001,
-      now
-    );
-
-  gain.gain
-    .exponentialRampToValueAtTime(
-      volume,
-      now+.02
-    );
-
-  gain.gain
-    .exponentialRampToValueAtTime(
-      .001,
-      now+duration
-    );
+  gain.gain.setValueAtTime(0.0001,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    volume,
+    audioCtx.currentTime+.008
+  );
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    audioCtx.currentTime+duration
+  );
 
   osc.connect(gain);
-  gain.connect(ctx.destination);
+  gain.connect(audioCtx.destination);
 
-  osc.start(now);
-  osc.stop(now+duration+.01);
-
+  osc.start();
+  osc.stop(audioCtx.currentTime+duration+.02);
 }
 
-/* STATS */
-
-function updateStats(){
-
-  turnCount.textContent=
-    turns;
-
-  attemptCount.textContent=
-    attempts;
-
-  hintCount.textContent=
-    hints;
-
+function moveSound(){
+  tone(155,.045,.025,"sine");
 }
 
-/* BOARD */
-
-function buildLocks(){
-
-  lockStack.innerHTML="";
-
-  for(let row=0;row<4;row++){
-
-    const lock=
-      document.createElement("div");
-
-    lock.className=
-      "lock-row";
-
-    lock.innerHTML=`
-
-      <div class="row-bed"></div>
-
-      <div class="lock-number">
-        ${row+1}
-      </div>
-
-      <div
-        class="reels"
-        id="row${row}">
-      </div>
-
-    `;
-
-    lockStack.appendChild(lock);
-
-  }
-
-  for(let p=0;p<16;p++){
-
-    const reel=
-      document.createElement("div");
-
-    reel.className=
-      "reel";
-
-    reel.dataset.position=p;
-
-    document
-      .getElementById(
-        `row${Math.floor(p/4)}`
-      )
-      .appendChild(reel);
-
-    addSwipe(reel,p);
-
-  }
-
-  renderAll();
-
+function wrongSound(){
+  tone(92,.12,.035,"sine");
 }
 
-/* COLOUR HISTORY */
-
-function washForPosition(p){
-
-  const ids=[
-    ...placeColours[p]
-  ];
-
-  const colours=
-    ids.map(
-      id=>puzzles[id].colour
-    );
-
-  if(colours.length===0){
-    return "transparent";
-  }
-
-  if(colours.length===1){
-    return colours[0];
-  }
-
-  if(colours.length===2){
-
-    return `
-      linear-gradient(
-        135deg,
-        ${colours[0]} 0%,
-        ${colours[0]} 34%,
-        ${colours[1]} 66%,
-        ${colours[1]} 100%
-      )
-    `;
-
-  }
-
-  if(colours.length===3){
-
-    return `
-      conic-gradient(
-        ${colours[0]} 0deg 120deg,
-        ${colours[1]} 120deg 240deg,
-        ${colours[2]} 240deg 360deg
-      )
-    `;
-
-  }
-
-  return `
-    conic-gradient(
-      ${colours[0]} 0deg 90deg,
-      ${colours[1]} 90deg 180deg,
-      ${colours[2]} 180deg 270deg,
-      ${colours[3]} 270deg 360deg
-    )
-  `;
-
+function successSound(){
+  tone(196,.12,.025);
+  setTimeout(()=>tone(247,.15,.025),90);
 }
 
-/* RENDER */
-
-function wheelIndex(p){
-
-  return wheels[p]
-    .indexOf(
-      letters[p]
-    );
-
+function connectionSound(){
+  tone(196,.18,.025);
+  setTimeout(()=>tone(247,.20,.025),110);
+  setTimeout(()=>tone(294,.28,.025),230);
 }
 
-function optionAt(
-  p,
-  offset
-){
 
-  const wheel=
-    wheels[p];
+/* =========================================================
+   HELPERS
+   ========================================================= */
 
-  return wheel[
-    (
-      wheelIndex(p)+
-      offset+
-      wheel.length
-    )%
-    wheel.length
-  ];
-
+function letterAt(i){
+  return PUZZLE.wheels[i][current[i]];
 }
 
-function getReel(p){
+function indexOfLetter(i,letter){
+  return PUZZLE.wheels[i].indexOf(letter);
+}
 
-  return document.querySelector(
-    `.reel[data-position="${p}"]`
+function adjacent(a,b){
+  const ar=Math.floor(a/4);
+  const ac=a%4;
+  const br=Math.floor(b/4);
+  const bc=b%4;
+
+  return (
+    Math.max(
+      Math.abs(ar-br),
+      Math.abs(ac-bc)
+    ) === 1
   );
-
 }
 
-function render(p){
 
-  const reel=
-    getReel(p);
+/* Find every currently displayed path spelling a word. */
 
-  if(!reel){
-    return;
-  }
-
-  const left=
-    optionAt(p,-1);
-
-  const current=
-    letters[p];
-
-  const right=
-    optionAt(p,1);
-
-  const pulse=
-    reel.classList.contains(
-      "start-pulse"
-    );
-
-  reel.className="reel";
-
-  if(placeColours[p].size){
-
-    reel.classList.add(
-      "visited"
-    );
-
-  }
-
-  if(pulse){
-
-    reel.classList.add(
-      "start-pulse"
-    );
-
-  }
-
-  const leftClass=
-    rememberedLetters[p].has(left)
-
-      ? "choice left remembered"
-      : "choice left";
-
-  const rightClass=
-    rememberedLetters[p].has(right)
-
-      ? "choice right remembered"
-      : "choice right";
-
-  reel.innerHTML=`
-
-    <div
-      class="reel-wash"
-      style="
-        background:
-        ${washForPosition(p)}
-      ">
-    </div>
-
-    <div class="choice-strip">
-
-      <div class="${leftClass}">
-        ${left}
-      </div>
-
-      <div class="choice current">
-        ${current}
-      </div>
-
-      <div class="${rightClass}">
-        ${right}
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-function renderAll(){
-
-  for(let p=0;p<16;p++){
-    render(p);
-  }
-
-}
-
-/* MOVEMENT */
-
-async function moveOne(
-  p,
-  direction,
-  countTurn=true
-){
-
-  if(busy){
-    return;
-  }
-
-  await getAudio();
-
-  const wheel=
-    wheels[p];
-
-  letters[p]=
-    wheel[
-      (
-        wheelIndex(p)+
-        direction+
-        wheel.length
-      )%
-      wheel.length
-    ];
-
-  if(countTurn){
-
-    turns++;
-
-    interacted=true;
-
-    updateStats();
-
-    stopEasyPulse();
-
-  }
-
-  tone();
-
-  const reel=
-    getReel(p);
-
-  reel.style.transform=
-    `translateX(${
-      direction>0
-        ? -4
-        : 4
-    }px)`;
-
-  await wait(120);
-
-  reel.style.transform="";
-
-  render(p);
-
-}
-
-/* SWIPE */
-
-function addSwipe(
-  reel,
-  p
-){
-
-  let startX=null;
-
-  reel.addEventListener(
-    "touchstart",
-    async event=>{
-
-      await getAudio();
-
-      if(!busy){
-
-        startX=
-          event.touches[0].clientX;
-
-      }
-
-    },
-    {passive:true}
-  );
-
-  reel.addEventListener(
-    "touchmove",
-    event=>{
-
-      if(startX===null){
-        return;
-      }
-
-      const dx=
-        event.touches[0].clientX-
-        startX;
-
-      reel.style.transform=
-        `translateX(${
-          Math.max(
-            -6,
-            Math.min(
-              6,
-              dx*.1
-            )
-          )
-        }px)`;
-
-    },
-    {passive:true}
-  );
-
-  reel.addEventListener(
-    "touchend",
-    event=>{
-
-      if(startX===null){
-        return;
-      }
-
-      const dx=
-        event.changedTouches[0].clientX-
-        startX;
-
-      reel.style.transform="";
-
-      if(Math.abs(dx)>=18){
-
-        moveOne(
-          p,
-          dx<0 ? 1 : -1,
-          true
-        );
-
-      }
-
-      startX=null;
-
-    },
-    {passive:true}
-  );
-
-}
-
-/* ADJACENCY */
-
-function neighbours(p){
-
-  const row=
-    Math.floor(p/4);
-
-  const col=
-    p%4;
-
-  const result=[];
-
-  for(let dr=-1;dr<=1;dr++){
-
-    for(let dc=-1;dc<=1;dc++){
-
-      if(
-        dr===0 &&
-        dc===0
-      ){
-        continue;
-      }
-
-      const nr=
-        row+dr;
-
-      const nc=
-        col+dc;
-
-      if(
-        nr>=0 &&
-        nr<4 &&
-        nc>=0 &&
-        nc<4
-      ){
-
-        result.push(
-          nr*4+nc
-        );
-
-      }
-
-    }
-
-  }
-
-  return result;
-
-}
-
-/* FIND ACTUAL DISPLAYED WORD */
-
-function findAllPaths(word){
-
+function findPaths(word){
   const results=[];
 
-  function search(
-    p,
-    index,
-    used,
-    path
-  ){
+  function walk(position,letterIndex,path){
 
-    if(
-      letters[p] !==
-      word[index]
-    ){
+    if(letterIndex === word.length){
+      results.push([...path]);
       return;
     }
 
-    const nextPath=[
-      ...path,
-      p
-    ];
+    for(let i=0;i<16;i++){
 
-    if(
-      index===
-      word.length-1
-    ){
+      if(path.includes(i)) continue;
 
-      results.push(
-        nextPath
-      );
+      if(letterAt(i)!==word[letterIndex]) continue;
 
-      return;
+      if(position!==null && !adjacent(position,i)) continue;
 
+      path.push(i);
+      walk(i,letterIndex+1,path);
+      path.pop();
     }
-
-    const nextUsed=
-      new Set(used);
-
-    nextUsed.add(p);
-
-    for(
-      const next of
-      neighbours(p)
-    ){
-
-      if(nextUsed.has(next)){
-        continue;
-      }
-
-      if(
-        letters[next] !==
-        word[index+1]
-      ){
-        continue;
-      }
-
-      search(
-        next,
-        index+1,
-        nextUsed,
-        nextPath
-      );
-
-    }
-
   }
 
-  for(let p=0;p<16;p++){
-
-    if(
-      letters[p]===
-      word[0]
-    ){
-
-      search(
-        p,
-        0,
-        new Set(),
-        []
-      );
-
-    }
-
-  }
+  walk(null,0,[]);
 
   return results;
-
 }
 
-/*
-Prototype route choice.
 
-The construction of this particular
-cold-play puzzle has been checked so
-each solved state has one valid route.
-*/
+/* =========================================================
+   RENDER
+   ========================================================= */
 
-function choosePath(paths){
+function render(){
 
-  if(paths.length===0){
-    return null;
+  const board=document.getElementById("board");
+  board.innerHTML="";
+
+  PUZZLE.wheels.forEach((wheel,i)=>{
+
+    const reel=document.createElement("div");
+    reel.className="reel";
+
+    applyHistoryClass(reel,i);
+
+    const centre=current[i];
+
+    const left=(centre+2)%3;
+    const right=(centre+1)%3;
+
+    const inner=document.createElement("div");
+    inner.className="reel-inner";
+
+    [
+      {idx:left,kind:"alt"},
+      {idx:centre,kind:"current"},
+      {idx:right,kind:"alt"}
+    ].forEach(item=>{
+
+      const el=document.createElement("div");
+      el.className="letter "+item.kind;
+
+      const letter=wheel[item.idx];
+
+      if(
+        item.kind==="alt" &&
+        remembered[i].has(letter)
+      ){
+        el.classList.add("remembered");
+      }
+
+      el.textContent=letter;
+      inner.appendChild(el);
+    });
+
+    reel.appendChild(inner);
+
+    /* swipe / drag */
+    let startX=null;
+
+    reel.addEventListener("pointerdown",e=>{
+      activateAudio();
+      startX=e.clientX;
+      reel.setPointerCapture?.(e.pointerId);
+    });
+
+    reel.addEventListener("pointerup",e=>{
+      if(startX===null) return;
+
+      const dx=e.clientX-startX;
+      startX=null;
+
+      if(Math.abs(dx)<16) return;
+
+      if(dx<0){
+        turnReel(i,1);
+      }else{
+        turnReel(i,-1);
+      }
+    });
+
+    board.appendChild(reel);
+  });
+
+  updateStats();
+}
+
+
+function applyHistoryClass(reel,i){
+
+  const colours=[...histories[i]];
+
+  if(colours.length===1){
+    reel.classList.add("used"+colours[0]);
   }
 
-  return paths[0];
+  if(colours.length>=2){
+    const a=Math.min(...colours);
+    const b=Math.max(...colours);
 
-}
+    const mix="mix"+a+b;
 
-/* ROLLBACK */
-
-function directionTo(
-  p,
-  target
-){
-
-  const wheel=
-    wheels[p];
-
-  const current=
-    wheel.indexOf(
-      letters[p]
-    );
-
-  const wanted=
-    wheel.indexOf(
-      target
-    );
-
-  if(
-    (current+1)%3===
-    wanted
-  ){
-
-    return 1;
-
-  }
-
-  return -1;
-
-}
-
-async function returnTo(
-  p,
-  target
-){
-
-  let safety=0;
-
-  while(
-    letters[p]!==target &&
-    safety<4
-  ){
-
-    const direction=
-      directionTo(
-        p,
-        target
-      );
-
-    const wheel=
-      wheels[p];
-
-    let index=
-      wheel.indexOf(
-        letters[p]
-      );
-
-    index=
-      (
-        index+
-        direction+
-        3
-      )%3;
-
-    letters[p]=
-      wheel[index];
-
-    tone(
-      190,
-      .012,
-      .12
-    );
-
-    const reel=
-      getReel(p);
-
-    reel.style.transform=
-      `translateX(${
-        direction>0 ? -3 : 3
-      }px)`;
-
-    await wait(120);
-
-    reel.style.transform="";
-
-    render(p);
-
-    await wait(65);
-
-    safety++;
-
-  }
-
-}
-
-async function rollbackAll(){
-
-  for(let p=0;p<16;p++){
-
-    if(
-      letters[p] !==
-      clueSnapshot[p]
-    ){
-
-      await returnTo(
-        p,
-        clueSnapshot[p]
-      );
-
+    if([
+      "mix12","mix13","mix14",
+      "mix23","mix24","mix34"
+    ].includes(mix)){
+      reel.classList.add(mix);
+    }else{
+      reel.classList.add("used"+colours[colours.length-1]);
     }
-
   }
-
 }
 
-async function rollbackIrrelevant(
-  path
-){
 
-  const keep=
-    new Set(path);
+function turnReel(i,direction){
 
-  for(let p=0;p<16;p++){
+  activateAudio();
 
-    if(
-      !keep.has(p) &&
-      letters[p] !==
-      clueSnapshot[p]
-    ){
+  current[i]=(current[i]+direction+3)%3;
 
-      await returnTo(
-        p,
-        clueSnapshot[p]
-      );
+  turns++;
 
-    }
+  moveSound();
 
-  }
-
+  render();
 }
 
-/* RESET */
 
-resetBtn.addEventListener(
-  "click",
-  async()=>{
+function renderClue(){
 
-    if(busy){
-      return;
-    }
+  const c=PUZZLE.clues[clueIndex];
 
-    await getAudio();
+  document.getElementById("clueLabel").textContent=
+    "CLUE "+(clueIndex+1);
 
-    busy=true;
-    disableControls(true);
+  document.getElementById("clue").textContent=c.clue;
 
-    message.textContent=
-      "Returning…";
+  document.getElementById("length").textContent=
+    c.answer.length+" LETTERS";
 
-    await rollbackAll();
+  document.getElementById("message").textContent="";
 
-    message.textContent=
-      "Ready.";
+  render();
 
-    busy=false;
-    disableControls(false);
-
-  }
-);
-
-/* START LETTER */
-
-function stopEasyPulse(){
-
-  if(pulseTimer){
-
-    clearTimeout(pulseTimer);
-    pulseTimer=null;
-
-  }
-
-  document
-    .querySelectorAll(
-      ".start-pulse"
-    )
-    .forEach(
-      element=>
-        element.classList.remove(
-          "start-pulse"
-        )
-    );
-
+  /* Easy-mode starting-place pulse */
+  setTimeout(()=>{
+    const reels=document.querySelectorAll(".reel");
+    reels[c.start]?.classList.add("pulse");
+  },300);
 }
 
-function pulseStart(){
 
-  if(
-    busy ||
-    interacted ||
-    puzzleIndex>=4
-  ){
+/* =========================================================
+   UNLOCK
+   ========================================================= */
+
+function unlock(){
+
+  activateAudio();
+
+  attempts++;
+
+  const clue=PUZZLE.clues[clueIndex];
+  const paths=findPaths(clue.answer);
+
+  updateStats();
+
+  if(!paths.length){
+    wrongSound();
+
+    document.getElementById("message").textContent=
+      "Not quite. The place settles back.";
+
+    document.querySelector(".panel").classList.add("shake");
+
+    setTimeout(()=>{
+      document.querySelector(".panel").classList.remove("shake");
+      rollback();
+    },520);
+
     return;
   }
 
-  const position=
-    puzzles[puzzleIndex].start;
+  /*
+     For this prototype, if more than one currently displayed
+     path exists, favour the route containing the greatest
+     number of selectors changed since the clue began.
 
-  const reel=
-    getReel(position);
+     This is NOT being treated as the final production answer
+     to route ownership. That remains a design problem.
+  */
 
-  reel.classList.remove(
-    "start-pulse"
-  );
+  let chosen=paths[0];
 
-  void reel.offsetWidth;
+  if(paths.length>1){
 
-  reel.classList.add(
-    "start-pulse"
-  );
+    chosen=[...paths].sort((a,b)=>{
 
-  setTimeout(
-    ()=>{
-      reel.classList.remove(
-        "start-pulse"
-      );
-    },
-    1800
-  );
+      const score=p=>
+        p.reduce(
+          (n,i)=>n+(current[i]!==clueSnapshot[i]?1:0),
+          0
+        );
 
-  pulseTimer=
-    setTimeout(
-      pulseStart,
-      4200
-    );
+      return score(b)-score(a);
 
+    })[0];
+  }
+
+  solve(clue,chosen);
 }
 
-function startEasyPulse(){
 
-  stopEasyPulse();
+function solve(clue,path){
 
-  pulseTimer=
-    setTimeout(
-      pulseStart,
-      500
-    );
+  successSound();
 
-}
+  path.forEach((position,n)=>{
 
-/* HINT */
+    const letter=clue.answer[n];
 
-hintBtn.addEventListener(
-  "click",
-  ()=>{
-
-    if(
-      busy ||
-      puzzleIndex>=4
-    ){
-      return;
-    }
-
-    const puzzle=
-      puzzles[puzzleIndex];
-
-    let target=null;
-
-    for(
-      let i=0;
-      i<puzzle.path.length;
-      i++
-    ){
-
-      const position=
-        puzzle.path[i];
-
-      if(
-        letters[position] !==
-        puzzle.answer[i]
-      ){
-
-        target=position;
-        break;
-
-      }
-
-    }
-
-    if(target===null){
-
-      message.textContent=
-        "You have what you need. Look again…";
-
-      return;
-
-    }
-
-    hints++;
-
-    updateStats();
-
-    const reel=
-      getReel(target);
-
-    reel.animate(
-      [
-        {
-          boxShadow:
-            "0 0 0 0 rgba(150,120,70,0)"
-        },
-        {
-          boxShadow:
-            "0 0 0 4px rgba(150,120,70,.5)"
-        },
-        {
-          boxShadow:
-            "0 0 0 0 rgba(150,120,70,0)"
-        }
-      ],
-      {
-        duration:1300,
-        iterations:2
-      }
-    );
-
-    message.textContent=
-      "This place can help.";
-
-  }
-);
-
-/* SUCCESSFUL PATH */
-
-async function recordPath(
-  path,
-  answer,
-  answerIndex
-){
-
-  for(
-    let i=0;
-    i<path.length;
-    i++
-  ){
-
-    rememberedLetters[
-      path[i]
-    ].add(
-      answer[i]
-    );
-
-  }
-
-  for(
-    const position of path
-  ){
-
-    usedPositions.add(
-      position
-    );
-
-    placeColours[
-      position
-    ].add(
-      answerIndex
-    );
-
-    render(position);
-
-    tone(
-      245,
-      .018,
-      .17
-    );
-
-    await wait(210);
-
-  }
-
-  banked.push({
-    word:answer,
-    puzzleIndex:answerIndex
+    remembered[position].add(letter);
+    histories[position].add(clue.colour);
   });
 
-  renderBank();
+  solvedWords.push(clue.answer);
 
+  document.getElementById("message").textContent=
+    clue.answer+" found.";
+
+  renderBank();
+  render();
+
+  document.querySelectorAll(".progress-dot")[clueIndex]
+    .classList.add("done");
+
+  clueIndex++;
+
+  if(clueIndex>=PUZZLE.clues.length){
+
+    setTimeout(showConnection,750);
+    return;
+  }
+
+  /*
+     Correct route remains.
+     Irrelevant experiments return to clue-start state.
+  */
+
+  const next=[...clueSnapshot];
+
+  path.forEach(i=>{
+    next[i]=current[i];
+  });
+
+  current=next;
+  clueSnapshot=[...current];
+
+  setTimeout(renderClue,650);
 }
 
-/* BANK */
+
+function rollback(){
+
+  current=[...clueSnapshot];
+  render();
+
+  setTimeout(()=>{
+    document.getElementById("message").textContent="";
+  },550);
+}
+
+
+function manualReset(){
+  activateAudio();
+  current=[...clueSnapshot];
+  render();
+  document.getElementById("message").textContent="";
+}
+
+
+/* =========================================================
+   CLUE-STAGE HINT
+
+   Still intentionally modest:
+   pulse the starting place.
+   It does not expose a constructor route.
+   ========================================================= */
+
+function clueHint(){
+
+  hints++;
+  updateStats();
+
+  const clue=PUZZLE.clues[clueIndex];
+
+  const reels=document.querySelectorAll(".reel");
+
+  reels[clue.start]?.classList.remove("pulse");
+
+  void reels[clue.start]?.offsetWidth;
+
+  reels[clue.start]?.classList.add("pulse");
+
+  document.getElementById("message").textContent=
+    "Start here.";
+}
+
+
+/* =========================================================
+   BANK
+   ========================================================= */
 
 function renderBank(){
 
-  answerBank.innerHTML="";
+  const bank=document.getElementById("bank");
+  bank.innerHTML="";
 
-  for(const item of banked){
+  solvedWords.forEach((word,i)=>{
 
-    const pill=
-      document.createElement("div");
+    const pill=document.createElement("div");
+    pill.className="pill c"+(i+1);
+    pill.textContent=word;
 
-    pill.className=
-      "banked-word";
-
-    pill.textContent=
-      item.word;
-
-    pill.style.background=
-      puzzles[
-        item.puzzleIndex
-      ].colour;
-
-    answerBank.appendChild(
-      pill
-    );
-
-  }
-
+    bank.appendChild(pill);
+  });
 }
 
-/* CLUE */
 
-function loadClue(){
+/* =========================================================
+   CONNECTION
+   ========================================================= */
 
-  clueSnapshot=[
-    ...letters
-  ];
+function showConnection(){
 
-  interacted=false;
+  document.getElementById("controls").style.display="none";
+  document.getElementById("clueLabel").style.display="none";
+  document.getElementById("clue").style.display="none";
+  document.getElementById("length").style.display="none";
+  document.getElementById("message").textContent="";
 
-  renderAll();
+  const section=document.getElementById("connection");
+  section.classList.add("show");
 
-  const puzzle=
-    puzzles[puzzleIndex];
+  const words=document.getElementById("connectionWords");
+  words.innerHTML="";
 
-  clueCount.textContent=
-    `WORD ${puzzleIndex+1} OF 4`;
+  solvedWords.forEach((word,i)=>{
 
-  clueEl.textContent=
-    `${puzzle.clue} (${puzzle.answer.length})`;
+    const pill=document.createElement("div");
+    pill.className="pill c"+(i+1);
+    pill.textContent=word;
 
-  message.textContent=
-    puzzleIndex===0
-      ? "Find the word. Turn the letters."
-      : "Find your next word.";
+    words.appendChild(pill);
+  });
 
-  startEasyPulse();
+  /*
+     IMPORTANT:
+     The number of dots now genuinely equals
+     the number of letters in the Connection.
+  */
 
+  document.getElementById("connectionLength").textContent=
+    "•".repeat(PUZZLE.connection.answer.length);
+
+  setTimeout(()=>{
+    document.getElementById("connectionInput").focus();
+  },350);
 }
 
-function disableControls(
-  value
-){
 
-  resetBtn.disabled=value;
-  hintBtn.disabled=value;
-  unlockBtn.disabled=value;
+function connectionHint(){
 
-}
+  activateAudio();
 
-/* UNLOCK */
+  if(connectionHintLevel>=3) return;
 
-unlockBtn.addEventListener(
-  "click",
-  async()=>{
+  connectionHintLevel++;
+  hints++;
+  updateStats();
 
-    if(busy){
-      return;
-    }
-
-    await getAudio();
-
-    attempts++;
-
-    updateStats();
-
-    const puzzle=
-      puzzles[puzzleIndex];
-
-    const paths=
-      findAllPaths(
-        puzzle.answer
-      );
-
-    const actualPath=
-      choosePath(paths);
-
-    if(!actualPath){
-
-      busy=true;
-      disableControls(true);
-
-      tone(
-        72,
-        .045,
-        .22
-      );
-
-      message.textContent=
-        "Not quite.";
-
-      await wait(650);
-
-      await rollbackAll();
-
-      message.textContent=
-        "Try another way.";
-
-      interacted=false;
-
-      busy=false;
-      disableControls(false);
-
-      startEasyPulse();
-
-      return;
-
-    }
-
-    busy=true;
-    disableControls(true);
-
-    stopEasyPulse();
-
-    message.textContent=
-      `${puzzle.answer} ✓`;
-
-    for(
-      let i=0;
-      i<actualPath.length;
-      i++
-    ){
-
-      const reel=
-        getReel(
-          actualPath[i]
-        );
-
-      reel.animate(
-        [
-          {transform:"scale(1)"},
-          {transform:"scale(1.035)"},
-          {transform:"scale(1)"}
-        ],
-        {duration:450}
-      );
-
-      tone(
-        245+(i*14),
-        .022,
-        .18
-      );
-
-      await wait(190);
-
-    }
-
-    await rollbackIrrelevant(
-      actualPath
-    );
-
-    await recordPath(
-      actualPath,
-      puzzle.answer,
-      puzzleIndex
-    );
-
-    await wait(650);
-
-    puzzleIndex++;
-
-    if(puzzleIndex===4){
-
-      controls.style.display=
-        "none";
-
-      message.textContent="";
-
-      clueCount.textContent=
-        "FOUR WORDS FOUND";
-
-      clueEl.textContent=
-        "This is your path.";
-
-      await wait(1500);
-
-      yourPathNumber.textContent=
-        `${usedPositions.size} of 16 places visited`;
-
-      pathStage.classList.add(
-        "show"
-      );
-
-      await wait(1100);
-
-      beginKeyStage();
-
-      return;
-
-    }
-
-    loadClue();
-
-    busy=false;
-    disableControls(false);
-
-  }
-);
-
-/* CONNECTION */
-
-function beginKeyStage(){
-
-  finalWords.innerHTML="";
-
-  for(const item of banked){
-
-    const tile=
-      document.createElement("div");
-
-    tile.className=
-      "final-word";
-
-    tile.textContent=
-      item.word;
-
-    tile.style.background=
-      puzzles[
-        item.puzzleIndex
-      ].colour;
-
-    finalWords.appendChild(
-      tile
-    );
-
-  }
-
-  keyStage.classList.add(
-    "show"
-  );
-
-  clueCount.textContent=
-    "THE CONNECTION";
-
-  clueEl.textContent=
-    "What connects them?";
-
-  busy=false;
-
-}
-
-keyButton.addEventListener(
-  "click",
-  async()=>{
-
-    if(busy){
-      return;
-    }
-
-    await getAudio();
-
-    const guess=
-      keyInput.value
-        .trim()
-        .toUpperCase();
-
-    if(!guess){
-      return;
-    }
-
-    attempts++;
-
-    updateStats();
-
-    if(guess!==KEY){
-
-      tone(
-        62,
-        .07,
-        .25
-      );
-
-      keyFeedback.textContent=
-        "That doesn't connect them.";
-
-      keyInput.classList.remove(
-        "wrong"
-      );
-
-      void keyInput.offsetWidth;
-
-      keyInput.classList.add(
-        "wrong"
-      );
-
-      setTimeout(
-        ()=>{
-
-          keyInput.classList.remove(
-            "wrong"
-          );
-
-          keyFeedback.textContent="";
-
-          keyInput.focus();
-          keyInput.select();
-
-        },
-        700
-      );
-
-      return;
-
-    }
-
-    busy=true;
-
-    keyInput.disabled=true;
-    keyButton.disabled=true;
-
-    keyButton.textContent=
-      "CONNECTED";
-
-    connectionStage.innerHTML="";
-
-    connectionStage.classList.add(
-      "show"
-    );
-
-    const forms=[
-      "SHORELINE",
-      "PUNCHLINE",
-      "DATELINE",
-      "POWER LINE"
+  const text=
+    PUZZLE.connection[
+      "hint"+connectionHintLevel
     ];
 
-    const notes=[
-      262,
-      294,
-      330,
-      392
-    ];
+  document.getElementById("connectionHint").textContent=text;
 
-    for(
-      let i=0;
-      i<forms.length;
-      i++
-    ){
-
-      const item=
-        document.createElement("div");
-
-      item.className=
-        "connection";
-
-      item.innerHTML=
-        forms[i].replace(
-          "LINE",
-          `<span class="key">LINE</span>`
-        );
-
-      connectionStage.appendChild(
-        item
-      );
-
-      await wait(120);
-
-      item.classList.add(
-        "reveal"
-      );
-
-      tone(
-        notes[i],
-        .027,
-        .32
-      );
-
-      await wait(520);
-
-    }
-
-    await wait(900);
-
-    clueCount.textContent=
-      "CONNECTED";
-
-    clueEl.textContent=
-      "A place visited.";
-
-    await wait(700);
-
-    placeShell.classList.add(
-      "revealed"
-    );
-
-    await wait(1200);
-
-    keyStage.style.display=
-      "none";
-
-    pathStage.style.display=
-      "none";
-
-    placeReveal.classList.add(
-      "show"
-    );
-
-    finalResult.innerHTML=
-
-      `${turns} Turns · `+
-      `${attempts} Attempts · `+
-      `${hints} ${
-        hints===1
-          ? "Hint"
-          : "Hints"
-      }`+
-      `<br>`+
-      `Your Path · `+
-      `${usedPositions.size} of 16 places visited`;
-
+  if(connectionHintLevel===3){
+    document.getElementById("connectionHintBtn").textContent=
+      "NO MORE HINTS";
   }
-);
+}
 
-keyInput.addEventListener(
-  "keydown",
-  event=>{
 
-    if(event.key==="Enter"){
-      keyButton.click();
-    }
+function tryConnection(){
 
+  activateAudio();
+
+  const input=document.getElementById("connectionInput");
+  const guess=input.value.trim().toUpperCase();
+
+  if(!guess) return;
+
+  attempts++;
+  updateStats();
+
+  if(guess===PUZZLE.connection.answer){
+
+    completeConnection(false);
+
+  }else{
+
+    wrongSound();
+
+    input.classList.add("shake");
+
+    document.getElementById("connectionHint").textContent=
+      "That doesn't connect all four.";
+
+    setTimeout(()=>{
+      input.classList.remove("shake");
+    },350);
   }
-);
+}
 
-/* GO */
 
-buildLocks();
-updateStats();
-loadClue();
+function revealConnection(){
+
+  activateAudio();
+
+  const answer=PUZZLE.connection.answer;
+
+  document.getElementById("connectionInput").value=answer;
+
+  document.getElementById("connectionHint").textContent=
+    "There it is.";
+
+  setTimeout(()=>{
+    completeConnection(true);
+  },500);
+}
+
+
+function completeConnection(revealed){
+
+  connectionSound();
+
+  const answer=PUZZLE.connection.answer;
+
+  document.getElementById("connectionInput").disabled=true;
+
+  document.getElementById("connectBtn").disabled=true;
+  document.getElementById("connectionHintBtn").disabled=true;
+  document.getElementById("revealBtn").disabled=true;
+
+  document.getElementById("connectionLength").textContent=answer;
+
+  document.getElementById("connectionHint").textContent=
+    solvedWords.map(word=>word+" "+answer).join("  ·  ");
+
+  setTimeout(()=>{
+    finish(revealed);
+  },1000);
+}
+
+
+/* =========================================================
+   FINISH
+   ========================================================= */
+
+function finish(revealed){
+
+  document.body.classList.add("complete");
+
+  document.getElementById("connection").style.display="none";
+
+  const visited=
+    histories.filter(set=>set.size>0).length;
+
+  document.getElementById("finalPath").textContent=
+    "YOUR PATH · "+visited+" OF 16 PLACES VISITED";
+
+  document.getElementById("final").classList.add("show");
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+function updateStats(){
+
+  document.getElementById("turnStat").textContent=
+    turns+" TURN"+(turns===1?"":"S");
+
+  document.getElementById("attemptStat").textContent=
+    attempts+" ATTEMPT"+(attempts===1?"":"S");
+
+  document.getElementById("hintStat").textContent=
+    hints+" HINT"+(hints===1?"":"S");
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+document.getElementById("unlockBtn")
+  .addEventListener("click",unlock);
+
+document.getElementById("resetBtn")
+  .addEventListener("click",manualReset);
+
+document.getElementById("hintBtn")
+  .addEventListener("click",clueHint);
+
+document.getElementById("connectBtn")
+  .addEventListener("click",tryConnection);
+
+document.getElementById("connectionHintBtn")
+  .addEventListener("click",connectionHint);
+
+document.getElementById("revealBtn")
+  .addEventListener("click",revealConnection);
+
+document.getElementById("connectionInput")
+  .addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      tryConnection();
+    }
+  });
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+renderClue();
 
 </script>
-
 </body>
 </html>
