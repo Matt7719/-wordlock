@@ -2,152 +2,211 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#e8e1d2">
-<title>WORDLOCK 018</title>
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#e7ddc9">
+<title>WORDLOCK — Prototype #019</title>
 
 <style>
 :root{
   --ink:#20211f;
-  --remembered:#353733;
-  --alternative:#6d716c;
-  --cream:rgba(248,246,237,.91);
+  --alt:#686d68;
+  --remembered:#292c29;
+  --cream:rgba(248,245,235,.92);
 
-  --sage:#aec1ad;
-  --blue:#a9c3ca;
-  --ochre:#d0b77f;
-  --mauve:#bca9be;
+  --sage:#adc1b0;
+  --blue:#a9c4cd;
+  --ochre:#d0b57a;
+  --mauve:#bba8bd;
 }
 
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
 
 html,body{
   margin:0;
   min-height:100%;
-  background:#e7dfcf;
+  background:#e7ddc9;
   color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Avenir Next",
+    "Segoe UI",
+    sans-serif;
 }
 
-body{overflow-x:hidden}
+body{
+  overflow-x:hidden;
+}
 
-button,input{font:inherit}
-button{touch-action:manipulation}
+button,input{
+  font:inherit;
+}
+
+/* =========================================================
+   PLACE
+   Visual target: our agreed "1.6".
+   Recognisable environment, still interpretive.
+========================================================= */
 
 #place{
-  min-height:100vh;
   position:relative;
+  min-height:100vh;
   overflow:hidden;
 
   background:
-    linear-gradient(145deg,#eadfc9 0%,#ddd1b7 55%,#d6c9aa 100%);
+    radial-gradient(
+      ellipse at 72% 16%,
+      rgba(173,186,150,.22),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 15% 74%,
+      rgba(188,167,127,.18),
+      transparent 46%
+    ),
+    linear-gradient(
+      145deg,
+      #ebe0ca 0%,
+      #e1d5bb 54%,
+      #d8c9aa 100%
+    );
 }
-
-/* =====================================================
-   THE PLACE
-   One continuous landscape, not wallpaper behind a card
-===================================================== */
 
 .terrain{
   position:absolute;
   inset:0;
-  pointer-events:none;
   overflow:hidden;
+  pointer-events:none;
 }
 
-/* subtle overall land variation */
-.landwash{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(ellipse at 76% 19%,
-      rgba(174,185,156,.23) 0%,
-      rgba(174,185,156,.08) 28%,
-      transparent 50%),
-    radial-gradient(ellipse at 18% 72%,
-      rgba(178,157,122,.19) 0%,
-      transparent 45%);
-}
+/* ---------- contours ---------- */
 
-/* Actual contour lines */
-.contour-svg{
+.contours{
   position:absolute;
   width:150%;
-  height:1100px;
+  height:1200px;
   left:-25%;
-  top:100px;
-  opacity:.58;
+  top:70px;
+  opacity:.62;
 }
 
-.contour-svg path{
+.contours path{
   fill:none;
-  stroke:#706e61;
-  stroke-width:1.25;
+  stroke:#6f7065;
+  stroke-width:1.15;
   vector-effect:non-scaling-stroke;
 }
 
-.contour-svg path.fine{
-  stroke-width:.75;
-  opacity:.55;
+.contours .fine{
+  stroke-width:.72;
+  opacity:.54;
 }
 
-/* WATER: recognisable, but part of terrain */
+.contours .light{
+  stroke:#f4ecd9;
+  stroke-width:1;
+  opacity:.60;
+}
+
+/* ---------- water ---------- */
+
 .water{
   position:absolute;
-  left:-5%;
-  top:700px;
-  width:67%;
-  height:220px;
+  left:-12%;
+  top:660px;
+
+  width:69%;
+  height:330px;
+
   transform:rotate(-8deg);
-  border-radius:46% 54% 49% 51%;
+
+  border-radius:
+    45% 55% 52% 48% /
+    52% 45% 55% 48%;
 
   background:
     repeating-linear-gradient(
-      3deg,
-      transparent 0 14px,
-      rgba(88,137,145,.13) 15px,
-      transparent 16px 28px
+      4deg,
+      transparent 0 17px,
+      rgba(75,130,140,.13) 18px,
+      transparent 19px 32px
     ),
     radial-gradient(
-      ellipse at 45% 52%,
-      rgba(90,153,164,.48),
-      rgba(112,157,160,.30) 52%,
-      rgba(118,150,150,.08) 72%,
+      ellipse at 55% 42%,
+      rgba(78,148,161,.50),
+      rgba(106,159,164,.31) 48%,
+      rgba(119,157,156,.13) 68%,
       transparent 76%
     );
 
-  border-top:1px solid rgba(77,112,114,.27);
-  border-bottom:1px solid rgba(77,112,114,.18);
+  border:
+    1px solid rgba(70,113,118,.23);
 }
 
-/* shoreline echoes */
 .water::before,
 .water::after{
   content:"";
   position:absolute;
-  border:1px solid rgba(83,101,98,.22);
+
+  border:
+    1px solid rgba(78,112,111,.22);
+
   border-radius:50%;
-  inset:-15px -28px;
+}
+
+.water::before{
+  inset:-18px -30px;
 }
 
 .water::after{
-  inset:-29px -50px;
-  opacity:.55;
+  inset:-38px -57px;
+  opacity:.54;
 }
 
-/* VEGETATION: texture rather than green paint */
-.vegetation{
+/* very restrained ripple marks */
+
+.ripples{
   position:absolute;
-  right:-8%;
-  top:390px;
-  width:55%;
-  height:430px;
+  left:-4%;
+  top:745px;
+
+  width:52%;
+  height:165px;
+
+  opacity:.36;
 
   background:
-    radial-gradient(circle at 70% 45%,
-      rgba(107,137,91,.30),
-      rgba(120,145,101,.13) 42%,
-      transparent 70%);
+    repeating-radial-gradient(
+      ellipse at 30% 50%,
+      transparent 0 20px,
+      rgba(236,241,226,.55) 21px,
+      transparent 22px 35px
+    );
+
+  transform:rotate(-8deg);
+}
+
+/* ---------- vegetation ---------- */
+
+.vegetation{
+  position:absolute;
+  right:-9%;
+  top:330px;
+
+  width:58%;
+  height:520px;
+
+  background:
+    radial-gradient(
+      ellipse at 70% 45%,
+      rgba(103,132,87,.28),
+      rgba(116,140,99,.12) 43%,
+      transparent 72%
+    );
 }
 
 .vegetation::before{
@@ -156,151 +215,301 @@ button{touch-action:manipulation}
   inset:0;
 
   background-image:
-    radial-gradient(circle,rgba(67,92,61,.34) 0 1.1px,transparent 1.5px),
-    radial-gradient(circle,rgba(83,106,72,.25) 0 1px,transparent 1.4px);
+    radial-gradient(
+      circle,
+      rgba(61,91,59,.35) 0 1.15px,
+      transparent 1.55px
+    ),
+    radial-gradient(
+      circle,
+      rgba(78,103,67,.24) 0 1px,
+      transparent 1.45px
+    );
 
-  background-size:19px 21px,31px 27px;
-  background-position:0 0,11px 7px;
+  background-size:
+    18px 20px,
+    29px 27px;
 
-  mask-image:radial-gradient(ellipse at 65% 45%,black 5%,transparent 72%);
-  -webkit-mask-image:radial-gradient(ellipse at 65% 45%,black 5%,transparent 72%);
+  background-position:
+    0 0,
+    9px 12px;
+
+  mask-image:
+    radial-gradient(
+      ellipse at 67% 45%,
+      black 0 35%,
+      transparent 74%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse at 67% 45%,
+      black 0 35%,
+      transparent 74%
+    );
 }
 
-/* subtle exposed stone */
-.stone{
-  position:absolute;
-  width:150px;
-  height:210px;
-  right:-28px;
-  top:810px;
+/*
+  Almost-trees.
 
-  border-radius:54% 46% 57% 43%;
+  Deliberately NOT recognisable tree illustrations.
+  Just enough branching/vertical structure that vegetation
+  begins to suggest something.
+*/
 
-  background:
-    linear-gradient(135deg,
-      rgba(154,137,110,.20),
-      rgba(120,111,95,.35));
-
-  box-shadow:
-    inset 14px 9px 25px rgba(255,255,255,.10),
-    inset -10px -12px 25px rgba(79,73,63,.10);
-}
-
-.stone2{
-  position:absolute;
-  width:120px;
-  height:105px;
-  left:-35px;
-  top:590px;
-  border-radius:45% 55% 48% 52%;
-
-  background:
-    linear-gradient(150deg,
-      rgba(150,136,112,.25),
-      rgba(117,108,92,.30));
-}
-
-/* ambiguous old track */
-.track{
-  position:absolute;
-  width:90%;
-  height:390px;
-  left:25%;
-  top:520px;
-  border-left:2px solid rgba(236,229,207,.33);
-  border-radius:48%;
-  transform:rotate(24deg);
-}
-
-.track::after{
+.vegetation::after{
   content:"";
   position:absolute;
-  inset:0 0 0 8px;
-  border-left:1px solid rgba(236,229,207,.23);
-  border-radius:48%;
+
+  right:10%;
+  top:7%;
+
+  width:55%;
+  height:56%;
+
+  opacity:.23;
+
+  background:
+    repeating-linear-gradient(
+      78deg,
+      transparent 0 18px,
+      rgba(54,81,52,.45) 19px,
+      transparent 20px 31px
+    );
+
+  mask-image:
+    radial-gradient(
+      ellipse,
+      black 0 38%,
+      transparent 72%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse,
+      black 0 38%,
+      transparent 72%
+    );
 }
 
-/* ===================================================== */
+/* ---------- stone ---------- */
+
+.stone{
+  position:absolute;
+
+  right:-26px;
+  top:825px;
+
+  width:148px;
+  height:190px;
+
+  border-radius:
+    53% 47% 58% 42% /
+    44% 58% 42% 56%;
+
+  background:
+    repeating-linear-gradient(
+      162deg,
+      transparent 0 17px,
+      rgba(84,77,66,.07) 18px,
+      transparent 19px 31px
+    ),
+    linear-gradient(
+      135deg,
+      rgba(161,143,113,.26),
+      rgba(116,107,91,.39)
+    );
+}
+
+.stone-small{
+  position:absolute;
+
+  left:-35px;
+  top:560px;
+
+  width:125px;
+  height:108px;
+
+  border-radius:
+    47% 53% 44% 56%;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(159,143,116,.25),
+      rgba(113,105,90,.34)
+    );
+}
+
+/* ---------- suggested path ---------- */
+
+.path{
+  position:absolute;
+
+  width:82%;
+  height:450px;
+
+  left:37%;
+  top:440px;
+
+  border-left:
+    2px solid rgba(245,235,210,.34);
+
+  border-radius:50%;
+
+  transform:rotate(22deg);
+}
+
+.path::after{
+  content:"";
+  position:absolute;
+
+  inset:0 0 0 8px;
+
+  border-left:
+    1px solid rgba(245,235,210,.24);
+
+  border-radius:50%;
+}
+
+/* =========================================================
+   LAYOUT
+========================================================= */
 
 .wrap{
   position:relative;
   z-index:2;
+
   width:min(94vw,520px);
+
   margin:0 auto;
 
   padding:
-    max(32px,env(safe-area-inset-top))
+    max(30px,env(safe-area-inset-top))
     0
-    max(45px,env(safe-area-inset-bottom));
+    max(46px,env(safe-area-inset-bottom));
 }
 
 header{
   text-align:center;
-  margin:25px 0 27px;
+  margin:23px 0 24px;
 }
 
 .brand{
   font-size:14px;
+  font-weight:850;
+  letter-spacing:.37em;
+}
+
+.prototype{
+  margin-top:7px;
+
+  font-size:8px;
   font-weight:800;
-  letter-spacing:.36em;
+  letter-spacing:.28em;
+
+  color:#60635c;
 }
 
 .where{
-  margin-top:12px;
+  margin-top:15px;
+
   font-family:Georgia,serif;
+
   font-size:11px;
   letter-spacing:.22em;
+
   text-transform:uppercase;
 }
 
 .terrain-note{
-  margin-top:5px;
+  margin-top:6px;
+
   font-family:Georgia,serif;
   font-size:15px;
-  color:#5e5d54;
+
+  color:#5d5d54;
 }
 
-/* No containing game card */
+/* =========================================================
+   CLUE
+========================================================= */
 
 .clue-area{
+  min-height:111px;
+
+  padding:10px 10px 8px;
+
   text-align:center;
-  min-height:112px;
-  padding:12px 10px;
 }
 
 .progress{
   display:flex;
   justify-content:center;
+
   gap:10px;
+
   margin-bottom:14px;
 }
 
 .progress-dot{
   width:8px;
   height:8px;
+
   border-radius:50%;
-  border:1px solid rgba(61,63,58,.65);
-  background:rgba(250,247,237,.52);
+
+  border:
+    1px solid rgba(60,62,57,.63);
+
+  background:
+    rgba(249,246,236,.48);
+
+  transition:
+    background .6s ease,
+    transform .5s ease;
 }
 
-.progress-dot.done:nth-child(1){background:var(--sage);border-color:transparent}
-.progress-dot.done:nth-child(2){background:var(--blue);border-color:transparent}
-.progress-dot.done:nth-child(3){background:var(--ochre);border-color:transparent}
-.progress-dot.done:nth-child(4){background:var(--mauve);border-color:transparent}
+.progress-dot.done{
+  transform:scale(1.08);
+}
+
+.progress-dot.done:nth-child(1){
+  background:var(--sage);
+  border-color:transparent;
+}
+
+.progress-dot.done:nth-child(2){
+  background:var(--blue);
+  border-color:transparent;
+}
+
+.progress-dot.done:nth-child(3){
+  background:var(--ochre);
+  border-color:transparent;
+}
+
+.progress-dot.done:nth-child(4){
+  background:var(--mauve);
+  border-color:transparent;
+}
 
 .clue-label{
   font-size:9px;
   font-weight:800;
-  letter-spacing:.25em;
-  color:#62645e;
+  letter-spacing:.26em;
+
+  color:#60635d;
 }
 
 #clue{
-  margin:7px auto 4px;
   max-width:390px;
+
   min-height:29px;
 
+  margin:7px auto 4px;
+
   font-family:Georgia,serif;
+
   font-size:20px;
   line-height:1.25;
 }
@@ -308,177 +517,336 @@ header{
 #length{
   font-size:10px;
   letter-spacing:.22em;
-  color:#666861;
+
+  color:#656861;
 }
 
-/* =====================================================
-   REELS
-===================================================== */
+/* =========================================================
+   BOARD
+========================================================= */
 
 .board{
-  position:relative;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+
+  grid-template-columns:
+    repeat(4,1fr);
+
   gap:12px 8px;
-  padding:10px 9px 6px;
+
+  padding:
+    10px 9px 6px;
+
+  position:relative;
 }
 
-/* subtle terrain visibility immediately beneath board */
-.board::before{
-  content:"";
-  position:absolute;
-  inset:-16px -10px;
-  border-radius:32px;
-
-  background:
-    radial-gradient(
-      ellipse at 50% 48%,
-      rgba(239,231,211,.11),
-      transparent 73%
-    );
-
-  pointer-events:none;
-}
+/* no enclosing board */
 
 .reel{
   position:relative;
-  z-index:1;
 
   height:76px;
 
-  /*
-    Softer than 017, but still geometric.
-    Definitely not pills.
-  */
-  border-radius:17px;
+  overflow:hidden;
 
-  border:1px solid rgba(64,66,60,.22);
+  border:
+    1px solid rgba(61,64,58,.23);
+
+  border-radius:17px;
 
   background:var(--cream);
 
   box-shadow:
-    0 5px 12px rgba(55,51,43,.11),
+    0 5px 13px rgba(52,49,42,.11),
     inset 0 1px 0 rgba(255,255,255,.82);
-
-  overflow:hidden;
 
   user-select:none;
   -webkit-user-select:none;
+
   touch-action:pan-y;
 
   transition:
-    background .55s ease,
-    transform .25s ease,
-    box-shadow .35s ease;
+    background .65s ease,
+    box-shadow .38s ease,
+    transform .38s cubic-bezier(.22,.75,.26,1);
 }
 
-.reel-inner{
-  height:100%;
+/*
+  The three visible letters now live on a little physical strip.
+*/
+
+.reel-strip{
+  position:absolute;
+
+  inset:0;
+
   display:grid;
-  grid-template-columns:1fr 1.28fr 1fr;
+
+  grid-template-columns:
+    1fr 1.28fr 1fr;
+
   align-items:center;
+
   text-align:center;
+
+  will-change:transform;
 }
 
 .letter{
   display:flex;
   align-items:center;
   justify-content:center;
+
   line-height:1;
+
+  transition:
+    font-size .26s ease,
+    opacity .26s ease,
+    color .26s ease,
+    transform .26s ease;
 }
 
-/* unused but CLEAR */
 .letter.alt{
   font-size:17px;
-  font-weight:500;
-  color:var(--alternative);
+  font-weight:520;
+
+  color:var(--alt);
 }
 
-/* previously used */
 .letter.alt.remembered{
   color:var(--remembered);
-  font-weight:800;
+  font-weight:820;
 }
 
-/* current */
 .letter.current{
   font-size:31px;
-  font-weight:850;
+  font-weight:860;
+
   color:var(--ink);
 }
 
-/* colour history */
-.reel.used1{background:rgba(174,193,173,.92)}
-.reel.used2{background:rgba(169,195,202,.92)}
-.reel.used3{background:rgba(208,183,127,.92)}
-.reel.used4{background:rgba(188,169,190,.92)}
+/* =========================================================
+   REEL MOTION
 
-.reel.mix12{
-  background:linear-gradient(135deg,var(--sage),var(--blue));
+   Important difference from 018:
+   the letters visibly travel before the reel settles.
+========================================================= */
+
+.reel.cycle-left .reel-strip{
+  animation:
+    reelLeft .32s
+    cubic-bezier(.25,.70,.25,1);
 }
-.reel.mix13{
-  background:linear-gradient(135deg,var(--sage),var(--ochre));
+
+.reel.cycle-right .reel-strip{
+  animation:
+    reelRight .32s
+    cubic-bezier(.25,.70,.25,1);
 }
-.reel.mix14{
-  background:linear-gradient(135deg,var(--sage),var(--mauve));
+
+@keyframes reelLeft{
+
+  0%{
+    transform:translateX(0);
+  }
+
+  68%{
+    transform:translateX(-15%);
+  }
+
+  84%{
+    transform:translateX(-12%);
+  }
+
+  100%{
+    transform:translateX(0);
+  }
 }
-.reel.mix23{
-  background:linear-gradient(135deg,var(--blue),var(--ochre));
+
+@keyframes reelRight{
+
+  0%{
+    transform:translateX(0);
+  }
+
+  68%{
+    transform:translateX(15%);
+  }
+
+  84%{
+    transform:translateX(12%);
+  }
+
+  100%{
+    transform:translateX(0);
+  }
 }
-.reel.mix24{
-  background:linear-gradient(135deg,var(--blue),var(--mauve));
+
+/* tiny physical settle */
+
+.reel.settle{
+  animation:
+    settle .26s ease;
 }
-.reel.mix34{
-  background:linear-gradient(135deg,var(--ochre),var(--mauve));
+
+@keyframes settle{
+
+  0%{
+    transform:scale(1);
+  }
+
+  55%{
+    transform:scale(.985);
+  }
+
+  100%{
+    transform:scale(1);
+  }
 }
 
 .reel.confirming{
   transform:scale(1.045);
+
   box-shadow:
-    0 0 0 3px rgba(255,255,255,.36),
-    0 7px 16px rgba(50,48,42,.13);
+    0 0 0 3px rgba(255,255,255,.34),
+    0 8px 17px rgba(50,47,40,.13);
 }
 
 .reel.pulse{
-  animation:pulse 1.05s ease-in-out 2;
+  animation:
+    pulse 1.05s
+    ease-in-out 2;
 }
 
 @keyframes pulse{
+
   50%{
     transform:scale(1.055);
+
     box-shadow:
       0 0 0 4px rgba(60,65,58,.11),
       0 7px 16px rgba(50,48,42,.13);
   }
 }
 
-/* ===================================================== */
+/* =========================================================
+   COLOUR TRACES
+========================================================= */
+
+.reel.used1{
+  background:
+    rgba(173,193,176,.93);
+}
+
+.reel.used2{
+  background:
+    rgba(169,196,205,.93);
+}
+
+.reel.used3{
+  background:
+    rgba(208,181,122,.93);
+}
+
+.reel.used4{
+  background:
+    rgba(187,168,189,.93);
+}
+
+.reel.mix12{
+  background:
+    linear-gradient(
+      135deg,
+      var(--sage),
+      var(--blue)
+    );
+}
+
+.reel.mix13{
+  background:
+    linear-gradient(
+      135deg,
+      var(--sage),
+      var(--ochre)
+    );
+}
+
+.reel.mix14{
+  background:
+    linear-gradient(
+      135deg,
+      var(--sage),
+      var(--mauve)
+    );
+}
+
+.reel.mix23{
+  background:
+    linear-gradient(
+      135deg,
+      var(--blue),
+      var(--ochre)
+    );
+}
+
+.reel.mix24{
+  background:
+    linear-gradient(
+      135deg,
+      var(--blue),
+      var(--mauve)
+    );
+}
+
+.reel.mix34{
+  background:
+    linear-gradient(
+      135deg,
+      var(--ochre),
+      var(--mauve)
+    );
+}
+
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 .controls{
   display:grid;
-  grid-template-columns:1fr 1.65fr 1fr;
+
+  grid-template-columns:
+    1fr 1.65fr 1fr;
+
   gap:9px;
+
   padding:0 9px;
+
   margin-top:16px;
 }
 
 .btn{
   min-height:49px;
-  border:1px solid rgba(52,54,50,.42);
+
+  border:
+    1px solid rgba(52,54,50,.40);
+
   border-radius:16px;
 
-  background:rgba(247,243,232,.83);
+  background:
+    rgba(247,243,232,.84);
 
   color:#343632;
 
   font-size:10px;
   font-weight:800;
+
   letter-spacing:.14em;
 }
 
 .btn.primary{
   background:#30322e;
+
   color:#f8f5eb;
+
   border-color:#30322e;
 }
 
@@ -488,45 +856,66 @@ header{
 
 #message{
   min-height:36px;
+
   padding-top:10px;
 
   text-align:center;
 
   font-family:Georgia,serif;
   font-style:italic;
+
   font-size:14px;
 
   color:#55584f;
 }
 
+/* =========================================================
+   BANK / STATS
+========================================================= */
+
 .bank{
   min-height:38px;
+
   margin-top:5px;
 
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
+
   gap:7px;
 }
 
 .pill{
   opacity:0;
-  transform:translateY(5px);
 
-  padding:7px 12px;
+  transform:
+    translateY(5px)
+    scale(.97);
+
+  padding:
+    7px 12px;
+
   border-radius:999px;
 
   font-size:11px;
   font-weight:800;
+
   letter-spacing:.08em;
 
-  animation:pillIn .55s ease forwards;
+  animation:
+    pillIn .65s
+    cubic-bezier(.22,.72,.26,1)
+    forwards;
 }
 
 @keyframes pillIn{
+
   to{
     opacity:1;
-    transform:none;
+
+    transform:
+      translateY(0)
+      scale(1);
   }
 }
 
@@ -538,42 +927,52 @@ header{
 .stats{
   display:flex;
   justify-content:center;
+
   gap:22px;
 
   margin-top:8px;
 
   font-size:9px;
   font-weight:800;
+
   letter-spacing:.14em;
 
   color:#565951;
 }
 
-/* =====================================================
+/* =========================================================
    CONNECTION
-===================================================== */
+========================================================= */
 
 .connection{
   display:none;
 
-  margin:28px 10px 0;
-  padding:25px 12px 22px;
+  margin:
+    28px 10px 0;
 
-  border-top:1px solid rgba(64,66,59,.25);
+  padding:
+    25px 12px 22px;
+
+  border-top:
+    1px solid rgba(64,66,59,.25);
 
   text-align:center;
 }
 
 .connection.show{
   display:block;
-  animation:gentleIn .75s ease both;
+
+  animation:
+    gentleIn .9s ease both;
 }
 
 @keyframes gentleIn{
+
   from{
     opacity:0;
     transform:translateY(7px);
   }
+
   to{
     opacity:1;
     transform:none;
@@ -583,7 +982,9 @@ header{
 .connection-title{
   font-size:9px;
   font-weight:800;
+
   letter-spacing:.27em;
+
   color:#5c5f58;
 }
 
@@ -591,6 +992,7 @@ header{
   margin:8px 0 12px;
 
   font-family:Georgia,serif;
+
   font-size:20px;
 }
 
@@ -598,14 +1000,17 @@ header{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
+
   gap:7px;
 }
 
 .connection-length{
-  margin:15px 0 6px;
+  margin:
+    15px 0 6px;
 
   font-size:20px;
   font-weight:800;
+
   letter-spacing:.32em;
 
   color:#55584f;
@@ -615,7 +1020,10 @@ header{
   width:min(250px,82%);
 
   border:0;
-  border-bottom:1px solid #696b63;
+
+  border-bottom:
+    1px solid #696b63;
+
   border-radius:0;
 
   background:transparent;
@@ -629,6 +1037,7 @@ header{
 
   font-size:23px;
   font-weight:800;
+
   letter-spacing:.14em;
 
   color:#252724;
@@ -638,6 +1047,7 @@ header{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
+
   gap:8px;
 
   margin-top:14px;
@@ -655,31 +1065,40 @@ header{
 
   font-family:Georgia,serif;
   font-style:italic;
+
   font-size:14px;
   line-height:1.4;
 
   color:#55584f;
 }
 
-/* =====================================================
-   COMPLETION
-===================================================== */
+/* =========================================================
+   FINISH
+========================================================= */
 
 .final{
   display:none;
-  margin:27px 12px 0;
-  padding:25px 10px;
+
+  margin:
+    28px 12px 0;
+
+  padding:
+    27px 10px;
+
   text-align:center;
 }
 
 .final.show{
   display:block;
-  animation:gentleIn 1.2s ease both;
+
+  animation:
+    gentleIn 1.3s ease both;
 }
 
 .final-kicker{
   font-size:9px;
   font-weight:800;
+
   letter-spacing:.27em;
 }
 
@@ -687,50 +1106,83 @@ header{
   margin-top:8px;
 
   font-family:Georgia,serif;
+
   font-size:28px;
 }
 
 .final-copy{
+  max-width:325px;
+
   margin:8px auto;
-  max-width:320px;
 
   font-family:Georgia,serif;
+
   font-size:15px;
   line-height:1.5;
 
   color:#50534c;
 }
 
+/*
+  Deliberately factual for this prototype.
+  We are NOT pretending route choice is meaningful
+  until the route-ownership experiment earns it.
+*/
+
 .final-path{
-  margin-top:16px;
+  margin-top:17px;
 
   font-size:10px;
   font-weight:800;
+
   letter-spacing:.15em;
+
+  color:#50534c;
 }
 
-/* ===================================================== */
+/* ========================================================= */
 
 .shake{
-  animation:shake .28s linear;
+  animation:
+    shake .30s linear;
 }
 
 @keyframes shake{
+
   25%{transform:translateX(-4px)}
   50%{transform:translateX(4px)}
   75%{transform:translateX(-2px)}
 }
 
 @media(max-width:390px){
-  .board{gap:10px 7px}
-  .reel{height:70px;border-radius:15px}
-  .letter.alt{font-size:16px}
-  .letter.current{font-size:29px}
-  #clue{font-size:19px}
+
+  .board{
+    gap:10px 7px;
+  }
+
+  .reel{
+    height:70px;
+    border-radius:15px;
+  }
+
+  .letter.alt{
+    font-size:16px;
+  }
+
+  .letter.current{
+    font-size:29px;
+  }
+
+  #clue{
+    font-size:19px;
+  }
 }
 
 @media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
+
+  *,
+  *::before,
+  *::after{
     animation-duration:.01ms!important;
     transition-duration:.01ms!important;
   }
@@ -744,58 +1196,81 @@ header{
 
   <div class="terrain">
 
-    <div class="landwash"></div>
-
-    <svg class="contour-svg"
-         viewBox="0 0 700 1100"
+    <svg class="contours"
+         viewBox="0 0 700 1200"
          preserveAspectRatio="none"
          aria-hidden="true">
 
-      <path d="M-50 150
-               C100 45 280 60 365 160
-               C450 260 600 230 760 110"/>
+      <path d="
+        M-70 145
+        C80 40 270 55 365 155
+        C460 255 610 225 770 105
+      "/>
 
-      <path d="M-60 190
-               C105 85 260 90 340 185
-               C425 285 585 280 760 155"/>
+      <path d="
+        M-70 190
+        C95 85 260 90 345 185
+        C430 285 590 280 770 150
+      "/>
 
-      <path class="fine"
-            d="M-80 235
-               C90 130 245 135 320 220
-               C405 315 570 330 770 200"/>
+      <path class="fine" d="
+        M-80 235
+        C90 130 245 135 320 220
+        C405 315 570 330 780 200
+      "/>
 
-      <path d="M-80 390
-               C80 320 175 360 250 430
-               C345 520 490 485 760 350"/>
+      <path d="
+        M-90 390
+        C70 320 180 360 255 430
+        C350 520 500 485 780 350
+      "/>
 
-      <path class="fine"
-            d="M-90 425
-               C65 355 170 400 235 465
-               C330 555 500 525 770 390"/>
+      <path class="fine" d="
+        M-90 430
+        C65 360 170 400 235 465
+        C330 555 500 525 780 390
+      "/>
 
-      <path d="M-90 610
-               C80 525 245 535 355 640
-               C470 750 600 735 770 610"/>
+      <path class="light" d="
+        M-90 495
+        C80 420 200 450 285 520
+        C380 600 525 575 780 455
+      "/>
 
-      <path class="fine"
-            d="M-90 650
-               C85 570 245 575 335 675
-               C445 795 605 775 770 650"/>
+      <path d="
+        M-100 620
+        C80 530 245 540 355 645
+        C470 755 600 740 790 610
+      "/>
 
-      <path d="M-100 835
-               C85 745 280 750 390 860
-               C500 970 630 950 780 820"/>
+      <path class="fine" d="
+        M-100 665
+        C85 575 245 580 335 680
+        C445 800 605 780 790 650
+      "/>
 
-      <path d="M-100 890
-               C80 800 265 805 365 905
-               C475 1015 620 1010 780 875"/>
+      <path d="
+        M-100 850
+        C85 755 280 760 390 870
+        C500 980 630 960 790 825
+      "/>
+
+      <path class="fine" d="
+        M-100 905
+        C80 810 265 815 365 915
+        C475 1025 620 1020 790 880
+      "/>
 
     </svg>
 
     <div class="vegetation"></div>
-    <div class="track"></div>
-    <div class="stone2"></div>
+    <div class="path"></div>
+
+    <div class="stone-small"></div>
+
     <div class="water"></div>
+    <div class="ripples"></div>
+
     <div class="stone"></div>
 
   </div>
@@ -803,55 +1278,123 @@ header{
   <main class="wrap">
 
     <header>
-      <div class="brand">WORDLOCK</div>
-      <div class="where">Somewhere near the beginning</div>
-      <div class="terrain-note">Stone · water · first traces</div>
-    </header>
 
-    <section class="clue-area" id="clueArea">
-
-      <div class="progress">
-        <div class="progress-dot"></div>
-        <div class="progress-dot"></div>
-        <div class="progress-dot"></div>
-        <div class="progress-dot"></div>
+      <div class="brand">
+        WORDLOCK
       </div>
 
-      <div class="clue-label" id="clueLabel">CLUE 1</div>
+      <div class="prototype">
+        PROTOTYPE #019
+      </div>
+
+      <div class="where">
+        Somewhere near the beginning
+      </div>
+
+      <div class="terrain-note">
+        Stone · water · first traces
+      </div>
+
+    </header>
+
+    <section
+      class="clue-area"
+      id="clueArea">
+
+      <div class="progress">
+
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+
+      </div>
+
+      <div
+        class="clue-label"
+        id="clueLabel">
+        CLUE 1
+      </div>
+
       <div id="clue"></div>
+
       <div id="length"></div>
 
     </section>
 
-    <div class="board" id="board"></div>
+    <div
+      class="board"
+      id="board">
+    </div>
 
-    <div class="controls" id="controls">
-      <button class="btn" id="resetBtn">RESET</button>
-      <button class="btn primary" id="unlockBtn">UNLOCK</button>
-      <button class="btn" id="hintBtn">HINT</button>
+    <div
+      class="controls"
+      id="controls">
+
+      <button
+        class="btn"
+        id="resetBtn">
+        RESET
+      </button>
+
+      <button
+        class="btn primary"
+        id="unlockBtn">
+        UNLOCK
+      </button>
+
+      <button
+        class="btn"
+        id="hintBtn">
+        HINT
+      </button>
+
     </div>
 
     <div id="message"></div>
 
-    <div class="bank" id="bank"></div>
-
-    <div class="stats">
-      <span id="turnStat">0 TURNS</span>
-      <span id="attemptStat">0 ATTEMPTS</span>
-      <span id="hintStat">0 HINTS</span>
+    <div
+      class="bank"
+      id="bank">
     </div>
 
-    <section class="connection" id="connection">
+    <div class="stats">
 
-      <div class="connection-title">THE CONNECTION</div>
+      <span id="turnStat">
+        0 TURNS
+      </span>
+
+      <span id="attemptStat">
+        0 ATTEMPTS
+      </span>
+
+      <span id="hintStat">
+        0 HINTS
+      </span>
+
+    </div>
+
+    <section
+      class="connection"
+      id="connection">
+
+      <div class="connection-title">
+        THE CONNECTION
+      </div>
 
       <div class="connection-copy">
         What connects all four?
       </div>
 
-      <div class="connection-words" id="connectionWords"></div>
+      <div
+        class="connection-words"
+        id="connectionWords">
+      </div>
 
-      <div class="connection-length" id="connectionLength"></div>
+      <div
+        class="connection-length"
+        id="connectionLength">
+      </div>
 
       <input
         id="connectionInput"
@@ -860,32 +1403,55 @@ header{
         autocapitalize="characters"
         spellcheck="false"
         maxlength="12"
-        aria-label="Connecting word"
-      >
+        aria-label="Connecting word">
 
       <div class="connection-actions">
-        <button class="btn primary" id="connectBtn">CONNECT</button>
-        <button class="btn" id="connectionHintBtn">HINT</button>
-        <button class="btn" id="revealBtn">REVEAL</button>
+
+        <button
+          class="btn primary"
+          id="connectBtn">
+          CONNECT
+        </button>
+
+        <button
+          class="btn"
+          id="connectionHintBtn">
+          HINT
+        </button>
+
+        <button
+          class="btn"
+          id="revealBtn">
+          REVEAL
+        </button>
+
       </div>
 
       <div id="connectionHint"></div>
 
     </section>
 
-    <section class="final" id="final">
+    <section
+      class="final"
+      id="final">
 
-      <div class="final-kicker">A FIRST TRACE</div>
+      <div class="final-kicker">
+        A FIRST TRACE
+      </div>
 
       <div class="final-title">
         Your path remains.
       </div>
 
       <div class="final-copy">
-        This place is a little different because you passed through it.
+        This place is a little different
+        because you passed through it.
       </div>
 
-      <div class="final-path" id="finalPath"></div>
+      <div
+        class="final-path"
+        id="finalPath">
+      </div>
 
     </section>
 
@@ -895,25 +1461,38 @@ header{
 <script>
 
 /* =========================================================
-   WORDLOCK 018
+   WORDLOCK — PROTOTYPE #019
 ========================================================= */
+
+
+/*
+  Puzzle deliberately kept structurally straightforward.
+
+  #019 is primarily testing:
+  - 1.6 environmental language
+  - reel movement
+  - reel sound
+  - overall tactile/atmospheric feel
+
+  Route ownership remains a later controlled experiment.
+*/
 
 const PUZZLE={
 
   wheels:[
 
-    ["M","N","C"],
-    ["I","A","R"],
-    ["F","O","D"],
-    ["T","S","P"],
+    ["B","C","M"],
+    ["R","A","L"],
+    ["T","N","O"],
+    ["D","S","P"],
 
-    ["E","G","B"],
-    ["L","E","Y"],
-    ["K","X","V"],
-    ["O","J","U"],
+    ["E","G","H"],
+    ["L","I","Y"],
+    ["R","V","K"],
+    ["A","J","U"],
 
-    ["L","Q","H"],
-    ["I","X","A"],
+    ["N","Q","F"],
+    ["I","X","E"],
     ["M","U","S"],
     ["R","W","N"],
 
@@ -926,29 +1505,29 @@ const PUZZLE={
   clues:[
 
     {
-      answer:"MILE",
-      clue:"A unit used to measure distance",
+      answer:"CALM",
+      clue:"Peaceful and without agitation",
       start:0,
       colour:1
     },
 
     {
-      answer:"GEM",
-      clue:"A precious or beautiful stone",
+      answer:"GLOW",
+      clue:"A steady, gentle light",
       start:4,
       colour:2
     },
 
     {
-      answer:"LIME",
-      clue:"A small green citrus fruit",
+      answer:"FINE",
+      clue:"Delicate or very slight",
       start:8,
       colour:3
     },
 
     {
-      answer:"TOUCH",
-      clue:"A light contact with a hand or finger",
+      answer:"PATH",
+      clue:"A way through a place",
       start:3,
       colour:4
     }
@@ -957,16 +1536,16 @@ const PUZZLE={
 
   connection:{
 
-    answer:"STONE",
+    answer:"LINE",
 
     hint1:
       "The connecting word comes after all four answers.",
 
     hint2:
-      "Think of something ancient, solid and shaped by time.",
+      "Think of something that can be drawn, followed or crossed.",
 
     hint3:
-      "It can mark a distance, be precious, form rock — or become a point of reference."
+      "A single word can follow CALM, GLOW, FINE and PATH."
   }
 
 };
@@ -978,13 +1557,21 @@ const PUZZLE={
 
 let clueIndex=0;
 
-let current=PUZZLE.wheels.map(()=>1);
+let current=
+  PUZZLE.wheels.map(()=>1);
 
-let clueSnapshot=[...current];
+let clueSnapshot=
+  [...current];
 
-let remembered=PUZZLE.wheels.map(()=>new Set());
+let remembered=
+  PUZZLE.wheels.map(
+    ()=>new Set()
+  );
 
-let histories=PUZZLE.wheels.map(()=>new Set());
+let histories=
+  PUZZLE.wheels.map(
+    ()=>new Set()
+  );
 
 let solvedWords=[];
 
@@ -998,15 +1585,24 @@ let busy=false;
 
 
 /* =========================================================
-   AUDIO
+   ETHEREAL-MECHANICAL AUDIO
+
+   Still generated in-browser, therefore zero external assets.
+   But movement is now layered:
+   - quiet physical tick
+   - soft resonant tone
+   - very faint higher shimmer
+
+   This is an experiment, not final sound design.
 ========================================================= */
 
 let audioCtx=null;
 
+
 function ensureAudio(){
 
   const AC=
-    window.AudioContext||
+    window.AudioContext ||
     window.webkitAudioContext;
 
   if(!AC)return;
@@ -1015,69 +1611,209 @@ function ensureAudio(){
     audioCtx=new AC();
   }
 
-  if(audioCtx.state==="suspended"){
+  if(
+    audioCtx.state===
+    "suspended"
+  ){
     audioCtx.resume();
   }
 }
 
-function tone(freq,duration=.06,volume=.025){
+
+function oscillatorTone(
+  frequency,
+  duration,
+  volume,
+  type="sine",
+  delay=0
+){
 
   ensureAudio();
 
   if(!audioCtx)return;
 
-  const o=audioCtx.createOscillator();
-  const g=audioCtx.createGain();
-
-  o.type="sine";
-
-  o.frequency.setValueAtTime(
-    freq,
-    audioCtx.currentTime
-  );
-
-  g.gain.setValueAtTime(
-    .0001,
-    audioCtx.currentTime
-  );
-
-  g.gain.exponentialRampToValueAtTime(
-    volume,
-    audioCtx.currentTime+.008
-  );
-
-  g.gain.exponentialRampToValueAtTime(
-    .0001,
-    audioCtx.currentTime+duration
-  );
-
-  o.connect(g);
-  g.connect(audioCtx.destination);
-
-  o.start();
-
-  o.stop(
+  const now=
     audioCtx.currentTime+
-    duration+.03
+    delay;
+
+  const osc=
+    audioCtx.createOscillator();
+
+  const gain=
+    audioCtx.createGain();
+
+  osc.type=type;
+
+  osc.frequency
+    .setValueAtTime(
+      frequency,
+      now
+    );
+
+  gain.gain
+    .setValueAtTime(
+      .0001,
+      now
+    );
+
+  gain.gain
+    .exponentialRampToValueAtTime(
+      volume,
+      now+.008
+    );
+
+  gain.gain
+    .exponentialRampToValueAtTime(
+      .0001,
+      now+duration
+    );
+
+  osc.connect(gain);
+
+  gain.connect(
+    audioCtx.destination
+  );
+
+  osc.start(now);
+
+  osc.stop(
+    now+
+    duration+
+    .03
   );
 }
 
-function moveSound(){
-  tone(145,.045,.018);
+
+/*
+  Each board position gets a subtly different resonance.
+  Not intended to sound like a tune.
+*/
+
+const REEL_PITCHES=[
+  196,207,220,233,
+  185,196,208,220,
+  174,185,196,208,
+  165,174,185,196
+];
+
+
+function reelSound(index){
+
+  const root=
+    REEL_PITCHES[index];
+
+  /* tiny mechanism */
+  oscillatorTone(
+    105,
+    .035,
+    .009,
+    "triangle"
+  );
+
+  /* body */
+  oscillatorTone(
+    root,
+    .19,
+    .012,
+    "sine",
+    .018
+  );
+
+  /* faint shimmer */
+  oscillatorTone(
+    root*2.01,
+    .27,
+    .0045,
+    "sine",
+    .035
+  );
 }
+
 
 function wrongSound(){
-  tone(88,.13,.025);
+
+  oscillatorTone(
+    110,
+    .12,
+    .018,
+    "triangle"
+  );
+
+  oscillatorTone(
+    82,
+    .19,
+    .010,
+    "sine",
+    .025
+  );
 }
+
 
 function pathSound(step){
-  tone(175+(step*18),.09,.018);
+
+  const notes=[
+    196,
+    220,
+    247,
+    277,
+    294,
+    330
+  ];
+
+  const f=
+    notes[
+      Math.min(
+        step,
+        notes.length-1
+      )
+    ];
+
+  oscillatorTone(
+    f,
+    .24,
+    .010,
+    "sine"
+  );
+
+  oscillatorTone(
+    f*2,
+    .34,
+    .003,
+    "sine",
+    .025
+  );
 }
 
-function finishSound(){
-  tone(196,.16,.02);
-  setTimeout(()=>tone(247,.18,.02),120);
-  setTimeout(()=>tone(294,.25,.018),260);
+
+function connectionSound(){
+
+  const notes=[
+    196,
+    247,
+    294,
+    370
+  ];
+
+  notes.forEach(
+    (n,i)=>{
+
+      oscillatorTone(
+        n,
+        .38,
+        .009,
+        "sine",
+        i*.12
+      );
+
+      oscillatorTone(
+        n*2,
+        .48,
+        .0025,
+        "sine",
+        i*.12+.025
+      );
+    }
+  );
 }
 
 
@@ -1086,21 +1822,34 @@ function finishSound(){
 ========================================================= */
 
 function letterAt(i){
-  return PUZZLE.wheels[i][current[i]];
+
+  return(
+    PUZZLE.wheels[i]
+    [current[i]]
+  );
 }
+
 
 function adjacent(a,b){
 
-  const ar=Math.floor(a/4);
-  const ac=a%4;
+  const ar=
+    Math.floor(a/4);
 
-  const br=Math.floor(b/4);
-  const bc=b%4;
+  const ac=
+    a%4;
 
-  return Math.max(
-    Math.abs(ar-br),
-    Math.abs(ac-bc)
-  )===1;
+  const br=
+    Math.floor(b/4);
+
+  const bc=
+    b%4;
+
+  return(
+    Math.max(
+      Math.abs(ar-br),
+      Math.abs(ac-bc)
+    )===1
+  );
 }
 
 
@@ -1108,23 +1857,49 @@ function findPaths(word){
 
   const results=[];
 
-  function walk(position,index,path){
 
-    if(index===word.length){
-      results.push([...path]);
+  function walk(
+    position,
+    index,
+    path
+  ){
+
+    if(
+      index===
+      word.length
+    ){
+
+      results.push(
+        [...path]
+      );
+
       return;
     }
 
-    for(let i=0;i<16;i++){
 
-      if(path.includes(i))continue;
+    for(
+      let i=0;
+      i<16;
+      i++
+    ){
 
-      if(letterAt(i)!==word[index])continue;
+      if(
+        path.includes(i)
+      )continue;
+
+      if(
+        letterAt(i)!==
+        word[index]
+      )continue;
 
       if(
         position!==null &&
-        !adjacent(position,i)
+        !adjacent(
+          position,
+          i
+        )
       )continue;
+
 
       path.push(i);
 
@@ -1138,166 +1913,330 @@ function findPaths(word){
     }
   }
 
-  walk(null,0,[]);
+
+  walk(
+    null,
+    0,
+    []
+  );
 
   return results;
 }
 
 
 /* =========================================================
-   BOARD
+   RENDER BOARD
 ========================================================= */
 
 function render(){
 
   const board=
-    document.getElementById("board");
+    document.getElementById(
+      "board"
+    );
 
   board.innerHTML="";
 
-  PUZZLE.wheels.forEach((wheel,i)=>{
 
-    const reel=
-      document.createElement("div");
+  PUZZLE.wheels.forEach(
+    (wheel,i)=>{
 
-    reel.className="reel";
-
-    applyHistory(reel,i);
-
-    const centre=current[i];
-    const left=(centre+2)%3;
-    const right=(centre+1)%3;
-
-    const inner=
-      document.createElement("div");
-
-    inner.className="reel-inner";
-
-    [
-      {idx:left,type:"alt"},
-      {idx:centre,type:"current"},
-      {idx:right,type:"alt"}
-    ].forEach(item=>{
-
-      const el=
-        document.createElement("div");
-
-      el.className=
-        "letter "+item.type;
-
-      const letter=
-        wheel[item.idx];
-
-      if(
-        item.type==="alt" &&
-        remembered[i].has(letter)
-      ){
-        el.classList.add("remembered");
-      }
-
-      el.textContent=letter;
-
-      inner.appendChild(el);
-    });
-
-    reel.appendChild(inner);
-
-    let startX=null;
-
-    reel.addEventListener(
-      "pointerdown",
-      e=>{
-
-        if(busy)return;
-
-        ensureAudio();
-
-        startX=e.clientX;
-
-        reel.setPointerCapture?.(
-          e.pointerId
+      const reel=
+        document.createElement(
+          "div"
         );
-      }
-    );
 
-    reel.addEventListener(
-      "pointerup",
-      e=>{
+      reel.className="reel";
 
-        if(
-          busy ||
-          startX===null
-        )return;
+      applyHistory(
+        reel,
+        i
+      );
 
-        const dx=
-          e.clientX-startX;
 
-        startX=null;
+      const centre=
+        current[i];
 
-        if(Math.abs(dx)<16)return;
+      const left=
+        (centre+2)%3;
 
-        turnReel(
-          i,
-          dx<0?1:-1
+      const right=
+        (centre+1)%3;
+
+
+      const strip=
+        document.createElement(
+          "div"
         );
-      }
-    );
 
-    board.appendChild(reel);
-  });
+      strip.className=
+        "reel-strip";
+
+
+      [
+        {
+          idx:left,
+          type:"alt"
+        },
+        {
+          idx:centre,
+          type:"current"
+        },
+        {
+          idx:right,
+          type:"alt"
+        }
+      ].forEach(
+        item=>{
+
+          const el=
+            document.createElement(
+              "div"
+            );
+
+          el.className=
+            "letter "+
+            item.type;
+
+          const letter=
+            wheel[item.idx];
+
+
+          if(
+            item.type===
+            "alt" &&
+            remembered[i]
+              .has(letter)
+          ){
+
+            el.classList.add(
+              "remembered"
+            );
+          }
+
+
+          el.textContent=
+            letter;
+
+          strip.appendChild(
+            el
+          );
+        }
+      );
+
+
+      reel.appendChild(
+        strip
+      );
+
+
+      let startX=null;
+
+
+      reel.addEventListener(
+        "pointerdown",
+        e=>{
+
+          if(busy)return;
+
+          ensureAudio();
+
+          startX=
+            e.clientX;
+
+          reel
+            .setPointerCapture?.(
+              e.pointerId
+            );
+        }
+      );
+
+
+      reel.addEventListener(
+        "pointerup",
+        e=>{
+
+          if(
+            busy ||
+            startX===null
+          )return;
+
+
+          const dx=
+            e.clientX-
+            startX;
+
+          startX=null;
+
+
+          if(
+            Math.abs(dx)<16
+          )return;
+
+
+          animateTurn(
+            i,
+            dx<0 ? 1 : -1
+          );
+        }
+      );
+
+
+      board.appendChild(
+        reel
+      );
+    }
+  );
+
 
   updateStats();
 }
 
 
-function applyHistory(reel,i){
+/* =========================================================
+   HISTORY COLOUR
+========================================================= */
 
-  const c=
-    [...histories[i]];
+function applyHistory(
+  reel,
+  index
+){
 
-  if(c.length===1){
+  const colours=
+    [...histories[index]];
+
+
+  if(
+    colours.length===1
+  ){
+
     reel.classList.add(
-      "used"+c[0]
+      "used"+
+      colours[0]
     );
+
     return;
   }
 
-  if(c.length>=2){
 
-    const a=Math.min(...c);
-    const b=Math.max(...c);
+  if(
+    colours.length>=2
+  ){
 
-    const mix="mix"+a+b;
+    const a=
+      Math.min(
+        ...colours
+      );
 
-    if([
-      "mix12","mix13","mix14",
-      "mix23","mix24","mix34"
-    ].includes(mix)){
-      reel.classList.add(mix);
+    const b=
+      Math.max(
+        ...colours
+      );
+
+    const mix=
+      "mix"+a+b;
+
+
+    if(
+      [
+        "mix12",
+        "mix13",
+        "mix14",
+        "mix23",
+        "mix24",
+        "mix34"
+      ].includes(mix)
+    ){
+
+      reel.classList.add(
+        mix
+      );
     }
   }
 }
 
 
-function turnReel(i,direction){
+/* =========================================================
+   REEL TURN
+
+   Animate first.
+   Change state at the settling point.
+========================================================= */
+
+function animateTurn(
+  index,
+  direction
+){
 
   if(busy)return;
 
+  busy=true;
+
   ensureAudio();
 
-  current[i]=
-    (current[i]+direction+3)%3;
+  const reel=
+    document
+      .querySelectorAll(
+        ".reel"
+      )[index];
 
-  turns++;
 
-  moveSound();
+  reel.classList.add(
+    direction===1
+      ? "cycle-left"
+      : "cycle-right"
+  );
 
-  render();
+
+  reelSound(index);
+
+
+  /*
+    Wait until the motion is visibly underway
+    before replacing the letter state.
+  */
+
+  setTimeout(()=>{
+
+    current[index]=
+      (
+        current[index]+
+        direction+
+        3
+      )%3;
+
+    turns++;
+
+    render();
+
+
+    const fresh=
+      document
+        .querySelectorAll(
+          ".reel"
+        )[index];
+
+    fresh?.classList.add(
+      "settle"
+    );
+
+
+    setTimeout(()=>{
+
+      fresh?.classList.remove(
+        "settle"
+      );
+
+      busy=false;
+
+    },260);
+
+  },215);
 }
 
 
 /* =========================================================
-   CLUES
+   CLUE
 ========================================================= */
 
 function renderClue(){
@@ -1305,40 +2244,62 @@ function renderClue(){
   busy=false;
 
   const clue=
-    PUZZLE.clues[clueIndex];
+    PUZZLE.clues[
+      clueIndex
+    ];
 
-  document.getElementById(
-    "clueLabel"
-  ).textContent=
-    "CLUE "+(clueIndex+1);
 
-  document.getElementById(
-    "clue"
-  ).textContent=
-    clue.clue;
+  document
+    .getElementById(
+      "clueLabel"
+    )
+    .textContent=
+      "CLUE "+
+      (clueIndex+1);
 
-  document.getElementById(
-    "length"
-  ).textContent=
-    clue.answer.length+
-    " LETTERS";
 
-  document.getElementById(
-    "message"
-  ).textContent="";
+  document
+    .getElementById(
+      "clue"
+    )
+    .textContent=
+      clue.clue;
+
+
+  document
+    .getElementById(
+      "length"
+    )
+    .textContent=
+      clue.answer.length+
+      " LETTERS";
+
+
+  document
+    .getElementById(
+      "message"
+    )
+    .textContent="";
+
 
   render();
+
 
   setTimeout(()=>{
 
     const reels=
-      document.querySelectorAll(".reel");
+      document
+        .querySelectorAll(
+          ".reel"
+        );
 
     reels[
       clue.start
-    ]?.classList.add("pulse");
+    ]?.classList.add(
+      "pulse"
+    );
 
-  },350);
+  },400);
 }
 
 
@@ -1356,31 +2317,52 @@ function unlock(){
 
   updateStats();
 
+
   const clue=
-    PUZZLE.clues[clueIndex];
+    PUZZLE.clues[
+      clueIndex
+    ];
+
 
   const paths=
-    findPaths(clue.answer);
+    findPaths(
+      clue.answer
+    );
 
-  if(!paths.length){
+
+  if(
+    !paths.length
+  ){
 
     wrongSound();
 
-    const board=
-      document.getElementById("board");
-
-    board.classList.add("shake");
-
-    document.getElementById(
-      "message"
-    ).textContent=
-      "Not quite. The place settles back.";
-
     busy=true;
+
+    const board=
+      document
+        .getElementById(
+          "board"
+        );
+
+
+    board.classList.add(
+      "shake"
+    );
+
+
+    document
+      .getElementById(
+        "message"
+      )
+      .textContent=
+        "Not quite. The place settles back.";
+
 
     setTimeout(()=>{
 
-      board.classList.remove("shake");
+      board.classList.remove(
+        "shake"
+      );
 
       current=[
         ...clueSnapshot
@@ -1390,14 +2372,19 @@ function unlock(){
 
       busy=false;
 
-    },650);
+    },720);
+
 
     return;
   }
 
+
   /*
-    018 puzzle has been constructed so the
-    valid solution state has one route.
+    #019 is not attempting to solve route ownership.
+    If multiple paths happen to exist in a displayed state,
+    this build uses the first valid path.
+
+    That is explicit technical debt, not our final rule.
   */
 
   solve(
@@ -1408,63 +2395,84 @@ function unlock(){
 
 
 /* =========================================================
-   SMOOTH SUCCESS SEQUENCE
+   SUCCESS SEQUENCE
 ========================================================= */
 
-function solve(clue,path){
+function solve(
+  clue,
+  path
+){
 
   busy=true;
 
-  document.getElementById(
-    "message"
-  ).textContent="";
 
-  /*
-    First record remembered letters.
-    Colour is added visually one place at a time.
-  */
+  document
+    .getElementById(
+      "message"
+    )
+    .textContent="";
 
-  path.forEach((position,n)=>{
 
-    remembered[position].add(
-      clue.answer[n]
-    );
+  path.forEach(
+    (position,n)=>{
 
-  });
+      remembered[position]
+        .add(
+          clue.answer[n]
+        );
+    }
+  );
+
 
   let step=0;
 
+
   function colourNext(){
 
-    if(step>=path.length){
+    if(
+      step>=
+      path.length
+    ){
 
       setTimeout(
-        ()=>completeWord(clue,path),
-        320
+        ()=>completeWord(
+          clue,
+          path
+        ),
+        380
       );
 
       return;
     }
 
+
     const position=
       path[step];
 
-    histories[position].add(
-      clue.colour
-    );
+
+    histories[position]
+      .add(
+        clue.colour
+      );
+
 
     render();
 
+
     const reel=
-      document.querySelectorAll(
-        ".reel"
-      )[position];
+      document
+        .querySelectorAll(
+          ".reel"
+        )[position];
+
 
     reel?.classList.add(
       "confirming"
     );
 
+
     pathSound(step);
+
 
     setTimeout(()=>{
 
@@ -1472,51 +2480,72 @@ function solve(clue,path){
         "confirming"
       );
 
-    },230);
+    },300);
+
 
     step++;
 
+
     setTimeout(
       colourNext,
-      125
+      155
     );
   }
+
 
   colourNext();
 }
 
 
-function completeWord(clue,path){
+function completeWord(
+  clue,
+  path
+){
 
   solvedWords.push(
     clue.answer
   );
 
+
   renderBank();
 
-  document.querySelectorAll(
-    ".progress-dot"
-  )[clueIndex]
-    .classList.add("done");
 
-  document.getElementById(
-    "message"
-  ).textContent=
-    clue.answer+" found.";
+  document
+    .querySelectorAll(
+      ".progress-dot"
+    )[clueIndex]
+    .classList.add(
+      "done"
+    );
+
+
+  document
+    .getElementById(
+      "message"
+    )
+    .textContent=
+      clue.answer+
+      " found.";
+
 
   /*
-    Keep only the successful route's
-    changes. Other experimentation
-    settles back.
+    Irrelevant experiments return.
+    Successful path state carries forward.
   */
 
   const next=[
     ...clueSnapshot
   ];
 
-  path.forEach(i=>{
-    next[i]=current[i];
-  });
+
+  path.forEach(
+    i=>{
+
+      next[i]=
+        current[i];
+    }
+  );
+
 
   current=next;
 
@@ -1524,7 +2553,9 @@ function completeWord(clue,path){
     ...current
   ];
 
+
   clueIndex++;
+
 
   if(
     clueIndex>=
@@ -1533,15 +2564,16 @@ function completeWord(clue,path){
 
     setTimeout(
       showConnection,
-      850
+      1000
     );
 
     return;
   }
 
+
   setTimeout(
     renderClue,
-    800
+    900
   );
 }
 
@@ -1562,9 +2594,11 @@ function reset(){
 
   render();
 
-  document.getElementById(
-    "message"
-  ).textContent="";
+  document
+    .getElementById(
+      "message"
+    )
+    .textContent="";
 }
 
 
@@ -1576,27 +2610,43 @@ function clueHint(){
 
   updateStats();
 
+
   const clue=
-    PUZZLE.clues[clueIndex];
+    PUZZLE.clues[
+      clueIndex
+    ];
+
 
   const reels=
-    document.querySelectorAll(
-      ".reel"
-    );
+    document
+      .querySelectorAll(
+        ".reel"
+      );
+
 
   const r=
-    reels[clue.start];
+    reels[
+      clue.start
+    ];
 
-  r?.classList.remove("pulse");
+
+  r?.classList.remove(
+    "pulse"
+  );
 
   void r?.offsetWidth;
 
-  r?.classList.add("pulse");
+  r?.classList.add(
+    "pulse"
+  );
 
-  document.getElementById(
-    "message"
-  ).textContent=
-    "Start here.";
+
+  document
+    .getElementById(
+      "message"
+    )
+    .textContent=
+      "Start here.";
 }
 
 
@@ -1607,22 +2657,31 @@ function clueHint(){
 function renderBank(){
 
   const bank=
-    document.getElementById("bank");
+    document.getElementById(
+      "bank"
+    );
 
   bank.innerHTML="";
+
 
   solvedWords.forEach(
     (word,i)=>{
 
       const p=
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       p.className=
-        "pill c"+(i+1);
+        "pill c"+
+        (i+1);
 
-      p.textContent=word;
+      p.textContent=
+        word;
 
-      bank.appendChild(p);
+      bank.appendChild(
+        p
+      );
     }
   );
 }
@@ -1636,55 +2695,83 @@ function showConnection(){
 
   busy=false;
 
-  document.getElementById(
-    "controls"
-  ).style.display="none";
 
-  document.getElementById(
-    "message"
-  ).textContent="";
+  document
+    .getElementById(
+      "controls"
+    )
+    .style.display=
+      "none";
 
-  document.getElementById(
-    "clueArea"
-  ).style.display="none";
 
-  const connection=
+  document
+    .getElementById(
+      "message"
+    )
+    .textContent="";
+
+
+  document
+    .getElementById(
+      "clueArea"
+    )
+    .style.display=
+      "none";
+
+
+  const section=
     document.getElementById(
       "connection"
     );
 
-  connection.classList.add(
+
+  section.classList.add(
     "show"
   );
+
 
   const words=
     document.getElementById(
       "connectionWords"
     );
 
+
   words.innerHTML="";
+
 
   solvedWords.forEach(
     (word,i)=>{
 
       const p=
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       p.className=
-        "pill c"+(i+1);
+        "pill c"+
+        (i+1);
 
-      p.textContent=word;
+      p.textContent=
+        word;
 
-      words.appendChild(p);
+      words.appendChild(
+        p
+      );
     }
   );
 
-  document.getElementById(
-    "connectionLength"
-  ).textContent=
-    "•".repeat(
-      PUZZLE.connection.answer.length
-    );
+
+  document
+    .getElementById(
+      "connectionLength"
+    )
+    .textContent=
+      "•".repeat(
+        PUZZLE
+          .connection
+          .answer
+          .length
+      );
 }
 
 
@@ -1692,9 +2779,11 @@ function connectionHint(){
 
   ensureAudio();
 
+
   if(
     connectionHintLevel>=3
   )return;
+
 
   connectionHintLevel++;
 
@@ -1702,21 +2791,29 @@ function connectionHint(){
 
   updateStats();
 
-  document.getElementById(
-    "connectionHint"
-  ).textContent=
-    PUZZLE.connection[
-      "hint"+
-      connectionHintLevel
-    ];
+
+  document
+    .getElementById(
+      "connectionHint"
+    )
+    .textContent=
+      PUZZLE
+        .connection[
+          "hint"+
+          connectionHintLevel
+        ];
+
 
   if(
     connectionHintLevel===3
   ){
-    document.getElementById(
-      "connectionHintBtn"
-    ).textContent=
-      "NO MORE HINTS";
+
+    document
+      .getElementById(
+        "connectionHintBtn"
+      )
+      .textContent=
+        "NO MORE HINTS";
   }
 }
 
@@ -1725,25 +2822,33 @@ function tryConnection(){
 
   ensureAudio();
 
+
   const input=
     document.getElementById(
       "connectionInput"
     );
 
+
   const guess=
-    input.value
+    input
+      .value
       .trim()
       .toUpperCase();
 
+
   if(!guess)return;
+
 
   attempts++;
 
   updateStats();
 
+
   if(
     guess===
-    PUZZLE.connection.answer
+    PUZZLE
+      .connection
+      .answer
   ){
 
     completeConnection();
@@ -1752,19 +2857,28 @@ function tryConnection(){
 
     wrongSound();
 
+
     input.classList.add(
       "shake"
     );
 
-    document.getElementById(
-      "connectionHint"
-    ).textContent=
-      "That doesn't connect all four.";
+
+    document
+      .getElementById(
+        "connectionHint"
+      )
+      .textContent=
+        "That doesn't connect all four.";
+
 
     setTimeout(
-      ()=>input.classList.remove(
-        "shake"
-      ),
+      ()=>{
+
+        input.classList.remove(
+          "shake"
+        );
+
+      },
       350
     );
   }
@@ -1775,116 +2889,147 @@ function revealConnection(){
 
   ensureAudio();
 
+
   const answer=
-    PUZZLE.connection.answer;
+    PUZZLE
+      .connection
+      .answer;
 
-  document.getElementById(
-    "connectionInput"
-  ).value=
-    answer;
 
-  document.getElementById(
-    "connectionHint"
-  ).textContent=
-    "There it is.";
+  document
+    .getElementById(
+      "connectionInput"
+    )
+    .value=
+      answer;
+
+
+  document
+    .getElementById(
+      "connectionHint"
+    )
+    .textContent=
+      "There it is.";
+
 
   setTimeout(
     completeConnection,
-    550
+    600
   );
 }
 
 
 function completeConnection(){
 
-  finishSound();
+  connectionSound();
+
 
   const answer=
-    PUZZLE.connection.answer;
+    PUZZLE
+      .connection
+      .answer;
+
 
   const input=
     document.getElementById(
       "connectionInput"
     );
 
-  input.value=answer;
-  input.disabled=true;
 
-  document.getElementById(
-    "connectBtn"
-  ).disabled=true;
-
-  document.getElementById(
-    "connectionHintBtn"
-  ).disabled=true;
-
-  document.getElementById(
-    "revealBtn"
-  ).disabled=true;
-
-  document.getElementById(
-    "connectionLength"
-  ).textContent=
+  input.value=
     answer;
 
-  /*
-    Reveal the four relationships
-    gently rather than replacing
-    the whole screen at once.
-  */
+  input.disabled=
+    true;
+
+
+  [
+    "connectBtn",
+    "connectionHintBtn",
+    "revealBtn"
+  ].forEach(
+    id=>{
+
+      document
+        .getElementById(id)
+        .disabled=true;
+    }
+  );
+
+
+  document
+    .getElementById(
+      "connectionLength"
+    )
+    .textContent=
+      answer;
+
 
   const forms=
     solvedWords.map(
-      word=>word+answer
+      word=>
+        word+
+        answer
     );
+
+
+  const out=
+    document.getElementById(
+      "connectionHint"
+    );
+
+
+  out.textContent="";
+
 
   let i=0;
 
-  document.getElementById(
-    "connectionHint"
-  ).textContent="";
 
   function revealNext(){
 
-    if(i>=forms.length){
+    if(
+      i>=
+      forms.length
+    ){
 
       setTimeout(
         finish,
-        700
+        850
       );
 
       return;
     }
 
-    const existing=
-      document.getElementById(
-        "connectionHint"
-      ).textContent;
 
-    document.getElementById(
-      "connectionHint"
-    ).textContent=
-      existing
-        ? existing+"  ·  "+forms[i]
+    out.textContent=
+      out.textContent
+        ? out.textContent+
+          "  ·  "+
+          forms[i]
         : forms[i];
 
-    tone(
-      190+(i*28),
-      .10,
-      .016
+
+    oscillatorTone(
+      190+(i*30),
+      .25,
+      .007,
+      "sine"
     );
+
 
     i++;
 
+
     setTimeout(
       revealNext,
-      360
+      410
     );
   }
 
+
   setTimeout(
     revealNext,
-    350
+    450
   );
 }
 
@@ -1897,36 +3042,54 @@ function finish(){
 
   const visited=
     histories.filter(
-      h=>h.size>0
+      set=>
+        set.size>0
     ).length;
+
 
   const connection=
     document.getElementById(
       "connection"
     );
 
-  connection.style.opacity="0";
 
   connection.style.transition=
-    "opacity .65s ease";
+    "opacity .8s ease";
+
+  connection.style.opacity=
+    "0";
+
 
   setTimeout(()=>{
 
     connection.style.display=
       "none";
 
-    document.getElementById(
-      "finalPath"
-    ).textContent=
-      "YOUR PATH · "+
-      visited+
-      " OF 16 PLACES VISITED";
 
-    document.getElementById(
-      "final"
-    ).classList.add("show");
+    /*
+      Wording deliberately avoids claiming
+      that higher coverage = better.
+    */
 
-  },650);
+    document
+      .getElementById(
+        "finalPath"
+      )
+      .textContent=
+        "TODAY'S TRACE · "+
+        visited+
+        " OF 16 PLACES";
+
+
+    document
+      .getElementById(
+        "final"
+      )
+      .classList.add(
+        "show"
+      );
+
+  },800);
 }
 
 
@@ -1936,26 +3099,46 @@ function finish(){
 
 function updateStats(){
 
-  document.getElementById(
-    "turnStat"
-  ).textContent=
-    turns+
-    " TURN"+
-    (turns===1?"":"S");
+  document
+    .getElementById(
+      "turnStat"
+    )
+    .textContent=
+      turns+
+      " TURN"+
+      (
+        turns===1
+          ? ""
+          : "S"
+      );
 
-  document.getElementById(
-    "attemptStat"
-  ).textContent=
-    attempts+
-    " ATTEMPT"+
-    (attempts===1?"":"S");
 
-  document.getElementById(
-    "hintStat"
-  ).textContent=
-    hints+
-    " HINT"+
-    (hints===1?"":"S");
+  document
+    .getElementById(
+      "attemptStat"
+    )
+    .textContent=
+      attempts+
+      " ATTEMPT"+
+      (
+        attempts===1
+          ? ""
+          : "S"
+      );
+
+
+  document
+    .getElementById(
+      "hintStat"
+    )
+    .textContent=
+      hints+
+      " HINT"+
+      (
+        hints===1
+          ? ""
+          : "S"
+      );
 }
 
 
@@ -1963,58 +3146,81 @@ function updateStats(){
    BUTTONS
 ========================================================= */
 
-document.getElementById(
-  "unlockBtn"
-).addEventListener(
-  "click",
-  unlock
-);
+document
+  .getElementById(
+    "unlockBtn"
+  )
+  .addEventListener(
+    "click",
+    unlock
+  );
 
-document.getElementById(
-  "resetBtn"
-).addEventListener(
-  "click",
-  reset
-);
 
-document.getElementById(
-  "hintBtn"
-).addEventListener(
-  "click",
-  clueHint
-);
+document
+  .getElementById(
+    "resetBtn"
+  )
+  .addEventListener(
+    "click",
+    reset
+  );
 
-document.getElementById(
-  "connectBtn"
-).addEventListener(
-  "click",
-  tryConnection
-);
 
-document.getElementById(
-  "connectionHintBtn"
-).addEventListener(
-  "click",
-  connectionHint
-);
+document
+  .getElementById(
+    "hintBtn"
+  )
+  .addEventListener(
+    "click",
+    clueHint
+  );
 
-document.getElementById(
-  "revealBtn"
-).addEventListener(
-  "click",
-  revealConnection
-);
 
-document.getElementById(
-  "connectionInput"
-).addEventListener(
-  "keydown",
-  e=>{
-    if(e.key==="Enter"){
-      tryConnection();
+document
+  .getElementById(
+    "connectBtn"
+  )
+  .addEventListener(
+    "click",
+    tryConnection
+  );
+
+
+document
+  .getElementById(
+    "connectionHintBtn"
+  )
+  .addEventListener(
+    "click",
+    connectionHint
+  );
+
+
+document
+  .getElementById(
+    "revealBtn"
+  )
+  .addEventListener(
+    "click",
+    revealConnection
+  );
+
+
+document
+  .getElementById(
+    "connectionInput"
+  )
+  .addEventListener(
+    "keydown",
+    e=>{
+
+      if(
+        e.key==="Enter"
+      ){
+        tryConnection();
+      }
     }
-  }
-);
+  );
 
 
 /* =========================================================
@@ -2024,5 +3230,6 @@ document.getElementById(
 renderClue();
 
 </script>
+
 </body>
 </html>
