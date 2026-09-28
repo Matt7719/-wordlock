@@ -4,17 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>WORDLOCK #011</title>
+<title>WORDLOCK #012</title>
 
 <style>
+
 :root{
   --cream:#f3eee4;
   --ink:#181818;
   --paper:#fffdf8;
   --steel:#303234;
-  --solved:#b8c9c0;
-  --solved-dark:#31594d;
+
+  --sage:#b8c9c0;
+  --sage-dark:#31594d;
+  --sage-line:#78998e;
+
   --gold:#d4a640;
+  --wrong:#8d5149;
 }
 
 *{
@@ -108,8 +113,8 @@ h1{
 
 .banked-word{
   border:1px solid rgba(49,89,77,.25);
-  background:rgba(184,201,192,.35);
-  color:var(--solved-dark);
+  background:rgba(184,201,192,.25);
+  color:var(--sage-dark);
   border-radius:999px;
   padding:5px 9px;
   font-size:10px;
@@ -166,7 +171,9 @@ h1{
 .vault-content{
   opacity:0;
   transform:scale(.96);
-  transition:opacity .7s .7s,transform .7s .7s;
+  transition:
+    opacity .7s .7s,
+    transform .7s .7s;
   position:relative;
   z-index:2;
 }
@@ -195,6 +202,7 @@ h1{
   color:#d0d0d0;
   font-size:11px;
   font-weight:800;
+  line-height:1.7;
 }
 
 /* DOOR */
@@ -204,13 +212,15 @@ h1{
   z-index:5;
   transform-style:preserve-3d;
   transform-origin:left center;
-  transition:transform 1.4s cubic-bezier(.18,.72,.16,1);
+  transition:
+    transform 1.4s cubic-bezier(.18,.72,.16,1);
 }
 
 .safe-door{
   position:relative;
   min-height:414px;
-  background:linear-gradient(145deg,#3c3f41,#2e3032);
+  background:
+    linear-gradient(145deg,#3c3f41,#2e3032);
   border-radius:14px;
   border:2px solid #4c4f51;
   padding:18px 15px 16px;
@@ -227,14 +237,24 @@ h1{
   bottom:7px;
   right:-19px;
   width:28px;
-  background:linear-gradient(90deg,#141516,#55585a,#252729);
+  background:
+    linear-gradient(
+      90deg,
+      #141516,
+      #55585a,
+      #252729
+    );
   border-radius:0 8px 8px 0;
-  transform:rotateY(90deg) translateZ(14px);
+  transform:
+    rotateY(90deg)
+    translateZ(14px);
   transform-origin:left center;
 }
 
 .safe-frame.opened .door-wrap{
-  transform:translateX(-3px) rotateY(-112deg);
+  transform:
+    translateX(-3px)
+    rotateY(-112deg);
 }
 
 .safe-label{
@@ -251,7 +271,13 @@ h1{
   width:16px;
   height:48px;
   border-radius:5px;
-  background:linear-gradient(90deg,#777,#b6b6b3,#656565);
+  background:
+    linear-gradient(
+      90deg,
+      #777,
+      #b6b6b3,
+      #656565
+    );
   z-index:7;
 }
 
@@ -306,7 +332,9 @@ h1{
   height:24px;
   background:#b9b8b3;
   border-radius:4px 12px 12px 4px;
-  transition:transform .6s cubic-bezier(.2,.8,.25,1.2),background .35s;
+  transition:
+    transform .6s cubic-bezier(.2,.8,.25,1.2),
+    background .35s;
   z-index:2;
 }
 
@@ -323,7 +351,7 @@ h1{
 
 .lock-row.released .safe-bolt{
   transform:translateX(-29px);
-  background:var(--solved);
+  background:var(--sage);
 }
 
 /* REELS */
@@ -338,14 +366,19 @@ h1{
   touch-action:none;
   user-select:none;
   transition:
-    background .35s,
-    color .35s,
+    background .45s,
+    color .45s,
     transform .14s,
     box-shadow .25s;
 }
 
-.reel:first-child{border-radius:5px 1px 1px 5px;}
-.reel:last-child{border-radius:1px 5px 5px 1px;}
+.reel:first-child{
+  border-radius:5px 1px 1px 5px;
+}
+
+.reel:last-child{
+  border-radius:1px 5px 5px 1px;
+}
 
 .choice-strip{
   position:absolute;
@@ -374,20 +407,49 @@ h1{
   font-size:27px;
 }
 
-/* ENTIRE SOLVED POSITION */
+/*
+USED PATH
 
-.reel.solved{
-  background:var(--solved);
-  color:var(--solved-dark);
+Important:
+the reel remains mechanically alive.
+
+The inset border means:
+"A successful answer has passed through here."
+*/
+
+.reel.used{
+  box-shadow:
+    inset 0 0 0 4px var(--sage-line);
 }
 
-.reel.solved .left,
-.reel.solved .right{
-  opacity:0;
+.reel.used:after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border-radius:2px;
+  pointer-events:none;
+  border:1px solid rgba(49,89,77,.18);
 }
 
-.reel.solved .current{
-  font-size:28px;
+/*
+FINAL COVERAGE
+
+After clue 4, every historically used
+position fills sage.
+
+Alternatives REMAIN visible.
+*/
+
+.reel.covered{
+  background:var(--sage);
+  color:var(--sage-dark);
+  box-shadow:
+    inset 0 0 0 2px var(--sage-line);
+}
+
+.reel.covered .left,
+.reel.covered .right{
+  opacity:.42;
 }
 
 /* TRACE */
@@ -397,6 +459,7 @@ h1{
   color:white !important;
   transform:scale(1.055);
   z-index:10;
+  box-shadow:none !important;
 }
 
 /* START LETTER */
@@ -410,9 +473,30 @@ h1{
     transform:scale(1);
     color:#181818;
   }
+
   50%{
     transform:scale(1.55);
     color:#a26d00;
+  }
+}
+
+/* COVERAGE REVEAL */
+
+.reel.coverage-pop{
+  animation:coveragePop .42s ease-out;
+}
+
+@keyframes coveragePop{
+  0%{
+    transform:scale(1);
+  }
+
+  45%{
+    transform:scale(1.075);
+  }
+
+  100%{
+    transform:scale(1);
   }
 }
 
@@ -457,11 +541,47 @@ button:disabled{
   font-weight:750;
 }
 
+/* COVERAGE CARD */
+
+.coverage-stage{
+  display:none;
+  margin-top:16px;
+  padding:16px 14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.62);
+}
+
+.coverage-stage.show{
+  display:block;
+  animation:stageIn .55s ease-out;
+}
+
+.coverage-label{
+  color:#77736b;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:2px;
+}
+
+.coverage-number{
+  margin-top:2px;
+  color:var(--sage-dark);
+  font-size:35px;
+  font-weight:950;
+}
+
+.coverage-note{
+  margin-top:3px;
+  color:#77736b;
+  font-size:11px;
+  font-weight:750;
+}
+
 /* KEY STAGE */
 
 .key-stage{
   display:none;
-  margin-top:17px;
+  margin-top:12px;
   padding:18px 14px;
   border-radius:16px;
   background:rgba(255,255,255,.6);
@@ -469,14 +589,15 @@ button:disabled{
 
 .key-stage.show{
   display:block;
-  animation:keyReveal .7s ease-out;
+  animation:stageIn .6s ease-out;
 }
 
-@keyframes keyReveal{
+@keyframes stageIn{
   from{
     transform:translateY(8px);
     opacity:0;
   }
+
   to{
     transform:none;
     opacity:1;
@@ -512,8 +633,8 @@ button:disabled{
 }
 
 .final-word{
-  background:var(--solved);
-  color:var(--solved-dark);
+  background:var(--sage);
+  color:var(--sage-dark);
   border-radius:7px;
   padding:8px 5px;
   font-size:13px;
@@ -531,6 +652,38 @@ button:disabled{
   font-size:20px;
   font-weight:950;
   letter-spacing:5px;
+  background:white;
+  transition:
+    border-color .2s,
+    background .2s;
+}
+
+.key-input.wrong{
+  border-color:var(--wrong);
+  background:#fff8f7;
+  animation:keyShake .34s ease-in-out;
+}
+
+@keyframes keyShake{
+  0%,100%{
+    transform:translateX(0);
+  }
+
+  20%{
+    transform:translateX(-7px);
+  }
+
+  40%{
+    transform:translateX(7px);
+  }
+
+  60%{
+    transform:translateX(-5px);
+  }
+
+  80%{
+    transform:translateX(5px);
+  }
 }
 
 .key-button{
@@ -544,7 +697,15 @@ button:disabled{
   font-weight:950;
 }
 
-/* KEY RESOLUTION */
+.key-feedback{
+  min-height:24px;
+  margin-top:8px;
+  color:var(--wrong);
+  font-size:12px;
+  font-weight:850;
+}
+
+/* CONNECTION REVEAL */
 
 .connection-stage{
   display:none;
@@ -564,7 +725,8 @@ button:disabled{
 }
 
 .connection.reveal{
-  animation:connectionIn .4s forwards;
+  animation:
+    connectionIn .4s forwards;
 }
 
 .connection .key{
@@ -577,6 +739,8 @@ button:disabled{
     transform:none;
   }
 }
+
+/* MASTER WHEEL */
 
 .master-area{
   margin:12px auto 1px;
@@ -592,7 +756,9 @@ button:disabled{
   border:7px solid #999b9c;
   background:#252729;
   position:relative;
-  transition:transform 1.05s,border-color .5s;
+  transition:
+    transform 1.05s,
+    border-color .5s;
 }
 
 .master-wheel:before,
@@ -636,7 +802,10 @@ button:disabled{
 <main class="game">
 
 <h1>WORDLOCK</h1>
-<div class="subhead">PROTOTYPE #011 · EASY</div>
+
+<div class="subhead">
+  PROTOTYPE #012 · EASY
+</div>
 
 <div class="stats">
 
@@ -658,15 +827,29 @@ button:disabled{
 </div>
 
 <div class="clue-card">
-  <div id="clueCount" class="clue-count"></div>
-  <div id="clue" class="clue"></div>
+
+  <div
+    id="clueCount"
+    class="clue-count">
+  </div>
+
+  <div
+    id="clue"
+    class="clue">
+  </div>
+
 </div>
 
-<div id="answerBank" class="answer-bank"></div>
+<div
+  id="answerBank"
+  class="answer-bank">
+</div>
 
 <div class="safe-shell">
 
-<div class="safe-frame" id="safeFrame">
+<div
+  class="safe-frame"
+  id="safeFrame">
 
 <div class="vault-interior">
 
@@ -680,7 +863,10 @@ button:disabled{
     Four locks. One connection.
   </div>
 
-  <div id="finalResult" class="final-result"></div>
+  <div
+    id="finalResult"
+    class="final-result">
+  </div>
 
 </div>
 
@@ -689,6 +875,7 @@ button:disabled{
 <div class="door-wrap">
 
 <div class="door-edge"></div>
+
 <div class="hinge one"></div>
 <div class="hinge two"></div>
 
@@ -701,7 +888,12 @@ button:disabled{
 <div id="lockStack"></div>
 
 <div class="master-area">
-  <div id="masterWheel" class="master-wheel"></div>
+
+  <div
+    id="masterWheel"
+    class="master-wheel">
+  </div>
+
 </div>
 
 </div>
@@ -710,41 +902,76 @@ button:disabled{
 </div>
 </div>
 
-<div id="controls" class="controls">
+<div
+  id="controls"
+  class="controls">
 
-<button id="resetBtn" class="reset">
-RESET
+<button
+  id="resetBtn"
+  class="reset">
+  RESET
 </button>
 
-<button id="hintBtn" class="hint">
-HINT
+<button
+  id="hintBtn"
+  class="hint">
+  HINT
 </button>
 
-<button id="unlockBtn" class="unlock">
-UNLOCK
+<button
+  id="unlockBtn"
+  class="unlock">
+  UNLOCK
 </button>
 
 </div>
 
-<div id="message" class="message">
-Find the first word.
+<div
+  id="message"
+  class="message">
+  Find the first word.
 </div>
 
-<section id="keyStage" class="key-stage">
+<section
+  id="coverageStage"
+  class="coverage-stage">
+
+  <div class="coverage-label">
+    PATH COVERAGE
+  </div>
+
+  <div
+    id="coverageNumber"
+    class="coverage-number">
+    0%
+  </div>
+
+  <div class="coverage-note">
+    How much of the board your four answers used.
+  </div>
+
+</section>
+
+<section
+  id="keyStage"
+  class="key-stage">
 
 <div class="key-heading">
-THE KEY
+  THE KEY
 </div>
 
 <div class="key-question">
-What connects all four?
+  What connects all four?
 </div>
 
 <div class="key-copy">
-One word works with every answer.
+  One word works with every answer.
 </div>
 
-<div id="finalWords" class="final-words"></div>
+<div
+  id="finalWords"
+  class="final-words">
+</div>
 
 <input
   id="keyInput"
@@ -755,11 +982,20 @@ One word works with every answer.
   spellcheck="false"
   placeholder="•••••">
 
-<button id="keyButton" class="key-button">
-TURN KEY
+<button
+  id="keyButton"
+  class="key-button">
+  TURN KEY
 </button>
 
-<div id="connectionStage" class="connection-stage">
+<div
+  id="keyFeedback"
+  class="key-feedback">
+</div>
+
+<div
+  id="connectionStage"
+  class="connection-stage">
 
   <div class="connection">
     <span class="key">LIGHT</span>SABER
@@ -786,29 +1022,39 @@ TURN KEY
 <script>
 
 /*
-======================================================
-WORDLOCK #011
-======================================================
+========================================================
+WORDLOCK #012
+========================================================
 
-QUESTION BEING TESTED:
+PRIMARY TEST:
 
-Does the game become more coherent if:
+Correct answers no longer freeze reels.
 
-1. whole solved words remain on the board;
-2. solved positions become physically locked;
-3. later answers may cross those positions;
-4. the four answers themselves matter;
-5. one semantic KEY connects all four?
+Instead:
 
-No arbitrary gold-letter extraction.
-======================================================
+- the actual successful path receives a sage OUTLINE;
+- outlined reels remain fully movable;
+- all three letters remain visible;
+- later answers may reuse/reconfigure those positions;
+- the historical UNION of successful paths is remembered;
+- after clue 4, that union fills solid sage;
+- PATH COVERAGE is calculated;
+- coverage is an achievement/statistic, NOT a gate;
+- Connection then proceeds normally.
+
+This means an alternative valid route cannot make a later
+clue impossible merely because it permanently froze reels.
+
+========================================================
 */
 
 
 /*
-======================================================
-PUZZLE CONSTRUCTION
-======================================================
+========================================================
+PUZZLE DATA
+========================================================
+
+Reference construction:
 
 SABER
 0 → 1 → 2 → 3 → 6
@@ -822,17 +1068,23 @@ FLASH
 SPOT
 7 → 11 → 14 → 15
 
+Reference cumulative unique coverage:
 
-OVERLAPS:
+after SABER = 5 / 16
+after HOUSE = 9 / 16
+after FLASH = 13 / 16
+after SPOT  = 16 / 16
 
-HOUSE / SABER share E at 3.
-FLASH / HOUSE share H at 4.
-SPOT / HOUSE share S at 7.
+= 100%
 
-Union = all 16 positions.
+IMPORTANT:
 
-Final semantic KEY = LIGHT.
-======================================================
+Those are NOT mandatory player routes.
+
+The engine accepts any valid adjacent path currently
+spelling the answer and records THAT path.
+
+========================================================
 */
 
 
@@ -862,10 +1114,15 @@ const wheels=[
 
 
 const initialBoard=[
+
 "M","N","D","R",
+
 "M","I","L","N",
+
 "C","E","A","D",
+
 "R","O","I","E"
+
 ];
 
 
@@ -874,28 +1131,28 @@ const puzzles=[
 {
   clue:"A curved sword",
   answer:"SABER",
-  path:[0,1,2,3,6],
+  intendedPath:[0,1,2,3,6],
   start:0
 },
 
 {
   clue:"A place to live",
   answer:"HOUSE",
-  path:[4,5,10,7,3],
+  intendedPath:[4,5,10,7,3],
   start:4
 },
 
 {
   clue:"A sudden burst of light",
   answer:"FLASH",
-  path:[8,12,13,9,4],
+  intendedPath:[8,12,13,9,4],
   start:8
 },
 
 {
   clue:"A small round mark",
   answer:"SPOT",
-  path:[7,11,14,15],
+  intendedPath:[7,11,14,15],
   start:7
 }
 
@@ -906,14 +1163,28 @@ const KEY="LIGHT";
 
 
 /*
-======================================================
+========================================================
 STATE
-======================================================
+========================================================
 */
 
 let letters=[...initialBoard];
 
-let solved=Array(16).fill(false);
+/*
+usedPositions = historical union.
+
+Once a successful answer has passed through a position,
+it stays marked as "used" even if the reel later changes.
+*/
+
+let usedPositions=new Set();
+
+/*
+successfulPaths preserves each player's actual route.
+Useful later for stats / sharing / analysis.
+*/
+
+let successfulPaths=[];
 
 let clueSnapshot=[...letters];
 
@@ -930,14 +1201,17 @@ let pulseTimer=null;
 
 let banked=[];
 
+let coveragePercent=0;
+
 
 /*
-======================================================
+========================================================
 DOM
-======================================================
+========================================================
 */
 
-const $=id=>document.getElementById(id);
+const $=id=>
+  document.getElementById(id);
 
 const lockStack=$("lockStack");
 
@@ -958,13 +1232,18 @@ const unlockBtn=$("unlockBtn");
 
 const controls=$("controls");
 
+const coverageStage=$("coverageStage");
+const coverageNumber=$("coverageNumber");
+
 const keyStage=$("keyStage");
 const finalWords=$("finalWords");
 
 const keyInput=$("keyInput");
 const keyButton=$("keyButton");
+const keyFeedback=$("keyFeedback");
 
-const connectionStage=$("connectionStage");
+const connectionStage=
+  $("connectionStage");
 
 const masterWheel=$("masterWheel");
 const safeFrame=$("safeFrame");
@@ -972,7 +1251,9 @@ const safeFrame=$("safeFrame");
 const finalResult=$("finalResult");
 
 const wait=ms=>
-  new Promise(resolve=>setTimeout(resolve,ms));
+  new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
 
 
 function updateStats(){
@@ -985,16 +1266,16 @@ function updateStats(){
 
 
 /*
-======================================================
+========================================================
 AUDIO
-======================================================
+========================================================
 
-Same technically successful Web Audio route as #010.
+Playback reliability is retained from #010/#011.
 
-Still intentionally prototype-ish.
-We're testing GAME STRUCTURE in #011,
-not final sound design.
-======================================================
+These are STILL placeholder synthesized sounds.
+
+The next audio job is sound DESIGN, not Safari repair.
+========================================================
 */
 
 let audio=null;
@@ -1029,8 +1310,8 @@ async function getAudio(){
 
 
 async function clickSound(
-  volume=.11,
-  pitch=520
+  volume=.09,
+  pitch=500
 ){
 
   const ctx=await getAudio();
@@ -1039,8 +1320,11 @@ async function clickSound(
 
   const now=ctx.currentTime;
 
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
+  const osc=
+    ctx.createOscillator();
+
+  const gain=
+    ctx.createGain();
 
   osc.type="triangle";
 
@@ -1050,7 +1334,7 @@ async function clickSound(
   );
 
   osc.frequency.exponentialRampToValueAtTime(
-    pitch*.58,
+    pitch*.56,
     now+.025
   );
 
@@ -1081,8 +1365,11 @@ async function clunk(big=false){
 
   const now=ctx.currentTime;
 
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
+  const osc=
+    ctx.createOscillator();
+
+  const gain=
+    ctx.createGain();
 
   osc.type="sine";
 
@@ -1093,7 +1380,7 @@ async function clunk(big=false){
 
   osc.frequency.exponentialRampToValueAtTime(
     big ? 34 : 50,
-    now+(big?.25:.16)
+    now+(big ? .25 : .16)
   );
 
   gain.gain.setValueAtTime(
@@ -1103,19 +1390,23 @@ async function clunk(big=false){
 
   gain.gain.exponentialRampToValueAtTime(
     .001,
-    now+(big?.3:.2)
+    now+(big ? .3 : .2)
   );
 
   osc.connect(gain);
   gain.connect(ctx.destination);
 
   osc.start(now);
-  osc.stop(now+(big?.31:.21));
+  osc.stop(
+    now+(big ? .31 : .21)
+  );
 
 }
 
 
-async function wrongSound(){
+async function wrongSound(
+  heavy=false
+){
 
   const ctx=await getAudio();
 
@@ -1123,32 +1414,47 @@ async function wrongSound(){
 
   const now=ctx.currentTime;
 
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
+  const osc=
+    ctx.createOscillator();
+
+  const gain=
+    ctx.createGain();
 
   osc.type="sine";
-  osc.frequency.value=82;
 
-  gain.gain.setValueAtTime(.08,now);
+  osc.frequency.setValueAtTime(
+    heavy ? 67 : 82,
+    now
+  );
+
+  osc.frequency.exponentialRampToValueAtTime(
+    heavy ? 42 : 60,
+    now+.12
+  );
+
+  gain.gain.setValueAtTime(
+    heavy ? .16 : .08,
+    now
+  );
 
   gain.gain.exponentialRampToValueAtTime(
     .001,
-    now+.12
+    now+.15
   );
 
   osc.connect(gain);
   gain.connect(ctx.destination);
 
   osc.start(now);
-  osc.stop(now+.13);
+  osc.stop(now+.16);
 
 }
 
 
 /*
-======================================================
+========================================================
 BUILD LOCKS
-======================================================
+========================================================
 */
 
 function buildLocks(){
@@ -1161,7 +1467,9 @@ function buildLocks(){
       document.createElement("div");
 
     lock.className="lock-row";
-    lock.id=`lockRow${row}`;
+
+    lock.id=
+      `lockRow${row}`;
 
     lock.innerHTML=`
 
@@ -1191,6 +1499,7 @@ function buildLocks(){
       document.createElement("div");
 
     reel.className="reel";
+
     reel.dataset.position=p;
 
     document
@@ -1203,16 +1512,15 @@ function buildLocks(){
 
   }
 
-
   renderAll();
 
 }
 
 
 /*
-======================================================
+========================================================
 RENDER
-======================================================
+========================================================
 */
 
 function wheelIndex(p){
@@ -1224,7 +1532,10 @@ function wheelIndex(p){
 }
 
 
-function optionAt(p,offset){
+function optionAt(
+  p,
+  offset
+){
 
   const wheel=wheels[p];
 
@@ -1255,14 +1566,47 @@ function render(p){
 
   if(!reel) return;
 
-  const left=optionAt(p,-1);
-  const current=letters[p];
-  const right=optionAt(p,1);
+  const left=
+    optionAt(p,-1);
+
+  const current=
+    letters[p];
+
+  const right=
+    optionAt(p,1);
+
+  /*
+  Preserve transient classes where necessary.
+  */
+
+  const hadTrace=
+    reel.classList.contains("trace");
+
+  const hadPulse=
+    reel.classList.contains("start-pulse");
+
+  const hadCovered=
+    reel.classList.contains("covered");
 
   reel.className="reel";
 
-  if(solved[p]){
-    reel.classList.add("solved");
+  if(
+    usedPositions.has(p) &&
+    !hadCovered
+  ){
+    reel.classList.add("used");
+  }
+
+  if(hadCovered){
+    reel.classList.add("covered");
+  }
+
+  if(hadTrace){
+    reel.classList.add("trace");
+  }
+
+  if(hadPulse){
+    reel.classList.add("start-pulse");
   }
 
   reel.innerHTML=`
@@ -1298,9 +1642,9 @@ function renderAll(){
 
 
 /*
-======================================================
+========================================================
 MOVEMENT
-======================================================
+========================================================
 */
 
 async function moveOne(
@@ -1310,13 +1654,12 @@ async function moveOne(
 ){
 
   /*
-  SOLVED = PHYSICALLY LOCKED.
+  #012 KEY CHANGE:
+
+  USED POSITIONS ARE STILL MOVABLE.
   */
 
-  if(
-    busy ||
-    solved[p]
-  ){
+  if(busy){
     return;
   }
 
@@ -1324,7 +1667,8 @@ async function moveOne(
 
   const wheel=wheels[p];
 
-  let index=wheelIndex(p);
+  let index=
+    wheelIndex(p);
 
   index=
     (
@@ -1338,19 +1682,24 @@ async function moveOne(
   if(countTurn){
 
     turns++;
+
     interacted=true;
 
     updateStats();
+
     stopEasyPulse();
 
   }
 
   clickSound();
 
-  const reel=getReel(p);
+  const reel=
+    getReel(p);
 
   reel.style.transform=
-    `translateX(${direction>0?-7:7}px)`;
+    `translateX(${
+      direction>0 ? -7 : 7
+    }px)`;
 
   await wait(75);
 
@@ -1362,12 +1711,15 @@ async function moveOne(
 
 
 /*
-======================================================
+========================================================
 SWIPE
-======================================================
+========================================================
 */
 
-function addSwipe(reel,p){
+function addSwipe(
+  reel,
+  p
+){
 
   let startX=null;
 
@@ -1377,10 +1729,7 @@ function addSwipe(reel,p){
 
       await getAudio();
 
-      if(
-        busy ||
-        solved[p]
-      ){
+      if(busy){
         return;
       }
 
@@ -1396,7 +1745,8 @@ function addSwipe(reel,p){
     "touchmove",
     event=>{
 
-      if(startX===null) return;
+      if(startX===null)
+        return;
 
       const dx=
         event.touches[0].clientX-
@@ -1406,7 +1756,10 @@ function addSwipe(reel,p){
         `translateX(${
           Math.max(
             -8,
-            Math.min(8,dx*.13)
+            Math.min(
+              8,
+              dx*.13
+            )
           )
         }px)`;
 
@@ -1419,7 +1772,8 @@ function addSwipe(reel,p){
     "touchend",
     event=>{
 
-      if(startX===null) return;
+      if(startX===null)
+        return;
 
       const dx=
         event.changedTouches[0].clientX-
@@ -1447,21 +1801,32 @@ function addSwipe(reel,p){
 
 
 /*
-======================================================
+========================================================
 SPATIAL SEARCH
-======================================================
+========================================================
 */
 
 function neighbours(p){
 
-  const row=Math.floor(p/4);
-  const col=p%4;
+  const row=
+    Math.floor(p/4);
+
+  const col=
+    p%4;
 
   const result=[];
 
-  for(let dr=-1;dr<=1;dr++){
+  for(
+    let dr=-1;
+    dr<=1;
+    dr++
+  ){
 
-    for(let dc=-1;dc<=1;dc++){
+    for(
+      let dc=-1;
+      dc<=1;
+      dc++
+    ){
 
       if(
         dr===0 &&
@@ -1470,8 +1835,11 @@ function neighbours(p){
         continue;
       }
 
-      const nr=row+dr;
-      const nc=col+dc;
+      const nr=
+        row+dr;
+
+      const nc=
+        col+dc;
 
       if(
         nr>=0 &&
@@ -1495,9 +1863,20 @@ function neighbours(p){
 }
 
 
-function findPath(word){
+/*
+Return ALL valid paths for a displayed word.
 
-  word=word.toUpperCase();
+That lets us choose intelligently if the current board
+contains the answer more than once.
+*/
+
+function findAllPaths(word){
+
+  word=
+    word.toUpperCase();
+
+  const results=[];
+
 
   function search(
     p,
@@ -1507,9 +1886,10 @@ function findPath(word){
   ){
 
     if(
-      letters[p]!==word[index]
+      letters[p] !==
+      word[index]
     ){
-      return null;
+      return;
     }
 
     const nextPath=[
@@ -1518,9 +1898,15 @@ function findPath(word){
     ];
 
     if(
-      index===word.length-1
+      index ===
+      word.length-1
     ){
-      return nextPath;
+
+      results.push(
+        nextPath
+      );
+
+      return;
     }
 
     const nextUsed=
@@ -1533,8 +1919,11 @@ function findPath(word){
       of neighbours(p)
     ){
 
-      if(nextUsed.has(next))
+      if(
+        nextUsed.has(next)
+      ){
         continue;
+      }
 
       if(
         letters[next] !==
@@ -1543,20 +1932,14 @@ function findPath(word){
         continue;
       }
 
-      const result=
-        search(
-          next,
-          index+1,
-          nextUsed,
-          nextPath
-        );
-
-      if(result)
-        return result;
+      search(
+        next,
+        index+1,
+        nextUsed,
+        nextPath
+      );
 
     }
-
-    return null;
 
   }
 
@@ -1564,47 +1947,112 @@ function findPath(word){
   for(let p=0;p<16;p++){
 
     if(
-      letters[p]===word[0]
+      letters[p] ===
+      word[0]
     ){
 
-      const result=
-        search(
-          p,
-          0,
-          new Set(),
-          []
-        );
-
-      if(result)
-        return result;
+      search(
+        p,
+        0,
+        new Set(),
+        []
+      );
 
     }
 
   }
 
-  return null;
+  return results;
 
 }
 
 
 /*
-======================================================
-ROLLBACK
-======================================================
+If several valid routes exist on the exact displayed board,
+we need a deterministic rule.
+
+For #012:
+prefer the path that adds the MOST new coverage.
+
+Why?
+
+Because it honours the player's displayed solution while
+making the coverage mechanic generous rather than punitive.
+
+If tied, take the first path found.
+
+This is an experimental choice, not yet doctrine.
 */
 
-function directionTo(p,target){
+function choosePath(paths){
+
+  if(paths.length===0){
+    return null;
+  }
+
+  let best=paths[0];
+  let bestNew=-1;
+
+  for(const path of paths){
+
+    let fresh=0;
+
+    for(const p of path){
+
+      if(
+        !usedPositions.has(p)
+      ){
+        fresh++;
+      }
+
+    }
+
+    if(fresh>bestNew){
+
+      bestNew=fresh;
+      best=path;
+
+    }
+
+  }
+
+  return best;
+
+}
+
+
+/*
+========================================================
+ROLLBACK
+========================================================
+
+A solved historical path is NOT a frozen state.
+
+Rollback therefore restores reels to the clue-start
+snapshot regardless of whether they were previously used.
+========================================================
+*/
+
+function directionTo(
+  p,
+  target
+){
 
   const wheel=wheels[p];
 
   const current=
-    wheel.indexOf(letters[p]);
+    wheel.indexOf(
+      letters[p]
+    );
 
   const wanted=
-    wheel.indexOf(target);
+    wheel.indexOf(
+      target
+    );
 
   if(
-    (current+1)%3===wanted
+    (current+1)%3 ===
+    wanted
   ){
     return 1;
   }
@@ -1627,9 +2075,13 @@ async function returnTo(
   ){
 
     const direction=
-      directionTo(p,target);
+      directionTo(
+        p,
+        target
+      );
 
-    const wheel=wheels[p];
+    const wheel=
+      wheels[p];
 
     let index=
       wheel.indexOf(
@@ -1643,24 +2095,29 @@ async function returnTo(
         3
       )%3;
 
-    letters[p]=wheel[index];
+    letters[p]=
+      wheel[index];
 
-    clickSound(.07,420);
+    clickSound(
+      .055,
+      410
+    );
 
-    const reel=getReel(p);
+    const reel=
+      getReel(p);
 
     reel.style.transform=
       `translateX(${
-        direction>0?-6:6
+        direction>0 ? -6 : 6
       }px)`;
 
-    await wait(85);
+    await wait(75);
 
     reel.style.transform="";
 
     render(p);
 
-    await wait(45);
+    await wait(35);
 
     safety++;
 
@@ -1674,8 +2131,8 @@ async function rollbackAll(){
   for(let p=0;p<16;p++){
 
     if(
-      !solved[p] &&
-      letters[p]!==clueSnapshot[p]
+      letters[p] !==
+      clueSnapshot[p]
     ){
 
       await returnTo(
@@ -1690,7 +2147,9 @@ async function rollbackAll(){
 }
 
 
-async function rollbackIrrelevant(path){
+async function rollbackIrrelevant(
+  path
+){
 
   const keep=
     new Set(path);
@@ -1699,8 +2158,8 @@ async function rollbackIrrelevant(path){
 
     if(
       !keep.has(p) &&
-      !solved[p] &&
-      letters[p]!==clueSnapshot[p]
+      letters[p] !==
+      clueSnapshot[p]
     ){
 
       await returnTo(
@@ -1716,9 +2175,9 @@ async function rollbackIrrelevant(path){
 
 
 /*
-======================================================
+========================================================
 RESET
-======================================================
+========================================================
 */
 
 resetBtn.addEventListener(
@@ -1730,6 +2189,7 @@ resetBtn.addEventListener(
     await getAudio();
 
     busy=true;
+
     disableControls(true);
 
     message.textContent=
@@ -1741,6 +2201,7 @@ resetBtn.addEventListener(
       "Ready.";
 
     busy=false;
+
     disableControls(false);
 
   }
@@ -1748,16 +2209,19 @@ resetBtn.addEventListener(
 
 
 /*
-======================================================
+========================================================
 EASY START PULSE
-======================================================
+========================================================
 */
 
 function stopEasyPulse(){
 
   if(pulseTimer){
 
-    clearTimeout(pulseTimer);
+    clearTimeout(
+      pulseTimer
+    );
+
     pulseTimer=null;
 
   }
@@ -1767,9 +2231,10 @@ function stopEasyPulse(){
       ".start-pulse"
     )
     .forEach(
-      el=>el.classList.remove(
-        "start-pulse"
-      )
+      el=>
+        el.classList.remove(
+          "start-pulse"
+        )
     );
 
 }
@@ -1788,13 +2253,8 @@ function pulseStart(){
   const p=
     puzzles[puzzleIndex].start;
 
-  const reel=getReel(p);
-
-  /*
-  If start position is already solved because
-  this word crosses a previous route, don't
-  pretend it is movable. It can still pulse.
-  */
+  const reel=
+    getReel(p);
 
   reel.classList.remove(
     "start-pulse"
@@ -1838,17 +2298,14 @@ function startEasyPulse(){
 
 
 /*
-======================================================
+========================================================
 HINT
-======================================================
+========================================================
 
-For #011 keep this intentionally simple:
+Still intentionally simple for #012.
 
-Each press identifies the next unresolved position
-in the intended path.
-
-We are NOT testing the hint system today.
-======================================================
+This is NOT the final Hint design.
+========================================================
 */
 
 hintBtn.addEventListener(
@@ -1869,11 +2326,13 @@ hintBtn.addEventListener(
 
     for(
       let i=0;
-      i<puzzle.path.length;
+      i<
+      puzzle.intendedPath.length;
       i++
     ){
 
-      const p=puzzle.path[i];
+      const p=
+        puzzle.intendedPath[i];
 
       if(
         letters[p] !==
@@ -1897,9 +2356,11 @@ hintBtn.addEventListener(
     }
 
     hints++;
+
     updateStats();
 
-    const reel=getReel(target);
+    const reel=
+      getReel(target);
 
     reel.animate(
       [
@@ -1923,27 +2384,33 @@ hintBtn.addEventListener(
     );
 
     message.textContent=
-      "This reel is part of the path.";
+      "This reel can help.";
 
   }
 );
 
 
 /*
-======================================================
+========================================================
 TRACE
-======================================================
+========================================================
 */
 
 async function trace(path){
 
   for(const p of path){
 
-    const reel=getReel(p);
+    const reel=
+      getReel(p);
 
-    reel.classList.add("trace");
+    reel.classList.add(
+      "trace"
+    );
 
-    clickSound(.07,600);
+    clickSound(
+      .065,
+      600
+    );
 
     await wait(115);
 
@@ -1965,47 +2432,59 @@ async function trace(path){
 
 
 /*
-======================================================
-LOCK WHOLE SOLVED PATH
-======================================================
+========================================================
+RECORD SUCCESSFUL PATH
+========================================================
 */
 
-async function lockPath(
+async function recordPath(
   path,
   answer
 ){
 
+  successfulPaths.push(
+    [...path]
+  );
+
   /*
-  This is the conceptual change.
-
-  EVERY position used by the answer becomes
-  part of the permanent solved network.
-
-  Existing solved intersections simply stay solved.
+  Add the player's actual path to the historical union.
   */
 
   for(const p of path){
 
-    if(!solved[p]){
+    const firstUse=
+      !usedPositions.has(p);
 
-      solved[p]=true;
+    usedPositions.add(p);
 
-      render(p);
+    render(p);
 
-      const reel=getReel(p);
+    if(firstUse){
+
+      const reel=
+        getReel(p);
 
       reel.animate(
         [
-          {transform:"scale(1)"},
-          {transform:"scale(1.10)"},
-          {transform:"scale(1)"}
+          {
+            boxShadow:
+              "inset 0 0 0 0 rgba(120,153,142,0)"
+          },
+          {
+            boxShadow:
+              "inset 0 0 0 5px rgba(120,153,142,1)"
+          },
+          {
+            boxShadow:
+              "inset 0 0 0 4px rgba(120,153,142,1)"
+          }
         ],
         {
-          duration:320
+          duration:380
         }
       );
 
-      await wait(90);
+      await wait(70);
 
     }
 
@@ -2025,12 +2504,19 @@ function renderBank(){
   for(const word of banked){
 
     const item=
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    item.className="banked-word";
-    item.textContent=word;
+    item.className=
+      "banked-word";
 
-    answerBank.appendChild(item);
+    item.textContent=
+      word;
+
+    answerBank.appendChild(
+      item
+    );
 
   }
 
@@ -2038,14 +2524,16 @@ function renderBank(){
 
 
 /*
-======================================================
+========================================================
 LOAD CLUE
-======================================================
+========================================================
 */
 
 function loadClue(){
 
-  clueSnapshot=[...letters];
+  clueSnapshot=[
+    ...letters
+  ];
 
   interacted=false;
 
@@ -2063,7 +2551,7 @@ function loadClue(){
   message.textContent=
     puzzleIndex===0
       ? "Find the word. Turn the reels."
-      : "The solved letters stay locked.";
+      : "Outlined reels are still in play.";
 
   startEasyPulse();
 
@@ -2071,12 +2559,14 @@ function loadClue(){
 
 
 /*
-======================================================
+========================================================
 CONTROLS
-======================================================
+========================================================
 */
 
-function disableControls(value){
+function disableControls(
+  value
+){
 
   resetBtn.disabled=value;
   hintBtn.disabled=value;
@@ -2086,9 +2576,9 @@ function disableControls(value){
 
 
 /*
-======================================================
+========================================================
 UNLOCK
-======================================================
+========================================================
 */
 
 unlockBtn.addEventListener(
@@ -2100,15 +2590,19 @@ unlockBtn.addEventListener(
     await getAudio();
 
     attempts++;
+
     updateStats();
 
     const puzzle=
       puzzles[puzzleIndex];
 
-    const actualPath=
-      findPath(
+    const paths=
+      findAllPaths(
         puzzle.answer
       );
+
+    const actualPath=
+      choosePath(paths);
 
 
     /*
@@ -2118,6 +2612,7 @@ unlockBtn.addEventListener(
     if(!actualPath){
 
       busy=true;
+
       disableControls(true);
 
       wrongSound();
@@ -2137,6 +2632,7 @@ unlockBtn.addEventListener(
       interacted=false;
 
       busy=false;
+
       disableControls(false);
 
       startEasyPulse();
@@ -2159,13 +2655,20 @@ unlockBtn.addEventListener(
     message.textContent=
       `${puzzle.answer} ✓`;
 
-    await trace(actualPath);
+    await trace(
+      actualPath
+    );
+
+    /*
+    Preserve the actual successful path,
+    but rollback experiments elsewhere.
+    */
 
     await rollbackIrrelevant(
       actualPath
     );
 
-    await lockPath(
+    await recordPath(
       actualPath,
       puzzle.answer
     );
@@ -2184,9 +2687,11 @@ unlockBtn.addEventListener(
     puzzleIndex++;
 
 
-    if(puzzleIndex===4){
+    if(
+      puzzleIndex===4
+    ){
 
-      await beginKeyStage();
+      await finishLocks();
 
       return;
 
@@ -2204,16 +2709,17 @@ unlockBtn.addEventListener(
 
 
 /*
-======================================================
-SEMANTIC KEY
-======================================================
+========================================================
+FINAL COVERAGE REVEAL
+========================================================
 */
 
-async function beginKeyStage(){
+async function finishLocks(){
 
   stopEasyPulse();
 
-  controls.style.display="none";
+  controls.style.display=
+    "none";
 
   message.textContent="";
 
@@ -2221,32 +2727,122 @@ async function beginKeyStage(){
     "FOUR LOCKS OPEN";
 
   clueEl.textContent=
-    "Now connect them.";
-
-  await wait(700);
+    "Your path through the lock.";
 
   /*
-  Let the completed network sit there for
-  a moment before introducing the meta.
+  Give the player a moment to see the outlined board.
   */
+
+  await wait(650);
+
+
+  /*
+  Calculate coverage from UNIQUE historical positions.
+  */
+
+  coveragePercent=
+    Math.round(
+      (
+        usedPositions.size /
+        16
+      ) * 100
+    );
+
+
+  /*
+  Fill all used positions sage.
+
+  We do this in a quick sequence rather than all at
+  exactly once so the board feels mechanically activated.
+  */
+
+  for(let p=0;p<16;p++){
+
+    if(
+      usedPositions.has(p)
+    ){
+
+      const reel=
+        getReel(p);
+
+      reel.classList.remove(
+        "used"
+      );
+
+      reel.classList.add(
+        "covered",
+        "coverage-pop"
+      );
+
+      clickSound(
+        .045,
+        460+(p*7)
+      );
+
+      await wait(55);
+
+      reel.classList.remove(
+        "coverage-pop"
+      );
+
+    }
+
+  }
+
+
+  await wait(350);
+
+  coverageNumber.textContent=
+    `${coveragePercent}%`;
+
+  coverageStage.classList.add(
+    "show"
+  );
+
+
+  /*
+  Coverage is INFORMATION / ACHIEVEMENT.
+
+  It does NOT gate the Connection.
+  */
+
+  await wait(950);
 
   masterWheel.classList.add(
     "ready"
   );
 
-  await wait(650);
+  await beginKeyStage();
+
+}
+
+
+/*
+========================================================
+SEMANTIC KEY
+========================================================
+*/
+
+async function beginKeyStage(){
 
   finalWords.innerHTML="";
 
   for(const word of banked){
 
     const tile=
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    tile.className="final-word";
-    tile.textContent=word;
+    tile.className=
+      "final-word";
 
-    finalWords.appendChild(tile);
+    tile.textContent=
+      word;
+
+    finalWords.appendChild(
+      tile
+    );
 
   }
 
@@ -2254,15 +2850,69 @@ async function beginKeyStage(){
     "show"
   );
 
+  clueCount.textContent=
+    "THE KEY";
+
+  clueEl.textContent=
+    "What connects them?";
+
   busy=false;
 
 }
 
 
 /*
-======================================================
+========================================================
+WRONG KEY FEEDBACK
+========================================================
+*/
+
+async function rejectKey(){
+
+  /*
+  Final connection guesses ARE attempts.
+  */
+
+  wrongSound(true);
+
+  keyFeedback.textContent=
+    "The key doesn't turn.";
+
+  keyInput.classList.remove(
+    "wrong"
+  );
+
+  void keyInput.offsetWidth;
+
+  keyInput.classList.add(
+    "wrong"
+  );
+
+  await wait(500);
+
+  keyInput.focus();
+  keyInput.select();
+
+  setTimeout(
+    ()=>{
+
+      keyInput.classList.remove(
+        "wrong"
+      );
+
+      keyFeedback.textContent="";
+
+    },
+    1200
+  );
+
+}
+
+
+/*
+========================================================
 TURN KEY
-======================================================
+========================================================
 */
 
 keyButton.addEventListener(
@@ -2278,14 +2928,22 @@ keyButton.addEventListener(
         .trim()
         .toUpperCase();
 
-    if(!guess) return;
+    if(!guess)
+      return;
+
+
+    /*
+    A committed Connection guess counts as an Attempt.
+    */
+
+    attempts++;
+
+    updateStats();
 
 
     if(guess!==KEY){
 
-      wrongSound();
-
-      keyInput.select();
+      await rejectKey();
 
       return;
 
@@ -2297,6 +2955,8 @@ keyButton.addEventListener(
     keyInput.disabled=true;
     keyButton.disabled=true;
 
+    keyFeedback.textContent="";
+
     keyButton.textContent=
       "KEY FOUND";
 
@@ -2306,7 +2966,7 @@ keyButton.addEventListener(
 
 
     /*
-    Reveal WHY the answer works.
+    Reveal WHY LIGHT works.
     */
 
     const connections=
@@ -2314,13 +2974,19 @@ keyButton.addEventListener(
         ".connection"
       );
 
-    for(const item of connections){
+    for(
+      const item
+      of connections
+    ){
 
       item.classList.add(
         "reveal"
       );
 
-      clickSound(.08,500);
+      clickSound(
+        .075,
+        500
+      );
 
       await wait(350);
 
@@ -2356,14 +3022,19 @@ keyButton.addEventListener(
     keyStage.style.display=
       "none";
 
-    finalResult.textContent=
+    coverageStage.style.display=
+      "none";
+
+    finalResult.innerHTML=
       `${turns} Turns · `+
       `${attempts} Attempts · `+
       `${hints} ${
         hints===1
           ? "Hint"
           : "Hints"
-      }`;
+      }`+
+      `<br>`+
+      `Path Coverage · ${coveragePercent}%`;
 
   }
 );
@@ -2373,8 +3044,12 @@ keyInput.addEventListener(
   "keydown",
   event=>{
 
-    if(event.key==="Enter"){
+    if(
+      event.key==="Enter"
+    ){
+
       keyButton.click();
+
     }
 
   }
@@ -2382,9 +3057,9 @@ keyInput.addEventListener(
 
 
 /*
-======================================================
+========================================================
 START
-======================================================
+========================================================
 */
 
 buildLocks();
