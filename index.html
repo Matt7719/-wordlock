@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#e7ddc9">
-<title>WORDLOCK — Prototype #029 · Medium</title>
+<title>WORDLOCK — Prototype #030 · Medium</title>
 
 <style>
 :root{
@@ -15,12 +15,12 @@
  --sage:#adc1b0;
  --blue:#a9c4cd;
  --ochre:#d0b57a;
- --mauve:#bba8bd
+ --mauve:#bba8bd;
 }
 
 *{
  box-sizing:border-box;
- -webkit-tap-highlight-color:transparent
+ -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
@@ -28,11 +28,10 @@ html,body{
  min-height:100%;
  background:#e7ddc9;
  color:var(--ink);
- font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif
+ font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif;
 }
 
 body{overflow-x:hidden}
-
 button,input{font:inherit}
 
 #place{
@@ -40,16 +39,16 @@ button,input{font:inherit}
  min-height:100vh;
  overflow:hidden;
  background:
- radial-gradient(ellipse at 75% 19%,rgba(150,170,126,.22),transparent 40%),
- radial-gradient(ellipse at 14% 72%,rgba(183,161,120,.18),transparent 44%),
- linear-gradient(145deg,#ebe0ca 0%,#e2d6bc 52%,#d8c9aa 100%)
+  radial-gradient(ellipse at 75% 19%,rgba(150,170,126,.22),transparent 40%),
+  radial-gradient(ellipse at 14% 72%,rgba(183,161,120,.18),transparent 44%),
+  linear-gradient(145deg,#ebe0ca 0%,#e2d6bc 52%,#d8c9aa 100%);
 }
 
 .terrain{
  position:absolute;
  inset:0;
  overflow:hidden;
- pointer-events:none
+ pointer-events:none;
 }
 
 .contours{
@@ -58,25 +57,25 @@ button,input{font:inherit}
  height:1250px;
  left:-28%;
  top:80px;
- opacity:.61
+ opacity:.61;
 }
 
 .contours path{
  fill:none;
  stroke:#6e7066;
  stroke-width:1.15;
- vector-effect:non-scaling-stroke
+ vector-effect:non-scaling-stroke;
 }
 
 .contours .fine{
  stroke-width:.72;
- opacity:.52
+ opacity:.52;
 }
 
 .contours .light{
  stroke:#f3ead5;
  stroke-width:1;
- opacity:.60
+ opacity:.60;
 }
 
 .water{
@@ -88,20 +87,20 @@ button,input{font:inherit}
  transform:rotate(-8deg);
  border-radius:45% 55% 52% 48%/52% 45% 55% 48%;
  background:
- repeating-linear-gradient(
-  3deg,
-  transparent 0 18px,
-  rgba(67,125,137,.13) 19px,
-  transparent 20px 34px
- ),
- radial-gradient(
-  ellipse at 58% 42%,
-  rgba(76,145,158,.49),
-  rgba(103,155,161,.30) 47%,
-  rgba(115,151,151,.13) 68%,
-  transparent 77%
- );
- border:1px solid rgba(69,111,116,.22)
+  repeating-linear-gradient(
+   3deg,
+   transparent 0 18px,
+   rgba(67,125,137,.13) 19px,
+   transparent 20px 34px
+  ),
+  radial-gradient(
+   ellipse at 58% 42%,
+   rgba(76,145,158,.49),
+   rgba(103,155,161,.30) 47%,
+   rgba(115,151,151,.13) 68%,
+   transparent 77%
+  );
+ border:1px solid rgba(69,111,116,.22);
 }
 
 .water::before,
@@ -109,16 +108,14 @@ button,input{font:inherit}
  content:"";
  position:absolute;
  border:1px solid rgba(73,108,109,.21);
- border-radius:50%
+ border-radius:50%;
 }
 
-.water::before{
- inset:-18px -31px
-}
+.water::before{inset:-18px -31px}
 
 .water::after{
  inset:-39px -58px;
- opacity:.52
+ opacity:.52;
 }
 
 .ripples{
@@ -129,13 +126,13 @@ button,input{font:inherit}
  height:170px;
  opacity:.34;
  background:
- repeating-radial-gradient(
-  ellipse at 30% 50%,
-  transparent 0 21px,
-  rgba(239,242,226,.53) 22px,
-  transparent 23px 36px
- );
- transform:rotate(-8deg)
+  repeating-radial-gradient(
+   ellipse at 30% 50%,
+   transparent 0 21px,
+   rgba(239,242,226,.53) 22px,
+   transparent 23px 36px
+  );
+ transform:rotate(-8deg);
 }
 
 .vegetation{
@@ -145,12 +142,12 @@ button,input{font:inherit}
  width:59%;
  height:540px;
  background:
- radial-gradient(
-  ellipse at 70% 44%,
-  rgba(96,129,84,.29),
-  rgba(111,137,96,.13) 43%,
-  transparent 73%
- )
+  radial-gradient(
+   ellipse at 70% 44%,
+   rgba(96,129,84,.29),
+   rgba(111,137,96,.13) 43%,
+   transparent 73%
+  );
 }
 
 .vegetation::before{
@@ -158,12 +155,12 @@ button,input{font:inherit}
  position:absolute;
  inset:0;
  background-image:
- radial-gradient(circle,rgba(56,88,56,.36) 0 1.2px,transparent 1.6px),
- radial-gradient(circle,rgba(76,102,66,.25) 0 1px,transparent 1.45px);
+  radial-gradient(circle,rgba(56,88,56,.36) 0 1.2px,transparent 1.6px),
+  radial-gradient(circle,rgba(76,102,66,.25) 0 1px,transparent 1.45px);
  background-size:18px 20px,29px 27px;
  background-position:0 0,9px 12px;
  -webkit-mask-image:
- radial-gradient(ellipse at 67% 45%,black 0 36%,transparent 75%)
+  radial-gradient(ellipse at 67% 45%,black 0 36%,transparent 75%);
 }
 
 .vegetation::after{
@@ -175,14 +172,14 @@ button,input{font:inherit}
  height:57%;
  opacity:.23;
  background:
- repeating-linear-gradient(
-  78deg,
-  transparent 0 18px,
-  rgba(52,80,51,.46) 19px,
-  transparent 20px 31px
- );
+  repeating-linear-gradient(
+   78deg,
+   transparent 0 18px,
+   rgba(52,80,51,.46) 19px,
+   transparent 20px 31px
+  );
  -webkit-mask-image:
- radial-gradient(ellipse,black 0 39%,transparent 73%)
+  radial-gradient(ellipse,black 0 39%,transparent 73%);
 }
 
 .stone{
@@ -193,17 +190,17 @@ button,input{font:inherit}
  height:190px;
  border-radius:53% 47% 58% 42%/44% 58% 42% 56%;
  background:
- repeating-linear-gradient(
-  162deg,
-  transparent 0 17px,
-  rgba(83,76,65,.07) 18px,
-  transparent 19px 31px
- ),
- linear-gradient(
-  135deg,
-  rgba(158,140,111,.25),
-  rgba(115,106,90,.39)
- )
+  repeating-linear-gradient(
+   162deg,
+   transparent 0 17px,
+   rgba(83,76,65,.07) 18px,
+   transparent 19px 31px
+  ),
+  linear-gradient(
+   135deg,
+   rgba(158,140,111,.25),
+   rgba(115,106,90,.39)
+  );
 }
 
 .stone-small{
@@ -214,11 +211,11 @@ button,input{font:inherit}
  height:110px;
  border-radius:47% 53% 44% 56%;
  background:
- linear-gradient(
-  145deg,
-  rgba(158,142,115,.25),
-  rgba(112,104,89,.34)
- )
+  linear-gradient(
+   145deg,
+   rgba(158,142,115,.25),
+   rgba(112,104,89,.34)
+  );
 }
 
 .path{
@@ -229,7 +226,7 @@ button,input{font:inherit}
  top:440px;
  border-left:2px solid rgba(245,235,210,.34);
  border-radius:50%;
- transform:rotate(22deg)
+ transform:rotate(22deg);
 }
 
 .path::after{
@@ -237,7 +234,7 @@ button,input{font:inherit}
  position:absolute;
  inset:0 0 0 8px;
  border-left:1px solid rgba(245,235,210,.24);
- border-radius:50%
+ border-radius:50%;
 }
 
 .wrap{
@@ -246,20 +243,20 @@ button,input{font:inherit}
  width:min(94vw,520px);
  margin:0 auto;
  padding:
- max(30px,env(safe-area-inset-top))
- 0
- max(50px,env(safe-area-inset-bottom))
+  max(30px,env(safe-area-inset-top))
+  0
+  max(50px,env(safe-area-inset-bottom));
 }
 
 header{
  text-align:center;
- margin:23px 0 24px
+ margin:23px 0 24px;
 }
 
 .brand{
  font-size:14px;
  font-weight:850;
- letter-spacing:.37em
+ letter-spacing:.37em;
 }
 
 .prototype{
@@ -267,7 +264,7 @@ header{
  font-size:8px;
  font-weight:800;
  letter-spacing:.28em;
- color:#60635c
+ color:#60635c;
 }
 
 .where{
@@ -275,15 +272,17 @@ header{
  font-family:Georgia,serif;
  font-size:11px;
  letter-spacing:.22em;
- text-transform:uppercase
+ text-transform:uppercase;
 }
 
 .terrain-note{
  margin-top:6px;
  font-family:Georgia,serif;
  font-size:15px;
- color:#5d5d54
+ color:#5d5d54;
 }
+
+/* ENTRY */
 
 .entry{
  position:relative;
@@ -298,9 +297,9 @@ header{
  cursor:pointer;
  touch-action:manipulation;
  transition:
- opacity 1.35s ease,
- transform 1.55s cubic-bezier(.22,.72,.26,1),
- filter 1.45s ease
+  opacity 1.35s ease,
+  transform 1.55s cubic-bezier(.22,.72,.26,1),
+  filter 1.45s ease;
 }
 
 .entry-title{
@@ -308,7 +307,7 @@ header{
  font-size:23px;
  line-height:1.35;
  color:#34372f;
- opacity:.88
+ opacity:.88;
 }
 
 .entry-copy{
@@ -317,8 +316,7 @@ header{
  font-size:13px;
  font-style:italic;
  color:#65675f;
- animation:
- entryBreath 3.8s ease-in-out infinite
+ animation:entryBreath 3.8s ease-in-out infinite;
 }
 
 @keyframes entryBreath{
@@ -330,28 +328,26 @@ header{
  opacity:0;
  transform:scale(1.025);
  filter:blur(3px);
- pointer-events:none
+ pointer-events:none;
 }
 
 .game-shell{
  position:relative;
  opacity:0;
  filter:blur(11px);
- transform:
- translateY(11px)
- scale(.982);
+ transform:translateY(11px) scale(.982);
  pointer-events:none;
  transition:
- opacity 2.05s ease,
- filter 2.30s ease,
- transform 2.30s cubic-bezier(.22,.72,.26,1)
+  opacity 2.05s ease,
+  filter 2.30s ease,
+  transform 2.30s cubic-bezier(.22,.72,.26,1);
 }
 
 .game-shell.visible{
  opacity:1;
  filter:blur(0);
  transform:none;
- pointer-events:auto
+ pointer-events:auto;
 }
 
 .latent{
@@ -365,8 +361,8 @@ header{
  opacity:.16;
  pointer-events:none;
  transition:
- opacity 1.5s ease,
- transform 1.7s ease
+  opacity 1.5s ease,
+  transform 1.7s ease;
 }
 
 .latent::before,
@@ -375,35 +371,35 @@ header{
  position:absolute;
  inset:0;
  border-radius:46% 54% 49% 51%;
- border:1px solid rgba(80,82,72,.28)
+ border:1px solid rgba(80,82,72,.28);
 }
 
 .latent::before{
- transform:rotate(-5deg) scale(.94)
+ transform:rotate(-5deg) scale(.94);
 }
 
 .latent::after{
- transform:rotate(4deg) scale(.82)
+ transform:rotate(4deg) scale(.82);
 }
 
 body.entered .latent{
  opacity:0;
- transform:
- translateX(-50%)
- scale(1.05)
+ transform:translateX(-50%) scale(1.05);
 }
+
+/* CLUES */
 
 .clue-area{
  min-height:111px;
  padding:10px 10px 8px;
- text-align:center
+ text-align:center;
 }
 
 .progress{
  display:flex;
  justify-content:center;
  gap:10px;
- margin-bottom:14px
+ margin-bottom:14px;
 }
 
 .progress-dot{
@@ -412,40 +408,36 @@ body.entered .latent{
  border-radius:50%;
  border:1px solid rgba(60,62,57,.63);
  background:rgba(249,246,236,.48);
- transition:
- background .65s ease,
- transform .5s ease
+ transition:background .65s ease,transform .5s ease;
 }
 
-.progress-dot.done{
- transform:scale(1.08)
-}
+.progress-dot.done{transform:scale(1.08)}
 
 .progress-dot.done:nth-child(1){
  background:var(--sage);
- border-color:transparent
+ border-color:transparent;
 }
 
 .progress-dot.done:nth-child(2){
  background:var(--blue);
- border-color:transparent
+ border-color:transparent;
 }
 
 .progress-dot.done:nth-child(3){
  background:var(--ochre);
- border-color:transparent
+ border-color:transparent;
 }
 
 .progress-dot.done:nth-child(4){
  background:var(--mauve);
- border-color:transparent
+ border-color:transparent;
 }
 
 .clue-label{
  font-size:9px;
  font-weight:800;
  letter-spacing:.26em;
- color:#60635d
+ color:#60635d;
 }
 
 #clue{
@@ -455,14 +447,16 @@ body.entered .latent{
  font-family:Georgia,serif;
  font-size:22px;
  line-height:1.3;
- color:#292b27
+ color:#292b27;
 }
+
+/* BOARD */
 
 .board{
  display:grid;
  grid-template-columns:repeat(4,1fr);
  gap:12px 8px;
- padding:10px 9px 6px
+ padding:10px 9px 6px;
 }
 
 .reel{
@@ -473,15 +467,15 @@ body.entered .latent{
  border-radius:17px;
  background:var(--cream);
  box-shadow:
- 0 5px 13px rgba(52,49,42,.11),
- inset 0 1px 0 rgba(255,255,255,.82);
+  0 5px 13px rgba(52,49,42,.11),
+  inset 0 1px 0 rgba(255,255,255,.82);
  user-select:none;
  -webkit-user-select:none;
  touch-action:pan-y;
  transition:
- background .68s ease,
- box-shadow .42s ease,
- transform .40s cubic-bezier(.22,.75,.26,1)
+  background .68s ease,
+  box-shadow .42s ease,
+  transform .40s cubic-bezier(.22,.75,.26,1);
 }
 
 .reel-strip{
@@ -491,7 +485,7 @@ body.entered .latent{
  grid-template-columns:1fr 1.28fr 1fr;
  align-items:center;
  text-align:center;
- will-change:transform
+ will-change:transform;
 }
 
 .letter{
@@ -499,37 +493,35 @@ body.entered .latent{
  align-items:center;
  justify-content:center;
  line-height:1;
- transition:.27s ease
+ transition:.27s ease;
 }
 
 .letter.alt{
  font-size:17px;
  font-weight:500;
  color:var(--alt);
- opacity:.76
+ opacity:.76;
 }
 
 .letter.alt.remembered{
  color:var(--remembered);
  font-weight:900;
- opacity:1
+ opacity:1;
 }
 
 .letter.current{
  font-size:31px;
  font-weight:860;
  color:var(--ink);
- opacity:1
+ opacity:1;
 }
 
 .reel.cycle-left .reel-strip{
- animation:
- reelLeft .34s cubic-bezier(.25,.70,.25,1)
+ animation:reelLeft .34s cubic-bezier(.25,.70,.25,1);
 }
 
 .reel.cycle-right .reel-strip{
- animation:
- reelRight .34s cubic-bezier(.25,.70,.25,1)
+ animation:reelRight .34s cubic-bezier(.25,.70,.25,1);
 }
 
 @keyframes reelLeft{
@@ -546,9 +538,7 @@ body.entered .latent{
  100%{transform:translateX(0)}
 }
 
-.reel.settle{
- animation:settle .27s ease
-}
+.reel.settle{animation:settle .27s ease}
 
 @keyframes settle{
  0%{transform:scale(1)}
@@ -559,121 +549,97 @@ body.entered .latent{
 .reel.confirming{
  transform:scale(1.045);
  box-shadow:
- 0 0 0 3px rgba(255,255,255,.34),
- 0 8px 17px rgba(50,47,40,.13)
+  0 0 0 3px rgba(255,255,255,.34),
+  0 8px 17px rgba(50,47,40,.13);
 }
 
 /* MEDIUM:
-   unmistakable reel pulse,
-   but it does not reveal which
-   of the three letters begins the word. */
+   pulse the reel, not the answer letter */
 
 .reel.pulse{
  z-index:3;
- animation:
- mediumPulse 1.75s ease-in-out infinite
+ animation:mediumPulse 1.75s ease-in-out infinite;
 }
 
 @keyframes mediumPulse{
-
  0%,100%{
   transform:scale(1);
-  border-color:
-  rgba(61,64,58,.23);
+  border-color:rgba(61,64,58,.23);
   box-shadow:
    0 5px 13px rgba(52,49,42,.11),
-   inset 0 1px 0 rgba(255,255,255,.82)
+   inset 0 1px 0 rgba(255,255,255,.82);
  }
 
  50%{
   transform:scale(1.075);
-  border-color:
-  rgba(72,82,68,.62);
+  border-color:rgba(72,82,68,.62);
   box-shadow:
    0 0 0 5px rgba(245,241,222,.72),
    0 0 22px rgba(84,101,78,.34),
    0 9px 20px rgba(52,49,42,.16),
-   inset 0 1px 0 rgba(255,255,255,.92)
+   inset 0 1px 0 rgba(255,255,255,.92);
  }
-
 }
 
-.reel.used1{
- background:rgba(173,193,176,.93)
-}
+/* TRACE COLOURS */
 
-.reel.used2{
- background:rgba(169,196,205,.93)
-}
-
-.reel.used3{
- background:rgba(208,181,122,.93)
-}
-
-.reel.used4{
- background:rgba(187,168,189,.93)
-}
+.reel.used1{background:rgba(173,193,176,.93)}
+.reel.used2{background:rgba(169,196,205,.93)}
+.reel.used3{background:rgba(208,181,122,.93)}
+.reel.used4{background:rgba(187,168,189,.93)}
 
 .reel.mix12{
- background:
- linear-gradient(135deg,var(--sage),var(--blue))
+ background:linear-gradient(135deg,var(--sage),var(--blue));
 }
 
 .reel.mix13{
- background:
- linear-gradient(135deg,var(--sage),var(--ochre))
+ background:linear-gradient(135deg,var(--sage),var(--ochre));
 }
 
 .reel.mix14{
- background:
- linear-gradient(135deg,var(--sage),var(--mauve))
+ background:linear-gradient(135deg,var(--sage),var(--mauve));
 }
 
 .reel.mix23{
- background:
- linear-gradient(135deg,var(--blue),var(--ochre))
+ background:linear-gradient(135deg,var(--blue),var(--ochre));
 }
 
 .reel.mix24{
- background:
- linear-gradient(135deg,var(--blue),var(--mauve))
+ background:linear-gradient(135deg,var(--blue),var(--mauve));
 }
 
 .reel.mix34{
- background:
- linear-gradient(135deg,var(--ochre),var(--mauve))
+ background:linear-gradient(135deg,var(--ochre),var(--mauve));
 }
+
+/* CONTROLS */
 
 .controls{
  display:grid;
  grid-template-columns:1fr 1.65fr 1fr;
  gap:9px;
  padding:0 9px;
- margin-top:16px
+ margin-top:16px;
 }
 
 .btn{
  min-height:49px;
- border:
- 1px solid rgba(52,54,50,.40);
+ border:1px solid rgba(52,54,50,.40);
  border-radius:16px;
- background:
- rgba(247,243,232,.84);
+ background:rgba(247,243,232,.84);
  color:#343632;
  font-size:10px;
  font-weight:800;
- letter-spacing:.14em
+ letter-spacing:.14em;
 }
 
 .btn.primary{
  background:#30322e;
  color:#f8f5eb;
- border-color:#30322e
+ border-color:#30322e;
 }
 
-.btn:active{
- transform:translateY(1px)
-}
+.btn:active{transform:translateY(1px)}
 
 #message{
  min-height:36px;
@@ -682,7 +648,7 @@ body.entered .latent{
  font-family:Georgia,serif;
  font-style:italic;
  font-size:14px;
- color:#55584f
+ color:#55584f;
 }
 
 .bank{
@@ -691,47 +657,31 @@ body.entered .latent{
  display:flex;
  justify-content:center;
  flex-wrap:wrap;
- gap:7px
+ gap:7px;
 }
 
 .pill{
  opacity:0;
- transform:
- translateY(5px)
- scale(.97);
+ transform:translateY(5px) scale(.97);
  padding:7px 12px;
  border-radius:999px;
  font-size:11px;
  font-weight:800;
  letter-spacing:.08em;
- animation:
- pillIn .65s cubic-bezier(.22,.72,.26,1) forwards
+ animation:pillIn .65s cubic-bezier(.22,.72,.26,1) forwards;
 }
 
 @keyframes pillIn{
  to{
   opacity:1;
-  transform:
-  translateY(0)
-  scale(1)
+  transform:translateY(0) scale(1);
  }
 }
 
-.pill.c1{
- background:var(--sage)
-}
-
-.pill.c2{
- background:var(--blue)
-}
-
-.pill.c3{
- background:var(--ochre)
-}
-
-.pill.c4{
- background:var(--mauve)
-}
+.pill.c1{background:var(--sage)}
+.pill.c2{background:var(--blue)}
+.pill.c3{background:var(--ochre)}
+.pill.c4{background:var(--mauve)}
 
 .stats{
  display:flex;
@@ -741,32 +691,32 @@ body.entered .latent{
  font-size:9px;
  font-weight:800;
  letter-spacing:.14em;
- color:#565951
+ color:#565951;
 }
+
+/* CONNECTION */
 
 .connection{
  display:none;
  margin:28px 10px 0;
  padding:25px 12px 22px;
- border-top:
- 1px solid rgba(64,66,59,.25);
- text-align:center
+ border-top:1px solid rgba(64,66,59,.25);
+ text-align:center;
 }
 
 .connection.show{
  display:block;
- animation:
- gentleIn .9s ease both
+ animation:gentleIn .9s ease both;
 }
 
 @keyframes gentleIn{
  from{
   opacity:0;
-  transform:translateY(7px)
+  transform:translateY(7px);
  }
  to{
   opacity:1;
-  transform:none
+  transform:none;
  }
 }
 
@@ -774,13 +724,13 @@ body.entered .latent{
  font-size:9px;
  font-weight:800;
  letter-spacing:.27em;
- color:#5c5f58
+ color:#5c5f58;
 }
 
 .connection-copy{
  margin:8px 0 12px;
  font-family:Georgia,serif;
- font-size:20px
+ font-size:20px;
 }
 
 .connection-length{
@@ -788,14 +738,13 @@ body.entered .latent{
  font-size:20px;
  font-weight:800;
  letter-spacing:.32em;
- color:#55584f
+ color:#55584f;
 }
 
 .connection-input{
  width:min(250px,82%);
  border:0;
- border-bottom:
- 1px solid #696b63;
+ border-bottom:1px solid #696b63;
  border-radius:0;
  background:transparent;
  padding:8px;
@@ -805,7 +754,7 @@ body.entered .latent{
  font-size:23px;
  font-weight:800;
  letter-spacing:.14em;
- color:#252724
+ color:#252724;
 }
 
 .connection-actions{
@@ -813,12 +762,10 @@ body.entered .latent{
  justify-content:center;
  flex-wrap:wrap;
  gap:8px;
- margin-top:14px
+ margin-top:14px;
 }
 
-.connection-actions .btn{
- padding:0 17px
-}
+.connection-actions .btn{padding:0 17px}
 
 #connectionHint{
  max-width:340px;
@@ -828,32 +775,33 @@ body.entered .latent{
  font-style:italic;
  font-size:14px;
  line-height:1.4;
- color:#55584f
+ color:#55584f;
 }
+
+/* END */
 
 .final{
  display:none;
  margin:28px 12px 0;
  padding:27px 10px;
- text-align:center
+ text-align:center;
 }
 
 .final.show{
  display:block;
- animation:
- gentleIn 1.3s ease both
+ animation:gentleIn 1.3s ease both;
 }
 
 .final-kicker{
  font-size:9px;
  font-weight:800;
- letter-spacing:.27em
+ letter-spacing:.27em;
 }
 
 .final-title{
  margin-top:8px;
  font-family:Georgia,serif;
- font-size:28px
+ font-size:28px;
 }
 
 .final-copy{
@@ -862,7 +810,7 @@ body.entered .latent{
  font-family:Georgia,serif;
  font-size:15px;
  line-height:1.5;
- color:#50534c
+ color:#50534c;
 }
 
 .final-path{
@@ -870,13 +818,10 @@ body.entered .latent{
  font-size:10px;
  font-weight:800;
  letter-spacing:.15em;
- color:#50534c
+ color:#50534c;
 }
 
-.shake{
- animation:
- shake .30s linear
-}
+.shake{animation:shake .30s linear}
 
 @keyframes shake{
  25%{transform:translateX(-4px)}
@@ -885,43 +830,21 @@ body.entered .latent{
 }
 
 @media(max-width:390px){
-
- .board{
-  gap:10px 7px
- }
-
- .reel{
-  height:70px;
-  border-radius:15px
- }
-
- .letter.alt{
-  font-size:16px
- }
-
- .letter.current{
-  font-size:29px
- }
-
- #clue{
-  font-size:21px
- }
-
- .entry{
-  min-height:520px
- }
-
+ .board{gap:10px 7px}
+ .reel{height:70px;border-radius:15px}
+ .letter.alt{font-size:16px}
+ .letter.current{font-size:29px}
+ #clue{font-size:21px}
+ .entry{min-height:520px}
 }
 
 @media(prefers-reduced-motion:reduce){
-
  *,
  *::before,
  *::after{
   animation-duration:.01ms!important;
-  transition-duration:.01ms!important
+  transition-duration:.01ms!important;
  }
-
 }
 </style>
 </head>
@@ -938,7 +861,6 @@ body.entered .latent{
  preserveAspectRatio="none"
  aria-hidden="true"
 >
-
 <path d="M-70 145 C80 40 270 55 365 155 C460 255 610 225 770 105"/>
 <path d="M-70 190 C95 85 260 90 345 185 C430 285 590 280 770 150"/>
 <path class="fine" d="M-80 235 C90 130 245 135 320 220 C405 315 570 330 780 200"/>
@@ -949,7 +871,6 @@ body.entered .latent{
 <path class="fine" d="M-100 665 C85 575 245 580 335 680 C445 800 605 780 790 650"/>
 <path d="M-100 850 C85 755 280 760 390 870 C500 980 630 960 790 825"/>
 <path class="fine" d="M-100 905 C80 810 265 815 365 915 C475 1025 620 1020 790 880"/>
-
 </svg>
 
 <div class="vegetation"></div>
@@ -966,291 +887,195 @@ body.entered .latent{
 <main class="wrap">
 
 <header>
-
-<div class="brand">
-WORDLOCK
-</div>
-
-<div class="prototype">
-PROTOTYPE #029 · MEDIUM
-</div>
-
-<div class="where">
-Somewhere near the beginning
-</div>
-
-<div class="terrain-note">
-Stone · water · first traces
-</div>
-
+ <div class="brand">WORDLOCK</div>
+ <div class="prototype">PROTOTYPE #030 · MEDIUM</div>
+ <div class="where">Somewhere near the beginning</div>
+ <div class="terrain-note">Stone · water · first traces</div>
 </header>
 
-<section
- class="entry"
- id="entry"
- role="button"
- tabindex="0"
->
+<section class="entry" id="entry" role="button" tabindex="0">
+ <div class="entry-title">Today’s place is waiting.</div>
+ <div class="entry-copy">Touch the place</div>
+</section>
 
-<div class="entry-title">
-Today’s place is waiting.
-</div>
+<div class="game-shell" id="gameShell">
 
-<div class="entry-copy">
-Touch the place
-</div>
+<section class="clue-area" id="clueArea">
+
+ <div class="progress">
+  <div class="progress-dot"></div>
+  <div class="progress-dot"></div>
+  <div class="progress-dot"></div>
+  <div class="progress-dot"></div>
+ </div>
+
+ <div class="clue-label" id="clueLabel">CLUE 1</div>
+ <div id="clue"></div>
 
 </section>
 
-<div
- class="game-shell"
- id="gameShell"
->
+<div class="board" id="board"></div>
 
-<section
- class="clue-area"
- id="clueArea"
->
-
-<div class="progress">
-
-<div class="progress-dot"></div>
-<div class="progress-dot"></div>
-<div class="progress-dot"></div>
-<div class="progress-dot"></div>
-
-</div>
-
-<div
- class="clue-label"
- id="clueLabel"
->
-CLUE 1
-</div>
-
-<div id="clue"></div>
-
-</section>
-
-<div
- class="board"
- id="board"
-></div>
-
-<div
- class="controls"
- id="controls"
->
-
-<button
- class="btn"
- id="resetBtn"
->
-RESET
-</button>
-
-<button
- class="btn primary"
- id="unlockBtn"
->
-UNLOCK
-</button>
-
-<button
- class="btn"
- id="hintBtn"
->
-HINT
-</button>
-
+<div class="controls" id="controls">
+ <button class="btn" id="resetBtn">RESET</button>
+ <button class="btn primary" id="unlockBtn">UNLOCK</button>
+ <button class="btn" id="hintBtn">HINT</button>
 </div>
 
 <div id="message"></div>
 
-<div
- class="bank"
- id="bank"
-></div>
+<div class="bank" id="bank"></div>
 
 <div class="stats">
-
-<span id="turnStat">
-0 TURNS
-</span>
-
-<span id="attemptStat">
-0 ATTEMPTS
-</span>
-
-<span id="hintStat">
-0 HINTS
-</span>
-
+ <span id="turnStat">0 TURNS</span>
+ <span id="attemptStat">0 ATTEMPTS</span>
+ <span id="hintStat">0 HINTS</span>
 </div>
 
-<section
- class="connection"
- id="connection"
->
+<section class="connection" id="connection">
 
-<div class="connection-title">
-THE CONNECTION
-</div>
+ <div class="connection-title">THE CONNECTION</div>
 
-<div class="connection-copy">
-What connects all four?
-</div>
+ <div class="connection-copy">
+  What connects all four?
+ </div>
 
-<div
- class="connection-length"
- id="connectionLength"
-></div>
+ <div class="connection-length" id="connectionLength"></div>
 
-<input
- id="connectionInput"
- class="connection-input"
- autocomplete="off"
- autocapitalize="characters"
- spellcheck="false"
->
+ <input
+  id="connectionInput"
+  class="connection-input"
+  autocomplete="off"
+  autocapitalize="characters"
+  spellcheck="false"
+ >
 
-<div class="connection-actions">
+ <div class="connection-actions">
+  <button class="btn primary" id="connectBtn">CONNECT</button>
+  <button class="btn" id="connectionHintBtn">HINT</button>
+  <button class="btn" id="revealBtn">REVEAL</button>
+ </div>
 
-<button
- class="btn primary"
- id="connectBtn"
->
-CONNECT
-</button>
-
-<button
- class="btn"
- id="connectionHintBtn"
->
-HINT
-</button>
-
-<button
- class="btn"
- id="revealBtn"
->
-REVEAL
-</button>
-
-</div>
-
-<div id="connectionHint"></div>
+ <div id="connectionHint"></div>
 
 </section>
 
-<section
- class="final"
- id="final"
->
+<section class="final" id="final">
 
-<div class="final-kicker">
-A FIRST TRACE
-</div>
+ <div class="final-kicker">
+  A FIRST TRACE
+ </div>
 
-<div class="final-title">
-Your path remains.
-</div>
+ <div class="final-title">
+  Your path remains.
+ </div>
 
-<div class="final-copy">
-This place is a little different because you passed through it.
-</div>
+ <div class="final-copy">
+  This place is a little different because you passed through it.
+ </div>
 
-<div
- class="final-path"
- id="finalPath"
-></div>
+ <div class="final-path" id="finalPath"></div>
 
 </section>
 
 </div>
-
 </main>
-
 </div>
 
 <script>
 
 /*
- WORDLOCK #029
- MEDIUM CALIBRATION 3
+ WORDLOCK #030
+ MEDIUM CALIBRATION 4
 
- Important construction distinction:
+ END-TO-END VALIDATION
 
- Different successful reel configurations
- may create different geographical routes.
+ Initial board:
+ - no clue answer already present
 
- A displayed state containing more than
- one simultaneous valid route is NOT
- silently resolved by the engine.
+ FIELD:
+ - 2 validated geographical footprints
+
+ CLOCK:
+ - 2 validated geographical footprints
+   after either FIELD branch
+
+ PATCH:
+ - 1–2 validated geographical footprints
+   depending on prior branch
+
+ FRAME:
+ - 3 validated geographical footprints
+   from every state reaching clue 4
+
+ Full branching solve tree:
+ - 10 distinct validated final states
+
+ Every accepted state in the validated
+ tree contains exactly one visible route
+ for the current answer.
 */
 
 const PUZZLE={
 
  wheels:[
 
-  ["E","Y","L"],
-  ["S","L","R"],
-  ["E","M","X"],
-  ["R","Y","Z"],
+  ["D","S","U"],
+  ["B","I","R"],
+  ["A","M","Y"],
+  ["E","H","O"],
 
-  ["A","E","H"],
-  ["L","J","H"],
-  ["S","L","T"],
-  ["S","A","J"],
+  ["D","P","U"],
+  ["A","D","P"],
+  ["I","L","R"],
+  ["C","D","E"],
 
-  ["R","T","S"],
-  ["S","E","T"],
-  ["S","L","D"],
-  ["E","H","W"],
+  ["K","M","T"],
+  ["A","E","S"],
+  ["B","F","K"],
+  ["A","O","U"],
 
-  ["A","E","W"],
-  ["S","L","Y"],
-  ["L","J","O"],
-  ["R","L","E"]
+  ["C","S","T"],
+  ["A","H","I"],
+  ["B","C","K"],
+  ["G","H","K"]
 
  ],
 
  initial:[
-
-  1,2,2,0,
-  0,1,1,0,
-  0,2,1,1,
-  2,1,2,2
-
+  0,1,0,1,
+  1,2,0,0,
+  0,1,0,0,
+  1,2,1,0
  ],
 
  clues:[
 
   {
-   answer:"STAR",
-   clue:"Celestial body producing its own light",
-   start:1,
+   answer:"FIELD",
+   clue:"Grassy expanse",
+   start:10,
    colour:1
   },
 
   {
-   answer:"JELLY",
-   clue:"Soft, wobbly dessert",
-   start:5,
+   answer:"CLOCK",
+   clue:"It may have hands but no arms",
+   start:7,
    colour:2
   },
 
   {
-   answer:"SHELL",
-   clue:"Hard outer covering of a mollusc",
-   start:8,
+   answer:"PATCH",
+   clue:"Repair covering a worn area",
+   start:4,
    colour:3
   },
 
   {
-   answer:"SWORD",
-   clue:"Bladed weapon carried by a knight",
-   start:7,
+   answer:"FRAME",
+   clue:"Supporting structure",
+   start:10,
    colour:4
   }
 
@@ -1258,101 +1083,74 @@ const PUZZLE={
 
  connection:{
 
-  answer:"FISH",
+  answer:"WORK",
 
   hint1:
-  "The connecting word comes after all four answers.",
+   "The connecting word comes after all four answers.",
 
   hint2:
-  "Think beneath the surface of the water.",
+   "Think of making, building or doing.",
 
   hint3:
-  "STAR, JELLY, SHELL and SWORD can all be followed by the same four letters."
+   "FIELD, CLOCK, PATCH and FRAME can all be followed by the same four letters."
 
  }
 
 };
 
-
-
 let clueIndex=0;
-
-let current=
- [...PUZZLE.initial];
-
-let clueSnapshot=
- [...PUZZLE.initial];
+let current=[...PUZZLE.initial];
+let clueSnapshot=[...PUZZLE.initial];
 
 let remembered=
- PUZZLE.wheels
-  .map(()=>new Set());
+ PUZZLE.wheels.map(()=>new Set());
 
 let histories=
- PUZZLE.wheels
-  .map(()=>new Set());
+ PUZZLE.wheels.map(()=>new Set());
 
 let solvedWords=[];
 
 let turns=0;
-
 let attempts=0;
-
 let hints=0;
 
 let connectionHintLevel=0;
 
 let busy=false;
-
 let clueHasStarted=false;
-
 let entered=false;
 
 let audioCtx=null;
 
 
+/* AUDIO */
 
 function getAudioContext(){
 
- if(audioCtx){
-  return audioCtx;
- }
+ if(audioCtx)return audioCtx;
 
  const AC=
   window.AudioContext||
   window.webkitAudioContext;
 
- if(!AC){
-  return null;
- }
+ if(!AC)return null;
 
- audioCtx=
-  new AC();
+ audioCtx=new AC();
 
  return audioCtx;
-
 }
-
 
 
 function primeAudio(){
 
- const ctx=
-  getAudioContext();
+ const ctx=getAudioContext();
 
- if(!ctx){
-  return;
- }
+ if(!ctx)return;
 
  try{
 
-  if(
-   ctx.state===
-   "suspended"
-  ){
-
-   ctx.resume()
-    .catch(()=>{});
-
+  if(ctx.state==="suspended"){
+   ctx.resume().catch(()=>{});
   }
 
   const buffer=
@@ -1365,19 +1163,14 @@ function primeAudio(){
   const source=
    ctx.createBufferSource();
 
-  source.buffer=
-   buffer;
+  source.buffer=buffer;
 
-  source.connect(
-   ctx.destination
-  );
+  source.connect(ctx.destination);
 
   source.start(0);
 
  }catch(e){}
-
 }
-
 
 
 async function tone(
@@ -1388,17 +1181,11 @@ async function tone(
  delay=0
 ){
 
- const ctx=
-  getAudioContext();
+ const ctx=getAudioContext();
 
- if(!ctx){
-  return;
- }
+ if(!ctx)return;
 
- if(
-  ctx.state!==
-  "running"
- ){
+ if(ctx.state!=="running"){
 
   try{
    await ctx.resume();
@@ -1407,8 +1194,7 @@ async function tone(
  }
 
  const now=
-  ctx.currentTime+
-  delay;
+  ctx.currentTime+delay;
 
  const osc=
   ctx.createOscillator();
@@ -1416,8 +1202,7 @@ async function tone(
  const gain=
   ctx.createGain();
 
- osc.type=
-  type;
+ osc.type=type;
 
  osc.frequency
   .setValueAtTime(
@@ -1433,10 +1218,7 @@ async function tone(
 
  gain.gain
   .exponentialRampToValueAtTime(
-   Math.max(
-    volume,
-    .0002
-   ),
+   Math.max(volume,.0002),
    now+.012
   );
 
@@ -1448,26 +1230,16 @@ async function tone(
 
  osc.connect(gain);
 
- gain.connect(
-  ctx.destination
- );
+ gain.connect(ctx.destination);
 
  osc.start(now);
 
  osc.stop(
-  now+
-  duration+
-  .04
+  now+duration+.04
  );
 
 }
 
-
-
-/* NEW #029:
-   a soft atmospheric response
-   when the player touches the place.
-   Deliberately not a mechanical click. */
 
 function placeSound(){
 
@@ -1506,7 +1278,6 @@ function placeSound(){
 }
 
 
-
 function reelSound(){
 
  tone(
@@ -1535,7 +1306,6 @@ function reelSound(){
 }
 
 
-
 function wrongSound(){
 
  tone(
@@ -1554,7 +1324,6 @@ function wrongSound(){
  );
 
 }
-
 
 
 function pathSound(step){
@@ -1593,7 +1362,6 @@ function pathSound(step){
 }
 
 
-
 function connectionSound(){
 
  [
@@ -1626,37 +1394,28 @@ function connectionSound(){
 }
 
 
+/* ENTRY */
 
 function enterPlace(){
 
- if(entered){
-  return;
- }
+ if(entered)return;
 
  entered=true;
 
  primeAudio();
-
- /*
-  Tiny delay gives Safari's
-  audio context time to wake
-  before the audible bloom.
- */
 
  setTimeout(
   placeSound,
   45
  );
 
- entry.classList
-  .add(
-   "entering"
-  );
+ entry.classList.add(
+  "entering"
+ );
 
- document.body.classList
-  .add(
-   "entered"
-  );
+ document.body.classList.add(
+  "entered"
+ );
 
  setTimeout(
   ()=>{
@@ -1664,10 +1423,9 @@ function enterPlace(){
    entry.style.display=
     "none";
 
-   gameShell.classList
-    .add(
-     "visible"
-    );
+   gameShell.classList.add(
+    "visible"
+   );
 
   },
   650
@@ -1681,7 +1439,6 @@ function enterPlace(){
 }
 
 
-
 entry.addEventListener(
  "pointerdown",
  primeAudio
@@ -1693,6 +1450,7 @@ entry.addEventListener(
 );
 
 
+/* PATH ENGINE */
 
 function letterAt(i){
 
@@ -1703,11 +1461,7 @@ function letterAt(i){
 }
 
 
-
-function adjacent(
- a,
- b
-){
+function adjacent(a,b){
 
  return Math.max(
 
@@ -1726,13 +1480,9 @@ function adjacent(
 }
 
 
-
 /*
- Find every route currently
- visible on the board.
-
- A place may appear only once
- within a word.
+ Each place may be used once
+ within an answer.
 */
 
 function findPaths(word){
@@ -1766,25 +1516,19 @@ function findPaths(word){
 
    if(
     path.includes(i)
-   ){
-    continue;
-   }
+   )continue;
 
    if(
     !adjacent(
      position,
      i
     )
-   ){
-    continue;
-   }
+   )continue;
 
    if(
     letterAt(i)!==
     word[letterIndex]
-   ){
-    continue;
-   }
+   )continue;
 
    path.push(i);
 
@@ -1826,6 +1570,7 @@ function findPaths(word){
 }
 
 
+/* BOARD HISTORY */
 
 function applyHistory(
  reel,
@@ -1868,9 +1613,7 @@ function applyHistory(
    ].includes(mix)
   ){
 
-   reel.classList.add(
-    mix
-   );
+   reel.classList.add(mix);
 
   }
 
@@ -1879,16 +1622,13 @@ function applyHistory(
 }
 
 
-
 function applyStartingPulse(){
 
  if(
   !entered||
   clueHasStarted||
   clueIndex>=4
- ){
-  return;
- }
+ )return;
 
  const reels=
   document.querySelectorAll(
@@ -1906,165 +1646,150 @@ function applyStartingPulse(){
 }
 
 
+/* RENDER */
 
 function render(){
 
  board.innerHTML="";
 
- PUZZLE.wheels
-  .forEach(
-   (wheel,i)=>{
+ PUZZLE.wheels.forEach(
+  (wheel,i)=>{
 
-    const reel=
-     document
-      .createElement(
+   const reel=
+    document.createElement(
+     "div"
+    );
+
+   reel.className="reel";
+
+   applyHistory(
+    reel,
+    i
+   );
+
+   const centre=
+    current[i];
+
+   const left=
+    (centre+2)%3;
+
+   const right=
+    (centre+1)%3;
+
+   const strip=
+    document.createElement(
+     "div"
+    );
+
+   strip.className=
+    "reel-strip";
+
+   [
+    {
+     idx:left,
+     type:"alt"
+    },
+    {
+     idx:centre,
+     type:"current"
+    },
+    {
+     idx:right,
+     type:"alt"
+    }
+   ].forEach(
+    item=>{
+
+     const el=
+      document.createElement(
        "div"
       );
 
-    reel.className=
-     "reel";
+     el.className=
+      "letter "+
+      item.type;
 
-    applyHistory(
-     reel,
-     i
-    );
+     const letter=
+      wheel[item.idx];
 
-    const centre=
-     current[i];
+     if(
+      item.type==="alt"&&
+      remembered[i]
+       .has(letter)
+     ){
 
-    const left=
-     (centre+2)%3;
-
-    const right=
-     (centre+1)%3;
-
-    const strip=
-     document
-      .createElement(
-       "div"
-      );
-
-    strip.className=
-     "reel-strip";
-
-    [
-     {
-      idx:left,
-      type:"alt"
-     },
-     {
-      idx:centre,
-      type:"current"
-     },
-     {
-      idx:right,
-      type:"alt"
-     }
-    ].forEach(
-     item=>{
-
-      const el=
-       document
-        .createElement(
-         "div"
-        );
-
-      el.className=
-       "letter "+
-       item.type;
-
-      const letter=
-       wheel[
-        item.idx
-       ];
-
-      if(
-       item.type===
-       "alt"&&
-       remembered[i]
-        .has(letter)
-      ){
-
-       el.classList
-        .add(
-         "remembered"
-        );
-
-      }
-
-      el.textContent=
-       letter;
-
-      strip.appendChild(
-       el
+      el.classList.add(
+       "remembered"
       );
 
      }
-    );
 
-    reel.appendChild(
-     strip
-    );
+     el.textContent=
+      letter;
 
-    let startX=null;
+     strip.appendChild(
+      el
+     );
 
-    reel.addEventListener(
-     "pointerdown",
-     e=>{
+    }
+   );
 
-      if(busy){
-       return;
-      }
+   reel.appendChild(
+    strip
+   );
 
-      primeAudio();
+   let startX=null;
 
-      startX=
-       e.clientX;
+   reel.addEventListener(
+    "pointerdown",
+    e=>{
 
-      reel
-       .setPointerCapture?.
-       (e.pointerId);
+     if(busy)return;
 
-     }
-    );
+     primeAudio();
 
-    reel.addEventListener(
-     "pointerup",
-     e=>{
+     startX=e.clientX;
 
-      if(
-       busy||
-       startX===null
-      ){
-       return;
-      }
-
-      const dx=
-       e.clientX-
-       startX;
-
-      startX=null;
-
-      if(
-       Math.abs(dx)<16
-      ){
-       return;
-      }
-
-      animateTurn(
-       i,
-       dx<0?1:-1
-      );
-
-     }
-    );
-
-    board.appendChild(
      reel
-    );
+      .setPointerCapture?.
+      (e.pointerId);
 
-   }
-  );
+    }
+   );
+
+   reel.addEventListener(
+    "pointerup",
+    e=>{
+
+     if(
+      busy||
+      startX===null
+     )return;
+
+     const dx=
+      e.clientX-
+      startX;
+
+     startX=null;
+
+     if(
+      Math.abs(dx)<16
+     )return;
+
+     animateTurn(
+      i,
+      dx<0?1:-1
+     );
+
+    }
+   );
+
+   board.appendChild(
+    reel
+   );
+
+  }
+ );
 
  applyStartingPulse();
 
@@ -2073,22 +1798,20 @@ function render(){
 }
 
 
+/* REEL MOVEMENT */
 
 function animateTurn(
  i,
  direction
 ){
 
- if(busy){
-  return;
- }
+ if(busy)return;
 
  if(
   !clueHasStarted
  ){
 
-  clueHasStarted=
-   true;
+  clueHasStarted=true;
 
   document
    .querySelectorAll(
@@ -2096,10 +1819,9 @@ function animateTurn(
    )
    .forEach(
     r=>
-     r.classList
-      .remove(
-       "pulse"
-      )
+     r.classList.remove(
+      "pulse"
+     )
    );
 
  }
@@ -2140,18 +1862,16 @@ function animateTurn(
       ".reel"
      )[i];
 
-   fresh?.classList
-    .add(
-     "settle"
-    );
+   fresh?.classList.add(
+    "settle"
+   );
 
    setTimeout(
     ()=>{
 
-     fresh?.classList
-      .remove(
-       "settle"
-      );
+     fresh?.classList.remove(
+      "settle"
+     );
 
      busy=false;
 
@@ -2166,13 +1886,13 @@ function animateTurn(
 }
 
 
+/* CLUES */
 
 function renderClue(){
 
  busy=false;
 
- clueHasStarted=
-  false;
+ clueHasStarted=false;
 
  const c=
   PUZZLE.clues[
@@ -2196,12 +1916,9 @@ function renderClue(){
 }
 
 
-
 function unlock(){
 
- if(busy){
-  return;
- }
+ if(busy)return;
 
  primeAudio();
 
@@ -2227,10 +1944,9 @@ function unlock(){
 
   busy=true;
 
-  board.classList
-   .add(
-    "shake"
-   );
+  board.classList.add(
+   "shake"
+  );
 
   message.textContent=
    "Not quite. The place settles back.";
@@ -2238,10 +1954,9 @@ function unlock(){
   setTimeout(
    ()=>{
 
-    board.classList
-     .remove(
-      "shake"
-     );
+    board.classList.remove(
+     "shake"
+    );
 
     current=
      [...clueSnapshot];
@@ -2259,8 +1974,8 @@ function unlock(){
  }
 
  /*
-  Never guess which path
-  the player intended.
+  Never allow the engine to
+  choose a path for the player.
  */
 
  if(
@@ -2282,7 +1997,6 @@ function unlock(){
  );
 
 }
-
 
 
 function solve(
@@ -2344,20 +2058,18 @@ function solve(
      ".reel"
     )[position];
 
-  reel?.classList
-   .add(
-    "confirming"
-   );
+  reel?.classList.add(
+   "confirming"
+  );
 
   pathSound(
    step
   );
 
   setTimeout(
-   ()=>reel?.classList
-    .remove(
-     "confirming"
-    ),
+   ()=>reel?.classList.remove(
+    "confirming"
+   ),
    320
   );
 
@@ -2373,7 +2085,6 @@ function solve(
  next();
 
 }
-
 
 
 function completeWord(
@@ -2400,11 +2111,8 @@ function completeWord(
   " found.";
 
  /*
-  Only the successful path
-  survives into the next clue.
-
-  Experimental reel changes
-  outside it settle back.
+  Only the actual successful
+  route carries forward.
  */
 
  const next=
@@ -2419,8 +2127,7 @@ function completeWord(
   }
  );
 
- current=
-  next;
+ current=next;
 
  clueSnapshot=
   [...current];
@@ -2448,12 +2155,9 @@ function completeWord(
 }
 
 
-
 function reset(){
 
- if(busy){
-  return;
- }
+ if(busy)return;
 
  primeAudio();
 
@@ -2467,12 +2171,9 @@ function reset(){
 }
 
 
-
 function clueHint(){
 
- if(busy){
-  return;
- }
+ if(busy)return;
 
  primeAudio();
 
@@ -2490,17 +2191,15 @@ function clueHint(){
     ].start
    ];
 
- reel?.classList
-  .remove(
-   "pulse"
-  );
+ reel?.classList.remove(
+  "pulse"
+ );
 
  void reel?.offsetWidth;
 
- reel?.classList
-  .add(
-   "pulse"
-  );
+ reel?.classList.add(
+  "pulse"
+ );
 
  message.textContent=
   "One possible place to start.";
@@ -2508,38 +2207,38 @@ function clueHint(){
 }
 
 
+/* BANK */
 
 function renderBank(){
 
  bank.innerHTML="";
 
- solvedWords
-  .forEach(
-   (word,i)=>{
+ solvedWords.forEach(
+  (word,i)=>{
 
-    const pill=
-     document
-      .createElement(
-       "div"
-      );
-
-    pill.className=
-     "pill c"+
-     (i+1);
-
-    pill.textContent=
-     word;
-
-    bank.appendChild(
-     pill
+   const pill=
+    document.createElement(
+     "div"
     );
 
-   }
-  );
+   pill.className=
+    "pill c"+
+    (i+1);
+
+   pill.textContent=
+    word;
+
+   bank.appendChild(
+    pill
+   );
+
+  }
+ );
 
 }
 
 
+/* CONNECTION */
 
 function showConnection(){
 
@@ -2553,21 +2252,17 @@ function showConnection(){
  clueArea.style.display=
   "none";
 
- connection.classList
-  .add(
-   "show"
-  );
+ connection.classList.add(
+  "show"
+ );
 
  connectionLength.textContent=
   "•".repeat(
-   PUZZLE
-    .connection
-    .answer
-    .length
+   PUZZLE.connection
+    .answer.length
   );
 
 }
-
 
 
 function connectionHint(){
@@ -2576,9 +2271,7 @@ function connectionHint(){
 
  if(
   connectionHintLevel>=3
- ){
-  return;
- }
+ )return;
 
  connectionHintLevel++;
 
@@ -2591,24 +2284,21 @@ function connectionHint(){
    "connectionHint"
   )
   .textContent=
-   PUZZLE
-    .connection[
-     "hint"+
-     connectionHintLevel
-    ];
+   PUZZLE.connection[
+    "hint"+
+    connectionHintLevel
+   ];
 
  if(
   connectionHintLevel===3
  ){
 
-  connectionHintBtn
-   .textContent=
-    "NO MORE HINTS";
+  connectionHintBtn.textContent=
+   "NO MORE HINTS";
 
  }
 
 }
-
 
 
 function tryConnection(){
@@ -2621,9 +2311,7 @@ function tryConnection(){
    .trim()
    .toUpperCase();
 
- if(!guess){
-  return;
- }
+ if(!guess)return;
 
  attempts++;
 
@@ -2631,8 +2319,7 @@ function tryConnection(){
 
  if(
   guess===
-  PUZZLE
-   .connection
+  PUZZLE.connection
    .answer
  ){
 
@@ -2643,8 +2330,7 @@ function tryConnection(){
   wrongSound();
 
   connectionInput
-   .classList
-   .add(
+   .classList.add(
     "shake"
    );
 
@@ -2659,8 +2345,7 @@ function tryConnection(){
    ()=>{
 
     connectionInput
-     .classList
-     .remove(
+     .classList.remove(
       "shake"
      );
 
@@ -2673,15 +2358,12 @@ function tryConnection(){
 }
 
 
-
 function revealConnection(){
 
  primeAudio();
 
  connectionInput.value=
-  PUZZLE
-   .connection
-   .answer;
+  PUZZLE.connection.answer;
 
  document
   .getElementById(
@@ -2698,15 +2380,12 @@ function revealConnection(){
 }
 
 
-
 function completeConnection(){
 
  connectionSound();
 
  const answer=
-  PUZZLE
-   .connection
-   .answer;
+  PUZZLE.connection.answer;
 
  connectionInput.value=
   answer;
@@ -2722,11 +2401,8 @@ function completeConnection(){
   id=>{
 
    document
-    .getElementById(
-     id
-    )
-    .disabled=
-     true;
+    .getElementById(id)
+    .disabled=true;
 
   }
  );
@@ -2735,19 +2411,17 @@ function completeConnection(){
   answer;
 
  /*
-  STARFISH
-  JELLYFISH
-  SHELLFISH
-  SWORDFISH
+  FIELDWORK
+  CLOCKWORK
+  PATCHWORK
+  FRAMEWORK
  */
 
  const forms=
-  solvedWords
-   .map(
-    word=>
-     word+
-     answer
-   );
+  solvedWords.map(
+   word=>
+    word+answer
+  );
 
  const out=
   document
@@ -2762,8 +2436,7 @@ function completeConnection(){
  function next(){
 
   if(
-   i>=
-   forms.length
+   i>=forms.length
   ){
 
    setTimeout(
@@ -2805,48 +2478,41 @@ function completeConnection(){
 }
 
 
+/* FINISH */
 
 function finish(){
 
  const visited=
-  histories
-   .filter(
-    set=>
-     set.size>0
-   )
-   .length;
+  histories.filter(
+   set=>set.size>0
+  ).length;
 
- connection.style
-  .transition=
-   "opacity .8s ease";
+ connection.style.transition=
+  "opacity .8s ease";
 
- connection.style
-  .opacity=
-   "0";
+ connection.style.opacity=
+  "0";
 
  setTimeout(
   ()=>{
 
-   connection.style
-    .display=
-     "none";
+   connection.style.display=
+    "none";
 
    finalPath.textContent=
     "TODAY'S TRACE · "+
     visited+
     " OF 16 PLACES";
 
-   final.classList
-    .add(
-     "show"
-    );
+   final.classList.add(
+    "show"
+   );
 
   },
   800
  );
 
 }
-
 
 
 function updateStats(){
@@ -2881,59 +2547,50 @@ function updateStats(){
 }
 
 
+/* EVENTS */
 
-unlockBtn
- .addEventListener(
-  "click",
-  unlock
- );
+unlockBtn.addEventListener(
+ "click",
+ unlock
+);
 
-resetBtn
- .addEventListener(
-  "click",
-  reset
- );
+resetBtn.addEventListener(
+ "click",
+ reset
+);
 
-hintBtn
- .addEventListener(
-  "click",
-  clueHint
- );
+hintBtn.addEventListener(
+ "click",
+ clueHint
+);
 
-connectBtn
- .addEventListener(
-  "click",
-  tryConnection
- );
+connectBtn.addEventListener(
+ "click",
+ tryConnection
+);
 
-connectionHintBtn
- .addEventListener(
-  "click",
-  connectionHint
- );
+connectionHintBtn.addEventListener(
+ "click",
+ connectionHint
+);
 
-revealBtn
- .addEventListener(
-  "click",
-  revealConnection
- );
+revealBtn.addEventListener(
+ "click",
+ revealConnection
+);
 
-connectionInput
- .addEventListener(
-  "keydown",
-  e=>{
+connectionInput.addEventListener(
+ "keydown",
+ e=>{
 
-   if(
-    e.key===
-    "Enter"
-   ){
-
-    tryConnection();
-
-   }
-
+  if(
+   e.key==="Enter"
+  ){
+   tryConnection();
   }
- );
+
+ }
+);
 
 renderClue();
 
