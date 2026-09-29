@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#e7ddc9">
 
-<title>WORDLOCK — Prototype #023</title>
+<title>WORDLOCK — Prototype #024</title>
 
 <style>
+
 :root{
   --ink:#20211f;
   --alt:#777b76;
@@ -41,6 +42,7 @@ button,input{
   font:inherit;
 }
 
+
 /* ======================================================
    THE PLACE
 ====================================================== */
@@ -56,11 +58,13 @@ button,input{
       rgba(150,170,126,.22),
       transparent 40%
     ),
+
     radial-gradient(
       ellipse at 14% 72%,
       rgba(183,161,120,.18),
       transparent 44%
     ),
+
     linear-gradient(
       145deg,
       #ebe0ca 0%,
@@ -103,6 +107,11 @@ button,input{
   opacity:.60;
 }
 
+
+/* ======================================================
+   WATER
+====================================================== */
+
 .water{
   position:absolute;
   left:-15%;
@@ -123,6 +132,7 @@ button,input{
       rgba(67,125,137,.13) 19px,
       transparent 20px 34px
     ),
+
     radial-gradient(
       ellipse at 58% 42%,
       rgba(76,145,158,.49),
@@ -170,6 +180,11 @@ button,input{
   transform:rotate(-8deg);
 }
 
+
+/* ======================================================
+   VEGETATION
+====================================================== */
+
 .vegetation{
   position:absolute;
   right:-10%;
@@ -197,6 +212,7 @@ button,input{
       rgba(56,88,56,.36) 0 1.2px,
       transparent 1.6px
     ),
+
     radial-gradient(
       circle,
       rgba(76,102,66,.25) 0 1px,
@@ -258,6 +274,11 @@ button,input{
     );
 }
 
+
+/* ======================================================
+   STONE
+====================================================== */
+
 .stone{
   position:absolute;
   right:-28px;
@@ -276,6 +297,7 @@ button,input{
       rgba(83,76,65,.07) 18px,
       transparent 19px 31px
     ),
+
     linear-gradient(
       135deg,
       rgba(158,140,111,.25),
@@ -301,6 +323,11 @@ button,input{
     );
 }
 
+
+/* ======================================================
+   SUGGESTED PATH
+====================================================== */
+
 .path{
   position:absolute;
   width:82%;
@@ -325,6 +352,7 @@ button,input{
 
   border-radius:50%;
 }
+
 
 /* ======================================================
    MAIN LAYOUT
@@ -375,6 +403,171 @@ header{
   font-size:15px;
   color:#5d5d54;
 }
+
+
+/* ======================================================
+   #024 — ENTER THE PLACE
+====================================================== */
+
+.entry{
+  position:relative;
+  z-index:5;
+
+  min-height:560px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  padding:30px 24px 110px;
+
+  text-align:center;
+
+  cursor:pointer;
+  touch-action:manipulation;
+
+  transition:
+    opacity 1.1s ease,
+    transform 1.25s cubic-bezier(.22,.72,.26,1),
+    filter 1.2s ease;
+}
+
+.entry-title{
+  font-family:Georgia,serif;
+  font-size:23px;
+  line-height:1.35;
+  color:#34372f;
+
+  opacity:.88;
+}
+
+.entry-copy{
+  margin-top:11px;
+
+  font-family:Georgia,serif;
+  font-size:13px;
+  font-style:italic;
+
+  color:#65675f;
+
+  opacity:.72;
+
+  animation:
+    entryBreath 3.8s ease-in-out infinite;
+}
+
+@keyframes entryBreath{
+  0%,100%{
+    opacity:.42;
+  }
+
+  50%{
+    opacity:.88;
+  }
+}
+
+.entry.entering{
+  opacity:0;
+  transform:scale(1.025);
+  filter:blur(3px);
+  pointer-events:none;
+}
+
+
+/*
+  The game exists in the DOM from the start,
+  but before entry it has almost no substance.
+
+  On entering, it resolves into the landscape.
+*/
+
+.game-shell{
+  position:relative;
+
+  opacity:0;
+
+  filter:blur(9px);
+
+  transform:
+    translateY(9px)
+    scale(.985);
+
+  pointer-events:none;
+
+  transition:
+    opacity 1.45s ease,
+    filter 1.65s ease,
+    transform 1.65s cubic-bezier(.22,.72,.26,1);
+}
+
+.game-shell.visible{
+  opacity:1;
+  filter:blur(0);
+  transform:none;
+  pointer-events:auto;
+}
+
+
+/*
+  Very faint latent mark in the landscape.
+
+  This is intentionally NOT a visible empty
+  4 x 4 board.
+*/
+
+.latent{
+  position:absolute;
+  z-index:1;
+
+  left:50%;
+  top:300px;
+
+  width:min(78vw,390px);
+  height:330px;
+
+  transform:translateX(-50%);
+
+  opacity:.16;
+
+  pointer-events:none;
+
+  transition:
+    opacity 1.1s ease,
+    transform 1.3s ease;
+}
+
+.latent::before,
+.latent::after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  border-radius:46% 54% 49% 51%;
+
+  border:
+    1px solid rgba(80,82,72,.28);
+}
+
+.latent::before{
+  transform:
+    rotate(-5deg)
+    scale(.94);
+}
+
+.latent::after{
+  transform:
+    rotate(4deg)
+    scale(.82);
+}
+
+body.entered .latent{
+  opacity:0;
+  transform:
+    translateX(-50%)
+    scale(1.05);
+}
+
 
 /* ======================================================
    CLUE
@@ -456,6 +649,7 @@ header{
   color:#656861;
 }
 
+
 /* ======================================================
    BOARD
 ====================================================== */
@@ -498,6 +692,7 @@ header{
 
   display:grid;
   grid-template-columns:1fr 1.28fr 1fr;
+
   align-items:center;
   text-align:center;
 
@@ -536,6 +731,7 @@ header{
   color:var(--ink);
   opacity:1;
 }
+
 
 /* ======================================================
    REEL MOTION
@@ -585,8 +781,9 @@ header{
     0 8px 17px rgba(50,47,40,.13);
 }
 
+
 /* ======================================================
-   PERSISTENT STARTING PULSE
+   STARTING PULSE
 ====================================================== */
 
 .reel.pulse{
@@ -614,6 +811,7 @@ header{
       0 7px 16px rgba(50,48,42,.13);
   }
 }
+
 
 /* ======================================================
    COLOUR HISTORY
@@ -664,6 +862,7 @@ header{
   background:
     linear-gradient(135deg,var(--ochre),var(--mauve));
 }
+
 
 /* ======================================================
    CONTROLS
@@ -716,6 +915,7 @@ header{
 
   color:#55584f;
 }
+
 
 /* ======================================================
    BANK / STATS
@@ -784,6 +984,7 @@ header{
 
   color:#565951;
 }
+
 
 /* ======================================================
    CONNECTION
@@ -876,7 +1077,6 @@ header{
 #connectionHint{
   max-width:340px;
   min-height:46px;
-
   margin:13px auto 0;
 
   font-family:Georgia,serif;
@@ -886,6 +1086,7 @@ header{
 
   color:#55584f;
 }
+
 
 /* ======================================================
    FINISH
@@ -928,11 +1129,9 @@ header{
 
 .final-path{
   margin-top:17px;
-
   font-size:10px;
   font-weight:800;
   letter-spacing:.15em;
-
   color:#50534c;
 }
 
@@ -946,7 +1145,9 @@ header{
   75%{transform:translateX(-2px);}
 }
 
+
 @media(max-width:390px){
+
   .board{
     gap:10px 7px;
   }
@@ -967,9 +1168,15 @@ header{
   #clue{
     font-size:19px;
   }
+
+  .entry{
+    min-height:520px;
+  }
 }
 
+
 @media(prefers-reduced-motion:reduce){
+
   *,
   *::before,
   *::after{
@@ -977,20 +1184,23 @@ header{
     transition-duration:.01ms!important;
   }
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div id="place">
 
+
 <div class="terrain">
 
 <svg
-  class="contours"
-  viewBox="0 0 700 1200"
-  preserveAspectRatio="none"
-  aria-hidden="true">
+class="contours"
+viewBox="0 0 700 1200"
+preserveAspectRatio="none"
+aria-hidden="true">
 
 <path d="M-70 145 C80 40 270 55 365 155 C460 255 610 225 770 105"/>
 <path d="M-70 190 C95 85 260 90 345 185 C430 285 590 280 770 150"/>
@@ -1014,7 +1224,12 @@ header{
 
 </div>
 
+
+<div class="latent"></div>
+
+
 <main class="wrap">
+
 
 <header>
 
@@ -1023,7 +1238,7 @@ WORDLOCK
 </div>
 
 <div class="prototype">
-PROTOTYPE #023
+PROTOTYPE #024
 </div>
 
 <div class="where">
@@ -1036,63 +1251,103 @@ Stone · water · first traces
 
 </header>
 
+
+<!-- ==================================================
+     ENTRY STATE
+=================================================== -->
+
 <section
-  class="clue-area"
-  id="clueArea">
+class="entry"
+id="entry"
+role="button"
+tabindex="0"
+aria-label="Enter today's place">
+
+<div class="entry-title">
+Today’s place is waiting.
+</div>
+
+<div class="entry-copy">
+Touch the place
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     GAME
+=================================================== -->
+
+<div
+class="game-shell"
+id="gameShell">
+
+
+<section
+class="clue-area"
+id="clueArea">
 
 <div class="progress">
+
 <div class="progress-dot"></div>
 <div class="progress-dot"></div>
 <div class="progress-dot"></div>
 <div class="progress-dot"></div>
+
 </div>
 
 <div
-  class="clue-label"
-  id="clueLabel">
+class="clue-label"
+id="clueLabel">
 CLUE 1
 </div>
 
 <div id="clue"></div>
+
 <div id="length"></div>
 
 </section>
 
+
 <div
-  class="board"
-  id="board">
+class="board"
+id="board">
 </div>
 
+
 <div
-  class="controls"
-  id="controls">
+class="controls"
+id="controls">
 
 <button
-  class="btn"
-  id="resetBtn">
+class="btn"
+id="resetBtn">
 RESET
 </button>
 
 <button
-  class="btn primary"
-  id="unlockBtn">
+class="btn primary"
+id="unlockBtn">
 UNLOCK
 </button>
 
 <button
-  class="btn"
-  id="hintBtn">
+class="btn"
+id="hintBtn">
 HINT
 </button>
 
 </div>
 
+
 <div id="message"></div>
 
+
 <div
-  class="bank"
-  id="bank">
+class="bank"
+id="bank">
 </div>
+
 
 <div class="stats">
 
@@ -1110,9 +1365,10 @@ HINT
 
 </div>
 
+
 <section
-  class="connection"
-  id="connection">
+class="connection"
+id="connection">
 
 <div class="connection-title">
 THE CONNECTION
@@ -1122,43 +1378,37 @@ THE CONNECTION
 What connects all four?
 </div>
 
-<!--
-  #023:
-  No duplicated answer pills here.
-  The bank immediately above remains visible.
--->
-
 <div
-  class="connection-length"
-  id="connectionLength">
+class="connection-length"
+id="connectionLength">
 </div>
 
 <input
-  id="connectionInput"
-  class="connection-input"
-  autocomplete="off"
-  autocapitalize="characters"
-  spellcheck="false"
-  maxlength="12"
-  aria-label="Connecting word">
+id="connectionInput"
+class="connection-input"
+autocomplete="off"
+autocapitalize="characters"
+spellcheck="false"
+maxlength="12"
+aria-label="Connecting word">
 
 <div class="connection-actions">
 
 <button
-  class="btn primary"
-  id="connectBtn">
+class="btn primary"
+id="connectBtn">
 CONNECT
 </button>
 
 <button
-  class="btn"
-  id="connectionHintBtn">
+class="btn"
+id="connectionHintBtn">
 HINT
 </button>
 
 <button
-  class="btn"
-  id="revealBtn">
+class="btn"
+id="revealBtn">
 REVEAL
 </button>
 
@@ -1168,9 +1418,10 @@ REVEAL
 
 </section>
 
+
 <section
-  class="final"
-  id="final">
+class="final"
+id="final">
 
 <div class="final-kicker">
 A FIRST TRACE
@@ -1185,21 +1436,35 @@ This place is a little different because you passed through it.
 </div>
 
 <div
-  class="final-path"
-  id="finalPath">
+class="final-path"
+id="finalPath">
 </div>
 
 </section>
+
+
+</div>
 
 </main>
 
 </div>
 
+
 <script>
 
 /* ======================================================
-   WORDLOCK
-   PROTOTYPE #023
+   WORDLOCK — PROTOTYPE #024
+
+   Experiment:
+   WORLD / PLACE → TOUCH → PUZZLE EMERGES
+
+   The entry touch is also the explicit user gesture
+   used to wake iOS/Safari audio before reel play begins.
+====================================================== */
+
+
+/* ======================================================
+   PUZZLE
 ====================================================== */
 
 const PUZZLE={
@@ -1231,53 +1496,56 @@ wheels:[
 clues:[
 
 {
-  answer:"PATH",
-  clue:"A way through a place",
-  start:0,
-  colour:1,
-  target:[0,1,5,4]
+answer:"PATH",
+clue:"A way through a place",
+start:0,
+colour:1,
+target:[0,1,5,4]
 },
 
 {
-  answer:"DOOR",
-  clue:"An entrance from one space to another",
-  start:2,
-  colour:2,
-  target:[2,3,7,6]
+answer:"DOOR",
+clue:"An entrance from one space to another",
+start:2,
+colour:2,
+target:[2,3,7,6]
 },
 
 {
-  answer:"HALL",
-  clue:"A passage or entrance space inside a building",
-  start:8,
-  colour:3,
-  target:[8,9,10,14]
+answer:"HALL",
+clue:"A passage or entrance space inside a building",
+start:8,
+colour:3,
+target:[8,9,10,14]
 },
 
 {
-  answer:"ROAD",
-  clue:"A route joining one place to another",
-  start:12,
-  colour:4,
-  target:[12,13,14,15]
+answer:"ROAD",
+clue:"A route joining one place to another",
+start:12,
+colour:4,
+target:[12,13,14,15]
 }
 
 ],
 
 connection:{
-  answer:"WAY",
 
-  hint1:
-  "The connecting word comes after all four answers.",
+answer:"WAY",
 
-  hint2:
-  "Think about movement, direction or passage.",
+hint1:
+"The connecting word comes after all four answers.",
 
-  hint3:
-  "PATH, DOOR, HALL and ROAD can all be followed by the same three letters."
+hint2:
+"Think about movement, direction or passage.",
+
+hint3:
+"PATH, DOOR, HALL and ROAD can all be followed by the same three letters."
+
 }
 
 };
+
 
 /* ======================================================
    STATE
@@ -1286,23 +1554,23 @@ connection:{
 let clueIndex=0;
 
 let current=
-  PUZZLE.wheels.map(
-    ()=>1
-  );
+PUZZLE.wheels.map(
+()=>1
+);
 
 let clueSnapshot=[
-  ...current
+...current
 ];
 
 let remembered=
-  PUZZLE.wheels.map(
-    ()=>new Set()
-  );
+PUZZLE.wheels.map(
+()=>new Set()
+);
 
 let histories=
-  PUZZLE.wheels.map(
-    ()=>new Set()
-  );
+PUZZLE.wheels.map(
+()=>new Set()
+);
 
 let solvedWords=[];
 
@@ -1316,297 +1584,467 @@ let busy=false;
 
 let clueHasStarted=false;
 
+let entered=false;
+
+
 /* ======================================================
-   AUDIO — #023
-
-   Two principles:
-
-   1. All reel movements are neutral and use
-      exactly the same pitch.
-
-   2. A sound request waits for Safari's audio
-      context to become active before playing.
+   AUDIO
 ====================================================== */
 
 let audioCtx=null;
 
+
+/*
+  Create the context only from a user gesture.
+*/
+
 function getAudioContext(){
 
-  if(audioCtx){
-    return audioCtx;
-  }
-
-  const AC=
-    window.AudioContext ||
-    window.webkitAudioContext;
-
-  if(!AC){
-    return null;
-  }
-
-  audioCtx=
-    new AC();
-
-  return audioCtx;
+if(audioCtx){
+return audioCtx;
 }
+
+const AC=
+window.AudioContext ||
+window.webkitAudioContext;
+
+if(!AC){
+return null;
+}
+
+audioCtx=
+new AC();
+
+return audioCtx;
+
+}
+
+
+/*
+  Explicit audio prime.
+
+  The crucial difference from earlier versions is
+  that this happens on the ENTRY TOUCH, before any
+  reel interaction is possible.
+
+  We also run a silent one-frame AudioBuffer through
+  the output while still inside that user gesture.
+*/
+
+function primeAudio(){
+
+const ctx=
+getAudioContext();
+
+if(!ctx){
+return;
+}
+
+try{
+
+if(
+ctx.state==="suspended"
+){
+
+ctx.resume()
+.catch(
+()=>{}
+);
+
+}
+
+
+/*
+  Silent buffer:
+  enough to establish the audio route without
+  producing an audible startup noise.
+*/
+
+const buffer=
+ctx.createBuffer(
+1,
+1,
+ctx.sampleRate
+);
+
+const source=
+ctx.createBufferSource();
+
+source.buffer=
+buffer;
+
+source.connect(
+ctx.destination
+);
+
+source.start(
+0
+);
+
+}
+catch(e){}
+
+}
+
+
+/*
+  Normal fallback for later interactions.
+*/
 
 function wakeAudio(){
 
-  const ctx=
-    getAudioContext();
+const ctx=
+getAudioContext();
 
-  if(!ctx){
-    return Promise.resolve(null);
-  }
-
-  if(ctx.state==="running"){
-    return Promise.resolve(ctx);
-  }
-
-  return ctx
-    .resume()
-    .then(()=>ctx)
-    .catch(()=>ctx);
+if(!ctx){
+return Promise.resolve(null);
 }
 
-document.addEventListener(
-  "touchstart",
-  wakeAudio,
-  {
-    capture:true,
-    passive:true
-  }
-);
-
-document.addEventListener(
-  "pointerdown",
-  wakeAudio,
-  true
-);
-
-document.addEventListener(
-  "click",
-  wakeAudio,
-  true
-);
-
-async function tone(
-  frequency,
-  duration,
-  volume,
-  type="sine",
-  delay=0
+if(
+ctx.state==="running"
 ){
 
-  const ctx=
-    await wakeAudio();
+return Promise.resolve(
+ctx
+);
 
-  if(!ctx){
-    return;
-  }
-
-  /*
-    Safari can occasionally resolve resume()
-    fractionally before audio output is ready.
-    Yielding one frame gives the context time
-    to enter its running state.
-  */
-
-  if(ctx.state!=="running"){
-
-    await new Promise(
-      resolve=>
-        setTimeout(
-          resolve,
-          35
-        )
-    );
-  }
-
-  const now=
-    ctx.currentTime+
-    delay;
-
-  const osc=
-    ctx.createOscillator();
-
-  const gain=
-    ctx.createGain();
-
-  osc.type=
-    type;
-
-  osc.frequency
-    .setValueAtTime(
-      frequency,
-      now
-    );
-
-  gain.gain
-    .setValueAtTime(
-      .0001,
-      now
-    );
-
-  gain.gain
-    .exponentialRampToValueAtTime(
-      Math.max(
-        volume,
-        .0002
-      ),
-      now+.012
-    );
-
-  gain.gain
-    .exponentialRampToValueAtTime(
-      .0001,
-      now+duration
-    );
-
-  osc.connect(
-    gain
-  );
-
-  gain.connect(
-    ctx.destination
-  );
-
-  osc.start(
-    now
-  );
-
-  osc.stop(
-    now+
-    duration+
-    .04
-  );
 }
 
-/*
-  #023:
-  One neutral mechanical pitch for EVERY reel.
+return ctx
+.resume()
+.then(
+()=>ctx
+)
+.catch(
+()=>ctx
+);
 
-  No rising/falling implication during exploration.
+}
+
+
+async function tone(
+frequency,
+duration,
+volume,
+type="sine",
+delay=0
+){
+
+const ctx=
+await wakeAudio();
+
+if(!ctx){
+return;
+}
+
+const now=
+ctx.currentTime+
+delay;
+
+const osc=
+ctx.createOscillator();
+
+const gain=
+ctx.createGain();
+
+osc.type=
+type;
+
+osc.frequency
+.setValueAtTime(
+frequency,
+now
+);
+
+gain.gain
+.setValueAtTime(
+.0001,
+now
+);
+
+gain.gain
+.exponentialRampToValueAtTime(
+Math.max(
+volume,
+.0002
+),
+now+.012
+);
+
+gain.gain
+.exponentialRampToValueAtTime(
+.0001,
+now+duration
+);
+
+osc.connect(
+gain
+);
+
+gain.connect(
+ctx.destination
+);
+
+osc.start(
+now
+);
+
+osc.stop(
+now+
+duration+
+.04
+);
+
+}
+
+
+/*
+  One neutral sound for every reel.
 */
 
-const REEL_PITCH=185;
+const REEL_PITCH=
+185;
+
 
 function reelSound(){
 
-  tone(
-    92,
-    .045,
-    .006,
-    "triangle"
-  );
+tone(
+92,
+.045,
+.006,
+"triangle"
+);
 
-  tone(
-    REEL_PITCH,
-    .22,
-    .010,
-    "sine",
-    .018
-  );
+tone(
+REEL_PITCH,
+.22,
+.010,
+"sine",
+.018
+);
 
-  tone(
-    REEL_PITCH*2.01,
-    .34,
-    .0033,
-    "sine",
-    .045
-  );
+tone(
+REEL_PITCH*2.01,
+.34,
+.0033,
+"sine",
+.045
+);
+
 }
+
 
 function wrongSound(){
 
-  tone(
-    104,
-    .13,
-    .013,
-    "triangle"
-  );
+tone(
+104,
+.13,
+.013,
+"triangle"
+);
 
-  tone(
-    78,
-    .20,
-    .007,
-    "sine",
-    .025
-  );
+tone(
+78,
+.20,
+.007,
+"sine",
+.025
+);
+
 }
 
-/*
-  Successful confirmation CAN rise.
-
-  At this point the game knows that progress
-  has genuinely been made.
-*/
 
 function pathSound(step){
 
-  const notes=[
-    174,
-    196,
-    220,
-    247,
-    277,
-    294
-  ];
+const notes=[
+174,
+196,
+220,
+247,
+277,
+294
+];
 
-  const f=
-    notes[
-      Math.min(
-        step,
-        notes.length-1
-      )
-    ];
+const f=
+notes[
+Math.min(
+step,
+notes.length-1
+)
+];
 
-  tone(
-    f,
-    .28,
-    .0085,
-    "sine"
-  );
+tone(
+f,
+.28,
+.0085,
+"sine"
+);
 
-  tone(
-    f*2,
-    .40,
-    .0028,
-    "sine",
-    .035
-  );
+tone(
+f*2,
+.40,
+.0028,
+"sine",
+.035
+);
+
 }
+
 
 function connectionSound(){
 
-  const notes=[
-    174,
-    220,
-    261,
-    330
-  ];
+const notes=[
+174,
+220,
+261,
+330
+];
 
-  notes.forEach(
-    (n,i)=>{
+notes.forEach(
+(n,i)=>{
 
-      tone(
-        n,
-        .42,
-        .008,
-        "sine",
-        i*.13
-      );
+tone(
+n,
+.42,
+.008,
+"sine",
+i*.13
+);
 
-      tone(
-        n*2,
-        .52,
-        .0024,
-        "sine",
-        i*.13+.035
-      );
-    }
-  );
+tone(
+n*2,
+.52,
+.0024,
+"sine",
+i*.13+.035
+);
+
 }
+);
+
+}
+
+
+/* ======================================================
+   ENTER THE PLACE
+====================================================== */
+
+function enterPlace(){
+
+if(entered){
+return;
+}
+
+entered=true;
+
+
+/*
+  Audio is primed immediately from the touch/click.
+*/
+
+primeAudio();
+
+
+const entry=
+document.getElementById(
+"entry"
+);
+
+const game=
+document.getElementById(
+"gameShell"
+);
+
+
+entry.classList.add(
+"entering"
+);
+
+document.body
+.classList.add(
+"entered"
+);
+
+
+/*
+  Allow the place itself to breathe for a moment
+  before the machinery resolves.
+*/
+
+setTimeout(
+()=>{
+
+entry.style.display=
+"none";
+
+game.classList.add(
+"visible"
+);
+
+},
+500
+);
+
+
+/*
+  The starting pulse appears only after the board
+  has substantially finished emerging.
+*/
+
+setTimeout(
+()=>{
+
+applyStartingPulse();
+
+},
+1850
+);
+
+}
+
+
+/*
+  Pointerdown/touch is important:
+  we want audio activation at the earliest possible
+  moment of the deliberate entry gesture.
+*/
+
+const entry=
+document.getElementById(
+"entry"
+);
+
+
+entry.addEventListener(
+"pointerdown",
+primeAudio
+);
+
+
+entry.addEventListener(
+"click",
+enterPlace
+);
+
+
+entry.addEventListener(
+"keydown",
+e=>{
+
+if(
+e.key==="Enter" ||
+e.key===" "
+){
+
+e.preventDefault();
+
+enterPlace();
+
+}
+
+}
+);
+
 
 /* ======================================================
    BOARD HELPERS
@@ -1614,199 +2052,198 @@ function connectionSound(){
 
 function letterAt(i){
 
-  return(
-    PUZZLE.wheels[i]
-    [current[i]]
-  );
+return(
+PUZZLE.wheels[i]
+[current[i]]
+);
+
 }
+
 
 function adjacent(a,b){
 
-  const ar=
-    Math.floor(a/4);
+const ar=
+Math.floor(a/4);
 
-  const ac=
-    a%4;
+const ac=
+a%4;
 
-  const br=
-    Math.floor(b/4);
+const br=
+Math.floor(b/4);
 
-  const bc=
-    b%4;
+const bc=
+b%4;
 
-  return(
-    Math.max(
-      Math.abs(ar-br),
-      Math.abs(ac-bc)
-    )===1
-  );
+return(
+Math.max(
+Math.abs(ar-br),
+Math.abs(ac-bc)
+)===1
+);
+
 }
 
+
 /* ======================================================
-   #023 ROUTE RULE
-
-   The pulsing starting reel is no longer merely
-   a visual hint.
-
-   It is the actual first position of the word.
-
-   Therefore a successful path MUST:
-   - begin at clue.start
-   - contain the answer's first letter there
-   - continue through adjacent positions
-   - never reuse a position
-
-   This fixes #022's HALL problem, where the game
-   instructed the player to start at position 8
-   but later chose another H elsewhere.
-
-   IMPORTANT:
-   If two valid routes begin at the SAME starting
-   position, this prototype still cannot know which
-   one the player mentally intended. #024 should
-   deliberately test that harder case.
+   ROUTE RULE
 ====================================================== */
 
 function findPathsFromStart(
-  word,
-  startPosition
+word,
+startPosition
 ){
 
-  const results=[];
+const results=[];
 
-  if(
-    letterAt(startPosition)!==
-    word[0]
-  ){
-    return results;
-  }
+if(
+letterAt(startPosition)!==
+word[0]
+){
 
-  function walk(
-    position,
-    index,
-    path
-  ){
+return results;
 
-    if(
-      index===
-      word.length
-    ){
-
-      results.push(
-        [...path]
-      );
-
-      return;
-    }
-
-    for(
-      let i=0;
-      i<16;
-      i++
-    ){
-
-      if(
-        path.includes(i)
-      ){
-        continue;
-      }
-
-      if(
-        !adjacent(
-          position,
-          i
-        )
-      ){
-        continue;
-      }
-
-      if(
-        letterAt(i)!==
-        word[index]
-      ){
-        continue;
-      }
-
-      path.push(i);
-
-      walk(
-        i,
-        index+1,
-        path
-      );
-
-      path.pop();
-    }
-  }
-
-  walk(
-    startPosition,
-    1,
-    [startPosition]
-  );
-
-  return results;
 }
+
+
+function walk(
+position,
+index,
+path
+){
+
+if(
+index===
+word.length
+){
+
+results.push(
+[...path]
+);
+
+return;
+
+}
+
+
+for(
+let i=0;
+i<16;
+i++
+){
+
+if(
+path.includes(i)
+){
+continue;
+}
+
+if(
+!adjacent(
+position,
+i
+)
+){
+continue;
+}
+
+if(
+letterAt(i)!==
+word[index]
+){
+continue;
+}
+
+path.push(i);
+
+walk(
+i,
+index+1,
+path
+);
+
+path.pop();
+
+}
+
+}
+
+
+walk(
+startPosition,
+1,
+[startPosition]
+);
+
+return results;
+
+}
+
 
 /* ======================================================
    HISTORY COLOUR
 ====================================================== */
 
 function applyHistory(
-  reel,
-  index
+reel,
+index
 ){
 
-  const colours=
-    [...histories[index]];
+const colours=
+[...histories[index]];
 
-  if(
-    colours.length===1
-  ){
+if(
+colours.length===1
+){
 
-    reel.classList.add(
-      "used"+
-      colours[0]
-    );
+reel.classList.add(
+"used"+
+colours[0]
+);
 
-    return;
-  }
+return;
 
-  if(
-    colours.length>=2
-  ){
-
-    const a=
-      Math.min(
-        ...colours
-      );
-
-    const b=
-      Math.max(
-        ...colours
-      );
-
-    const mix=
-      "mix"+a+b;
-
-    if(
-      [
-        "mix12",
-        "mix13",
-        "mix14",
-        "mix23",
-        "mix24",
-        "mix34"
-      ]
-      .includes(mix)
-    ){
-
-      reel.classList.add(
-        mix
-      );
-    }
-  }
 }
+
+
+if(
+colours.length>=2
+){
+
+const a=
+Math.min(
+...colours
+);
+
+const b=
+Math.max(
+...colours
+);
+
+const mix=
+"mix"+a+b;
+
+if(
+[
+"mix12",
+"mix13",
+"mix14",
+"mix23",
+"mix24",
+"mix34"
+]
+.includes(mix)
+){
+
+reel.classList.add(
+mix
+);
+
+}
+
+}
+
+}
+
 
 /* ======================================================
    STARTING PULSE
@@ -1814,32 +2251,35 @@ function applyHistory(
 
 function applyStartingPulse(){
 
-  if(
-    clueHasStarted ||
-    clueIndex>=
-    PUZZLE.clues.length
-  ){
-    return;
-  }
-
-  const clue=
-    PUZZLE.clues[
-      clueIndex
-    ];
-
-  const reels=
-    document
-    .querySelectorAll(
-      ".reel"
-    );
-
-  reels[
-    clue.start
-  ]
-  ?.classList.add(
-    "pulse"
-  );
+if(
+!entered ||
+clueHasStarted ||
+clueIndex>=
+PUZZLE.clues.length
+){
+return;
 }
+
+const clue=
+PUZZLE.clues[
+clueIndex
+];
+
+const reels=
+document
+.querySelectorAll(
+".reel"
+);
+
+reels[
+clue.start
+]
+?.classList.add(
+"pulse"
+);
+
+}
+
 
 /* ======================================================
    RENDER BOARD
@@ -1847,270 +2287,295 @@ function applyStartingPulse(){
 
 function render(){
 
-  const board=
-    document.getElementById(
-      "board"
-    );
+const board=
+document.getElementById(
+"board"
+);
 
-  board.innerHTML="";
+board.innerHTML="";
 
-  PUZZLE.wheels.forEach(
-    (wheel,i)=>{
 
-      const reel=
-        document.createElement(
-          "div"
-        );
+PUZZLE.wheels.forEach(
+(wheel,i)=>{
 
-      reel.className=
-        "reel";
+const reel=
+document.createElement(
+"div"
+);
 
-      applyHistory(
-        reel,
-        i
-      );
+reel.className=
+"reel";
 
-      const centre=
-        current[i];
+applyHistory(
+reel,
+i
+);
 
-      const left=
-        (centre+2)%3;
 
-      const right=
-        (centre+1)%3;
+const centre=
+current[i];
 
-      const strip=
-        document.createElement(
-          "div"
-        );
+const left=
+(centre+2)%3;
 
-      strip.className=
-        "reel-strip";
+const right=
+(centre+1)%3;
 
-      [
-        {
-          idx:left,
-          type:"alt"
-        },
-        {
-          idx:centre,
-          type:"current"
-        },
-        {
-          idx:right,
-          type:"alt"
-        }
-      ]
-      .forEach(
-        item=>{
 
-          const el=
-            document.createElement(
-              "div"
-            );
+const strip=
+document.createElement(
+"div"
+);
 
-          el.className=
-            "letter "+
-            item.type;
+strip.className=
+"reel-strip";
 
-          const letter=
-            wheel[
-              item.idx
-            ];
 
-          if(
-            item.type==="alt" &&
-            remembered[i]
-            .has(letter)
-          ){
+[
+{
+idx:left,
+type:"alt"
+},
 
-            el.classList.add(
-              "remembered"
-            );
-          }
+{
+idx:centre,
+type:"current"
+},
 
-          el.textContent=
-            letter;
-
-          strip.appendChild(
-            el
-          );
-        }
-      );
-
-      reel.appendChild(
-        strip
-      );
-
-      let startX=null;
-
-      reel.addEventListener(
-        "pointerdown",
-        e=>{
-
-          if(busy){
-            return;
-          }
-
-          /*
-            Wake audio immediately on the physical
-            touch, before we even know whether the
-            gesture becomes a swipe.
-          */
-
-          wakeAudio();
-
-          startX=
-            e.clientX;
-
-          reel
-          .setPointerCapture?.(
-            e.pointerId
-          );
-        }
-      );
-
-      reel.addEventListener(
-        "pointerup",
-        e=>{
-
-          if(
-            busy ||
-            startX===null
-          ){
-            return;
-          }
-
-          const dx=
-            e.clientX-
-            startX;
-
-          startX=null;
-
-          if(
-            Math.abs(dx)<16
-          ){
-            return;
-          }
-
-          animateTurn(
-            i,
-            dx<0 ? 1 : -1
-          );
-        }
-      );
-
-      board.appendChild(
-        reel
-      );
-    }
-  );
-
-  applyStartingPulse();
-
-  updateStats();
+{
+idx:right,
+type:"alt"
 }
+]
+.forEach(
+item=>{
+
+const el=
+document.createElement(
+"div"
+);
+
+el.className=
+"letter "+
+item.type;
+
+const letter=
+wheel[
+item.idx
+];
+
+if(
+item.type==="alt" &&
+remembered[i]
+.has(letter)
+){
+
+el.classList.add(
+"remembered"
+);
+
+}
+
+el.textContent=
+letter;
+
+strip.appendChild(
+el
+);
+
+}
+);
+
+
+reel.appendChild(
+strip
+);
+
+
+let startX=null;
+
+
+reel.addEventListener(
+"pointerdown",
+e=>{
+
+if(busy){
+return;
+}
+
+wakeAudio();
+
+startX=
+e.clientX;
+
+reel
+.setPointerCapture?.(
+e.pointerId
+);
+
+}
+);
+
+
+reel.addEventListener(
+"pointerup",
+e=>{
+
+if(
+busy ||
+startX===null
+){
+return;
+}
+
+const dx=
+e.clientX-
+startX;
+
+startX=null;
+
+if(
+Math.abs(dx)<16
+){
+return;
+}
+
+animateTurn(
+i,
+dx<0 ? 1 : -1
+);
+
+}
+);
+
+
+board.appendChild(
+reel
+);
+
+}
+);
+
+
+applyStartingPulse();
+
+updateStats();
+
+}
+
 
 /* ======================================================
    REEL TURN
 ====================================================== */
 
 function animateTurn(
-  index,
-  direction
+index,
+direction
 ){
 
-  if(busy){
-    return;
-  }
-
-  if(
-    !clueHasStarted
-  ){
-
-    clueHasStarted=true;
-
-    document
-    .querySelectorAll(
-      ".reel.pulse"
-    )
-    .forEach(
-      reel=>{
-
-        reel
-        .classList
-        .remove(
-          "pulse"
-        );
-      }
-    );
-  }
-
-  busy=true;
-
-  const reel=
-    document
-    .querySelectorAll(
-      ".reel"
-    )[index];
-
-  reel.classList.add(
-    direction===1
-      ? "cycle-left"
-      : "cycle-right"
-  );
-
-  /*
-    #023:
-    every turn asks for precisely the
-    same neutral sound.
-  */
-
-  reelSound();
-
-  setTimeout(
-    ()=>{
-
-      current[index]=
-        (
-          current[index]+
-          direction+
-          3
-        )%3;
-
-      turns++;
-
-      render();
-
-      const fresh=
-        document
-        .querySelectorAll(
-          ".reel"
-        )[index];
-
-      fresh
-      ?.classList
-      .add(
-        "settle"
-      );
-
-      setTimeout(
-        ()=>{
-
-          fresh
-          ?.classList
-          .remove(
-            "settle"
-          );
-
-          busy=false;
-        },
-        270
-      );
-    },
-    220
-  );
+if(busy){
+return;
 }
+
+
+if(
+!clueHasStarted
+){
+
+clueHasStarted=
+true;
+
+document
+.querySelectorAll(
+".reel.pulse"
+)
+.forEach(
+reel=>{
+
+reel.classList.remove(
+"pulse"
+);
+
+}
+);
+
+}
+
+
+busy=true;
+
+
+const reel=
+document
+.querySelectorAll(
+".reel"
+)[index];
+
+
+reel.classList.add(
+
+direction===1
+
+? "cycle-left"
+
+: "cycle-right"
+
+);
+
+
+reelSound();
+
+
+setTimeout(
+()=>{
+
+current[index]=
+(
+current[index]+
+direction+
+3
+)%3;
+
+turns++;
+
+render();
+
+
+const fresh=
+document
+.querySelectorAll(
+".reel"
+)[index];
+
+
+fresh
+?.classList
+.add(
+"settle"
+);
+
+
+setTimeout(
+()=>{
+
+fresh
+?.classList
+.remove(
+"settle"
+);
+
+busy=false;
+
+},
+270
+);
+
+},
+220
+);
+
+}
+
 
 /* ======================================================
    CLUE
@@ -2118,46 +2583,56 @@ function animateTurn(
 
 function renderClue(){
 
-  busy=false;
+busy=false;
 
-  clueHasStarted=false;
+clueHasStarted=
+false;
 
-  const clue=
-    PUZZLE.clues[
-      clueIndex
-    ];
+const clue=
+PUZZLE.clues[
+clueIndex
+];
 
-  document
-  .getElementById(
-    "clueLabel"
-  )
-  .textContent=
-    "CLUE "+
-    (clueIndex+1);
 
-  document
-  .getElementById(
-    "clue"
-  )
-  .textContent=
-    clue.clue;
+document
+.getElementById(
+"clueLabel"
+)
+.textContent=
 
-  document
-  .getElementById(
-    "length"
-  )
-  .textContent=
-    clue.answer.length+
-    " LETTERS";
+"CLUE "+
+(clueIndex+1);
 
-  document
-  .getElementById(
-    "message"
-  )
-  .textContent="";
 
-  render();
+document
+.getElementById(
+"clue"
+)
+.textContent=
+clue.clue;
+
+
+document
+.getElementById(
+"length"
+)
+.textContent=
+
+clue.answer.length+
+" LETTERS";
+
+
+document
+.getElementById(
+"message"
+)
+.textContent="";
+
+
+render();
+
 }
+
 
 /* ======================================================
    UNLOCK
@@ -2165,268 +2640,293 @@ function renderClue(){
 
 function unlock(){
 
-  if(busy){
-    return;
-  }
-
-  wakeAudio();
-
-  attempts++;
-
-  updateStats();
-
-  const clue=
-    PUZZLE.clues[
-      clueIndex
-    ];
-
-  /*
-    #023:
-    Search ONLY from the reel the game
-    instructed the player to start from.
-  */
-
-  const paths=
-    findPathsFromStart(
-      clue.answer,
-      clue.start
-    );
-
-  if(
-    !paths.length
-  ){
-
-    wrongSound();
-
-    busy=true;
-
-    const board=
-      document.getElementById(
-        "board"
-      );
-
-    board.classList.add(
-      "shake"
-    );
-
-    document
-    .getElementById(
-      "message"
-    )
-    .textContent=
-      "Not quite. The place settles back.";
-
-    setTimeout(
-      ()=>{
-
-        board
-        .classList
-        .remove(
-          "shake"
-        );
-
-        current=[
-          ...clueSnapshot
-        ];
-
-        render();
-
-        busy=false;
-      },
-      720
-    );
-
-    return;
-  }
-
-  /*
-    For #023, if more than one route begins
-    at the instructed starting reel, the
-    first valid one is still used.
-
-    We are deliberately NOT pretending this
-    solves the deeper route-agency question.
-  */
-
-  solve(
-    clue,
-    paths[0]
-  );
+if(busy){
+return;
 }
+
+wakeAudio();
+
+attempts++;
+
+updateStats();
+
+
+const clue=
+PUZZLE.clues[
+clueIndex
+];
+
+
+const paths=
+findPathsFromStart(
+clue.answer,
+clue.start
+);
+
+
+if(
+!paths.length
+){
+
+wrongSound();
+
+busy=true;
+
+const board=
+document.getElementById(
+"board"
+);
+
+board.classList.add(
+"shake"
+);
+
+
+document
+.getElementById(
+"message"
+)
+.textContent=
+
+"Not quite. The place settles back.";
+
+
+setTimeout(
+()=>{
+
+board.classList.remove(
+"shake"
+);
+
+current=[
+...clueSnapshot
+];
+
+render();
+
+busy=false;
+
+},
+720
+);
+
+return;
+
+}
+
+
+solve(
+clue,
+paths[0]
+);
+
+}
+
 
 /* ======================================================
    SUCCESS
 ====================================================== */
 
 function solve(
-  clue,
-  path
+clue,
+path
 ){
 
-  busy=true;
+busy=true;
 
-  document
-  .getElementById(
-    "message"
-  )
-  .textContent="";
 
-  path.forEach(
-    (position,n)=>{
+document
+.getElementById(
+"message"
+)
+.textContent="";
 
-      remembered[
-        position
-      ]
-      .add(
-        clue.answer[n]
-      );
-    }
-  );
 
-  let step=0;
+path.forEach(
+(position,n)=>{
 
-  function colourNext(){
+remembered[position]
+.add(
+clue.answer[n]
+);
 
-    if(
-      step>=
-      path.length
-    ){
-
-      setTimeout(
-        ()=>completeWord(
-          clue,
-          path
-        ),
-        420
-      );
-
-      return;
-    }
-
-    const position=
-      path[
-        step
-      ];
-
-    histories[
-      position
-    ]
-    .add(
-      clue.colour
-    );
-
-    render();
-
-    const reel=
-      document
-      .querySelectorAll(
-        ".reel"
-      )[position];
-
-    reel
-    ?.classList
-    .add(
-      "confirming"
-    );
-
-    pathSound(
-      step
-    );
-
-    setTimeout(
-      ()=>{
-
-        reel
-        ?.classList
-        .remove(
-          "confirming"
-        );
-      },
-      320
-    );
-
-    step++;
-
-    setTimeout(
-      colourNext,
-      175
-    );
-  }
-
-  colourNext();
 }
+);
+
+
+let step=0;
+
+
+function colourNext(){
+
+if(
+step>=
+path.length
+){
+
+setTimeout(
+()=>completeWord(
+clue,
+path
+),
+420
+);
+
+return;
+
+}
+
+
+const position=
+path[
+step
+];
+
+
+histories[position]
+.add(
+clue.colour
+);
+
+
+render();
+
+
+const reel=
+document
+.querySelectorAll(
+".reel"
+)[position];
+
+
+reel
+?.classList
+.add(
+"confirming"
+);
+
+
+pathSound(
+step
+);
+
+
+setTimeout(
+()=>{
+
+reel
+?.classList
+.remove(
+"confirming"
+);
+
+},
+320
+);
+
+
+step++;
+
+
+setTimeout(
+colourNext,
+175
+);
+
+}
+
+
+colourNext();
+
+}
+
 
 /* ======================================================
    COMPLETE WORD
 ====================================================== */
 
 function completeWord(
-  clue,
-  path
+clue,
+path
 ){
 
-  solvedWords.push(
-    clue.answer
-  );
+solvedWords.push(
+clue.answer
+);
 
-  renderBank();
 
-  document
-  .querySelectorAll(
-    ".progress-dot"
-  )[clueIndex]
-  .classList
-  .add(
-    "done"
-  );
+renderBank();
 
-  document
-  .getElementById(
-    "message"
-  )
-  .textContent=
-    clue.answer+
-    " found.";
 
-  const next=[
-    ...clueSnapshot
-  ];
+document
+.querySelectorAll(
+".progress-dot"
+)[clueIndex]
+.classList
+.add(
+"done"
+);
 
-  path.forEach(
-    i=>{
 
-      next[i]=
-        current[i];
-    }
-  );
+document
+.getElementById(
+"message"
+)
+.textContent=
 
-  current=
-    next;
+clue.answer+
+" found.";
 
-  clueSnapshot=[
-    ...current
-  ];
 
-  clueIndex++;
+const next=[
+...clueSnapshot
+];
 
-  if(
-    clueIndex>=
-    PUZZLE.clues.length
-  ){
 
-    setTimeout(
-      showConnection,
-      1050
-    );
+path.forEach(
+i=>{
 
-    return;
-  }
+next[i]=
+current[i];
 
-  setTimeout(
-    renderClue,
-    950
-  );
 }
+);
+
+
+current=
+next;
+
+
+clueSnapshot=[
+...current
+];
+
+
+clueIndex++;
+
+
+if(
+clueIndex>=
+PUZZLE.clues.length
+){
+
+setTimeout(
+showConnection,
+1050
+);
+
+return;
+
+}
+
+
+setTimeout(
+renderClue,
+950
+);
+
+}
+
 
 /* ======================================================
    RESET
@@ -2434,24 +2934,27 @@ function completeWord(
 
 function reset(){
 
-  if(busy){
-    return;
-  }
-
-  wakeAudio();
-
-  current=[
-    ...clueSnapshot
-  ];
-
-  render();
-
-  document
-  .getElementById(
-    "message"
-  )
-  .textContent="";
+if(busy){
+return;
 }
+
+wakeAudio();
+
+current=[
+...clueSnapshot
+];
+
+render();
+
+
+document
+.getElementById(
+"message"
+)
+.textContent="";
+
+}
+
 
 /* ======================================================
    CLUE HINT
@@ -2459,53 +2962,63 @@ function reset(){
 
 function clueHint(){
 
-  if(busy){
-    return;
-  }
-
-  wakeAudio();
-
-  hints++;
-
-  updateStats();
-
-  const clue=
-    PUZZLE.clues[
-      clueIndex
-    ];
-
-  const reels=
-    document
-    .querySelectorAll(
-      ".reel"
-    );
-
-  const r=
-    reels[
-      clue.start
-    ];
-
-  r
-  ?.classList
-  .remove(
-    "pulse"
-  );
-
-  void r?.offsetWidth;
-
-  r
-  ?.classList
-  .add(
-    "pulse"
-  );
-
-  document
-  .getElementById(
-    "message"
-  )
-  .textContent=
-    "Start here.";
+if(busy){
+return;
 }
+
+wakeAudio();
+
+hints++;
+
+updateStats();
+
+
+const clue=
+PUZZLE.clues[
+clueIndex
+];
+
+
+const reels=
+document
+.querySelectorAll(
+".reel"
+);
+
+
+const r=
+reels[
+clue.start
+];
+
+
+r
+?.classList
+.remove(
+"pulse"
+);
+
+
+void r?.offsetWidth;
+
+
+r
+?.classList
+.add(
+"pulse"
+);
+
+
+document
+.getElementById(
+"message"
+)
+.textContent=
+
+"Start here.";
+
+}
+
 
 /* ======================================================
    BANK
@@ -2513,34 +3026,38 @@ function clueHint(){
 
 function renderBank(){
 
-  const bank=
-    document.getElementById(
-      "bank"
-    );
+const bank=
+document.getElementById(
+"bank"
+);
 
-  bank.innerHTML="";
+bank.innerHTML="";
 
-  solvedWords.forEach(
-    (word,i)=>{
 
-      const p=
-        document.createElement(
-          "div"
-        );
+solvedWords.forEach(
+(word,i)=>{
 
-      p.className=
-        "pill c"+
-        (i+1);
+const p=
+document.createElement(
+"div"
+);
 
-      p.textContent=
-        word;
+p.className=
+"pill c"+
+(i+1);
 
-      bank.appendChild(
-        p
-      );
-    }
-  );
+p.textContent=
+word;
+
+bank.appendChild(
+p
+);
+
 }
+);
+
+}
+
 
 /* ======================================================
    CONNECTION
@@ -2548,57 +3065,58 @@ function renderBank(){
 
 function showConnection(){
 
-  busy=false;
+busy=false;
 
-  document
-  .getElementById(
-    "controls"
-  )
-  .style.display=
-    "none";
 
-  document
-  .getElementById(
-    "message"
-  )
-  .textContent="";
+document
+.getElementById(
+"controls"
+)
+.style.display=
+"none";
 
-  document
-  .getElementById(
-    "clueArea"
-  )
-  .style.display=
-    "none";
 
-  const section=
-    document.getElementById(
-      "connection"
-    );
+document
+.getElementById(
+"message"
+)
+.textContent="";
 
-  section.classList.add(
-    "show"
-  );
 
-  /*
-    #023:
-    No second copy of the four answer pills.
+document
+.getElementById(
+"clueArea"
+)
+.style.display=
+"none";
 
-    The original bank above the stats stays
-    exactly where it is.
-  */
 
-  document
-  .getElementById(
-    "connectionLength"
-  )
-  .textContent=
-    "•".repeat(
-      PUZZLE
-      .connection
-      .answer
-      .length
-    );
+const section=
+document.getElementById(
+"connection"
+);
+
+
+section.classList.add(
+"show"
+);
+
+
+document
+.getElementById(
+"connectionLength"
+)
+.textContent=
+
+"•".repeat(
+PUZZLE
+.connection
+.answer
+.length
+);
+
 }
+
 
 /* ======================================================
    CONNECTION HINTS
@@ -2606,43 +3124,52 @@ function showConnection(){
 
 function connectionHint(){
 
-  wakeAudio();
+wakeAudio();
 
-  if(
-    connectionHintLevel>=3
-  ){
-    return;
-  }
 
-  connectionHintLevel++;
-
-  hints++;
-
-  updateStats();
-
-  document
-  .getElementById(
-    "connectionHint"
-  )
-  .textContent=
-    PUZZLE
-    .connection[
-      "hint"+
-      connectionHintLevel
-    ];
-
-  if(
-    connectionHintLevel===3
-  ){
-
-    document
-    .getElementById(
-      "connectionHintBtn"
-    )
-    .textContent=
-      "NO MORE HINTS";
-  }
+if(
+connectionHintLevel>=3
+){
+return;
 }
+
+
+connectionHintLevel++;
+
+hints++;
+
+updateStats();
+
+
+document
+.getElementById(
+"connectionHint"
+)
+.textContent=
+
+PUZZLE
+.connection[
+"hint"+
+connectionHintLevel
+];
+
+
+if(
+connectionHintLevel===3
+){
+
+document
+.getElementById(
+"connectionHintBtn"
+)
+.textContent=
+
+"NO MORE HINTS";
+
+}
+
+}
+
 
 /* ======================================================
    TRY CONNECTION
@@ -2650,64 +3177,75 @@ function connectionHint(){
 
 function tryConnection(){
 
-  wakeAudio();
+wakeAudio();
 
-  const input=
-    document.getElementById(
-      "connectionInput"
-    );
 
-  const guess=
-    input
-    .value
-    .trim()
-    .toUpperCase();
+const input=
+document.getElementById(
+"connectionInput"
+);
 
-  if(!guess){
-    return;
-  }
 
-  attempts++;
+const guess=
+input
+.value
+.trim()
+.toUpperCase();
 
-  updateStats();
 
-  if(
-    guess===
-    PUZZLE
-    .connection
-    .answer
-  ){
-
-    completeConnection();
-  }
-  else{
-
-    wrongSound();
-
-    input.classList.add(
-      "shake"
-    );
-
-    document
-    .getElementById(
-      "connectionHint"
-    )
-    .textContent=
-      "That doesn't connect all four.";
-
-    setTimeout(
-      ()=>{
-
-        input
-        .classList
-        .remove(
-          "shake"
-        );
-      },
-      350
-    );
-  }
+if(!guess){
+return;
 }
+
+
+attempts++;
+
+updateStats();
+
+
+if(
+guess===
+PUZZLE
+.connection
+.answer
+){
+
+completeConnection();
+
+}
+else{
+
+wrongSound();
+
+input.classList.add(
+"shake"
+);
+
+
+document
+.getElementById(
+"connectionHint"
+)
+.textContent=
+
+"That doesn't connect all four.";
+
+
+setTimeout(
+()=>{
+
+input.classList.remove(
+"shake"
+);
+
+},
+350
+);
+
+}
+
+}
+
 
 /* ======================================================
    REVEAL CONNECTION
@@ -2715,32 +3253,39 @@ function tryConnection(){
 
 function revealConnection(){
 
-  wakeAudio();
+wakeAudio();
 
-  const answer=
-    PUZZLE
-    .connection
-    .answer;
 
-  document
-  .getElementById(
-    "connectionInput"
-  )
-  .value=
-    answer;
+const answer=
+PUZZLE
+.connection
+.answer;
 
-  document
-  .getElementById(
-    "connectionHint"
-  )
-  .textContent=
-    "There it is.";
 
-  setTimeout(
-    completeConnection,
-    650
-  );
+document
+.getElementById(
+"connectionInput"
+)
+.value=
+answer;
+
+
+document
+.getElementById(
+"connectionHint"
+)
+.textContent=
+
+"There it is.";
+
+
+setTimeout(
+completeConnection,
+650
+);
+
 }
+
 
 /* ======================================================
    COMPLETE CONNECTION
@@ -2748,106 +3293,129 @@ function revealConnection(){
 
 function completeConnection(){
 
-  connectionSound();
+connectionSound();
 
-  const answer=
-    PUZZLE
-    .connection
-    .answer;
 
-  const input=
-    document.getElementById(
-      "connectionInput"
-    );
+const answer=
+PUZZLE
+.connection
+.answer;
 
-  input.value=
-    answer;
 
-  input.disabled=
-    true;
+const input=
+document.getElementById(
+"connectionInput"
+);
 
-  [
-    "connectBtn",
-    "connectionHintBtn",
-    "revealBtn"
-  ]
-  .forEach(
-    id=>{
 
-      document
-      .getElementById(
-        id
-      )
-      .disabled=
-        true;
-    }
-  );
+input.value=
+answer;
 
-  document
-  .getElementById(
-    "connectionLength"
-  )
-  .textContent=
-    answer;
+input.disabled=
+true;
 
-  const forms=
-    solvedWords.map(
-      word=>
-        word+
-        answer
-    );
 
-  const out=
-    document.getElementById(
-      "connectionHint"
-    );
+[
+"connectBtn",
+"connectionHintBtn",
+"revealBtn"
+]
+.forEach(
+id=>{
 
-  out.textContent="";
+document
+.getElementById(
+id
+)
+.disabled=
+true;
 
-  let i=0;
-
-  function revealNext(){
-
-    if(
-      i>=
-      forms.length
-    ){
-
-      setTimeout(
-        finish,
-        900
-      );
-
-      return;
-    }
-
-    out.textContent=
-      out.textContent
-      ? out.textContent+
-        "  ·  "+
-        forms[i]
-      : forms[i];
-
-    tone(
-      180+(i*28),
-      .27,
-      .0065,
-      "sine"
-    );
-
-    i++;
-
-    setTimeout(
-      revealNext,
-      430
-    );
-  }
-
-  setTimeout(
-    revealNext,
-    470
-  );
 }
+);
+
+
+document
+.getElementById(
+"connectionLength"
+)
+.textContent=
+answer;
+
+
+const forms=
+solvedWords.map(
+word=>
+word+
+answer
+);
+
+
+const out=
+document.getElementById(
+"connectionHint"
+);
+
+
+out.textContent="";
+
+
+let i=0;
+
+
+function revealNext(){
+
+if(
+i>=
+forms.length
+){
+
+setTimeout(
+finish,
+900
+);
+
+return;
+
+}
+
+
+out.textContent=
+
+out.textContent
+
+? out.textContent+
+"  ·  "+
+forms[i]
+
+: forms[i];
+
+
+tone(
+180+(i*28),
+.27,
+.0065,
+"sine"
+);
+
+
+i++;
+
+
+setTimeout(
+revealNext,
+430
+);
+
+}
+
+
+setTimeout(
+revealNext,
+470
+);
+
+}
+
 
 /* ======================================================
    FINISH
@@ -2855,58 +3423,68 @@ function completeConnection(){
 
 function finish(){
 
-  const visited=
-    histories
-    .filter(
-      set=>
-        set.size>0
-    )
-    .length;
+const visited=
+histories
+.filter(
+set=>
+set.size>0
+)
+.length;
 
-  const connection=
-    document.getElementById(
-      "connection"
-    );
 
-  connection
-  .style
-  .transition=
-    "opacity .8s ease";
+const connection=
+document.getElementById(
+"connection"
+);
 
-  connection
-  .style
-  .opacity=
-    "0";
 
-  setTimeout(
-    ()=>{
+connection
+.style
+.transition=
 
-      connection
-      .style
-      .display=
-        "none";
+"opacity .8s ease";
 
-      document
-      .getElementById(
-        "finalPath"
-      )
-      .textContent=
-        "TODAY'S TRACE · "+
-        visited+
-        " OF 16 PLACES";
 
-      document
-      .getElementById(
-        "final"
-      )
-      .classList
-      .add(
-        "show"
-      );
-    },
-    800
-  );
+connection
+.style
+.opacity=
+"0";
+
+
+setTimeout(
+()=>{
+
+connection
+.style
+.display=
+"none";
+
+
+document
+.getElementById(
+"finalPath"
+)
+.textContent=
+
+"TODAY'S TRACE · "+
+visited+
+" OF 16 PLACES";
+
+
+document
+.getElementById(
+"final"
+)
+.classList.add(
+"show"
+);
+
+},
+800
+);
+
 }
+
 
 /* ======================================================
    STATS
@@ -2914,45 +3492,52 @@ function finish(){
 
 function updateStats(){
 
-  document
-  .getElementById(
-    "turnStat"
-  )
-  .textContent=
-    turns+
-    " TURN"+
-    (
-      turns===1
-      ? ""
-      : "S"
-    );
+document
+.getElementById(
+"turnStat"
+)
+.textContent=
 
-  document
-  .getElementById(
-    "attemptStat"
-  )
-  .textContent=
-    attempts+
-    " ATTEMPT"+
-    (
-      attempts===1
-      ? ""
-      : "S"
-    );
+turns+
+" TURN"+
+(
+turns===1
+? ""
+: "S"
+);
 
-  document
-  .getElementById(
-    "hintStat"
-  )
-  .textContent=
-    hints+
-    " HINT"+
-    (
-      hints===1
-      ? ""
-      : "S"
-    );
+
+document
+.getElementById(
+"attemptStat"
+)
+.textContent=
+
+attempts+
+" ATTEMPT"+
+(
+attempts===1
+? ""
+: "S"
+);
+
+
+document
+.getElementById(
+"hintStat"
+)
+.textContent=
+
+hints+
+" HINT"+
+(
+hints===1
+? ""
+: "S"
+);
+
 }
+
 
 /* ======================================================
    BUTTONS
@@ -2960,76 +3545,89 @@ function updateStats(){
 
 document
 .getElementById(
-  "unlockBtn"
+"unlockBtn"
 )
 .addEventListener(
-  "click",
-  unlock
+"click",
+unlock
 );
+
 
 document
 .getElementById(
-  "resetBtn"
+"resetBtn"
 )
 .addEventListener(
-  "click",
-  reset
+"click",
+reset
 );
+
 
 document
 .getElementById(
-  "hintBtn"
+"hintBtn"
 )
 .addEventListener(
-  "click",
-  clueHint
+"click",
+clueHint
 );
+
 
 document
 .getElementById(
-  "connectBtn"
+"connectBtn"
 )
 .addEventListener(
-  "click",
-  tryConnection
+"click",
+tryConnection
 );
+
 
 document
 .getElementById(
-  "connectionHintBtn"
+"connectionHintBtn"
 )
 .addEventListener(
-  "click",
-  connectionHint
+"click",
+connectionHint
 );
+
 
 document
 .getElementById(
-  "revealBtn"
+"revealBtn"
 )
 .addEventListener(
-  "click",
-  revealConnection
+"click",
+revealConnection
 );
+
 
 document
 .getElementById(
-  "connectionInput"
+"connectionInput"
 )
 .addEventListener(
-  "keydown",
-  e=>{
+"keydown",
+e=>{
 
-    if(
-      e.key==="Enter"
-    ){
-      tryConnection();
-    }
-  }
+if(
+e.key==="Enter"
+){
+
+tryConnection();
+
+}
+
+}
 );
+
 
 /* ======================================================
-   START
+   INITIALISE
+
+   Build the board behind the entry state,
+   but do NOT give it a pulse yet.
 ====================================================== */
 
 renderClue();
