@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#e7ddc9">
-<title>WORDLOCK — Prototype #030 · Medium</title>
+<title>WORDLOCK — Prototype #031 · Hard</title>
 
 <style>
 :root{
@@ -282,7 +282,7 @@ header{
  color:#5d5d54;
 }
 
-/* ENTRY */
+/* ---------- ENTRY ---------- */
 
 .entry{
  position:relative;
@@ -350,6 +350,17 @@ header{
  pointer-events:auto;
 }
 
+.game-shell.leaving{
+ opacity:0;
+ filter:blur(10px);
+ transform:translateY(5px) scale(.985);
+ pointer-events:none;
+ transition:
+  opacity 2.15s ease,
+  filter 2.25s ease,
+  transform 2.25s ease;
+}
+
 .latent{
  position:absolute;
  z-index:1;
@@ -387,7 +398,7 @@ body.entered .latent{
  transform:translateX(-50%) scale(1.05);
 }
 
-/* CLUES */
+/* ---------- CLUE ---------- */
 
 .clue-area{
  min-height:111px;
@@ -412,26 +423,10 @@ body.entered .latent{
 }
 
 .progress-dot.done{transform:scale(1.08)}
-
-.progress-dot.done:nth-child(1){
- background:var(--sage);
- border-color:transparent;
-}
-
-.progress-dot.done:nth-child(2){
- background:var(--blue);
- border-color:transparent;
-}
-
-.progress-dot.done:nth-child(3){
- background:var(--ochre);
- border-color:transparent;
-}
-
-.progress-dot.done:nth-child(4){
- background:var(--mauve);
- border-color:transparent;
-}
+.progress-dot.done:nth-child(1){background:var(--sage);border-color:transparent}
+.progress-dot.done:nth-child(2){background:var(--blue);border-color:transparent}
+.progress-dot.done:nth-child(3){background:var(--ochre);border-color:transparent}
+.progress-dot.done:nth-child(4){background:var(--mauve);border-color:transparent}
 
 .clue-label{
  font-size:9px;
@@ -450,7 +445,7 @@ body.entered .latent{
  color:#292b27;
 }
 
-/* BOARD */
+/* ---------- BOARD ---------- */
 
 .board{
  display:grid;
@@ -553,66 +548,45 @@ body.entered .latent{
   0 8px 17px rgba(50,47,40,.13);
 }
 
-/* MEDIUM:
-   pulse the reel, not the answer letter */
+/* HARD:
+   no automatic pulse.
+   This appears only when the player asks for help. */
 
-.reel.pulse{
+.reel.hint-pulse{
  z-index:3;
- animation:mediumPulse 1.75s ease-in-out infinite;
+ animation:hintPulse 1.45s ease-in-out infinite;
 }
 
-@keyframes mediumPulse{
+@keyframes hintPulse{
  0%,100%{
   transform:scale(1);
-  border-color:rgba(61,64,58,.23);
   box-shadow:
    0 5px 13px rgba(52,49,42,.11),
    inset 0 1px 0 rgba(255,255,255,.82);
  }
-
  50%{
-  transform:scale(1.075);
-  border-color:rgba(72,82,68,.62);
+  transform:scale(1.08);
+  border-color:rgba(72,82,68,.68);
   box-shadow:
-   0 0 0 5px rgba(245,241,222,.72),
-   0 0 22px rgba(84,101,78,.34),
-   0 9px 20px rgba(52,49,42,.16),
-   inset 0 1px 0 rgba(255,255,255,.92);
+   0 0 0 5px rgba(245,241,222,.78),
+   0 0 24px rgba(84,101,78,.38),
+   0 9px 20px rgba(52,49,42,.16);
  }
 }
-
-/* TRACE COLOURS */
 
 .reel.used1{background:rgba(173,193,176,.93)}
 .reel.used2{background:rgba(169,196,205,.93)}
 .reel.used3{background:rgba(208,181,122,.93)}
 .reel.used4{background:rgba(187,168,189,.93)}
 
-.reel.mix12{
- background:linear-gradient(135deg,var(--sage),var(--blue));
-}
+.reel.mix12{background:linear-gradient(135deg,var(--sage),var(--blue))}
+.reel.mix13{background:linear-gradient(135deg,var(--sage),var(--ochre))}
+.reel.mix14{background:linear-gradient(135deg,var(--sage),var(--mauve))}
+.reel.mix23{background:linear-gradient(135deg,var(--blue),var(--ochre))}
+.reel.mix24{background:linear-gradient(135deg,var(--blue),var(--mauve))}
+.reel.mix34{background:linear-gradient(135deg,var(--ochre),var(--mauve))}
 
-.reel.mix13{
- background:linear-gradient(135deg,var(--sage),var(--ochre));
-}
-
-.reel.mix14{
- background:linear-gradient(135deg,var(--sage),var(--mauve));
-}
-
-.reel.mix23{
- background:linear-gradient(135deg,var(--blue),var(--ochre));
-}
-
-.reel.mix24{
- background:linear-gradient(135deg,var(--blue),var(--mauve));
-}
-
-.reel.mix34{
- background:linear-gradient(135deg,var(--ochre),var(--mauve));
-}
-
-/* CONTROLS */
+/* ---------- CONTROLS ---------- */
 
 .controls{
  display:grid;
@@ -642,12 +616,13 @@ body.entered .latent{
 .btn:active{transform:translateY(1px)}
 
 #message{
- min-height:36px;
- padding-top:10px;
+ min-height:42px;
+ padding:10px 14px 0;
  text-align:center;
  font-family:Georgia,serif;
  font-style:italic;
  font-size:14px;
+ line-height:1.4;
  color:#55584f;
 }
 
@@ -683,18 +658,7 @@ body.entered .latent{
 .pill.c3{background:var(--ochre)}
 .pill.c4{background:var(--mauve)}
 
-.stats{
- display:flex;
- justify-content:center;
- gap:22px;
- margin-top:8px;
- font-size:9px;
- font-weight:800;
- letter-spacing:.14em;
- color:#565951;
-}
-
-/* CONNECTION */
+/* ---------- CONNECTION ---------- */
 
 .connection{
  display:none;
@@ -710,14 +674,8 @@ body.entered .latent{
 }
 
 @keyframes gentleIn{
- from{
-  opacity:0;
-  transform:translateY(7px);
- }
- to{
-  opacity:1;
-  transform:none;
- }
+ from{opacity:0;transform:translateY(7px)}
+ to{opacity:1;transform:none}
 }
 
 .connection-title{
@@ -778,12 +736,12 @@ body.entered .latent{
  color:#55584f;
 }
 
-/* END */
+/* ---------- END WORDS ---------- */
 
 .final{
  display:none;
- margin:28px 12px 0;
- padding:27px 10px;
+ margin:30px 12px 0;
+ padding:30px 10px 80px;
  text-align:center;
 }
 
@@ -799,26 +757,221 @@ body.entered .latent{
 }
 
 .final-title{
- margin-top:8px;
+ margin-top:9px;
  font-family:Georgia,serif;
- font-size:28px;
+ font-size:29px;
 }
 
 .final-copy{
  max-width:325px;
- margin:8px auto;
+ margin:10px auto;
  font-family:Georgia,serif;
  font-size:15px;
- line-height:1.5;
+ line-height:1.55;
  color:#50534c;
 }
 
-.final-path{
- margin-top:17px;
- font-size:10px;
- font-weight:800;
- letter-spacing:.15em;
- color:#50534c;
+/* ---------- TRANSFORMED PLACE ---------- */
+
+.completed-place{
+ display:none;
+ position:relative;
+ z-index:6;
+ min-height:610px;
+ margin-top:-5px;
+ opacity:0;
+ filter:blur(8px);
+ transform:scale(.985);
+ transition:
+  opacity 2.2s ease,
+  filter 2.4s ease,
+  transform 2.4s ease;
+}
+
+.completed-place.show{
+ display:block;
+}
+
+.completed-place.awake{
+ opacity:1;
+ filter:blur(0);
+ transform:none;
+}
+
+.trace-field{
+ position:relative;
+ width:min(86vw,430px);
+ height:min(86vw,430px);
+ max-height:430px;
+ margin:22px auto 0;
+ border-radius:44% 56% 49% 51% / 52% 45% 55% 48%;
+ overflow:hidden;
+ opacity:.95;
+}
+
+/*
+ The 4x4 route data is translated into
+ soft areas rather than a visible grid.
+*/
+
+.trace-wash{
+ position:absolute;
+ width:31%;
+ height:31%;
+ transform:translate(-50%,-50%) scale(1.35);
+ border-radius:50%;
+ filter:blur(20px);
+ opacity:0;
+ transition:opacity 2.2s ease;
+ mix-blend-mode:multiply;
+}
+
+.completed-place.awake .trace-wash{
+ opacity:.34;
+}
+
+.trace-wash.c1{background:var(--sage)}
+.trace-wash.c2{background:var(--blue)}
+.trace-wash.c3{background:var(--ochre)}
+.trace-wash.c4{background:var(--mauve)}
+
+.trace-wash.mix{
+ opacity:0;
+}
+
+.completed-place.awake .trace-wash.mix{
+ opacity:.40;
+}
+
+.place-ring{
+ position:absolute;
+ inset:8% 4% 12% 6%;
+ border:1px solid rgba(70,76,66,.23);
+ border-radius:47% 53% 51% 49%;
+ transform:rotate(-7deg);
+}
+
+.place-ring::before,
+.place-ring::after{
+ content:"";
+ position:absolute;
+ border:1px solid rgba(70,76,66,.16);
+ border-radius:50%;
+}
+
+.place-ring::before{
+ inset:10% -7% 4% 9%;
+ transform:rotate(12deg);
+}
+
+.place-ring::after{
+ inset:22% 8% -9% -6%;
+ transform:rotate(-9deg);
+}
+
+.tree{
+ position:absolute;
+ right:17%;
+ top:23%;
+ width:86px;
+ height:120px;
+ opacity:.13;
+ transition:opacity 2s ease;
+}
+
+.tree .trunk,
+.tree .branch{
+ position:absolute;
+ display:block;
+ height:1.5px;
+ background:rgba(55,79,54,.78);
+ transform-origin:left center;
+ opacity:0;
+}
+
+.tree .trunk{
+ width:69px;
+ left:40px;
+ top:95px;
+ transform:rotate(-90deg) scaleX(0);
+}
+
+.tree .b1{
+ width:35px;
+ left:41px;
+ top:57px;
+ transform:rotate(-135deg) scaleX(0);
+}
+
+.tree .b2{
+ width:39px;
+ left:40px;
+ top:49px;
+ transform:rotate(-45deg) scaleX(0);
+}
+
+.tree .b3{
+ width:27px;
+ left:40px;
+ top:37px;
+ transform:rotate(-128deg) scaleX(0);
+}
+
+.tree .b4{
+ width:24px;
+ left:40px;
+ top:30px;
+ transform:rotate(-52deg) scaleX(0);
+}
+
+.tree.resolve{
+ opacity:.72;
+}
+
+.tree.resolve .trunk{
+ animation:drawTrunk 1.3s ease forwards;
+}
+
+.tree.resolve .b1{
+ animation:drawB1 .8s .8s ease forwards;
+}
+
+.tree.resolve .b2{
+ animation:drawB2 .9s 1.0s ease forwards;
+}
+
+.tree.resolve .b3{
+ animation:drawB3 .7s 1.35s ease forwards;
+}
+
+.tree.resolve .b4{
+ animation:drawB4 .7s 1.55s ease forwards;
+}
+
+@keyframes drawTrunk{
+ to{opacity:1;transform:rotate(-90deg) scaleX(1)}
+}
+@keyframes drawB1{
+ to{opacity:1;transform:rotate(-135deg) scaleX(1)}
+}
+@keyframes drawB2{
+ to{opacity:1;transform:rotate(-45deg) scaleX(1)}
+}
+@keyframes drawB3{
+ to{opacity:1;transform:rotate(-128deg) scaleX(1)}
+}
+@keyframes drawB4{
+ to{opacity:1;transform:rotate(-52deg) scaleX(1)}
+}
+
+.completed-caption{
+ text-align:center;
+ margin-top:4px;
+ font-family:Georgia,serif;
+ font-size:13px;
+ font-style:italic;
+ color:#5d6058;
+ opacity:.72;
 }
 
 .shake{animation:shake .30s linear}
@@ -855,22 +1008,17 @@ body.entered .latent{
 
 <div class="terrain">
 
-<svg
- class="contours"
- viewBox="0 0 700 1200"
- preserveAspectRatio="none"
- aria-hidden="true"
->
-<path d="M-70 145 C80 40 270 55 365 155 C460 255 610 225 770 105"/>
-<path d="M-70 190 C95 85 260 90 345 185 C430 285 590 280 770 150"/>
-<path class="fine" d="M-80 235 C90 130 245 135 320 220 C405 315 570 330 780 200"/>
-<path d="M-90 390 C70 320 180 360 255 430 C350 520 500 485 780 350"/>
-<path class="fine" d="M-90 430 C65 360 170 400 235 465 C330 555 500 525 780 390"/>
-<path class="light" d="M-90 495 C80 420 200 450 285 520 C380 600 525 575 780 455"/>
-<path d="M-100 620 C80 530 245 540 355 645 C470 755 600 740 790 610"/>
-<path class="fine" d="M-100 665 C85 575 245 580 335 680 C445 800 605 780 790 650"/>
-<path d="M-100 850 C85 755 280 760 390 870 C500 980 630 960 790 825"/>
-<path class="fine" d="M-100 905 C80 810 265 815 365 915 C475 1025 620 1020 790 880"/>
+<svg class="contours" viewBox="0 0 700 1200" preserveAspectRatio="none" aria-hidden="true">
+ <path d="M-70 145 C80 40 270 55 365 155 C460 255 610 225 770 105"/>
+ <path d="M-70 190 C95 85 260 90 345 185 C430 285 590 280 770 150"/>
+ <path class="fine" d="M-80 235 C90 130 245 135 320 220 C405 315 570 330 780 200"/>
+ <path d="M-90 390 C70 320 180 360 255 430 C350 520 500 485 780 350"/>
+ <path class="fine" d="M-90 430 C65 360 170 400 235 465 C330 555 500 525 780 390"/>
+ <path class="light" d="M-90 495 C80 420 200 450 285 520 C380 600 525 575 780 455"/>
+ <path d="M-100 620 C80 530 245 540 355 645 C470 755 600 740 790 610"/>
+ <path class="fine" d="M-100 665 C85 575 245 580 335 680 C445 800 605 780 790 650"/>
+ <path d="M-100 850 C85 755 280 760 390 870 C500 980 630 960 790 825"/>
+ <path class="fine" d="M-100 905 C80 810 265 815 365 915 C475 1025 620 1020 790 880"/>
 </svg>
 
 <div class="vegetation"></div>
@@ -888,7 +1036,7 @@ body.entered .latent{
 
 <header>
  <div class="brand">WORDLOCK</div>
- <div class="prototype">PROTOTYPE #030 · MEDIUM</div>
+ <div class="prototype">PROTOTYPE #031 · HARD</div>
  <div class="where">Somewhere near the beginning</div>
  <div class="terrain-note">Stone · water · first traces</div>
 </header>
@@ -923,23 +1071,12 @@ body.entered .latent{
 </div>
 
 <div id="message"></div>
-
 <div class="bank" id="bank"></div>
-
-<div class="stats">
- <span id="turnStat">0 TURNS</span>
- <span id="attemptStat">0 ATTEMPTS</span>
- <span id="hintStat">0 HINTS</span>
-</div>
 
 <section class="connection" id="connection">
 
  <div class="connection-title">THE CONNECTION</div>
-
- <div class="connection-copy">
-  What connects all four?
- </div>
-
+ <div class="connection-copy">What connects all four?</div>
  <div class="connection-length" id="connectionLength"></div>
 
  <input
@@ -961,139 +1098,140 @@ body.entered .latent{
 </section>
 
 <section class="final" id="final">
-
- <div class="final-kicker">
-  A FIRST TRACE
- </div>
-
- <div class="final-title">
-  Your path remains.
- </div>
-
+ <div class="final-kicker">A FIRST TRACE</div>
+ <div class="final-title">Your path remains.</div>
  <div class="final-copy">
   This place is a little different because you passed through it.
  </div>
-
- <div class="final-path" id="finalPath"></div>
-
 </section>
 
 </div>
+
+<section class="completed-place" id="completedPlace">
+ <div class="trace-field" id="traceField">
+  <div class="place-ring"></div>
+
+  <div class="tree" id="tree">
+   <span class="trunk"></span>
+   <span class="branch b1"></span>
+   <span class="branch b2"></span>
+   <span class="branch b3"></span>
+   <span class="branch b4"></span>
+  </div>
+ </div>
+
+ <div class="completed-caption">
+  Somewhere you have been.
+ </div>
+</section>
+
 </main>
 </div>
 
 <script>
 
 /*
- WORDLOCK #030
- MEDIUM CALIBRATION 4
+ WORDLOCK #031 — HARD
 
- END-TO-END VALIDATION
+ Validated construction:
+ KEY · LIME · SAND · TOUCH → STONE
 
- Initial board:
- - no clue answer already present
+ No reel may be used twice within one word.
 
- FIELD:
- - 2 validated geographical footprints
+ Hard:
+ - no automatic starting pulse
+ - progressive voluntary route hints
 
- CLOCK:
- - 2 validated geographical footprints
-   after either FIELD branch
-
- PATCH:
- - 1–2 validated geographical footprints
-   depending on prior branch
-
- FRAME:
- - 3 validated geographical footprints
-   from every state reaching clue 4
-
- Full branching solve tree:
- - 10 distinct validated final states
-
- Every accepted state in the validated
- tree contains exactly one visible route
- for the current answer.
+ Player-facing Turns / Attempts / Hints
+ removed, but retained internally.
 */
 
 const PUZZLE={
 
  wheels:[
+  ["D","U","T"],
+  ["T","O","S"],
+  ["O","U","E"],
+  ["V","D","X"],
 
-  ["D","S","U"],
-  ["B","I","R"],
-  ["A","M","Y"],
-  ["E","H","O"],
+  ["S","A","H"],
+  ["C","N","E"],
+  ["D","U","E"],
+  ["Y","N","Q"],
 
-  ["D","P","U"],
-  ["A","D","P"],
-  ["I","L","R"],
-  ["C","D","E"],
+  ["E","R","G"],
+  ["S","H","O"],
+  ["Y","M","H"],
+  ["A","L","E"],
 
-  ["K","M","T"],
-  ["A","E","S"],
-  ["B","F","K"],
-  ["A","O","U"],
-
-  ["C","S","T"],
-  ["A","H","I"],
-  ["B","C","K"],
-  ["G","H","K"]
-
+  ["G","Y","E"],
+  ["M","C","K"],
+  ["K","I","L"],
+  ["Z","I","S"]
  ],
 
  initial:[
-  0,1,0,1,
-  1,2,0,0,
-  0,1,0,0,
-  1,2,1,0
+  2,0,1,0,
+  2,1,2,2,
+  1,2,0,2,
+  0,0,2,0
  ],
 
  clues:[
 
   {
-   answer:"FIELD",
-   clue:"Grassy expanse",
-   start:10,
-   colour:1
+   answer:"KEY",
+   clue:"Crucial, as a detail",
+   colour:1,
+   hintRoutes:[
+    [13,8,12],
+    [14,11,7]
+   ]
   },
 
   {
-   answer:"CLOCK",
-   clue:"It may have hands but no arms",
-   start:7,
-   colour:2
+   answer:"LIME",
+   clue:"Citrus in a gimlet",
+   colour:2,
+   hintRoutes:[
+    [11,14,10,6],
+    [11,15,10,5]
+   ]
   },
 
   {
-   answer:"PATCH",
-   clue:"Repair covering a worn area",
-   start:4,
-   colour:3
+   answer:"SAND",
+   clue:"Hourglass contents",
+   colour:3,
+   hintRoutes:[
+    [15,11,7,3],
+    [1,4,5,6]
+   ]
   },
 
   {
-   answer:"FRAME",
-   clue:"Supporting structure",
-   start:10,
-   colour:4
+   answer:"TOUCH",
+   clue:"Small amount, as of colour",
+   colour:4,
+   hintRoutes:[
+    [1,2,6,5,4],
+    [0,1,2,5,10]
+   ]
   }
 
  ],
 
  connection:{
-
-  answer:"WORK",
+  answer:"STONE",
 
   hint1:
    "The connecting word comes after all four answers.",
 
   hint2:
-   "Think of making, building or doing.",
+   "Think of something solid, natural and ancient.",
 
   hint3:
-   "FIELD, CLOCK, PATCH and FRAME can all be followed by the same four letters."
-
+   "KEY, LIME, SAND and TOUCH can all be followed by the same five letters."
  }
 
 };
@@ -1114,16 +1252,16 @@ let turns=0;
 let attempts=0;
 let hints=0;
 
+let clueHintLevel=0;
+let selectedHintRoute=null;
 let connectionHintLevel=0;
 
 let busy=false;
-let clueHasStarted=false;
 let entered=false;
-
 let audioCtx=null;
 
 
-/* AUDIO */
+/* ---------- AUDIO ---------- */
 
 function getAudioContext(){
 
@@ -1136,15 +1274,12 @@ function getAudioContext(){
  if(!AC)return null;
 
  audioCtx=new AC();
-
  return audioCtx;
 }
-
 
 function primeAudio(){
 
  const ctx=getAudioContext();
-
  if(!ctx)return;
 
  try{
@@ -1154,24 +1289,17 @@ function primeAudio(){
   }
 
   const buffer=
-   ctx.createBuffer(
-    1,
-    1,
-    ctx.sampleRate
-   );
+   ctx.createBuffer(1,1,ctx.sampleRate);
 
   const source=
    ctx.createBufferSource();
 
   source.buffer=buffer;
-
   source.connect(ctx.destination);
-
   source.start(0);
 
  }catch(e){}
 }
-
 
 async function tone(
  frequency,
@@ -1182,219 +1310,98 @@ async function tone(
 ){
 
  const ctx=getAudioContext();
-
  if(!ctx)return;
 
  if(ctx.state!=="running"){
-
-  try{
-   await ctx.resume();
-  }catch(e){}
-
+  try{await ctx.resume()}catch(e){}
  }
 
- const now=
-  ctx.currentTime+delay;
+ const now=ctx.currentTime+delay;
 
- const osc=
-  ctx.createOscillator();
-
- const gain=
-  ctx.createGain();
+ const osc=ctx.createOscillator();
+ const gain=ctx.createGain();
 
  osc.type=type;
+ osc.frequency.setValueAtTime(frequency,now);
 
- osc.frequency
-  .setValueAtTime(
-   frequency,
-   now
-  );
+ gain.gain.setValueAtTime(.0001,now);
 
- gain.gain
-  .setValueAtTime(
-   .0001,
-   now
-  );
+ gain.gain.exponentialRampToValueAtTime(
+  Math.max(volume,.0002),
+  now+.012
+ );
 
- gain.gain
-  .exponentialRampToValueAtTime(
-   Math.max(volume,.0002),
-   now+.012
-  );
-
- gain.gain
-  .exponentialRampToValueAtTime(
-   .0001,
-   now+duration
-  );
+ gain.gain.exponentialRampToValueAtTime(
+  .0001,
+  now+duration
+ );
 
  osc.connect(gain);
-
  gain.connect(ctx.destination);
 
  osc.start(now);
-
- osc.stop(
-  now+duration+.04
- );
-
+ osc.stop(now+duration+.04);
 }
-
 
 function placeSound(){
 
- tone(
-  110,
-  1.55,
-  .010,
-  "sine",
-  0
- );
-
- tone(
-  165,
-  1.80,
-  .005,
-  "sine",
-  .08
- );
-
- tone(
-  220,
-  2.10,
-  .0025,
-  "sine",
-  .16
- );
-
- tone(
-  330,
-  2.25,
-  .0015,
-  "sine",
-  .24
- );
-
+ tone(110,1.55,.010,"sine",0);
+ tone(165,1.80,.005,"sine",.08);
+ tone(220,2.10,.0025,"sine",.16);
+ tone(330,2.25,.0015,"sine",.24);
 }
-
 
 function reelSound(){
 
- tone(
-  92,
-  .045,
-  .006,
-  "triangle"
- );
-
- tone(
-  185,
-  .22,
-  .010,
-  "sine",
-  .018
- );
-
- tone(
-  372,
-  .34,
-  .0033,
-  "sine",
-  .045
- );
-
+ tone(92,.045,.006,"triangle");
+ tone(185,.22,.010,"sine",.018);
+ tone(372,.34,.0033,"sine",.045);
 }
 
+function hintSound(){
+
+ tone(196,.34,.006,"sine");
+ tone(294,.55,.0028,"sine",.05);
+}
+
+function treeSound(){
+
+ tone(147,.85,.004,"sine");
+ tone(220,1.15,.003,"sine",.16);
+ tone(330,1.45,.0018,"sine",.34);
+}
 
 function wrongSound(){
 
- tone(
-  104,
-  .13,
-  .013,
-  "triangle"
- );
-
- tone(
-  78,
-  .20,
-  .007,
-  "sine",
-  .025
- );
-
+ tone(104,.13,.013,"triangle");
+ tone(78,.20,.007,"sine",.025);
 }
-
 
 function pathSound(step){
 
  const notes=[
-  174,
-  196,
-  220,
-  247,
-  277,
-  294
+  174,196,220,247,277,294
  ];
 
  const n=
-  notes[
-   Math.min(
-    step,
-    notes.length-1
-   )
-  ];
+  notes[Math.min(step,notes.length-1)];
 
- tone(
-  n,
-  .28,
-  .0085
- );
-
- tone(
-  n*2,
-  .40,
-  .0028,
-  "sine",
-  .035
- );
-
+ tone(n,.28,.0085);
+ tone(n*2,.40,.0028,"sine",.035);
 }
-
 
 function connectionSound(){
 
- [
-  174,
-  220,
-  261,
-  330
- ].forEach(
+ [174,220,261,330].forEach(
   (n,i)=>{
-
-   tone(
-    n,
-    .42,
-    .008,
-    "sine",
-    i*.13
-   );
-
-   tone(
-    n*2,
-    .52,
-    .0024,
-    "sine",
-    i*.13+.035
-   );
-
+   tone(n,.42,.008,"sine",i*.13);
+   tone(n*2,.52,.0024,"sine",i*.13+.035);
   }
  );
-
 }
 
 
-/* ENTRY */
+/* ---------- ENTRY ---------- */
 
 function enterPlace(){
 
@@ -1404,40 +1411,19 @@ function enterPlace(){
 
  primeAudio();
 
- setTimeout(
-  placeSound,
-  45
- );
+ setTimeout(placeSound,45);
 
- entry.classList.add(
-  "entering"
- );
-
- document.body.classList.add(
-  "entered"
- );
+ entry.classList.add("entering");
+ document.body.classList.add("entered");
 
  setTimeout(
   ()=>{
-
-   entry.style.display=
-    "none";
-
-   gameShell.classList.add(
-    "visible"
-   );
-
+   entry.style.display="none";
+   gameShell.classList.add("visible");
   },
   650
  );
-
- setTimeout(
-  applyStartingPulse,
-  2850
- );
-
 }
-
 
 entry.addEventListener(
  "pointerdown",
@@ -1450,40 +1436,22 @@ entry.addEventListener(
 );
 
 
-/* PATH ENGINE */
+/* ---------- PATH ENGINE ---------- */
 
 function letterAt(i){
 
  return PUZZLE
   .wheels[i]
   [current[i]];
-
 }
-
 
 function adjacent(a,b){
 
  return Math.max(
-
-  Math.abs(
-   Math.floor(a/4)-
-   Math.floor(b/4)
-  ),
-
-  Math.abs(
-   a%4-
-   b%4
-  )
-
+  Math.abs(Math.floor(a/4)-Math.floor(b/4)),
+  Math.abs(a%4-b%4)
  )===1;
-
 }
-
-
-/*
- Each place may be used once
- within an answer.
-*/
 
 function findPaths(word){
 
@@ -1495,107 +1463,50 @@ function findPaths(word){
   path
  ){
 
-  if(
-   letterIndex===
-   word.length
-  ){
-
-   results.push(
-    [...path]
-   );
-
+  if(letterIndex===word.length){
+   results.push([...path]);
    return;
-
   }
 
-  for(
-   let i=0;
-   i<16;
-   i++
-  ){
+  for(let i=0;i<16;i++){
 
-   if(
-    path.includes(i)
-   )continue;
-
-   if(
-    !adjacent(
-     position,
-     i
-    )
-   )continue;
-
-   if(
-    letterAt(i)!==
-    word[letterIndex]
-   )continue;
+   if(path.includes(i))continue;
+   if(!adjacent(position,i))continue;
+   if(letterAt(i)!==word[letterIndex])continue;
 
    path.push(i);
-
-   walk(
-    i,
-    letterIndex+1,
-    path
-   );
-
+   walk(i,letterIndex+1,path);
    path.pop();
-
   }
-
  }
 
- for(
-  let i=0;
-  i<16;
-  i++
- ){
+ for(let i=0;i<16;i++){
 
-  if(
-   letterAt(i)===
-   word[0]
-  ){
-
-   walk(
-    i,
-    1,
-    [i]
-   );
-
+  if(letterAt(i)===word[0]){
+   walk(i,1,[i]);
   }
-
  }
 
  return results;
-
 }
 
 
-/* BOARD HISTORY */
+/* ---------- HISTORY ---------- */
 
-function applyHistory(
- reel,
- i
-){
+function applyHistory(reel,i){
 
- const colours=
-  [...histories[i]];
+ const colours=[...histories[i]];
 
- if(
-  colours.length===1
- ){
+ if(colours.length===1){
 
   reel.classList.add(
-   "used"+
-   colours[0]
+   "used"+colours[0]
   );
 
   return;
-
  }
 
- if(
-  colours.length>=2
- ){
+ if(colours.length>=2){
 
   const mix=
    "mix"+
@@ -1604,49 +1515,17 @@ function applyHistory(
 
   if(
    [
-    "mix12",
-    "mix13",
-    "mix14",
-    "mix23",
-    "mix24",
-    "mix34"
+    "mix12","mix13","mix14",
+    "mix23","mix24","mix34"
    ].includes(mix)
   ){
-
    reel.classList.add(mix);
-
   }
-
  }
-
 }
 
 
-function applyStartingPulse(){
-
- if(
-  !entered||
-  clueHasStarted||
-  clueIndex>=4
- )return;
-
- const reels=
-  document.querySelectorAll(
-   ".reel"
-  );
-
- reels[
-  PUZZLE.clues[
-   clueIndex
-  ].start
- ]?.classList.add(
-  "pulse"
- );
-
-}
-
-
-/* RENDER */
+/* ---------- RENDER ---------- */
 
 function render(){
 
@@ -1656,87 +1535,50 @@ function render(){
   (wheel,i)=>{
 
    const reel=
-    document.createElement(
-     "div"
-    );
+    document.createElement("div");
 
    reel.className="reel";
 
-   applyHistory(
-    reel,
-    i
-   );
+   applyHistory(reel,i);
 
-   const centre=
-    current[i];
-
-   const left=
-    (centre+2)%3;
-
-   const right=
-    (centre+1)%3;
+   const centre=current[i];
+   const left=(centre+2)%3;
+   const right=(centre+1)%3;
 
    const strip=
-    document.createElement(
-     "div"
-    );
+    document.createElement("div");
 
-   strip.className=
-    "reel-strip";
+   strip.className="reel-strip";
 
    [
-    {
-     idx:left,
-     type:"alt"
-    },
-    {
-     idx:centre,
-     type:"current"
-    },
-    {
-     idx:right,
-     type:"alt"
-    }
+    {idx:left,type:"alt"},
+    {idx:centre,type:"current"},
+    {idx:right,type:"alt"}
    ].forEach(
     item=>{
 
      const el=
-      document.createElement(
-       "div"
-      );
+      document.createElement("div");
 
      el.className=
-      "letter "+
-      item.type;
+      "letter "+item.type;
 
      const letter=
       wheel[item.idx];
 
      if(
-      item.type==="alt"&&
-      remembered[i]
-       .has(letter)
+      item.type==="alt" &&
+      remembered[i].has(letter)
      ){
-
-      el.classList.add(
-       "remembered"
-      );
-
+      el.classList.add("remembered");
      }
 
-     el.textContent=
-      letter;
-
-     strip.appendChild(
-      el
-     );
-
+     el.textContent=letter;
+     strip.appendChild(el);
     }
    );
 
-   reel.appendChild(
-    strip
-   );
+   reel.appendChild(strip);
 
    let startX=null;
 
@@ -1750,10 +1592,9 @@ function render(){
 
      startX=e.clientX;
 
-     reel
-      .setPointerCapture?.
-      (e.pointerId);
-
+     reel.setPointerCapture?.(
+      e.pointerId
+     );
     }
    );
 
@@ -1762,77 +1603,45 @@ function render(){
     e=>{
 
      if(
-      busy||
+      busy ||
       startX===null
      )return;
 
      const dx=
-      e.clientX-
-      startX;
+      e.clientX-startX;
 
      startX=null;
 
-     if(
-      Math.abs(dx)<16
-     )return;
+     if(Math.abs(dx)<16)return;
 
      animateTurn(
       i,
       dx<0?1:-1
      );
-
     }
    );
 
-   board.appendChild(
-    reel
-   );
-
+   board.appendChild(reel);
   }
  );
 
- applyStartingPulse();
-
- updateStats();
-
+ updateHintPulse();
 }
 
 
-/* REEL MOVEMENT */
+/* ---------- TURN ---------- */
 
-function animateTurn(
- i,
- direction
-){
+function animateTurn(i,direction){
 
  if(busy)return;
 
- if(
-  !clueHasStarted
- ){
-
-  clueHasStarted=true;
-
-  document
-   .querySelectorAll(
-    ".reel.pulse"
-   )
-   .forEach(
-    r=>
-     r.classList.remove(
-      "pulse"
-     )
-   );
-
- }
-
  busy=true;
+
+ clearHintPulse();
 
  const reel=
   document
-   .querySelectorAll(
-    ".reel"
-   )[i];
+   .querySelectorAll(".reel")[i];
 
  reel.classList.add(
   direction===1
@@ -1858,23 +1667,14 @@ function animateTurn(
 
    const fresh=
     document
-     .querySelectorAll(
-      ".reel"
-     )[i];
+     .querySelectorAll(".reel")[i];
 
-   fresh?.classList.add(
-    "settle"
-   );
+   fresh?.classList.add("settle");
 
    setTimeout(
     ()=>{
-
-     fresh?.classList.remove(
-      "settle"
-     );
-
+     fresh?.classList.remove("settle");
      busy=false;
-
     },
     270
    );
@@ -1882,26 +1682,23 @@ function animateTurn(
   },
   220
  );
-
 }
 
 
-/* CLUES */
+/* ---------- CLUES ---------- */
 
 function renderClue(){
 
  busy=false;
 
- clueHasStarted=false;
+ clueHintLevel=0;
+ selectedHintRoute=null;
 
  const c=
-  PUZZLE.clues[
-   clueIndex
-  ];
+  PUZZLE.clues[clueIndex];
 
  clueLabel.textContent=
-  "CLUE "+
-  (clueIndex+1);
+  "CLUE "+(clueIndex+1);
 
  clue.textContent=
   c.clue+
@@ -1909,12 +1706,11 @@ function renderClue(){
   c.answer.length+
   ")";
 
+ hintBtn.textContent="HINT";
  message.textContent="";
 
  render();
-
 }
-
 
 function unlock(){
 
@@ -1924,29 +1720,18 @@ function unlock(){
 
  attempts++;
 
- updateStats();
-
  const c=
-  PUZZLE.clues[
-   clueIndex
-  ];
+  PUZZLE.clues[clueIndex];
 
  const paths=
-  findPaths(
-   c.answer
-  );
+  findPaths(c.answer);
 
- if(
-  paths.length===0
- ){
+ if(paths.length===0){
 
   wrongSound();
-
   busy=true;
 
-  board.classList.add(
-   "shake"
-  );
+  board.classList.add("shake");
 
   message.textContent=
    "Not quite. The place settles back.";
@@ -1954,9 +1739,7 @@ function unlock(){
   setTimeout(
    ()=>{
 
-    board.classList.remove(
-     "shake"
-    );
+    board.classList.remove("shake");
 
     current=
      [...clueSnapshot];
@@ -1964,23 +1747,14 @@ function unlock(){
     render();
 
     busy=false;
-
    },
    720
   );
 
   return;
-
  }
 
- /*
-  Never allow the engine to
-  choose a path for the player.
- */
-
- if(
-  paths.length>1
- ){
+ if(paths.length>1){
 
   wrongSound();
 
@@ -1988,35 +1762,20 @@ function unlock(){
    "Two paths are open. Change the place slightly.";
 
   return;
-
  }
 
- solve(
-  c,
-  paths[0]
- );
-
+ solve(c,paths[0]);
 }
 
-
-function solve(
- c,
- path
-){
+function solve(c,path){
 
  busy=true;
-
  message.textContent="";
 
  path.forEach(
   (position,n)=>{
-
-   remembered[
-    position
-   ].add(
-    c.answer[n]
-   );
-
+   remembered[position]
+    .add(c.answer[n]);
   }
  );
 
@@ -2024,119 +1783,75 @@ function solve(
 
  function next(){
 
-  if(
-   step>=
-   path.length
-  ){
+  if(step>=path.length){
 
    setTimeout(
-    ()=>completeWord(
-     c,
-     path
-    ),
+    ()=>completeWord(c,path),
     420
    );
 
    return;
-
   }
 
-  const position=
-   path[step];
+  const position=path[step];
 
-  histories[
-   position
-  ].add(
-   c.colour
-  );
+  histories[position]
+   .add(c.colour);
 
   render();
 
   const reel=
    document
-    .querySelectorAll(
-     ".reel"
-    )[position];
+    .querySelectorAll(".reel")[position];
 
   reel?.classList.add(
    "confirming"
   );
 
-  pathSound(
-   step
-  );
+  pathSound(step);
 
   setTimeout(
-   ()=>reel?.classList.remove(
-    "confirming"
-   ),
+   ()=>reel?.classList.remove("confirming"),
    320
   );
 
   step++;
 
-  setTimeout(
-   next,
-   175
-  );
-
+  setTimeout(next,175);
  }
 
  next();
-
 }
 
+function completeWord(c,path){
 
-function completeWord(
- c,
- path
-){
-
- solvedWords.push(
-  c.answer
- );
+ solvedWords.push(c.answer);
 
  renderBank();
 
  document
-  .querySelectorAll(
-   ".progress-dot"
-  )[clueIndex]
-  .classList.add(
-   "done"
-  );
+  .querySelectorAll(".progress-dot")
+  [clueIndex]
+  .classList.add("done");
 
  message.textContent=
-  c.answer+
-  " found.";
-
- /*
-  Only the actual successful
-  route carries forward.
- */
+  c.answer+" found.";
 
  const next=
   [...clueSnapshot];
 
  path.forEach(
   position=>{
-
-   next[position]=
-    current[position];
-
+   next[position]=current[position];
   }
  );
 
  current=next;
-
- clueSnapshot=
-  [...current];
+ clueSnapshot=[...current];
 
  clueIndex++;
 
- if(
-  clueIndex>=4
- ){
+ if(clueIndex>=4){
 
   setTimeout(
    showConnection,
@@ -2144,16 +1859,13 @@ function completeWord(
   );
 
   return;
-
  }
 
  setTimeout(
   renderClue,
   950
  );
-
 }
-
 
 function reset(){
 
@@ -2164,12 +1876,163 @@ function reset(){
  current=
   [...clueSnapshot];
 
+ clearHintPulse();
  render();
 
  message.textContent="";
-
 }
 
+
+/* ---------- PROGRESSIVE HINTS ---------- */
+
+function configurationForRoute(
+ route,
+ answer
+){
+
+ const test=[...current];
+
+ route.forEach(
+  (position,n)=>{
+
+   const idx=
+    PUZZLE.wheels[position]
+     .indexOf(answer[n]);
+
+   if(idx>=0){
+    test[position]=idx;
+   }
+  }
+ );
+
+ return test;
+}
+
+function pathsForState(
+ word,
+ state
+){
+
+ const old=current;
+ current=state;
+
+ const paths=
+  findPaths(word);
+
+ current=old;
+
+ return paths;
+}
+
+function chooseHintRoute(){
+
+ const c=
+  PUZZLE.clues[clueIndex];
+
+ for(
+  const route of c.hintRoutes
+ ){
+
+  const test=
+   configurationForRoute(
+    route,
+    c.answer
+   );
+
+  const paths=
+   pathsForState(
+    c.answer,
+    test
+   );
+
+  if(
+   paths.length===1
+  ){
+   return route;
+  }
+ }
+
+ return c.hintRoutes[0];
+}
+
+function clearHintPulse(){
+
+ document
+  .querySelectorAll(
+   ".reel.hint-pulse"
+  )
+  .forEach(
+   r=>r.classList.remove(
+    "hint-pulse"
+   )
+  );
+}
+
+function updateHintPulse(){
+
+ clearHintPulse();
+
+ if(
+  clueHintLevel<1 ||
+  !selectedHintRoute
+ )return;
+
+ /*
+  Odd hint levels show the
+  next place. Even levels have
+  just turned that place.
+ */
+
+ if(clueHintLevel%2===1){
+
+  const step=
+   Math.floor(
+    clueHintLevel/2
+   );
+
+  if(
+   step<
+   selectedHintRoute.length
+  ){
+
+   document
+    .querySelectorAll(".reel")
+    [selectedHintRoute[step]]
+    ?.classList.add(
+     "hint-pulse"
+    );
+  }
+ }
+}
+
+function turnReelToLetter(
+ position,
+ letter
+){
+
+ const idx=
+  PUZZLE.wheels[position]
+   .indexOf(letter);
+
+ if(idx<0)return;
+
+ current[position]=idx;
+
+ reelSound();
+ render();
+
+ const reel=
+  document
+   .querySelectorAll(".reel")
+   [position];
+
+ reel?.classList.add("settle");
+
+ setTimeout(
+  ()=>reel?.classList.remove("settle"),
+  280
+ );
+}
 
 function clueHint(){
 
@@ -2177,37 +2040,83 @@ function clueHint(){
 
  primeAudio();
 
+ const c=
+  PUZZLE.clues[clueIndex];
+
+ if(!selectedHintRoute){
+  selectedHintRoute=
+   chooseHintRoute();
+ }
+
+ const maxHints=
+  selectedHintRoute.length*2;
+
+ if(clueHintLevel>=maxHints){
+
+  message.textContent=
+   "One complete way through the place is now showing.";
+
+  return;
+ }
+
+ clueHintLevel++;
  hints++;
 
- updateStats();
+ hintSound();
 
- const reel=
+ const step=
+  Math.floor(
+   (clueHintLevel-1)/2
+  );
+
+ if(clueHintLevel%2===1){
+
+  clearHintPulse();
+
+  const position=
+   selectedHintRoute[step];
+
   document
-   .querySelectorAll(
-    ".reel"
-   )[
-    PUZZLE.clues[
-     clueIndex
-    ].start
-   ];
+   .querySelectorAll(".reel")
+   [position]
+   ?.classList.add(
+    "hint-pulse"
+   );
 
- reel?.classList.remove(
-  "pulse"
- );
+  if(step===0){
+   message.textContent=
+    "One possible place to start.";
+  }else{
+   message.textContent=
+    "A possible next place.";
+  }
 
- void reel?.offsetWidth;
+ }else{
 
- reel?.classList.add(
-  "pulse"
- );
+  const position=
+   selectedHintRoute[step];
 
- message.textContent=
-  "One possible place to start.";
+  const letter=
+   c.answer[step];
 
+  clearHintPulse();
+
+  turnReelToLetter(
+   position,
+   letter
+  );
+
+  message.textContent=
+   "That place turns to "+letter+".";
+
+ }
+
+ hintBtn.textContent=
+  "ANOTHER HINT";
 }
 
 
-/* BANK */
+/* ---------- BANK ---------- */
 
 function renderBank(){
 
@@ -2217,89 +2126,58 @@ function renderBank(){
   (word,i)=>{
 
    const pill=
-    document.createElement(
-     "div"
-    );
+    document.createElement("div");
 
    pill.className=
-    "pill c"+
-    (i+1);
+    "pill c"+(i+1);
 
-   pill.textContent=
-    word;
+   pill.textContent=word;
 
-   bank.appendChild(
-    pill
-   );
-
+   bank.appendChild(pill);
   }
  );
-
 }
 
 
-/* CONNECTION */
+/* ---------- CONNECTION ---------- */
 
 function showConnection(){
 
  busy=false;
 
- controls.style.display=
-  "none";
-
+ controls.style.display="none";
  message.textContent="";
+ clueArea.style.display="none";
 
- clueArea.style.display=
-  "none";
-
- connection.classList.add(
-  "show"
- );
+ connection.classList.add("show");
 
  connectionLength.textContent=
   "•".repeat(
-   PUZZLE.connection
-    .answer.length
+   PUZZLE.connection.answer.length
   );
-
 }
-
 
 function connectionHint(){
 
  primeAudio();
 
- if(
-  connectionHintLevel>=3
- )return;
+ if(connectionHintLevel>=3)return;
 
  connectionHintLevel++;
-
  hints++;
 
- updateStats();
-
  document
-  .getElementById(
-   "connectionHint"
-  )
+  .getElementById("connectionHint")
   .textContent=
    PUZZLE.connection[
-    "hint"+
-    connectionHintLevel
+    "hint"+connectionHintLevel
    ];
 
- if(
-  connectionHintLevel===3
- ){
-
+ if(connectionHintLevel===3){
   connectionHintBtn.textContent=
    "NO MORE HINTS";
-
  }
-
 }
-
 
 function tryConnection(){
 
@@ -2315,12 +2193,9 @@ function tryConnection(){
 
  attempts++;
 
- updateStats();
-
  if(
   guess===
-  PUZZLE.connection
-   .answer
+  PUZZLE.connection.answer
  ){
 
   completeConnection();
@@ -2330,33 +2205,20 @@ function tryConnection(){
   wrongSound();
 
   connectionInput
-   .classList.add(
-    "shake"
-   );
+   .classList.add("shake");
 
   document
-   .getElementById(
-    "connectionHint"
-   )
+   .getElementById("connectionHint")
    .textContent=
     "That doesn't connect all four.";
 
   setTimeout(
-   ()=>{
-
-    connectionInput
-     .classList.remove(
-      "shake"
-     );
-
-   },
+   ()=>connectionInput
+    .classList.remove("shake"),
    350
   );
-
  }
-
 }
-
 
 function revealConnection(){
 
@@ -2366,9 +2228,7 @@ function revealConnection(){
   PUZZLE.connection.answer;
 
  document
-  .getElementById(
-   "connectionHint"
-  )
+  .getElementById("connectionHint")
   .textContent=
    "There it is.";
 
@@ -2376,9 +2236,7 @@ function revealConnection(){
   completeConnection,
   650
  );
-
 }
-
 
 function completeConnection(){
 
@@ -2387,11 +2245,8 @@ function completeConnection(){
  const answer=
   PUZZLE.connection.answer;
 
- connectionInput.value=
-  answer;
-
- connectionInput.disabled=
-  true;
+ connectionInput.value=answer;
+ connectionInput.disabled=true;
 
  [
   "connectBtn",
@@ -2399,35 +2254,23 @@ function completeConnection(){
   "revealBtn"
  ].forEach(
   id=>{
-
    document
     .getElementById(id)
     .disabled=true;
-
   }
  );
 
  connectionLength.textContent=
   answer;
 
- /*
-  FIELDWORK
-  CLOCKWORK
-  PATCHWORK
-  FRAMEWORK
- */
-
  const forms=
   solvedWords.map(
-   word=>
-    word+answer
+   word=>word+answer
   );
 
  const out=
   document
-   .getElementById(
-    "connectionHint"
-   );
+   .getElementById("connectionHint");
 
  out.textContent="";
 
@@ -2435,17 +2278,14 @@ function completeConnection(){
 
  function next(){
 
-  if(
-   i>=forms.length
-  ){
+  if(i>=forms.length){
 
    setTimeout(
-    finish,
-    900
+    showEndingWords,
+    1000
    );
 
    return;
-
   }
 
   out.textContent=
@@ -2463,91 +2303,195 @@ function completeConnection(){
 
   i++;
 
-  setTimeout(
-   next,
-   430
-  );
-
+  setTimeout(next,430);
  }
 
- setTimeout(
-  next,
-  470
- );
-
+ setTimeout(next,470);
 }
 
 
-/* FINISH */
+/* ---------- ENDING ---------- */
 
-function finish(){
-
- const visited=
-  histories.filter(
-   set=>set.size>0
-  ).length;
+function showEndingWords(){
 
  connection.style.transition=
   "opacity .8s ease";
 
- connection.style.opacity=
-  "0";
+ connection.style.opacity="0";
 
  setTimeout(
   ()=>{
 
-   connection.style.display=
-    "none";
+   connection.style.display="none";
 
-   finalPath.textContent=
-    "TODAY'S TRACE · "+
-    visited+
-    " OF 16 PLACES";
+   final.classList.add("show");
 
-   final.classList.add(
-    "show"
+   /*
+    Give the words enough time
+    to be read before the place
+    returns.
+   */
+
+   setTimeout(
+    returnToPlace,
+    3900
    );
 
   },
   800
  );
-
 }
 
 
-function updateStats(){
+/* ---------- PERSONAL TRACE ---------- */
 
- turnStat.textContent=
-  turns+
-  " TURN"+
-  (
-   turns===1
-   ?""
-   :"S"
-  );
+function traceColourClass(set){
 
- attemptStat.textContent=
-  attempts+
-  " ATTEMPT"+
-  (
-   attempts===1
-   ?""
-   :"S"
-  );
+ const colours=[...set];
 
- hintStat.textContent=
-  hints+
-  " HINT"+
-  (
-   hints===1
-   ?""
-   :"S"
-  );
+ if(colours.length===0)return null;
 
+ if(colours.length===1){
+  return "c"+colours[0];
+ }
+
+ /*
+  For the map wash, overlaps are
+  represented by two overlapping
+  washes rather than a hard gradient.
+ */
+
+ return colours;
+}
+
+function buildCompletedTrace(){
+
+ traceField
+  .querySelectorAll(".trace-wash")
+  .forEach(el=>el.remove());
+
+ histories.forEach(
+  (set,i)=>{
+
+   if(set.size===0)return;
+
+   const row=Math.floor(i/4);
+   const col=i%4;
+
+   const x=
+    14+
+    col*24;
+
+   const y=
+    15+
+    row*24;
+
+   [...set].forEach(
+    colour=>{
+
+     const wash=
+      document.createElement("div");
+
+     wash.className=
+      "trace-wash c"+
+      colour+
+      (
+       set.size>1
+       ?" mix"
+       :""
+      );
+
+     wash.style.left=x+"%";
+     wash.style.top=y+"%";
+
+     /*
+      Small deterministic offset
+      prevents overlaps looking like
+      a hidden checkerboard.
+     */
+
+     if(set.size>1){
+      wash.style.transform=
+       "translate("+
+       (
+        colour%2===0
+        ?"-44%"
+        :"-56%"
+       )+
+       ",-50%) scale(1.4)";
+     }
+
+     traceField.appendChild(wash);
+   });
+  }
+ );
+}
+
+function returnToPlace(){
+
+ buildCompletedTrace();
+
+ final.style.transition=
+  "opacity 1.2s ease";
+
+ final.style.opacity="0";
+
+ gameShell.classList.add(
+  "leaving"
+ );
+
+ /*
+  Bring the underlying landscape
+  back to the visual foreground.
+ */
+
+ setTimeout(
+  ()=>{
+
+   gameShell.style.display="none";
+
+   completedPlace.classList.add(
+    "show"
+   );
+
+   requestAnimationFrame(
+    ()=>{
+
+     requestAnimationFrame(
+      ()=>{
+       completedPlace.classList.add(
+        "awake"
+       );
+      }
+     );
+
+   });
+
+  },
+  1700
+ );
+
+ /*
+  Let the route settle into the
+  landscape before the tiny reward.
+ */
+
+ setTimeout(
+  ()=>{
+
+   tree.classList.add(
+    "resolve"
+   );
+
+   treeSound();
+
+  },
+  4200
+ );
 }
 
 
-/* EVENTS */
+/* ---------- EVENTS ---------- */
 
 unlockBtn.addEventListener(
  "click",
@@ -2582,19 +2526,14 @@ revealBtn.addEventListener(
 connectionInput.addEventListener(
  "keydown",
  e=>{
-
-  if(
-   e.key==="Enter"
-  ){
+  if(e.key==="Enter"){
    tryConnection();
   }
-
  }
 );
 
 renderClue();
 
 </script>
-
 </body>
 </html>
