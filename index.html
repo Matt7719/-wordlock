@@ -4,2040 +4,4241 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#e7ddc9">
-<title>WORDLOCK — #034 The Place Remembers</title>
+
+<title>WORDLOCK — Prototype #035</title>
 
 <style>
+
 :root{
-  --ink:#292a26;
-  --paper:#e8ddc6;
-  --cream:rgba(249,246,236,.94);
-  --sage:#abc1ae;
-  --blue:#a8c5d0;
-  --ochre:#d4b46f;
-  --mauve:#bca6bd;
+ --ink:#292a26;
+ --paper:#e8ddc6;
+ --cream:rgba(249,246,236,.94);
+
+ --sage:#abc1ae;
+ --blue:#a8c5d0;
+ --ochre:#d4b46f;
+ --mauve:#bca6bd;
 }
 
 *{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-  margin:0;
-  min-height:100%;
-  background:var(--paper);
-  color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif;
+ margin:0;
+ min-height:100%;
+ background:var(--paper);
+ color:var(--ink);
+ font-family:
+  -apple-system,
+  BlinkMacSystemFont,
+  "Avenir Next",
+  "Segoe UI",
+  sans-serif;
 }
 
-body{overflow-x:hidden}
-button,input{font:inherit}
+body{
+ overflow-x:hidden;
+}
+
+button,input{
+ font:inherit;
+}
 
 #place{
-  position:relative;
-  min-height:100vh;
-  overflow:hidden;
-  background:
-    radial-gradient(ellipse at 75% 19%,rgba(150,170,126,.22),transparent 40%),
-    radial-gradient(ellipse at 14% 72%,rgba(183,161,120,.18),transparent 44%),
-    linear-gradient(145deg,#ebe0ca,#e2d6bc 52%,#d8c9aa);
+ position:relative;
+ min-height:100vh;
+ overflow:hidden;
+
+ background:
+  radial-gradient(
+   ellipse at 75% 19%,
+   rgba(150,170,126,.22),
+   transparent 40%
+  ),
+  radial-gradient(
+   ellipse at 14% 72%,
+   rgba(183,161,120,.18),
+   transparent 44%
+  ),
+  linear-gradient(
+   145deg,
+   #ebe0ca,
+   #e2d6bc 52%,
+   #d8c9aa
+  );
 }
 
+
+/* ==================================================
+   BASE PLACE
+   ================================================== */
+
 .terrain{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  overflow:hidden;
+ position:absolute;
+ inset:0;
+ pointer-events:none;
+ overflow:hidden;
 }
 
 .contours{
-  position:absolute;
-  width:155%;
-  height:1250px;
-  left:-28%;
-  top:80px;
-  opacity:.60;
+ position:absolute;
+ width:155%;
+ height:1250px;
+ left:-28%;
+ top:80px;
+ opacity:.60;
 }
 
 .contours path{
-  fill:none;
-  stroke:#6e7066;
-  stroke-width:1.1;
+ fill:none;
+ stroke:#6e7066;
+ stroke-width:1.1;
 }
 
 .contours .fine{
-  stroke-width:.7;
-  opacity:.5;
+ stroke-width:.7;
+ opacity:.5;
 }
 
 .contours .light{
-  stroke:#f3ead5;
-  opacity:.65;
+ stroke:#f3ead5;
+ opacity:.65;
 }
 
 .water{
-  position:absolute;
-  left:-15%;
-  top:670px;
-  width:70%;
-  height:330px;
-  transform:rotate(-8deg);
-  border-radius:50%;
-  background:
-    repeating-linear-gradient(
-      3deg,
-      transparent 0 18px,
-      rgba(67,125,137,.13) 19px,
-      transparent 20px 34px
-    ),
-    radial-gradient(
-      ellipse at 58% 42%,
-      rgba(76,145,158,.49),
-      rgba(103,155,161,.30) 47%,
-      transparent 77%
-    );
-  border:1px solid rgba(69,111,116,.22);
+ position:absolute;
+ left:-15%;
+ top:670px;
+
+ width:70%;
+ height:330px;
+
+ transform:rotate(-8deg);
+
+ border-radius:50%;
+
+ background:
+  repeating-linear-gradient(
+   3deg,
+   transparent 0 18px,
+   rgba(67,125,137,.13) 19px,
+   transparent 20px 34px
+  ),
+  radial-gradient(
+   ellipse at 58% 42%,
+   rgba(76,145,158,.49),
+   rgba(103,155,161,.30) 47%,
+   transparent 77%
+  );
+
+ border:
+  1px solid
+  rgba(69,111,116,.22);
 }
 
 .vegetation{
-  position:absolute;
-  right:-10%;
-  top:330px;
-  width:59%;
-  height:540px;
-  background:
-    radial-gradient(
-      ellipse at 70% 44%,
-      rgba(96,129,84,.29),
-      rgba(111,137,96,.13) 43%,
-      transparent 73%
-    );
+ position:absolute;
+
+ right:-10%;
+ top:330px;
+
+ width:59%;
+ height:540px;
+
+ background:
+  radial-gradient(
+   ellipse at 70% 44%,
+   rgba(96,129,84,.29),
+   rgba(111,137,96,.13) 43%,
+   transparent 73%
+  );
 }
 
 .vegetation:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:
-    radial-gradient(circle,rgba(56,88,56,.36) 0 1.2px,transparent 1.6px),
-    radial-gradient(circle,rgba(76,102,66,.25) 0 1px,transparent 1.45px);
-  background-size:18px 20px,29px 27px;
+ content:"";
+
+ position:absolute;
+ inset:0;
+
+ background-image:
+  radial-gradient(
+   circle,
+   rgba(56,88,56,.36) 0 1.2px,
+   transparent 1.6px
+  ),
+  radial-gradient(
+   circle,
+   rgba(76,102,66,.25) 0 1px,
+   transparent 1.45px
+  );
+
+ background-size:
+  18px 20px,
+  29px 27px;
 }
 
 .stone{
-  position:absolute;
-  right:-28px;
-  top:830px;
-  width:150px;
-  height:190px;
-  border-radius:50%;
-  background:linear-gradient(135deg,rgba(158,140,111,.25),rgba(115,106,90,.39));
+ position:absolute;
+
+ right:-28px;
+ top:830px;
+
+ width:150px;
+ height:190px;
+
+ border-radius:50%;
+
+ background:
+  linear-gradient(
+   135deg,
+   rgba(158,140,111,.25),
+   rgba(115,106,90,.39)
+  );
 }
 
+
+/* ==================================================
+   PAGE
+   ================================================== */
+
 .wrap{
-  position:relative;
-  z-index:2;
-  width:min(94vw,520px);
-  margin:auto;
-  padding:max(30px,env(safe-area-inset-top)) 0 60px;
+ position:relative;
+ z-index:2;
+
+ width:min(94vw,520px);
+
+ margin:auto;
+
+ padding:
+  max(30px,env(safe-area-inset-top))
+  0
+  60px;
 }
 
 header{
-  text-align:center;
-  margin:23px 0 24px;
+ text-align:center;
+ margin:23px 0 17px;
 }
 
 .brand{
-  font-size:14px;
-  font-weight:850;
-  letter-spacing:.37em;
-}
-
-.prototype{
-  margin-top:7px;
-  font-size:8px;
-  font-weight:800;
-  letter-spacing:.28em;
-  color:#60635c;
+ font-size:14px;
+ font-weight:850;
+ letter-spacing:.37em;
 }
 
 .where{
-  margin-top:15px;
-  font-family:Georgia,serif;
-  font-size:11px;
-  letter-spacing:.22em;
-  text-transform:uppercase;
+ margin-top:15px;
+
+ font-family:Georgia,serif;
+ font-size:11px;
+ letter-spacing:.22em;
+ text-transform:uppercase;
 }
 
 .terrain-note{
-  margin-top:6px;
-  font-family:Georgia,serif;
-  font-size:15px;
-  color:#5d5d54;
+ margin-top:6px;
+
+ font-family:Georgia,serif;
+ font-size:15px;
+ color:#5d5d54;
 }
 
-/* ENTRY */
+
+/*
+ IMPORTANT:
+ Prototype number deliberately moved DOWN,
+ away from Safari's floating address bar.
+*/
+
+.version-badge{
+ display:inline-block;
+
+ margin-top:12px;
+ padding:5px 10px;
+
+ border:
+  1px solid
+  rgba(69,72,66,.26);
+
+ border-radius:999px;
+
+ background:
+  rgba(246,241,226,.55);
+
+ font-size:8px;
+ font-weight:850;
+ letter-spacing:.22em;
+
+ color:#5d6059;
+}
+
+
+/* ==================================================
+   ENTRY
+   ================================================== */
 
 .entry{
-  min-height:560px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding-bottom:120px;
-  transition:opacity 1.35s,transform 1.55s,filter 1.45s;
+ min-height:540px;
+
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+
+ text-align:center;
+
+ padding-bottom:120px;
+
+ transition:
+  opacity 1.35s,
+  transform 1.55s,
+  filter 1.45s;
 }
 
 .entry-title{
-  font-family:Georgia,serif;
-  font-size:23px;
+ font-family:Georgia,serif;
+ font-size:23px;
 }
 
 .entry-copy{
-  margin-top:11px;
-  font-family:Georgia,serif;
-  font-size:13px;
-  font-style:italic;
-  color:#666;
+ margin-top:11px;
+
+ font-family:Georgia,serif;
+ font-size:13px;
+ font-style:italic;
+
+ color:#666;
 }
 
 .entry.entering{
-  opacity:0;
-  transform:scale(1.025);
-  filter:blur(3px);
-  pointer-events:none;
+ opacity:0;
+
+ transform:scale(1.025);
+ filter:blur(3px);
+
+ pointer-events:none;
 }
 
 .game{
-  opacity:0;
-  filter:blur(10px);
-  transform:translateY(10px) scale(.985);
-  pointer-events:none;
-  transition:opacity 2.05s,filter 2.3s,transform 2.3s;
+ opacity:0;
+
+ filter:blur(10px);
+
+ transform:
+  translateY(10px)
+  scale(.985);
+
+ pointer-events:none;
+
+ transition:
+  opacity 2.05s,
+  filter 2.3s,
+  transform 2.3s;
 }
 
 .game.visible{
-  opacity:1;
-  filter:none;
-  transform:none;
-  pointer-events:auto;
+ opacity:1;
+ filter:none;
+ transform:none;
+
+ pointer-events:auto;
 }
 
 .game.leaving{
-  opacity:0;
-  filter:blur(10px);
-  transform:scale(.985);
-  pointer-events:none;
+ opacity:0;
+
+ filter:blur(10px);
+ transform:scale(.985);
+
+ pointer-events:none;
 }
 
-/* CLUE */
+
+/* ==================================================
+   CLUES
+   ================================================== */
 
 .clue-area{
-  text-align:center;
-  min-height:110px;
-  padding:10px;
+ text-align:center;
+ min-height:110px;
+ padding:10px;
 }
 
 .progress{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin-bottom:14px;
+ display:flex;
+ justify-content:center;
+
+ gap:10px;
+
+ margin-bottom:14px;
 }
 
 .dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  border:1px solid #777;
-  background:#f8f5eb;
+ width:8px;
+ height:8px;
+
+ border-radius:50%;
+
+ border:1px solid #777;
+ background:#f8f5eb;
 }
 
-.dot.d1{background:var(--sage);border:0}
-.dot.d2{background:var(--blue);border:0}
-.dot.d3{background:var(--ochre);border:0}
-.dot.d4{background:var(--mauve);border:0}
+.dot.d1{
+ background:var(--sage);
+ border:0;
+}
+
+.dot.d2{
+ background:var(--blue);
+ border:0;
+}
+
+.dot.d3{
+ background:var(--ochre);
+ border:0;
+}
+
+.dot.d4{
+ background:var(--mauve);
+ border:0;
+}
 
 .clue-label{
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:.26em;
-  color:#60635d;
+ font-size:9px;
+ font-weight:800;
+ letter-spacing:.26em;
+
+ color:#60635d;
 }
 
 #clue{
-  margin:8px auto;
-  font-family:Georgia,serif;
-  font-size:22px;
-  line-height:1.3;
+ margin:8px auto;
+
+ font-family:Georgia,serif;
+ font-size:22px;
+ line-height:1.3;
 }
 
-/* BOARD */
+
+/* ==================================================
+   BOARD
+   ================================================== */
 
 .board{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px 8px;
-  padding:10px 9px 6px;
+ display:grid;
+
+ grid-template-columns:
+  repeat(4,1fr);
+
+ gap:
+  12px
+  8px;
+
+ padding:
+  10px
+  9px
+  6px;
 }
 
 .reel{
-  position:relative;
-  height:76px;
-  border:1px solid rgba(61,64,58,.23);
-  border-radius:17px;
-  background:var(--cream);
-  overflow:hidden;
-  box-shadow:0 5px 13px rgba(52,49,42,.11),inset 0 1px rgba(255,255,255,.8);
-  user-select:none;
-  touch-action:pan-y;
-  transition:background .65s,transform .35s,box-shadow .35s;
+ position:relative;
+
+ height:76px;
+
+ border:
+  1px solid
+  rgba(61,64,58,.23);
+
+ border-radius:17px;
+
+ background:var(--cream);
+
+ overflow:hidden;
+
+ box-shadow:
+  0 5px 13px rgba(52,49,42,.11),
+  inset 0 1px rgba(255,255,255,.8);
+
+ user-select:none;
+ touch-action:pan-y;
+
+ transition:
+  background .65s,
+  transform .35s,
+  box-shadow .35s;
 }
 
 .strip{
-  position:absolute;
-  inset:0;
-  display:grid;
-  grid-template-columns:1fr 1.28fr 1fr;
-  align-items:center;
-  text-align:center;
+ position:absolute;
+ inset:0;
+
+ display:grid;
+
+ grid-template-columns:
+  1fr 1.28fr 1fr;
+
+ align-items:center;
+ text-align:center;
 }
 
 .alt{
-  font-size:17px;
-  color:#898c86;
+ font-size:17px;
+ color:#898c86;
 }
 
 .alt.remembered{
-  color:#272925;
-  font-weight:900;
+ color:#272925;
+ font-weight:900;
 }
 
 .current{
-  font-size:31px;
-  font-weight:850;
+ font-size:31px;
+ font-weight:850;
 }
 
-.reel.c1{background:var(--sage)}
-.reel.c2{background:var(--blue)}
-.reel.c3{background:var(--ochre)}
-.reel.c4{background:var(--mauve)}
 
-.reel.m12{background:linear-gradient(135deg,var(--sage),var(--blue))}
-.reel.m13{background:linear-gradient(135deg,var(--sage),var(--ochre))}
-.reel.m14{background:linear-gradient(135deg,var(--sage),var(--mauve))}
-.reel.m23{background:linear-gradient(135deg,var(--blue),var(--ochre))}
-.reel.m24{background:linear-gradient(135deg,var(--blue),var(--mauve))}
-.reel.m34{background:linear-gradient(135deg,var(--ochre),var(--mauve))}
+/* SINGLE COLOURS */
+
+.reel.c1{
+ background:var(--sage);
+}
+
+.reel.c2{
+ background:var(--blue);
+}
+
+.reel.c3{
+ background:var(--ochre);
+}
+
+.reel.c4{
+ background:var(--mauve);
+}
+
+
+/* BOARD BLENDS */
+
+.reel.m12{
+ background:
+  linear-gradient(
+   135deg,
+   var(--sage),
+   var(--blue)
+  );
+}
+
+.reel.m13{
+ background:
+  linear-gradient(
+   135deg,
+   var(--sage),
+   var(--ochre)
+  );
+}
+
+.reel.m14{
+ background:
+  linear-gradient(
+   135deg,
+   var(--sage),
+   var(--mauve)
+  );
+}
+
+.reel.m23{
+ background:
+  linear-gradient(
+   135deg,
+   var(--blue),
+   var(--ochre)
+  );
+}
+
+.reel.m24{
+ background:
+  linear-gradient(
+   135deg,
+   var(--blue),
+   var(--mauve)
+  );
+}
+
+.reel.m34{
+ background:
+  linear-gradient(
+   135deg,
+   var(--ochre),
+   var(--mauve)
+  );
+}
+
+
+/* HINT */
 
 .reel.pulse{
-  animation:pulse 1.35s ease-in-out infinite;
-  z-index:4;
+ animation:
+  pulse
+  1.35s
+  ease-in-out
+  infinite;
+
+ z-index:4;
 }
 
 @keyframes pulse{
-  50%{
-    transform:scale(1.08);
-    border-color:#697366;
-    box-shadow:
-      0 0 0 5px rgba(248,244,224,.82),
-      0 0 25px rgba(79,99,75,.4);
-  }
+
+ 50%{
+
+  transform:
+   scale(1.08);
+
+  border-color:#697366;
+
+  box-shadow:
+   0 0 0 5px
+   rgba(248,244,224,.82),
+
+   0 0 25px
+   rgba(79,99,75,.4);
+ }
 }
 
 .reel.hint-known:after{
-  content:"";
-  position:absolute;
-  inset:5px;
-  border:1.5px solid rgba(62,76,59,.55);
-  border-radius:13px;
-  pointer-events:none;
+ content:"";
+
+ position:absolute;
+ inset:5px;
+
+ border:
+  1.5px solid
+  rgba(62,76,59,.55);
+
+ border-radius:13px;
+
+ pointer-events:none;
 }
 
 .reel.confirm{
-  transform:scale(1.045);
-  box-shadow:
-    0 0 0 3px rgba(255,255,255,.4),
-    0 8px 18px rgba(0,0,0,.13);
+ transform:scale(1.045);
+
+ box-shadow:
+  0 0 0 3px
+  rgba(255,255,255,.4),
+
+  0 8px 18px
+  rgba(0,0,0,.13);
 }
 
-/* CONTROLS */
+
+/* ==================================================
+   CONTROLS
+   ================================================== */
 
 .controls{
-  display:grid;
-  grid-template-columns:1fr 1.65fr 1fr;
-  gap:9px;
-  padding:0 9px;
-  margin-top:16px;
+ display:grid;
+
+ grid-template-columns:
+  1fr 1.65fr 1fr;
+
+ gap:9px;
+
+ padding:0 9px;
+
+ margin-top:16px;
 }
 
 .btn{
-  min-height:49px;
-  border:1px solid rgba(52,54,50,.4);
-  border-radius:16px;
-  background:rgba(247,243,232,.88);
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.14em;
+ min-height:49px;
+
+ border:
+  1px solid
+  rgba(52,54,50,.4);
+
+ border-radius:16px;
+
+ background:
+  rgba(247,243,232,.88);
+
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:.14em;
 }
 
 .primary{
-  background:#30322e;
-  color:#f8f5eb;
-  border-color:#30322e;
+ background:#30322e;
+ color:#f8f5eb;
+ border-color:#30322e;
 }
 
 #message{
-  min-height:42px;
-  padding:10px 14px 0;
-  text-align:center;
-  font-family:Georgia,serif;
-  font-style:italic;
-  font-size:14px;
-  color:#55584f;
+ min-height:42px;
+
+ padding:
+  10px
+  14px
+  0;
+
+ text-align:center;
+
+ font-family:Georgia,serif;
+ font-style:italic;
+ font-size:14px;
+
+ color:#55584f;
 }
 
 .bank{
-  min-height:38px;
-  display:flex;
-  justify-content:center;
-  gap:7px;
-  flex-wrap:wrap;
+ min-height:38px;
+
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+
+ gap:7px;
 }
 
 .pill{
-  padding:7px 12px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.08em;
+ padding:
+  7px
+  12px;
+
+ border-radius:999px;
+
+ font-size:11px;
+ font-weight:800;
+ letter-spacing:.08em;
 }
 
-.pill.c1{background:var(--sage)}
-.pill.c2{background:var(--blue)}
-.pill.c3{background:var(--ochre)}
-.pill.c4{background:var(--mauve)}
+.pill.c1{
+ background:var(--sage);
+}
 
-/* CONNECTION */
+.pill.c2{
+ background:var(--blue);
+}
+
+.pill.c3{
+ background:var(--ochre);
+}
+
+.pill.c4{
+ background:var(--mauve);
+}
+
+
+/* ==================================================
+   CONNECTION
+   ================================================== */
 
 .connection{
-  display:none;
-  text-align:center;
-  margin:28px 10px 0;
-  padding:25px 12px;
-  border-top:1px solid #aaa;
+ display:none;
+
+ text-align:center;
+
+ margin:
+  28px
+  10px
+  0;
+
+ padding:
+  25px
+  12px;
+
+ border-top:
+  1px solid #aaa;
 }
 
-.connection.show{display:block}
+.connection.show{
+ display:block;
+}
 
 .connection-title{
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:.27em;
+ font-size:9px;
+ font-weight:800;
+ letter-spacing:.27em;
 }
 
 .connection-copy{
-  margin:8px;
-  font-family:Georgia,serif;
-  font-size:20px;
+ margin:8px;
+
+ font-family:Georgia,serif;
+ font-size:20px;
 }
 
 .connection-length{
-  margin:15px;
-  font-size:20px;
-  font-weight:800;
-  letter-spacing:.32em;
+ margin:15px;
+
+ font-size:20px;
+ font-weight:800;
+ letter-spacing:.32em;
 }
 
 .connection-input{
-  width:250px;
-  max-width:80%;
-  border:0;
-  border-bottom:1px solid #696b63;
-  background:transparent;
-  text-align:center;
-  text-transform:uppercase;
-  outline:none;
-  font-size:23px;
-  font-weight:800;
-  letter-spacing:.14em;
+ width:250px;
+ max-width:80%;
+
+ border:0;
+
+ border-bottom:
+  1px solid #696b63;
+
+ background:transparent;
+
+ text-align:center;
+ text-transform:uppercase;
+
+ outline:none;
+
+ font-size:23px;
+ font-weight:800;
+ letter-spacing:.14em;
 }
 
 .connection-actions{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  margin-top:14px;
+ display:flex;
+ justify-content:center;
+
+ gap:8px;
+
+ margin-top:14px;
 }
 
 .connection-actions .btn{
-  padding:0 15px;
+ padding:0 15px;
 }
 
 #connectionHint{
-  min-height:45px;
-  margin:13px auto;
-  font-family:Georgia,serif;
-  font-style:italic;
-  font-size:14px;
+ min-height:45px;
+
+ margin:13px auto;
+
+ font-family:Georgia,serif;
+ font-style:italic;
+ font-size:14px;
 }
 
-/* FINAL WORDS */
+
+/* ==================================================
+   FINAL WORDS
+   ================================================== */
 
 .final{
-  display:none;
-  text-align:center;
-  padding:35px 10px 70px;
+ display:none;
+
+ text-align:center;
+
+ padding:
+  35px
+  10px
+  70px;
 }
 
-.final.show{display:block}
+.final.show{
+ display:block;
+}
 
 .final-kicker{
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:.27em;
+ font-size:9px;
+ font-weight:800;
+ letter-spacing:.27em;
 }
 
 .final-title{
-  margin-top:9px;
-  font-family:Georgia,serif;
-  font-size:29px;
+ margin-top:9px;
+
+ font-family:Georgia,serif;
+ font-size:29px;
 }
 
 .final-copy{
-  margin:10px auto;
-  max-width:330px;
-  font-family:Georgia,serif;
-  font-size:15px;
-  line-height:1.55;
-  color:#50534c;
+ margin:10px auto;
+
+ max-width:330px;
+
+ font-family:Georgia,serif;
+ font-size:15px;
+ line-height:1.55;
+
+ color:#50534c;
 }
 
-/* =========================================================
-   #034 — THE PLACE REMEMBERS
 
-   NOT tiles.
-   NOT blobs.
+/* ==================================================
+   #035
+   ONE RAISED PIECE OF CARTOGRAPHY
 
-   A solved trace is interpreted as raised cartography:
-   straight edges + curves + arcs + planes + gradients.
+   Key difference from #034:
 
-   This prototype proves the VISUAL LANGUAGE before we
-   generalise it into a universal renderer.
-   ========================================================= */
+   The player's four ACTUAL ROUTES are compressed
+   into ONE shared landscape footprint.
+
+   The route bands supply the colour geography.
+
+   The shared silhouette + lower face + shadow
+   supply the sense of HEIGHT.
+   ================================================== */
 
 .returned{
-  display:none;
-  opacity:0;
-  transition:opacity 2.1s ease;
+ display:none;
+
+ opacity:0;
+
+ transition:
+  opacity
+  2s
+  ease;
 }
 
-.returned.show{display:block}
-.returned.awake{opacity:1}
+.returned.show{
+ display:block;
+}
+
+.returned.awake{
+ opacity:1;
+}
+
+
+/*
+ Deliberately tighter than #034.
+ This is a LOCAL transformed region,
+ not colour spread across the entire map.
+*/
 
 .trace-stage{
-  position:relative;
-  width:min(94vw,480px);
-  height:min(103vw,525px);
-  margin:-5px auto 0;
+ position:relative;
+
+ width:
+  min(90vw,450px);
+
+ height:
+  390px;
+
+ margin:
+  4px
+  auto
+  0;
 }
 
 .trace-svg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  overflow:visible;
+ position:absolute;
+ inset:0;
+
+ width:100%;
+ height:100%;
+
+ overflow:visible;
 }
 
-/* terrain begins almost invisible */
+
+/*
+ The whole changed region rises together.
+*/
 
 .personal-terrain{
-  opacity:0;
-  transform-origin:50% 50%;
-  transform:translateY(9px) scale(.985);
-  transition:
-    opacity 2.4s ease,
-    transform 3s cubic-bezier(.18,.7,.2,1);
+ opacity:0;
+
+ transform:
+  translateY(12px)
+  scale(.985);
+
+ transform-origin:
+  50% 55%;
+
+ transition:
+  opacity 2.2s ease,
+  transform 2.9s
+  cubic-bezier(.16,.72,.2,1);
 }
 
 .personal-terrain.risen{
-  opacity:1;
-  transform:none;
+ opacity:1;
+ transform:none;
 }
 
-/* Fine structural geometry appears slightly later */
+
+/*
+ Structural map lines arrive once the
+ coloured mass is already legible.
+*/
 
 .structure{
-  opacity:0;
-  transition:opacity 2s ease 1s;
+ opacity:0;
+
+ transition:
+  opacity
+  1.8s
+  ease
+  .85s;
 }
 
-.personal-terrain.risen .structure{
-  opacity:1;
+.personal-terrain.risen
+.structure{
+ opacity:1;
 }
 
-/* LANDMARK */
+
+/* THE TREE™ */
 
 .resolving-tree{
-  position:absolute;
-  right:18%;
-  top:21%;
-  width:92px;
-  height:120px;
-  opacity:0;
-  z-index:5;
-  transition:opacity 1.8s ease;
+ position:absolute;
+
+ right:16%;
+ top:21%;
+
+ width:92px;
+ height:120px;
+
+ opacity:0;
+
+ z-index:5;
+
+ transition:
+  opacity
+  1.8s
+  ease;
 }
 
 .resolving-tree.on{
-  opacity:.70;
+ opacity:.70;
 }
 
 .branch{
-  position:absolute;
-  height:1.3px;
-  background:#536750;
-  transform-origin:left center;
+ position:absolute;
+
+ height:1.3px;
+
+ background:#536750;
+
+ transform-origin:
+  left center;
 }
 
 .tree-trunk{
-  width:70px;
-  left:42px;
-  top:100px;
-  transform:rotate(-90deg);
+ width:70px;
+
+ left:42px;
+ top:100px;
+
+ transform:
+  rotate(-90deg);
 }
 
 .b1{
-  width:31px;
-  left:42px;
-  top:60px;
-  transform:rotate(-138deg);
+ width:31px;
+
+ left:42px;
+ top:60px;
+
+ transform:
+  rotate(-138deg);
 }
 
 .b2{
-  width:36px;
-  left:42px;
-  top:52px;
-  transform:rotate(-43deg);
+ width:36px;
+
+ left:42px;
+ top:52px;
+
+ transform:
+  rotate(-43deg);
 }
 
 .b3{
-  width:24px;
-  left:42px;
-  top:40px;
-  transform:rotate(-130deg);
+ width:24px;
+
+ left:42px;
+ top:40px;
+
+ transform:
+  rotate(-130deg);
 }
 
 .return-caption{
-  margin-top:-7px;
-  text-align:center;
-  font-family:Georgia,serif;
-  font-style:italic;
-  font-size:16px;
-  color:#62645c;
+ margin-top:-3px;
+
+ text-align:center;
+
+ font-family:Georgia,serif;
+ font-style:italic;
+ font-size:16px;
+
+ color:#62645c;
 }
 
+
 @media(max-width:390px){
-  .reel{height:70px}
-  .current{font-size:29px}
-  .alt{font-size:16px}
+
+ .reel{
+  height:70px;
+ }
+
+ .current{
+  font-size:29px;
+ }
+
+ .alt{
+  font-size:16px;
+ }
+
+ .trace-stage{
+  height:365px;
+ }
+
 }
 </style>
 </head>
+
 
 <body>
 
 <div id="place">
 
-  <div class="terrain">
+ <div class="terrain">
 
-    <svg class="contours" viewBox="0 0 700 1200" preserveAspectRatio="none">
-      <path d="M-70 145 C80 40 270 55 365 155 C460 255 610 225 770 105"/>
-      <path d="M-70 190 C95 85 260 90 345 185 C430 285 590 280 770 150"/>
-      <path class="fine" d="M-80 235 C90 130 245 135 320 220 C405 315 570 330 780 200"/>
-      <path d="M-90 390 C70 320 180 360 255 430 C350 520 500 485 780 350"/>
-      <path class="fine" d="M-90 430 C65 360 170 400 235 465 C330 555 500 525 780 390"/>
-      <path class="light" d="M-90 495 C80 420 200 450 285 520 C380 600 525 575 780 455"/>
-      <path d="M-100 620 C80 530 245 540 355 645 C470 755 600 740 790 610"/>
-      <path class="fine" d="M-100 665 C85 575 245 580 335 680 C445 800 605 780 790 650"/>
-      <path d="M-100 850 C85 755 280 760 390 870 C500 980 630 960 790 825"/>
-    </svg>
+  <svg
+   class="contours"
+   viewBox="0 0 700 1200"
+   preserveAspectRatio="none"
+  >
 
-    <div class="vegetation"></div>
-    <div class="water"></div>
-    <div class="stone"></div>
+   <path
+    d="
+     M-70 145
+     C80 40 270 55 365 155
+     C460 255 610 225 770 105
+    "
+   />
 
-  </div>
+   <path
+    d="
+     M-70 190
+     C95 85 260 90 345 185
+     C430 285 590 280 770 150
+    "
+   />
 
-  <main class="wrap">
+   <path
+    class="fine"
+    d="
+     M-80 235
+     C90 130 245 135 320 220
+     C405 315 570 330 780 200
+    "
+   />
 
-    <header>
-      <div class="brand">WORDLOCK</div>
-      <div class="prototype">PROTOTYPE #034 · THE PLACE REMEMBERS</div>
-      <div class="where">Somewhere near the beginning</div>
-      <div class="terrain-note">Stone · water · first traces</div>
-    </header>
+   <path
+    d="
+     M-90 390
+     C70 320 180 360 255 430
+     C350 520 500 485 780 350
+    "
+   />
 
-    <section class="entry" id="entry">
-      <div class="entry-title">Today’s place is waiting.</div>
-      <div class="entry-copy">Touch the place</div>
-    </section>
+   <path
+    class="fine"
+    d="
+     M-90 430
+     C65 360 170 400 235 465
+     C330 555 500 525 780 390
+    "
+   />
 
-    <div class="game" id="game">
+   <path
+    class="light"
+    d="
+     M-90 495
+     C80 420 200 450 285 520
+     C380 600 525 575 780 455
+    "
+   />
 
-      <section class="clue-area" id="clueArea">
+   <path
+    d="
+     M-100 620
+     C80 530 245 540 355 645
+     C470 755 600 740 790 610
+    "
+   />
 
-        <div class="progress">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
+   <path
+    class="fine"
+    d="
+     M-100 665
+     C85 575 245 580 335 680
+     C445 800 605 780 790 650
+    "
+   />
 
-        <div class="clue-label" id="clueLabel"></div>
-        <div id="clue"></div>
+   <path
+    d="
+     M-100 850
+     C85 755 280 760 390 870
+     C500 980 630 960 790 825
+    "
+   />
 
-      </section>
+  </svg>
 
-      <div class="board" id="board"></div>
+  <div class="vegetation"></div>
+  <div class="water"></div>
+  <div class="stone"></div>
 
-      <div class="controls" id="controls">
-        <button class="btn" id="resetBtn">RESET</button>
-        <button class="btn primary" id="unlockBtn">UNLOCK</button>
-        <button class="btn" id="hintBtn">HINT</button>
-      </div>
+ </div>
 
-      <div id="message"></div>
-      <div class="bank" id="bank"></div>
 
-      <section class="connection" id="connection">
+ <main class="wrap">
 
-        <div class="connection-title">THE CONNECTION</div>
-        <div class="connection-copy">What connects all four?</div>
+  <header>
 
-        <div class="connection-length" id="connectionLength"></div>
+   <div class="brand">
+    WORDLOCK
+   </div>
 
-        <input
-          id="connectionInput"
-          class="connection-input"
-          autocomplete="off"
-          autocapitalize="characters"
-          spellcheck="false"
-        >
+   <div class="where">
+    Somewhere near the beginning
+   </div>
 
-        <div class="connection-actions">
-          <button class="btn primary" id="connectBtn">CONNECT</button>
-          <button class="btn" id="connectionHintBtn">HINT</button>
-          <button class="btn" id="revealBtn">REVEAL</button>
-        </div>
+   <div class="terrain-note">
+    Stone · water · first traces
+   </div>
 
-        <div id="connectionHint"></div>
+   <div class="version-badge">
+    PROTOTYPE #035 · RAISED TRACE
+   </div>
 
-      </section>
+  </header>
 
-      <section class="final" id="final">
-        <div class="final-kicker">A FIRST TRACE</div>
-        <div class="final-title">Your path remains.</div>
-        <div class="final-copy">
-          This place is a little different because you passed through it.
-        </div>
-      </section>
+
+  <section
+   class="entry"
+   id="entry"
+  >
+
+   <div class="entry-title">
+    Today’s place is waiting.
+   </div>
+
+   <div class="entry-copy">
+    Touch the place
+   </div>
+
+  </section>
+
+
+  <div
+   class="game"
+   id="game"
+  >
+
+
+   <section
+    class="clue-area"
+    id="clueArea"
+   >
+
+    <div class="progress">
+
+     <div class="dot"></div>
+     <div class="dot"></div>
+     <div class="dot"></div>
+     <div class="dot"></div>
 
     </div>
 
-    <section class="returned" id="returned">
+    <div
+     class="clue-label"
+     id="clueLabel"
+    ></div>
 
-      <div class="trace-stage">
+    <div id="clue"></div>
 
-        <svg
-          class="trace-svg"
-          viewBox="0 0 480 500"
-          preserveAspectRatio="xMidYMid meet"
-        >
+   </section>
 
-          <defs>
 
-            <!-- board-derived blended materials -->
+   <div
+    class="board"
+    id="board"
+   ></div>
 
-            <linearGradient id="mauveBlue" x1="0" y1="0" x2="1" y2=".25">
-              <stop offset="0%" stop-color="#bca6bd"/>
-              <stop offset="48%" stop-color="#adc1cc"/>
-              <stop offset="100%" stop-color="#a8c5d0"/>
-            </linearGradient>
 
-            <linearGradient id="blueOchre" x1=".1" y1=".2" x2=".9" y2=".8">
-              <stop offset="0%" stop-color="#a8c5d0"/>
-              <stop offset="58%" stop-color="#b7c3ad"/>
-              <stop offset="100%" stop-color="#d4b46f"/>
-            </linearGradient>
+   <div
+    class="controls"
+    id="controls"
+   >
 
-            <linearGradient id="sageMauve" x1=".2" y1="0" x2=".8" y2="1">
-              <stop offset="0%" stop-color="#abc1ae"/>
-              <stop offset="55%" stop-color="#b4b6af"/>
-              <stop offset="100%" stop-color="#bca6bd"/>
-            </linearGradient>
+    <button
+     class="btn"
+     id="resetBtn"
+    >
+     RESET
+    </button>
 
-            <linearGradient id="sageOchre" x1="0" y1=".4" x2="1" y2=".6">
-              <stop offset="0%" stop-color="#abc1ae"/>
-              <stop offset="65%" stop-color="#bec19a"/>
-              <stop offset="100%" stop-color="#d4b46f"/>
-            </linearGradient>
+    <button
+     class="btn primary"
+     id="unlockBtn"
+    >
+     UNLOCK
+    </button>
 
-            <!-- very restrained relief -->
+    <button
+     class="btn"
+     id="hintBtn"
+    >
+     HINT
+    </button>
 
-            <filter id="liftA" x="-20%" y="-30%" width="150%" height="170%">
-              <feDropShadow
-                dx="0"
-                dy="5"
-                stdDeviation="7"
-                flood-color="#6f6657"
-                flood-opacity=".13"
-              />
-            </filter>
+   </div>
 
-            <filter id="liftB" x="-20%" y="-30%" width="150%" height="170%">
-              <feDropShadow
-                dx="0"
-                dy="3"
-                stdDeviation="4"
-                flood-color="#655e54"
-                flood-opacity=".10"
-              />
-            </filter>
 
-          </defs>
+   <div id="message"></div>
 
-          <g class="personal-terrain" id="personalTerrain">
+   <div
+    class="bank"
+    id="bank"
+   ></div>
 
-            <!--
-              PLANE 1
 
-              Starts with a straight edge — a faint memory
-              of the board — then escapes into a long curve.
-            -->
+   <section
+    class="connection"
+    id="connection"
+   >
 
-            <path
-              d="
-                M 38 108
-                L 157 108
-                L 157 183
-                C 206 164, 245 148, 302 158
-                C 355 168, 394 201, 454 193
-                L 454 242
-                C 392 251, 347 229, 302 218
-                C 244 204, 195 220, 145 245
-                L 38 221
-                Z
-              "
-              fill="url(#mauveBlue)"
-              opacity=".68"
-              filter="url(#liftB)"
-            />
+    <div class="connection-title">
+     THE CONNECTION
+    </div>
 
-            <!--
-              PLANE 2
+    <div class="connection-copy">
+     What connects all four?
+    </div>
 
-              Sweeping blue/sage band.
-              Deliberately behaves like terrain, not a cell.
-            -->
+    <div
+     class="connection-length"
+     id="connectionLength"
+    ></div>
 
-            <path
-              d="
-                M 157 108
-                C 212 105, 252 119, 294 148
-                C 342 181, 385 209, 454 193
-                L 454 269
-                C 389 286, 330 257, 283 231
-                C 238 206, 194 199, 145 219
-                L 157 183
-                Z
-              "
-              fill="url(#blueOchre)"
-              opacity=".59"
-              filter="url(#liftA)"
-            />
+    <input
+     id="connectionInput"
+     class="connection-input"
+     autocomplete="off"
+     autocapitalize="characters"
+     spellcheck="false"
+    >
 
-            <!--
-              PLANE 3
+    <div class="connection-actions">
 
-              A large partial geometric segment underneath.
-              This is the strongest "height" cue.
-            -->
+     <button
+      class="btn primary"
+      id="connectBtn"
+     >
+      CONNECT
+     </button>
 
-            <path
-              d="
-                M 50 222
-                C 99 204, 142 209, 177 234
-                C 213 260, 232 298, 229 348
-                L 229 414
-                L 63 414
-                C 52 373, 42 327, 43 282
-                C 43 258, 45 238, 50 222
-                Z
-              "
-              fill="url(#sageMauve)"
-              opacity=".57"
-              filter="url(#liftA)"
-            />
+     <button
+      class="btn"
+      id="connectionHintBtn"
+     >
+      HINT
+     </button>
 
-            <!--
-              PLANE 4
+     <button
+      class="btn"
+      id="revealBtn"
+     >
+      REVEAL
+     </button>
 
-              Ochre/sage territory, partly straight,
-              partly curved, tucked behind the band.
-            -->
+    </div>
 
-            <path
-              d="
-                M 232 225
-                C 273 217, 306 226, 340 245
-                C 376 265, 411 277, 454 269
-                L 454 339
-                C 405 346, 367 337, 329 322
-                C 291 307, 263 289, 232 270
-                Z
-              "
-              fill="url(#sageOchre)"
-              opacity=".48"
-            />
+    <div id="connectionHint"></div>
 
-            <!--
-              SMALL MAUVE SEGMENT
+   </section>
 
-              Keeps the sense of the isolated/leftward
-              colour without rendering another square.
-            -->
 
-            <path
-              d="
-                M 38 108
-                L 157 108
-                L 157 183
-                C 118 181, 85 194, 50 222
-                L 38 221
-                Z
-              "
-              fill="#bca6bd"
-              opacity=".38"
-            />
+   <section
+    class="final"
+    id="final"
+   >
 
-            <!-- STRUCTURAL GEOMETRY -->
+    <div class="final-kicker">
+     A FIRST TRACE
+    </div>
 
-            <g
-              class="structure"
-              fill="none"
-              stroke="#f4eedf"
-              stroke-width="1.25"
-              opacity=".75"
-            >
+    <div class="final-title">
+     Your path remains.
+    </div>
 
-              <!-- straight memory -->
-              <path d="M157 108 L157 183"/>
+    <div class="final-copy">
+     This place is a little different
+     because you passed through it.
+    </div>
 
-              <!-- broad sweep -->
-              <path
-                d="
-                  M 22 205
-                  C 106 166, 165 173, 223 208
-                  C 291 250, 360 283, 472 252
-                "
-              />
+   </section>
 
-              <!-- second parallel contour -->
-              <path
-                d="
-                  M 20 233
-                  C 103 194, 164 199, 220 233
-                  C 289 275, 365 305, 474 275
-                "
-                opacity=".58"
-              />
 
-              <!-- large partial arc -->
-              <path
-                d="
-                  M 50 222
-                  C 114 191, 176 211, 210 265
-                  C 244 319, 232 374, 229 414
-                "
-              />
+  </div>
 
-              <!-- geometric continuation beyond colour -->
-              <path
-                d="
-                  M 229 414
-                  L 302 447
-                "
-                opacity=".48"
-              />
 
-              <!-- subtle diagonal -->
-              <path
-                d="
-                  M 157 183
-                  L 232 225
-                "
-                opacity=".50"
-              />
+  <section
+   class="returned"
+   id="returned"
+  >
 
-            </g>
+   <div class="trace-stage">
 
-            <!-- darker hairlines: "bones" rather than borders -->
+    <svg
+     id="traceSvg"
+     class="trace-svg"
+     viewBox="0 0 480 390"
+     preserveAspectRatio="xMidYMid meet"
+    >
 
-            <g
-              class="structure"
-              fill="none"
-              stroke="#667168"
-              stroke-width=".75"
-              opacity=".31"
-            >
+     <defs>
 
-              <path
-                d="
-                  M 38 108
-                  L 157 108
-                  C 215 104, 252 119, 294 148
-                "
-              />
+      <!--
+       THE ONE SHARED FOOTPRINT.
+       Everything the player made lives inside this.
+      -->
 
-              <path
-                d="
-                  M 50 222
-                  C 99 204, 142 209, 177 234
-                "
-              />
+      <clipPath id="traceClip">
 
-              <path
-                d="
-                  M 232 225
-                  C 273 217, 306 226, 340 245
-                  C 376 265, 411 277, 454 269
-                "
-              />
+       <path
+        d="
+         M 46 89
 
-            </g>
+         C 93 54,
+           158 48,
+           215 60
 
-          </g>
+         C 266 70,
+           307 91,
+           356 88
 
-        </svg>
+         C 393 85,
+           420 74,
+           444 88
 
-        <div class="resolving-tree" id="tree">
-          <span class="branch tree-trunk"></span>
-          <span class="branch b1"></span>
-          <span class="branch b2"></span>
-          <span class="branch b3"></span>
-        </div>
+         L 447 218
 
-      </div>
+         C 413 242,
+           380 259,
+           339 269
 
-      <div class="return-caption">
-        Somewhere you have been.
-      </div>
+         C 298 279,
+           266 276,
+           226 287
 
-    </section>
+         C 178 300,
+           135 298,
+           95 278
 
-  </main>
+         C 59 260,
+           40 226,
+           42 185
+
+         Z
+        "
+       />
+
+      </clipPath>
+
+
+      <!--
+       THE SUBTLE HEIGHT CUE
+      -->
+
+      <filter
+       id="zoneLift"
+       x="-25%"
+       y="-30%"
+       width="160%"
+       height="180%"
+      >
+
+       <feDropShadow
+        dx="0"
+        dy="8"
+        stdDeviation="7"
+        flood-color="#686052"
+        flood-opacity=".18"
+       />
+
+      </filter>
+
+
+      <filter
+       id="softBand"
+       x="-20%"
+       y="-20%"
+       width="140%"
+       height="140%"
+      >
+
+       <feGaussianBlur
+        stdDeviation=".65"
+       />
+
+      </filter>
+
+     </defs>
+
+
+     <!--
+      LOWER FACE:
+      tiny downward displacement creates
+      the suggestion of a raised map piece.
+     -->
+
+     <path
+      id="lowerFace"
+      d="
+       M 46 89
+
+       C 93 54,
+         158 48,
+         215 60
+
+       C 266 70,
+         307 91,
+         356 88
+
+       C 393 85,
+         420 74,
+         444 88
+
+       L 447 218
+
+       C 413 242,
+         380 259,
+         339 269
+
+       C 298 279,
+         266 276,
+         226 287
+
+       C 178 300,
+         135 298,
+         95 278
+
+       C 59 260,
+         40 226,
+         42 185
+
+       Z
+      "
+
+      transform="
+       translate(0 11)
+      "
+
+      fill="
+       rgba(91,88,78,.12)
+      "
+
+      opacity="0"
+     />
+
+
+     <g
+      id="personalTerrain"
+      class="personal-terrain"
+     >
+
+      <!--
+       ONE PALE CARTOGRAPHIC BODY
+      -->
+
+      <path
+       d="
+        M 46 89
+
+        C 93 54,
+          158 48,
+          215 60
+
+        C 266 70,
+          307 91,
+          356 88
+
+        C 393 85,
+          420 74,
+          444 88
+
+        L 447 218
+
+        C 413 242,
+          380 259,
+          339 269
+
+        C 298 279,
+          266 276,
+          226 287
+
+        C 178 300,
+          135 298,
+          95 278
+
+        C 59 260,
+          40 226,
+          42 185
+
+        Z
+       "
+
+       fill="
+        rgba(235,228,209,.32)
+       "
+
+       stroke="
+        rgba(92,96,86,.20)
+       "
+
+       stroke-width="1"
+
+       filter="url(#zoneLift)"
+      />
+
+
+      <!--
+       ACTUAL PLAYER ROUTES
+       ARE GENERATED HERE.
+      -->
+
+      <g
+       id="routeBands"
+       clip-path="url(#traceClip)"
+      ></g>
+
+
+      <!--
+       OPTION-6 STYLE INTERNAL STRUCTURE
+      -->
+
+      <g
+       class="structure"
+       clip-path="url(#traceClip)"
+      >
+
+
+       <!--
+        large sweeping line
+       -->
+
+       <path
+        d="
+         M 22 151
+
+         C 101 105,
+           168 110,
+           228 145
+
+         C 290 181,
+           350 208,
+           466 165
+        "
+
+        fill="none"
+
+        stroke="
+         rgba(247,240,221,.88)
+        "
+
+        stroke-width="1.5"
+       />
+
+
+       <!--
+        parallel sweep
+       -->
+
+       <path
+        d="
+         M 19 176
+
+         C 101 132,
+           167 137,
+           224 169
+
+         C 291 207,
+           356 231,
+           469 190
+        "
+
+        fill="none"
+
+        stroke="
+         rgba(247,240,221,.59)
+        "
+
+        stroke-width="1.05"
+       />
+
+
+       <!--
+        lower partial arc
+       -->
+
+       <path
+        d="
+         M 69 273
+
+         C 52 216,
+           66 161,
+           116 138
+
+         C 165 116,
+           211 139,
+           231 183
+        "
+
+        fill="none"
+
+        stroke="
+         rgba(247,240,221,.88)
+        "
+
+        stroke-width="1.4"
+       />
+
+
+       <!--
+        line continues beyond implied form
+       -->
+
+       <path
+        d="
+         M 231 183
+         C 246 216,
+           243 250,
+           255 292
+        "
+
+        fill="none"
+
+        stroke="
+         rgba(247,240,221,.55)
+        "
+
+        stroke-width="1"
+       />
+
+
+       <!--
+        dynamically positioned straight
+        division will be inserted here
+       -->
+
+       <g id="dynamicStructure"></g>
+
+
+      </g>
+
+
+      <!--
+       darker bones
+      -->
+
+      <g
+       class="structure"
+       clip-path="url(#traceClip)"
+       fill="none"
+       stroke="#667168"
+       stroke-width=".8"
+       opacity=".28"
+      >
+
+       <path
+        d="
+         M 46 89
+         C 93 54,
+           158 48,
+           215 60
+        "
+       />
+
+       <path
+        d="
+         M 95 278
+         C 135 298,
+           178 300,
+           226 287
+        "
+       />
+
+       <path
+        d="
+         M 339 269
+         C 380 259,
+           413 242,
+           447 218
+        "
+       />
+
+      </g>
+
+     </g>
+
+    </svg>
+
+
+    <div
+     class="resolving-tree"
+     id="tree"
+    >
+
+     <span class="branch tree-trunk"></span>
+     <span class="branch b1"></span>
+     <span class="branch b2"></span>
+     <span class="branch b3"></span>
+
+    </div>
+
+   </div>
+
+
+   <div class="return-caption">
+    Somewhere you have been.
+   </div>
+
+  </section>
+
+
+ </main>
+
 </div>
+
 
 <script>
 
+/* ==================================================
+   PUZZLE
+   ================================================== */
+
 const P={
 
-  wheels:[
-    ["R","G","C"],
-    ["H","W","B"],
-    ["R","B","X"],
-    ["K","Q","B"],
+ wheels:[
 
-    ["L","T","E"],
-    ["H","Q","A"],
-    ["G","J","E"],
-    ["E","D","K"],
+  ["R","G","C"],
+  ["H","W","B"],
+  ["R","B","X"],
+  ["K","Q","B"],
 
-    ["A","F","X"],
-    ["D","N","B"],
-    ["F","H","A"],
-    ["P","A","X"],
+  ["L","T","E"],
+  ["H","Q","A"],
+  ["G","J","E"],
+  ["E","D","K"],
 
-    ["Y","S","C"],
-    ["J","H","K"],
-    ["M","D","V"],
-    ["D","C","W"]
-  ],
+  ["A","F","X"],
+  ["D","N","B"],
+  ["F","H","A"],
+  ["P","A","X"],
 
-  initial:[
-    2,0,2,2,
-    1,2,1,1,
-    2,1,0,0,
-    0,1,2,2
-  ],
+  ["Y","S","C"],
+  ["J","H","K"],
+  ["M","D","V"],
+  ["D","C","W"]
 
-  clues:[
+ ],
 
-    {
-      answer:"DEAD",
-      clue:"No longer functioning, as a battery",
-      colour:1,
-      route:[9,6,11,15]
-    },
+ initial:[
 
-    {
-      answer:"HEAD",
-      clue:"Foam atop a pint",
-      colour:2,
-      route:[5,4,8,9]
-    },
+  2,0,2,2,
 
-    {
-      answer:"BREAD",
-      clue:"Sourdough, for one",
-      colour:3,
-      route:[1,2,7,10,14]
-    },
+  1,2,1,1,
 
-    {
-      answer:"RED",
-      clue:"Traditionally, the colour of financial loss",
-      colour:4,
-      route:[0,4,9]
-    }
+  2,1,0,0,
 
-  ],
+  0,1,2,2
 
-  connection:{
-    answer:"LINE",
-    hints:[
-      "The same word comes after all four.",
-      "Think of boundaries, headlines and deadlines.",
-      "DEAD, HEAD, BREAD and RED can all be followed by the same four letters."
-    ]
+ ],
+
+ clues:[
+
+  {
+
+   answer:"DEAD",
+
+   clue:
+    "No longer functioning, as a battery",
+
+   colour:1,
+
+   route:
+    [9,6,11,15]
+
+  },
+
+  {
+
+   answer:"HEAD",
+
+   clue:
+    "Foam atop a pint",
+
+   colour:2,
+
+   route:
+    [5,4,8,9]
+
+  },
+
+  {
+
+   answer:"BREAD",
+
+   clue:
+    "Sourdough, for one",
+
+   colour:3,
+
+   route:
+    [1,2,7,10,14]
+
+  },
+
+  {
+
+   answer:"RED",
+
+   clue:
+    "Traditionally, the colour of financial loss",
+
+   colour:4,
+
+   route:
+    [0,4,9]
+
   }
+
+ ],
+
+ connection:{
+
+  answer:"LINE",
+
+  hints:[
+
+   "The same word comes after all four.",
+
+   "Think of boundaries, headlines and deadlines.",
+
+   "DEAD, HEAD, BREAD and RED can all be followed by the same four letters."
+
+  ]
+
+ }
 
 };
 
-let current=[...P.initial];
-let clueStart=[...P.initial];
+
+/* ==================================================
+   STATE
+   ================================================== */
+
+let current=
+ [...P.initial];
+
+let clueStart=
+ [...P.initial];
 
 let clueIndex=0;
+
 let solved=[];
 
+
+/*
+ This is new and important for #035.
+
+ We preserve the ACTUAL route selected
+ by route ownership for each solve.
+
+ The returned Place therefore comes from
+ the player's real journey.
+*/
+
+let solvedRoutes=[];
+
+
 let histories=
-  Array.from({length:16},()=>new Set());
+ Array.from(
+  {length:16},
+  ()=>new Set()
+ );
 
 let remembered=
-  Array.from({length:16},()=>new Set());
+ Array.from(
+  {length:16},
+  ()=>new Set()
+ );
 
 let touched=[];
 
 let hintRoute=null;
 let hintStep=0;
 
-let revealedHintPositions=new Set();
+let revealedHintPositions=
+ new Set();
 
 let audioCtx=null;
+
 let entered=false;
 let busy=false;
+
 let connectionHintNo=0;
 
-const neighbours=
-  Array.from(
-    {length:16},
-    (_,a)=>
-      Array.from(
-        {length:16},
-        (_,b)=>b
-      ).filter(
-        b=>
-          Math.max(
-            Math.abs(Math.floor(a/4)-Math.floor(b/4)),
-            Math.abs(a%4-b%4)
-          )===1
-      )
-  );
 
-/* AUDIO */
+/* ==================================================
+   DOM
+   ================================================== */
+
+const entry=
+ document.getElementById(
+  "entry"
+ );
+
+const game=
+ document.getElementById(
+  "game"
+ );
+
+const board=
+ document.getElementById(
+  "board"
+ );
+
+const clue=
+ document.getElementById(
+  "clue"
+ );
+
+const clueLabel=
+ document.getElementById(
+  "clueLabel"
+ );
+
+const clueArea=
+ document.getElementById(
+  "clueArea"
+ );
+
+const controls=
+ document.getElementById(
+  "controls"
+ );
+
+const message=
+ document.getElementById(
+  "message"
+ );
+
+const bank=
+ document.getElementById(
+  "bank"
+ );
+
+const resetBtn=
+ document.getElementById(
+  "resetBtn"
+ );
+
+const unlockBtn=
+ document.getElementById(
+  "unlockBtn"
+ );
+
+const hintBtn=
+ document.getElementById(
+  "hintBtn"
+ );
+
+const connection=
+ document.getElementById(
+  "connection"
+ );
+
+const connectionLength=
+ document.getElementById(
+  "connectionLength"
+ );
+
+const connectionInput=
+ document.getElementById(
+  "connectionInput"
+ );
+
+const connectBtn=
+ document.getElementById(
+  "connectBtn"
+ );
+
+const connectionHintBtn=
+ document.getElementById(
+  "connectionHintBtn"
+ );
+
+const revealBtn=
+ document.getElementById(
+  "revealBtn"
+ );
+
+const connectionHint=
+ document.getElementById(
+  "connectionHint"
+ );
+
+const final=
+ document.getElementById(
+  "final"
+ );
+
+const returned=
+ document.getElementById(
+  "returned"
+ );
+
+const personalTerrain=
+ document.getElementById(
+  "personalTerrain"
+ );
+
+const lowerFace=
+ document.getElementById(
+  "lowerFace"
+ );
+
+const routeBands=
+ document.getElementById(
+  "routeBands"
+ );
+
+const dynamicStructure=
+ document.getElementById(
+  "dynamicStructure"
+ );
+
+const tree=
+ document.getElementById(
+  "tree"
+ );
+
+
+/* ==================================================
+   NEIGHBOURS
+   ================================================== */
+
+const neighbours=
+ Array.from(
+
+  {length:16},
+
+  (_,a)=>
+
+   Array.from(
+    {length:16},
+    (_,b)=>b
+   )
+
+   .filter(
+
+    b=>
+
+     Math.max(
+
+      Math.abs(
+       Math.floor(a/4)-
+       Math.floor(b/4)
+      ),
+
+      Math.abs(
+       a%4-
+       b%4
+      )
+
+     )===1
+
+   )
+
+ );
+
+
+/* ==================================================
+   AUDIO
+   ================================================== */
 
 function audio(){
 
-  if(!audioCtx){
+ if(!audioCtx){
 
-    const A=
-      window.AudioContext||
-      window.webkitAudioContext;
+  const A=
+   window.AudioContext||
+   window.webkitAudioContext;
 
-    if(A){
-      audioCtx=new A();
-    }
+  if(A){
+   audioCtx=new A();
   }
+ }
 
-  if(audioCtx?.state==="suspended"){
-    audioCtx.resume();
-  }
+ if(
+  audioCtx?.state===
+  "suspended"
+ ){
+  audioCtx.resume();
+ }
 
-  return audioCtx;
+ return audioCtx;
 }
 
-function tone(f,d=.25,v=.006,delay=0){
 
-  const c=audio();
+function tone(
+ f,
+ d=.25,
+ v=.006,
+ delay=0
+){
 
-  if(!c)return;
+ const c=audio();
 
-  const o=c.createOscillator();
-  const g=c.createGain();
+ if(!c)return;
 
-  const n=c.currentTime+delay;
+ const o=
+  c.createOscillator();
 
-  o.frequency.value=f;
-  o.type="sine";
+ const g=
+  c.createGain();
 
-  g.gain.setValueAtTime(.0001,n);
-  g.gain.exponentialRampToValueAtTime(v,n+.015);
-  g.gain.exponentialRampToValueAtTime(.0001,n+d);
+ const n=
+  c.currentTime+
+  delay;
 
-  o.connect(g);
-  g.connect(c.destination);
+ o.frequency.value=f;
+ o.type="sine";
 
-  o.start(n);
-  o.stop(n+d+.05);
+ g.gain.setValueAtTime(
+  .0001,
+  n
+ );
+
+ g.gain.exponentialRampToValueAtTime(
+  v,
+  n+.015
+ );
+
+ g.gain.exponentialRampToValueAtTime(
+  .0001,
+  n+d
+ );
+
+ o.connect(g);
+ g.connect(c.destination);
+
+ o.start(n);
+ o.stop(n+d+.05);
 }
+
 
 function placeSound(){
-  tone(110,1.5,.01);
-  tone(165,1.8,.005,.08);
-  tone(220,2,.0025,.16);
+
+ tone(110,1.5,.01);
+
+ tone(
+  165,
+  1.8,
+  .005,
+  .08
+ );
+
+ tone(
+  220,
+  2,
+  .0025,
+  .16
+ );
 }
+
 
 function reelSound(){
-  tone(185,.22,.009);
-  tone(370,.3,.002,.04);
+
+ tone(
+  185,
+  .22,
+  .009
+ );
+
+ tone(
+  370,
+  .3,
+  .002,
+  .04
+ );
 }
+
 
 function goodSound(i){
-  tone(175+i*25,.28,.008);
+
+ tone(
+  175+i*25,
+  .28,
+  .008
+ );
 }
 
+
 function badSound(){
-  tone(95,.18,.012);
+
+ tone(
+  95,
+  .18,
+  .012
+ );
 }
+
 
 function terrainSound(){
 
-  tone(123,1.7,.004);
-  tone(185,1.9,.003,.18);
-  tone(247,2.2,.0017,.42);
+ tone(
+  123,
+  1.8,
+  .0045
+ );
 
+ tone(
+  185,
+  2,
+  .003,
+  .16
+ );
+
+ tone(
+  247,
+  2.3,
+  .0017,
+  .40
+ );
 }
+
 
 function landmarkSound(){
 
-  tone(196,.8,.003);
-  tone(294,1.2,.002,.14);
-  tone(392,1.5,.0012,.28);
+ tone(
+  196,
+  .8,
+  .003
+ );
 
+ tone(
+  294,
+  1.2,
+  .002,
+  .14
+ );
+
+ tone(
+  392,
+  1.5,
+  .0012,
+  .28
+ );
 }
 
-/* ENTRY */
+
+/* ==================================================
+   ENTRY
+   ================================================== */
 
 entry.onclick=()=>{
 
-  if(entered)return;
+ if(entered)return;
 
-  entered=true;
+ entered=true;
 
-  audio();
-  placeSound();
+ audio();
 
-  entry.classList.add("entering");
+ placeSound();
 
-  setTimeout(
-    ()=>{
+ entry.classList.add(
+  "entering"
+ );
 
-      entry.style.display="none";
-      game.classList.add("visible");
+ setTimeout(
 
-    },
-    650
-  );
+  ()=>{
+
+   entry.style.display=
+    "none";
+
+   game.classList.add(
+    "visible"
+   );
+
+  },
+
+  650
+
+ );
+
 };
 
-/* PATH ENGINE */
 
-function letter(i,state=current){
-  return P.wheels[i][state[i]];
+/* ==================================================
+   PATH ENGINE
+   ================================================== */
+
+function letter(
+ i,
+ state=current
+){
+
+ return P.wheels[i]
+  [state[i]];
+
 }
 
-function findPaths(word,state=current){
 
-  const out=[];
+function findPaths(
+ word,
+ state=current
+){
 
-  function walk(pos,k,path){
+ const out=[];
 
-    if(k===word.length){
 
-      out.push([...path]);
-      return;
-    }
+ function walk(
+  pos,
+  k,
+  path
+ ){
 
-    for(const n of neighbours[pos]){
+  if(
+   k===
+   word.length
+  ){
 
-      if(
-        path.includes(n) ||
-        letter(n,state)!==word[k]
-      ){
-        continue;
-      }
+   out.push(
+    [...path]
+   );
 
-      walk(
-        n,
-        k+1,
-        [...path,n]
-      );
-    }
+   return;
   }
 
-  for(let i=0;i<16;i++){
 
-    if(letter(i,state)===word[0]){
+  for(
+   const n
+   of neighbours[pos]
+  ){
 
-      walk(
-        i,
-        1,
-        [i]
-      );
-    }
+   if(
+    path.includes(n)
+    ||
+    letter(n,state)!==
+    word[k]
+   ){
+    continue;
+   }
+
+   walk(
+    n,
+    k+1,
+    [...path,n]
+   );
+
   }
 
-  return out;
+ }
+
+
+ for(
+  let i=0;
+  i<16;
+  i++
+ ){
+
+  if(
+   letter(i,state)===
+   word[0]
+  ){
+
+   walk(
+    i,
+    1,
+    [i]
+   );
+
+  }
+
+ }
+
+ return out;
 }
 
-/* ROUTE OWNERSHIP */
 
-function ownershipScore(path){
+/* ==================================================
+   ROUTE OWNERSHIP
+   ================================================== */
 
-  let score=0;
+function ownershipScore(
+ path
+){
 
-  const uniqueTouched=
-    new Set(touched);
+ let score=0;
 
-  for(const p of path){
-
-    if(uniqueTouched.has(p)){
-      score+=100;
-    }
-
-    const last=
-      touched.lastIndexOf(p);
-
-    if(last>=0){
-      score+=last+1;
-    }
-  }
-
-  return score;
-}
-
-function choosePlayerRoute(paths){
-
-  if(paths.length===1){
-    return paths[0];
-  }
-
-  const ranked=
-    paths.map(
-      p=>({
-        path:p,
-        score:ownershipScore(p),
-        key:p.join("-")
-      })
-    );
-
-  ranked.sort(
-    (a,b)=>
-      b.score-a.score ||
-      a.key.localeCompare(b.key)
+ const uniqueTouched=
+  new Set(
+   touched
   );
 
-  return ranked[0].path;
+ for(
+  const p
+  of path
+ ){
+
+  if(
+   uniqueTouched.has(p)
+  ){
+   score+=100;
+  }
+
+  const last=
+   touched.lastIndexOf(p);
+
+  if(last>=0){
+   score+=last+1;
+  }
+
+ }
+
+ return score;
 }
 
-/* BOARD HISTORY */
+
+function choosePlayerRoute(
+ paths
+){
+
+ if(
+  paths.length===1
+ ){
+  return paths[0];
+ }
+
+ const ranked=
+  paths.map(
+
+   p=>({
+
+    path:p,
+
+    score:
+     ownershipScore(p),
+
+    key:
+     p.join("-")
+
+   })
+
+  );
+
+
+ ranked.sort(
+
+  (a,b)=>
+
+   b.score-a.score
+   ||
+   a.key.localeCompare(
+    b.key
+   )
+
+ );
+
+
+ return ranked[0].path;
+}
+
+
+/* ==================================================
+   BOARD HISTORY
+   ================================================== */
 
 function historyClass(i){
 
-  const a=[...histories[i]].sort();
+ const a=
+  [...histories[i]]
+  .sort();
 
-  if(a.length===1){
-    return "c"+a[0];
-  }
+ if(
+  a.length===1
+ ){
+  return "c"+a[0];
+ }
 
-  if(a.length>=2){
+ if(
+  a.length>=2
+ ){
 
-    return (
-      "m"+
-      a[0]+
-      a[a.length-1]
-    );
-  }
+  return (
+   "m"+
+   a[0]+
+   a[a.length-1]
+  );
 
-  return "";
+ }
+
+ return "";
 }
 
-/* RENDER */
+
+/* ==================================================
+   BOARD RENDER
+   ================================================== */
 
 function render(){
 
-  board.innerHTML="";
+ board.innerHTML="";
 
-  P.wheels.forEach(
-    (w,i)=>{
 
-      const r=
-        document.createElement("div");
+ P.wheels.forEach(
 
-      r.className=
-        "reel "+
-        historyClass(i);
+  (w,i)=>{
 
-      if(
-        revealedHintPositions.has(i)
-      ){
-        r.classList.add("hint-known");
-      }
+   const r=
+    document.createElement(
+     "div"
+    );
 
-      const c=current[i];
-      const l=(c+2)%3;
-      const rr=(c+1)%3;
 
-      const strip=
-        document.createElement("div");
+   r.className=
+    "reel "+
+    historyClass(i);
 
-      strip.className="strip";
 
-      [l,c,rr].forEach(
-        (idx,k)=>{
+   if(
+    revealedHintPositions
+    .has(i)
+   ){
 
-          const x=
-            document.createElement("div");
+    r.classList.add(
+     "hint-known"
+    );
 
-          x.className=
-            k===1
-            ?"current"
-            :"alt";
+   }
 
-          if(
-            k!==1 &&
-            remembered[i].has(w[idx])
-          ){
-            x.classList.add("remembered");
-          }
 
-          x.textContent=w[idx];
+   const c=
+    current[i];
 
-          strip.appendChild(x);
-        }
+   const l=
+    (c+2)%3;
+
+   const rr=
+    (c+1)%3;
+
+
+   const strip=
+    document.createElement(
+     "div"
+    );
+
+   strip.className=
+    "strip";
+
+
+   [l,c,rr].forEach(
+
+    (idx,k)=>{
+
+     const x=
+      document.createElement(
+       "div"
       );
 
-      r.appendChild(strip);
 
-      let sx=null;
+     x.className=
+      k===1
+      ?"current"
+      :"alt";
 
-      r.onpointerdown=
-        e=>{
 
-          if(busy)return;
+     if(
+      k!==1
+      &&
+      remembered[i]
+      .has(w[idx])
+     ){
 
-          audio();
+      x.classList.add(
+       "remembered"
+      );
 
-          sx=e.clientX;
-        };
+     }
 
-      r.onpointerup=
-        e=>{
 
-          if(
-            busy ||
-            sx===null
-          ){
-            return;
-          }
+     x.textContent=
+      w[idx];
 
-          const dx=
-            e.clientX-sx;
 
-          sx=null;
+     strip.appendChild(x);
 
-          if(Math.abs(dx)<15){
-            return;
-          }
-
-          current[i]=
-            (
-              current[i]+
-              (dx<0?1:2)
-            )%3;
-
-          touched.push(i);
-
-          reelSound();
-
-          render();
-          applyHintPulse();
-        };
-
-      board.appendChild(r);
     }
-  );
 
-  applyHintPulse();
+   );
+
+
+   r.appendChild(strip);
+
+
+   let sx=null;
+
+
+   r.onpointerdown=
+    e=>{
+
+     if(busy)return;
+
+     audio();
+
+     sx=
+      e.clientX;
+
+    };
+
+
+   r.onpointerup=
+    e=>{
+
+     if(
+      busy
+      ||
+      sx===null
+     ){
+      return;
+     }
+
+
+     const dx=
+      e.clientX-
+      sx;
+
+
+     sx=null;
+
+
+     if(
+      Math.abs(dx)<15
+     ){
+      return;
+     }
+
+
+     current[i]=
+      (
+       current[i]+
+       (
+        dx<0
+        ?1
+        :2
+       )
+      )%3;
+
+
+     touched.push(i);
+
+
+     reelSound();
+
+     render();
+
+     applyHintPulse();
+
+    };
+
+
+   board.appendChild(r);
+
+  }
+
+ );
+
+
+ applyHintPulse();
+
 }
+
+
+/* ==================================================
+   HINT PULSE
+   ================================================== */
 
 function applyHintPulse(){
 
-  document
-    .querySelectorAll(".reel")
-    .forEach(
-      x=>x.classList.remove("pulse")
+ document
+  .querySelectorAll(
+   ".reel"
+  )
+  .forEach(
+
+   x=>
+    x.classList.remove(
+     "pulse"
+    )
+
+  );
+
+
+ if(!hintRoute)return;
+
+
+ if(
+  hintStep%2===1
+ ){
+
+  const n=
+   Math.floor(
+    hintStep/2
+   );
+
+
+  if(
+   n<
+   hintRoute.length
+  ){
+
+   document
+    .querySelectorAll(
+     ".reel"
+    )
+    [hintRoute[n]]
+    ?.classList.add(
+     "pulse"
     );
 
-  if(!hintRoute)return;
-
-  if(hintStep%2===1){
-
-    const n=
-      Math.floor(hintStep/2);
-
-    if(n<hintRoute.length){
-
-      document
-        .querySelectorAll(".reel")
-        [hintRoute[n]]
-        ?.classList.add("pulse");
-    }
   }
+
+ }
+
 }
 
-/* CLUES */
+
+/* ==================================================
+   CLUES
+   ================================================== */
 
 function renderClue(){
 
-  touched=[];
+ touched=[];
 
-  hintRoute=null;
-  hintStep=0;
+ hintRoute=null;
+ hintStep=0;
 
-  revealedHintPositions.clear();
+ revealedHintPositions
+  .clear();
 
-  const c=
-    P.clues[clueIndex];
 
-  clueLabel.textContent=
-    "CLUE "+(clueIndex+1);
+ const c=
+  P.clues[
+   clueIndex
+  ];
 
-  clue.textContent=
-    c.clue+
-    " ("+
-    c.answer.length+
-    ")";
 
-  hintBtn.textContent="HINT";
+ clueLabel.textContent=
+  "CLUE "+
+  (clueIndex+1);
 
-  message.textContent="";
 
-  render();
+ clue.textContent=
+  c.clue+
+  " ("+
+  c.answer.length+
+  ")";
+
+
+ hintBtn.textContent=
+  "HINT";
+
+
+ message.textContent="";
+
+
+ render();
+
 }
+
 
 function unlock(){
 
-  if(busy)return;
+ if(busy)return;
 
-  const c=
-    P.clues[clueIndex];
 
-  const paths=
-    findPaths(c.answer);
+ const c=
+  P.clues[
+   clueIndex
+  ];
 
-  if(!paths.length){
 
-    badSound();
-
-    message.textContent=
-      "Not quite. Try another way.";
-
-    return;
-  }
-
-  const route=
-    choosePlayerRoute(paths);
-
-  solve(c,route);
-}
-
-function solve(c,route){
-
-  busy=true;
-
-  message.textContent="";
-
-  route.forEach(
-    (p,n)=>
-      remembered[p].add(c.answer[n])
+ const paths=
+  findPaths(
+   c.answer
   );
 
-  let n=0;
 
-  function step(){
+ if(
+  !paths.length
+ ){
 
-    if(n===route.length){
-
-      setTimeout(
-        ()=>finishWord(c,route),
-        350
-      );
-
-      return;
-    }
-
-    const p=route[n];
-
-    histories[p].add(c.colour);
-
-    render();
-
-    const r=
-      document
-        .querySelectorAll(".reel")[p];
-
-    r?.classList.add("confirm");
-
-    goodSound(n);
-
-    setTimeout(
-      ()=>r?.classList.remove("confirm"),
-      280
-    );
-
-    n++;
-
-    setTimeout(step,170);
-  }
-
-  step();
-}
-
-function finishWord(c,route){
-
-  solved.push(c.answer);
-
-  /*
-    WHOLE DISPLAYED BOARD PERSISTS.
-    No rollback of player-owned changes.
-  */
-
-  clueStart=[...current];
-
-  renderBank();
-
-  document
-    .querySelectorAll(".dot")
-    [clueIndex]
-    .classList.add(
-      "d"+(clueIndex+1)
-    );
+  badSound();
 
   message.textContent=
-    c.answer+" found.";
+   "Not quite. Try another way.";
 
-  clueIndex++;
+  return;
 
-  busy=false;
+ }
 
-  if(clueIndex===4){
 
-    setTimeout(
-      showConnection,
-      900
-    );
+ const route=
+  choosePlayerRoute(
+   paths
+  );
 
-  }else{
 
-    setTimeout(
-      renderClue,
-      850
-    );
-  }
+ solve(
+  c,
+  route
+ );
+
 }
 
-function reset(){
 
-  current=[...clueStart];
+/* ==================================================
+   SOLVE
+   ================================================== */
 
-  touched=[];
+function solve(
+ c,
+ route
+){
+
+ busy=true;
+
+ message.textContent="";
+
+
+ route.forEach(
+
+  (p,n)=>
+
+   remembered[p]
+   .add(
+    c.answer[n]
+   )
+
+ );
+
+
+ let n=0;
+
+
+ function step(){
+
+  if(
+   n===
+   route.length
+  ){
+
+   setTimeout(
+
+    ()=>finishWord(
+     c,
+     route
+    ),
+
+    350
+
+   );
+
+   return;
+
+  }
+
+
+  const p=
+   route[n];
+
+
+  histories[p]
+  .add(
+   c.colour
+  );
+
 
   render();
 
-  message.textContent="";
+
+  const r=
+   document
+   .querySelectorAll(
+    ".reel"
+   )[p];
+
+
+  r?.classList.add(
+   "confirm"
+  );
+
+
+  goodSound(n);
+
+
+  setTimeout(
+
+   ()=>r?.classList.remove(
+    "confirm"
+   ),
+
+   280
+
+  );
+
+
+  n++;
+
+
+  setTimeout(
+   step,
+   170
+  );
+
+ }
+
+
+ step();
+
 }
+
+
+/* ==================================================
+   FINISH WORD
+   ================================================== */
+
+function finishWord(
+ c,
+ route
+){
+
+ solved.push(
+  c.answer
+ );
+
+
+ /*
+  Save the ACTUAL OWNED route.
+ */
+
+ solvedRoutes.push({
+
+  colour:
+   c.colour,
+
+  route:
+   [...route]
+
+ });
+
+
+ /*
+  Board ownership persists.
+ */
+
+ clueStart=[
+  ...current
+ ];
+
+
+ renderBank();
+
+
+ document
+ .querySelectorAll(
+  ".dot"
+ )
+ [clueIndex]
+ .classList.add(
+  "d"+
+  (clueIndex+1)
+ );
+
+
+ message.textContent=
+  c.answer+
+  " found.";
+
+
+ clueIndex++;
+
+
+ busy=false;
+
+
+ if(
+  clueIndex===4
+ ){
+
+  setTimeout(
+   showConnection,
+   900
+  );
+
+ }else{
+
+  setTimeout(
+   renderClue,
+   850
+  );
+
+ }
+
+}
+
+
+/* ==================================================
+   RESET
+   ================================================== */
+
+function reset(){
+
+ current=[
+  ...clueStart
+ ];
+
+ touched=[];
+
+ render();
+
+ message.textContent="";
+
+}
+
+
+/* ==================================================
+   BANK
+   ================================================== */
 
 function renderBank(){
 
-  bank.innerHTML="";
+ bank.innerHTML="";
 
-  solved.forEach(
-    (w,i)=>{
 
-      const p=
-        document.createElement("div");
+ solved.forEach(
 
-      p.className=
-        "pill c"+(i+1);
+  (w,i)=>{
 
-      p.textContent=w;
+   const p=
+    document.createElement(
+     "div"
+    );
 
-      bank.appendChild(p);
-    }
-  );
+
+   p.className=
+    "pill c"+
+    (i+1);
+
+
+   p.textContent=w;
+
+
+   bank.appendChild(p);
+
+  }
+
+ );
+
 }
 
-/* HINTS */
 
-function configureRoute(route,word){
+/* ==================================================
+   HINTS
+   ================================================== */
 
-  const s=[...current];
+function configureRoute(
+ route,
+ word
+){
 
-  route.forEach(
-    (p,n)=>{
+ const s=[
+  ...current
+ ];
 
-      const idx=
-        P.wheels[p].indexOf(word[n]);
 
-      if(idx>=0){
-        s[p]=idx;
-      }
-    }
-  );
+ route.forEach(
 
-  return s;
+  (p,n)=>{
+
+   const idx=
+    P.wheels[p]
+    .indexOf(
+     word[n]
+    );
+
+
+   if(
+    idx>=0
+   ){
+    s[p]=idx;
+   }
+
+  }
+
+ );
+
+
+ return s;
+
 }
+
 
 function chooseHintRoute(){
 
-  const c=
-    P.clues[clueIndex];
+ const c=
+  P.clues[
+   clueIndex
+  ];
 
-  const test=
-    configureRoute(
-      c.route,
-      c.answer
-    );
 
-  if(
-    findPaths(
-      c.answer,
-      test
-    ).some(
-      p=>
-        p.join()===
-        c.route.join()
-    )
-  ){
-    return c.route;
-  }
+ const test=
+  configureRoute(
+   c.route,
+   c.answer
+  );
 
-  const possible=
-    findPaths(c.answer);
 
-  if(possible.length){
-    return choosePlayerRoute(possible);
-  }
+ if(
 
+  findPaths(
+   c.answer,
+   test
+  )
+
+  .some(
+
+   p=>
+    p.join()===
+    c.route.join()
+
+  )
+
+ ){
   return c.route;
+ }
+
+
+ const possible=
+  findPaths(
+   c.answer
+  );
+
+
+ if(
+  possible.length
+ ){
+  return choosePlayerRoute(
+   possible
+  );
+ }
+
+
+ return c.route;
+
 }
+
 
 function doHint(){
 
-  const c=
-    P.clues[clueIndex];
+ const c=
+  P.clues[
+   clueIndex
+  ];
 
-  if(!hintRoute){
-    hintRoute=chooseHintRoute();
-  }
 
-  const max=
-    hintRoute.length*2;
+ if(
+  !hintRoute
+ ){
+  hintRoute=
+   chooseHintRoute();
+ }
 
-  if(hintStep>=max){
 
-    message.textContent=
-      "One complete way is now showing.";
+ const max=
+  hintRoute.length*
+  2;
 
-    return;
-  }
 
-  hintStep++;
+ if(
+  hintStep>=max
+ ){
 
-  const index=
-    Math.floor((hintStep-1)/2);
+  message.textContent=
+   "One complete way is now showing.";
 
-  const p=
-    hintRoute[index];
+  return;
 
-  if(hintStep%2===1){
+ }
 
-    message.textContent=
-      index===0
-      ?"One possible place to start."
-      :"A possible next place.";
 
-    render();
-    applyHintPulse();
+ hintStep++;
 
-  }else{
 
-    const wanted=
-      c.answer[index];
+ const index=
+  Math.floor(
+   (hintStep-1)/2
+  );
 
-    const idx=
-      P.wheels[p].indexOf(wanted);
 
-    current[p]=idx;
+ const p=
+  hintRoute[index];
 
-    touched.push(p);
 
-    revealedHintPositions.add(p);
+ if(
+  hintStep%2===1
+ ){
 
-    reelSound();
+  message.textContent=
+   index===0
+   ?"One possible place to start."
+   :"A possible next place.";
 
-    message.textContent=
-      "That place turns to "+
-      wanted+
-      ".";
 
-    render();
-  }
+  render();
 
-  hintBtn.textContent=
-    "ANOTHER HINT";
+  applyHintPulse();
+
+ }else{
+
+
+  const wanted=
+   c.answer[index];
+
+
+  const idx=
+   P.wheels[p]
+   .indexOf(
+    wanted
+   );
+
+
+  current[p]=idx;
+
+
+  touched.push(p);
+
+
+  revealedHintPositions
+  .add(p);
+
+
+  reelSound();
+
+
+  message.textContent=
+   "That place turns to "+
+   wanted+
+   ".";
+
+
+  render();
+
+ }
+
+
+ hintBtn.textContent=
+  "ANOTHER HINT";
+
 }
 
-/* CONNECTION */
+
+/* ==================================================
+   CONNECTION
+   ================================================== */
 
 function showConnection(){
 
-  controls.style.display="none";
-  clueArea.style.display="none";
+ controls.style.display=
+  "none";
 
-  message.textContent="";
+ clueArea.style.display=
+  "none";
 
-  connection.classList.add("show");
+ message.textContent="";
 
-  connectionLength.textContent=
-    "•".repeat(
-      P.connection.answer.length
-    );
+
+ connection.classList.add(
+  "show"
+ );
+
+
+ connectionLength.textContent=
+  "•".repeat(
+   P.connection
+   .answer.length
+  );
+
 }
+
 
 function tryConnection(){
 
-  const g=
-    connectionInput
-      .value
-      .trim()
-      .toUpperCase();
+ const g=
+  connectionInput
+  .value
+  .trim()
+  .toUpperCase();
 
-  if(g===P.connection.answer){
 
-    finishConnection();
+ if(
+  g===
+  P.connection.answer
+ ){
 
-  }else{
+  finishConnection();
 
-    badSound();
+ }else{
 
-    connectionHint.textContent=
-      "That doesn't connect all four.";
-  }
+  badSound();
+
+  connectionHint.textContent=
+   "That doesn't connect all four.";
+
+ }
+
 }
+
 
 function connectionHintFn(){
 
-  if(connectionHintNo>=3){
-    return;
-  }
+ if(
+  connectionHintNo>=3
+ ){
+  return;
+ }
 
-  connectionHint.textContent=
-    P.connection.hints[
-      connectionHintNo
-    ];
 
-  connectionHintNo++;
+ connectionHint.textContent=
+  P.connection
+  .hints[
+   connectionHintNo
+  ];
+
+
+ connectionHintNo++;
+
 }
+
 
 function finishConnection(){
 
-  const a=
-    P.connection.answer;
+ const a=
+  P.connection.answer;
 
-  connectionInput.value=a;
-  connectionInput.disabled=true;
 
-  connectionLength.textContent=a;
+ connectionInput.value=
+  a;
 
-  connectBtn.disabled=true;
-  connectionHintBtn.disabled=true;
-  revealBtn.disabled=true;
+ connectionInput.disabled=
+  true;
 
-  const forms=
-    solved.map(x=>x+a);
 
-  let n=0;
+ connectionLength.textContent=
+  a;
 
-  connectionHint.textContent="";
 
-  function add(){
+ connectBtn.disabled=
+  true;
 
-    if(n===forms.length){
+ connectionHintBtn.disabled=
+  true;
 
-      setTimeout(
-        showFinal,
-        1000
-      );
+ revealBtn.disabled=
+  true;
 
-      return;
-    }
 
-    connectionHint.textContent+=
-      (n?"  ·  ":"")+
-      forms[n];
+ const forms=
+  solved.map(
+   x=>x+a
+  );
 
-    tone(
-      180+n*30,
-      .3,
-      .006
-    );
 
-    n++;
+ let n=0;
 
-    setTimeout(add,420);
+
+ connectionHint.textContent="";
+
+
+ function add(){
+
+  if(
+   n===
+   forms.length
+  ){
+
+   setTimeout(
+    showFinal,
+    1000
+   );
+
+   return;
+
   }
 
-  add();
+
+  connectionHint.textContent+=
+   (
+    n
+    ?"  ·  "
+    :""
+   )
+   +
+   forms[n];
+
+
+  tone(
+   180+n*30,
+   .3,
+   .006
+  );
+
+
+  n++;
+
+
+  setTimeout(
+   add,
+   420
+  );
+
+ }
+
+
+ add();
+
 }
+
 
 function revealConnection(){
 
-  connectionInput.value=
-    P.connection.answer;
+ connectionInput.value=
+  P.connection.answer;
 
-  setTimeout(
-    finishConnection,
-    400
-  );
+
+ setTimeout(
+  finishConnection,
+  400
+ );
+
 }
+
 
 function showFinal(){
 
-  connection.style.display="none";
+ connection.style.display=
+  "none";
 
-  final.classList.add("show");
 
-  setTimeout(
-    returnToPlace,
-    3900
-  );
+ final.classList.add(
+  "show"
+ );
+
+
+ setTimeout(
+  returnToPlace,
+  3900
+ );
+
 }
 
-/* =====================================================
-   RETURN TO THE PLACE
 
-   Sequence matters:
+/* ==================================================
+   #035
+   BOARD POSITION -> COMPACT CARTOGRAPHY
+   ================================================== */
 
-   1. Puzzle disappears.
-   2. Place returns.
-   3. Personal terrain rises.
-   4. Terrain settles.
-   5. Authored landmark resolves.
 
-   Trace and landmark are intentionally separate.
-   ===================================================== */
+/*
+ Board coordinates become latent points
+ inside the tighter raised region.
+
+ IMPORTANT:
+ These are NOT rendered as cells.
+ They are only anchors for the broad bands.
+*/
+
+function mapCell(i){
+
+ const row=
+  Math.floor(i/4);
+
+ const col=
+  i%4;
+
+
+ /*
+  compressed 4 × 4 geography
+ */
+
+ return {
+
+  x:
+   91+
+   col*96,
+
+  y:
+   91+
+   row*58
+
+ };
+
+}
+
+
+/*
+ Route colours.
+*/
+
+function routeColour(c){
+
+ return {
+
+  1:"#abc1ae",
+  2:"#a8c5d0",
+  3:"#d4b46f",
+  4:"#bca6bd"
+
+ }[c];
+
+}
+
+
+/*
+ Hybrid route geometry.
+
+ Odd-coloured routes:
+ smoother.
+
+ Even-coloured routes:
+ retain a little more straight geometry.
+
+ This deliberately mixes curve and structure,
+ as in Option 6.
+*/
+
+function routePath(
+ route,
+ colour
+){
+
+ const pts=
+  route.map(
+   mapCell
+  );
+
+
+ if(
+  pts.length<2
+ ){
+  return "";
+ }
+
+
+ let d=
+  `M ${pts[0].x} ${pts[0].y}`;
+
+
+ if(
+  colour===2
+  ||
+  colour===4
+ ){
+
+  /*
+   STRAIGHTER FAMILY
+  */
+
+  for(
+   let i=1;
+   i<pts.length;
+   i++
+  ){
+
+   if(
+    i===pts.length-1
+   ){
+
+    d+=
+     ` L ${pts[i].x} ${pts[i].y}`;
+
+   }else{
+
+    const mx=
+     (
+      pts[i].x+
+      pts[i+1].x
+     )/2;
+
+    const my=
+     (
+      pts[i].y+
+      pts[i+1].y
+     )/2;
+
+
+    d+=
+     ` L ${pts[i].x} ${pts[i].y}`;
+
+    d+=
+     ` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
+
+   }
+
+  }
+
+ }else{
+
+  /*
+   CURVED FAMILY
+  */
+
+  for(
+   let i=1;
+   i<pts.length-1;
+   i++
+  ){
+
+   const mx=
+    (
+     pts[i].x+
+     pts[i+1].x
+    )/2;
+
+   const my=
+    (
+     pts[i].y+
+     pts[i+1].y
+    )/2;
+
+
+   d+=
+    ` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
+
+  }
+
+
+  const last=
+   pts[
+    pts.length-1
+   ];
+
+
+  d+=
+   ` T ${last.x} ${last.y}`;
+
+ }
+
+
+ return d;
+
+}
+
+
+/*
+ Build actual personal terrain.
+*/
+
+function buildReturnedTerrain(){
+
+ routeBands.innerHTML="";
+ dynamicStructure.innerHTML="";
+
+
+ /*
+  The bands are deliberately WIDE.
+  This is the opposite of #034's
+  isolated little shapes.
+
+  Together they create ONE mass.
+ */
+
+ solvedRoutes.forEach(
+
+  (item,index)=>{
+
+   const path=
+    document.createElementNS(
+     "http://www.w3.org/2000/svg",
+     "path"
+    );
+
+
+   path.setAttribute(
+    "d",
+    routePath(
+     item.route,
+     item.colour
+    )
+   );
+
+
+   path.setAttribute(
+    "fill",
+    "none"
+   );
+
+
+   path.setAttribute(
+    "stroke",
+    routeColour(
+     item.colour
+    )
+   );
+
+
+   /*
+    Slight width variation stops the
+    bands feeling mechanically identical.
+   */
+
+   const widths={
+    1:88,
+    2:82,
+    3:92,
+    4:78
+   };
+
+
+   path.setAttribute(
+    "stroke-width",
+    widths[
+     item.colour
+    ]
+   );
+
+
+   path.setAttribute(
+    "stroke-linecap",
+    item.colour===2
+    ||
+    item.colour===4
+    ?"square"
+    :"round"
+   );
+
+
+   path.setAttribute(
+    "stroke-linejoin",
+    "round"
+   );
+
+
+   path.setAttribute(
+    "opacity",
+    index===2
+    ?".54"
+    :".50"
+   );
+
+
+   /*
+    Very slight softening:
+    still geometric,
+    not fuzzy/blob-like.
+   */
+
+   path.setAttribute(
+    "filter",
+    "url(#softBand)"
+   );
+
+
+   routeBands.appendChild(
+    path
+   );
+
+  }
+
+ );
+
+
+ /*
+  STRUCTURAL STRAIGHT LINE
+
+  Look at top-row activity.
+  Where neighbouring used board positions
+  sit beside one another, preserve ONE
+  vertical memory of that division.
+
+  This is exactly the kind of subtle
+  board echo we liked in Option 6.
+ */
+
+ const topActive=[];
+
+
+ for(
+  let c=0;
+  c<4;
+  c++
+ ){
+
+  const i=c;
+
+  if(
+   histories[i].size
+  ){
+   topActive.push(c);
+  }
+
+ }
+
+
+ let separator=null;
+
+
+ for(
+  let i=0;
+  i<
+  topActive.length-1;
+  i++
+ ){
+
+  if(
+   topActive[i+1]-
+   topActive[i]===1
+  ){
+
+   separator=
+    topActive[i];
+
+   break;
+
+  }
+
+ }
+
+
+ if(
+  separator!==null
+ ){
+
+  const left=
+   mapCell(
+    separator
+   );
+
+  const right=
+   mapCell(
+    separator+1
+   );
+
+
+  const x=
+   (
+    left.x+
+    right.x
+   )/2;
+
+
+  const line=
+   document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path"
+   );
+
+
+  line.setAttribute(
+   "d",
+   `M ${x} 54 L ${x} 150`
+  );
+
+
+  line.setAttribute(
+   "fill",
+   "none"
+  );
+
+
+  line.setAttribute(
+   "stroke",
+   "rgba(247,240,221,.82)"
+  );
+
+
+  line.setAttribute(
+   "stroke-width",
+   "1.35"
+  );
+
+
+  dynamicStructure.appendChild(
+   line
+  );
+
+ }
+
+
+ /*
+  A second geometric echo derived from the
+  overall visited footprint.
+
+  It does NOT outline cells.
+ */
+
+ const used=[];
+
+
+ histories.forEach(
+
+  (set,i)=>{
+
+   if(
+    set.size
+   ){
+    used.push(
+     mapCell(i)
+    );
+   }
+
+  }
+
+ );
+
+
+ if(
+  used.length
+ ){
+
+  const minX=
+   Math.min(
+    ...used.map(
+     p=>p.x
+    )
+   );
+
+  const maxX=
+   Math.max(
+    ...used.map(
+     p=>p.x
+    )
+   );
+
+  const minY=
+   Math.min(
+    ...used.map(
+     p=>p.y
+    )
+   );
+
+  const maxY=
+   Math.max(
+    ...used.map(
+     p=>p.y
+    )
+   );
+
+
+  const sweep=
+   document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path"
+   );
+
+
+  sweep.setAttribute(
+   "d",
+
+   `
+    M ${Math.max(38,minX-54)}
+      ${Math.min(300,maxY+25)}
+
+    C ${minX+15}
+      ${maxY+48},
+
+      ${maxX-28}
+      ${minY+40},
+
+      ${Math.min(449,maxX+48)}
+      ${Math.min(280,maxY+3)}
+   `
+  );
+
+
+  sweep.setAttribute(
+   "fill",
+   "none"
+  );
+
+
+  sweep.setAttribute(
+   "stroke",
+   "rgba(247,240,221,.48)"
+  );
+
+
+  sweep.setAttribute(
+   "stroke-width",
+   "1.05"
+  );
+
+
+  dynamicStructure.appendChild(
+   sweep
+  );
+
+ }
+
+}
+
+
+/* ==================================================
+   RETURN TO PLACE
+   ================================================== */
 
 function returnToPlace(){
 
-  final.style.opacity="0";
+ buildReturnedTerrain();
 
-  game.classList.add("leaving");
 
-  setTimeout(
-    ()=>{
+ final.style.opacity=
+  "0";
 
-      game.style.display="none";
 
-      returned.classList.add("show");
+ game.classList.add(
+  "leaving"
+ );
 
-      requestAnimationFrame(
-        ()=>
-          requestAnimationFrame(
-            ()=>returned.classList.add("awake")
-          )
-      );
 
-    },
-    1450
-  );
+ setTimeout(
 
-  /*
-    PERSONAL TRACE
-  */
+  ()=>{
 
-  setTimeout(
-    ()=>{
+   game.style.display=
+    "none";
 
-      personalTerrain.classList.add("risen");
-      terrainSound();
 
-    },
-    2300
-  );
+   returned.classList.add(
+    "show"
+   );
 
-  /*
-    AUTHORED LANDMARK
 
-    It arrives only after the player's
-    terrain has had time to establish itself.
-  */
+   requestAnimationFrame(
 
-  setTimeout(
-    ()=>{
+    ()=>requestAnimationFrame(
 
-      tree.classList.add("on");
-      landmarkSound();
+     ()=>returned
+     .classList.add(
+      "awake"
+     )
 
-    },
-    5200
-  );
+    )
+
+   );
+
+  },
+
+  1450
+
+ );
+
+
+ /*
+  FIRST:
+  the whole transformed zone rises.
+ */
+
+ setTimeout(
+
+  ()=>{
+
+   lowerFace.style.opacity=
+    "1";
+
+
+   personalTerrain
+   .classList.add(
+    "risen"
+   );
+
+
+   terrainSound();
+
+  },
+
+  2250
+
+ );
+
+
+ /*
+  THEN:
+  the Place reveals its landmark.
+ */
+
+ setTimeout(
+
+  ()=>{
+
+   tree.classList.add(
+    "on"
+   );
+
+
+   landmarkSound();
+
+  },
+
+  5250
+
+ );
+
 }
 
-/* EVENTS */
 
-unlockBtn.onclick=unlock;
-resetBtn.onclick=reset;
-hintBtn.onclick=doHint;
+/* ==================================================
+   EVENTS
+   ================================================== */
 
-connectBtn.onclick=tryConnection;
-connectionHintBtn.onclick=connectionHintFn;
-revealBtn.onclick=revealConnection;
+unlockBtn.onclick=
+ unlock;
+
+resetBtn.onclick=
+ reset;
+
+hintBtn.onclick=
+ doHint;
+
+connectBtn.onclick=
+ tryConnection;
+
+connectionHintBtn.onclick=
+ connectionHintFn;
+
+revealBtn.onclick=
+ revealConnection;
+
 
 connectionInput.onkeydown=
-  e=>{
+ e=>{
 
-    if(e.key==="Enter"){
-      tryConnection();
-    }
-  };
+  if(
+   e.key==="Enter"
+  ){
+   tryConnection();
+  }
+
+ };
+
+
+/* START */
 
 renderClue();
 
 </script>
+
 </body>
 </html>
