@@ -2,4243 +2,796 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#e7ddc9">
-
-<title>WORDLOCK — Prototype #035</title>
-
+<title>WORDLOCK — Prototype #037</title>
 <style>
-
-:root{
- --ink:#292a26;
- --paper:#e8ddc6;
- --cream:rgba(249,246,236,.94);
-
- --sage:#abc1ae;
- --blue:#a8c5d0;
- --ochre:#d4b46f;
- --mauve:#bca6bd;
-}
-
-*{
- box-sizing:border-box;
- -webkit-tap-highlight-color:transparent;
-}
-
-html,body{
- margin:0;
- min-height:100%;
- background:var(--paper);
- color:var(--ink);
- font-family:
-  -apple-system,
-  BlinkMacSystemFont,
-  "Avenir Next",
-  "Segoe UI",
-  sans-serif;
-}
-
-body{
- overflow-x:hidden;
-}
-
-button,input{
- font:inherit;
-}
-
-#place{
- position:relative;
- min-height:100vh;
- overflow:hidden;
-
- background:
-  radial-gradient(
-   ellipse at 75% 19%,
-   rgba(150,170,126,.22),
-   transparent 40%
-  ),
-  radial-gradient(
-   ellipse at 14% 72%,
-   rgba(183,161,120,.18),
-   transparent 44%
-  ),
-  linear-gradient(
-   145deg,
-   #ebe0ca,
-   #e2d6bc 52%,
-   #d8c9aa
-  );
-}
-
-
-/* ==================================================
-   BASE PLACE
-   ================================================== */
-
-.terrain{
- position:absolute;
- inset:0;
- pointer-events:none;
- overflow:hidden;
-}
-
-.contours{
- position:absolute;
- width:155%;
- height:1250px;
- left:-28%;
- top:80px;
- opacity:.60;
-}
-
-.contours path{
- fill:none;
- stroke:#6e7066;
- stroke-width:1.1;
-}
-
-.contours .fine{
- stroke-width:.7;
- opacity:.5;
-}
-
-.contours .light{
- stroke:#f3ead5;
- opacity:.65;
-}
-
-.water{
- position:absolute;
- left:-15%;
- top:670px;
-
- width:70%;
- height:330px;
-
- transform:rotate(-8deg);
-
- border-radius:50%;
-
- background:
-  repeating-linear-gradient(
-   3deg,
-   transparent 0 18px,
-   rgba(67,125,137,.13) 19px,
-   transparent 20px 34px
-  ),
-  radial-gradient(
-   ellipse at 58% 42%,
-   rgba(76,145,158,.49),
-   rgba(103,155,161,.30) 47%,
-   transparent 77%
-  );
-
- border:
-  1px solid
-  rgba(69,111,116,.22);
-}
-
-.vegetation{
- position:absolute;
-
- right:-10%;
- top:330px;
-
- width:59%;
- height:540px;
-
- background:
-  radial-gradient(
-   ellipse at 70% 44%,
-   rgba(96,129,84,.29),
-   rgba(111,137,96,.13) 43%,
-   transparent 73%
-  );
-}
-
-.vegetation:after{
- content:"";
-
- position:absolute;
- inset:0;
-
- background-image:
-  radial-gradient(
-   circle,
-   rgba(56,88,56,.36) 0 1.2px,
-   transparent 1.6px
-  ),
-  radial-gradient(
-   circle,
-   rgba(76,102,66,.25) 0 1px,
-   transparent 1.45px
-  );
-
- background-size:
-  18px 20px,
-  29px 27px;
-}
-
-.stone{
- position:absolute;
-
- right:-28px;
- top:830px;
-
- width:150px;
- height:190px;
-
- border-radius:50%;
-
- background:
-  linear-gradient(
-   135deg,
-   rgba(158,140,111,.25),
-   rgba(115,106,90,.39)
-  );
-}
-
-
-/* ==================================================
-   PAGE
-   ================================================== */
-
-.wrap{
- position:relative;
- z-index:2;
-
- width:min(94vw,520px);
-
- margin:auto;
-
- padding:
-  max(30px,env(safe-area-inset-top))
-  0
-  60px;
-}
-
-header{
- text-align:center;
- margin:23px 0 17px;
-}
-
-.brand{
- font-size:14px;
- font-weight:850;
- letter-spacing:.37em;
-}
-
-.where{
- margin-top:15px;
-
- font-family:Georgia,serif;
- font-size:11px;
- letter-spacing:.22em;
- text-transform:uppercase;
-}
-
-.terrain-note{
- margin-top:6px;
-
- font-family:Georgia,serif;
- font-size:15px;
- color:#5d5d54;
-}
-
-
-/*
- IMPORTANT:
- Prototype number deliberately moved DOWN,
- away from Safari's floating address bar.
-*/
-
-.version-badge{
- display:inline-block;
-
- margin-top:12px;
- padding:5px 10px;
-
- border:
-  1px solid
-  rgba(69,72,66,.26);
-
- border-radius:999px;
-
- background:
-  rgba(246,241,226,.55);
-
- font-size:8px;
- font-weight:850;
- letter-spacing:.22em;
-
- color:#5d6059;
-}
-
-
-/* ==================================================
-   ENTRY
-   ================================================== */
-
-.entry{
- min-height:540px;
-
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
-
- text-align:center;
-
- padding-bottom:120px;
-
- transition:
-  opacity 1.35s,
-  transform 1.55s,
-  filter 1.45s;
-}
-
-.entry-title{
- font-family:Georgia,serif;
- font-size:23px;
-}
-
-.entry-copy{
- margin-top:11px;
-
- font-family:Georgia,serif;
- font-size:13px;
- font-style:italic;
-
- color:#666;
-}
-
-.entry.entering{
- opacity:0;
-
- transform:scale(1.025);
- filter:blur(3px);
-
- pointer-events:none;
-}
-
-.game{
- opacity:0;
-
- filter:blur(10px);
-
- transform:
-  translateY(10px)
-  scale(.985);
-
- pointer-events:none;
-
- transition:
-  opacity 2.05s,
-  filter 2.3s,
-  transform 2.3s;
-}
-
-.game.visible{
- opacity:1;
- filter:none;
- transform:none;
-
- pointer-events:auto;
-}
-
-.game.leaving{
- opacity:0;
-
- filter:blur(10px);
- transform:scale(.985);
-
- pointer-events:none;
-}
-
-
-/* ==================================================
-   CLUES
-   ================================================== */
-
-.clue-area{
- text-align:center;
- min-height:110px;
- padding:10px;
-}
-
-.progress{
- display:flex;
- justify-content:center;
-
- gap:10px;
-
- margin-bottom:14px;
-}
-
-.dot{
- width:8px;
- height:8px;
-
- border-radius:50%;
-
- border:1px solid #777;
- background:#f8f5eb;
-}
-
-.dot.d1{
- background:var(--sage);
- border:0;
-}
-
-.dot.d2{
- background:var(--blue);
- border:0;
-}
-
-.dot.d3{
- background:var(--ochre);
- border:0;
-}
-
-.dot.d4{
- background:var(--mauve);
- border:0;
-}
-
-.clue-label{
- font-size:9px;
- font-weight:800;
- letter-spacing:.26em;
-
- color:#60635d;
-}
-
-#clue{
- margin:8px auto;
-
- font-family:Georgia,serif;
- font-size:22px;
- line-height:1.3;
-}
-
-
-/* ==================================================
-   BOARD
-   ================================================== */
-
-.board{
- display:grid;
-
- grid-template-columns:
-  repeat(4,1fr);
-
- gap:
-  12px
-  8px;
-
- padding:
-  10px
-  9px
-  6px;
-}
-
-.reel{
- position:relative;
-
- height:76px;
-
- border:
-  1px solid
-  rgba(61,64,58,.23);
-
- border-radius:17px;
-
- background:var(--cream);
-
- overflow:hidden;
-
- box-shadow:
-  0 5px 13px rgba(52,49,42,.11),
-  inset 0 1px rgba(255,255,255,.8);
-
- user-select:none;
- touch-action:pan-y;
-
- transition:
-  background .65s,
-  transform .35s,
-  box-shadow .35s;
-}
-
-.strip{
- position:absolute;
- inset:0;
-
- display:grid;
-
- grid-template-columns:
-  1fr 1.28fr 1fr;
-
- align-items:center;
- text-align:center;
-}
-
-.alt{
- font-size:17px;
- color:#898c86;
-}
-
-.alt.remembered{
- color:#272925;
- font-weight:900;
-}
-
-.current{
- font-size:31px;
- font-weight:850;
-}
-
-
-/* SINGLE COLOURS */
-
-.reel.c1{
- background:var(--sage);
-}
-
-.reel.c2{
- background:var(--blue);
-}
-
-.reel.c3{
- background:var(--ochre);
-}
-
-.reel.c4{
- background:var(--mauve);
-}
-
-
-/* BOARD BLENDS */
-
-.reel.m12{
- background:
-  linear-gradient(
-   135deg,
-   var(--sage),
-   var(--blue)
-  );
-}
-
-.reel.m13{
- background:
-  linear-gradient(
-   135deg,
-   var(--sage),
-   var(--ochre)
-  );
-}
-
-.reel.m14{
- background:
-  linear-gradient(
-   135deg,
-   var(--sage),
-   var(--mauve)
-  );
-}
-
-.reel.m23{
- background:
-  linear-gradient(
-   135deg,
-   var(--blue),
-   var(--ochre)
-  );
-}
-
-.reel.m24{
- background:
-  linear-gradient(
-   135deg,
-   var(--blue),
-   var(--mauve)
-  );
-}
-
-.reel.m34{
- background:
-  linear-gradient(
-   135deg,
-   var(--ochre),
-   var(--mauve)
-  );
-}
-
-
-/* HINT */
-
-.reel.pulse{
- animation:
-  pulse
-  1.35s
-  ease-in-out
-  infinite;
-
- z-index:4;
-}
-
-@keyframes pulse{
-
- 50%{
-
-  transform:
-   scale(1.08);
-
-  border-color:#697366;
-
-  box-shadow:
-   0 0 0 5px
-   rgba(248,244,224,.82),
-
-   0 0 25px
-   rgba(79,99,75,.4);
- }
-}
-
-.reel.hint-known:after{
- content:"";
-
- position:absolute;
- inset:5px;
-
- border:
-  1.5px solid
-  rgba(62,76,59,.55);
-
- border-radius:13px;
-
- pointer-events:none;
-}
-
-.reel.confirm{
- transform:scale(1.045);
-
- box-shadow:
-  0 0 0 3px
-  rgba(255,255,255,.4),
-
-  0 8px 18px
-  rgba(0,0,0,.13);
-}
-
-
-/* ==================================================
-   CONTROLS
-   ================================================== */
-
-.controls{
- display:grid;
-
- grid-template-columns:
-  1fr 1.65fr 1fr;
-
- gap:9px;
-
- padding:0 9px;
-
- margin-top:16px;
-}
-
-.btn{
- min-height:49px;
-
- border:
-  1px solid
-  rgba(52,54,50,.4);
-
- border-radius:16px;
-
- background:
-  rgba(247,243,232,.88);
-
- font-size:10px;
- font-weight:800;
- letter-spacing:.14em;
-}
-
-.primary{
- background:#30322e;
- color:#f8f5eb;
- border-color:#30322e;
-}
-
-#message{
- min-height:42px;
-
- padding:
-  10px
-  14px
-  0;
-
- text-align:center;
-
- font-family:Georgia,serif;
- font-style:italic;
- font-size:14px;
-
- color:#55584f;
-}
-
-.bank{
- min-height:38px;
-
- display:flex;
- justify-content:center;
- flex-wrap:wrap;
-
- gap:7px;
-}
-
-.pill{
- padding:
-  7px
-  12px;
-
- border-radius:999px;
-
- font-size:11px;
- font-weight:800;
- letter-spacing:.08em;
-}
-
-.pill.c1{
- background:var(--sage);
-}
-
-.pill.c2{
- background:var(--blue);
-}
-
-.pill.c3{
- background:var(--ochre);
-}
-
-.pill.c4{
- background:var(--mauve);
-}
-
-
-/* ==================================================
-   CONNECTION
-   ================================================== */
-
-.connection{
- display:none;
-
- text-align:center;
-
- margin:
-  28px
-  10px
-  0;
-
- padding:
-  25px
-  12px;
-
- border-top:
-  1px solid #aaa;
-}
-
-.connection.show{
- display:block;
-}
-
-.connection-title{
- font-size:9px;
- font-weight:800;
- letter-spacing:.27em;
-}
-
-.connection-copy{
- margin:8px;
-
- font-family:Georgia,serif;
- font-size:20px;
-}
-
-.connection-length{
- margin:15px;
-
- font-size:20px;
- font-weight:800;
- letter-spacing:.32em;
-}
-
-.connection-input{
- width:250px;
- max-width:80%;
-
- border:0;
-
- border-bottom:
-  1px solid #696b63;
-
- background:transparent;
-
- text-align:center;
- text-transform:uppercase;
-
- outline:none;
-
- font-size:23px;
- font-weight:800;
- letter-spacing:.14em;
-}
-
-.connection-actions{
- display:flex;
- justify-content:center;
-
- gap:8px;
-
- margin-top:14px;
-}
-
-.connection-actions .btn{
- padding:0 15px;
-}
-
-#connectionHint{
- min-height:45px;
-
- margin:13px auto;
-
- font-family:Georgia,serif;
- font-style:italic;
- font-size:14px;
-}
-
-
-/* ==================================================
-   FINAL WORDS
-   ================================================== */
-
-.final{
- display:none;
-
- text-align:center;
-
- padding:
-  35px
-  10px
-  70px;
-}
-
-.final.show{
- display:block;
-}
-
-.final-kicker{
- font-size:9px;
- font-weight:800;
- letter-spacing:.27em;
-}
-
-.final-title{
- margin-top:9px;
-
- font-family:Georgia,serif;
- font-size:29px;
-}
-
-.final-copy{
- margin:10px auto;
-
- max-width:330px;
-
- font-family:Georgia,serif;
- font-size:15px;
- line-height:1.55;
-
- color:#50534c;
-}
-
-
-/* ==================================================
-   #035
-   ONE RAISED PIECE OF CARTOGRAPHY
-
-   Key difference from #034:
-
-   The player's four ACTUAL ROUTES are compressed
-   into ONE shared landscape footprint.
-
-   The route bands supply the colour geography.
-
-   The shared silhouette + lower face + shadow
-   supply the sense of HEIGHT.
-   ================================================== */
-
-.returned{
- display:none;
-
- opacity:0;
-
- transition:
-  opacity
-  2s
-  ease;
-}
-
-.returned.show{
- display:block;
-}
-
-.returned.awake{
- opacity:1;
-}
-
-
-/*
- Deliberately tighter than #034.
- This is a LOCAL transformed region,
- not colour spread across the entire map.
-*/
-
-.trace-stage{
- position:relative;
-
- width:
-  min(90vw,450px);
-
- height:
-  390px;
-
- margin:
-  4px
-  auto
-  0;
-}
-
-.trace-svg{
- position:absolute;
- inset:0;
-
- width:100%;
- height:100%;
-
- overflow:visible;
-}
-
-
-/*
- The whole changed region rises together.
-*/
-
-.personal-terrain{
- opacity:0;
-
- transform:
-  translateY(12px)
-  scale(.985);
-
- transform-origin:
-  50% 55%;
-
- transition:
-  opacity 2.2s ease,
-  transform 2.9s
-  cubic-bezier(.16,.72,.2,1);
-}
-
-.personal-terrain.risen{
- opacity:1;
- transform:none;
-}
-
-
-/*
- Structural map lines arrive once the
- coloured mass is already legible.
-*/
-
-.structure{
- opacity:0;
-
- transition:
-  opacity
-  1.8s
-  ease
-  .85s;
-}
-
-.personal-terrain.risen
-.structure{
- opacity:1;
-}
-
-
-/* THE TREE™ */
-
-.resolving-tree{
- position:absolute;
-
- right:16%;
- top:21%;
-
- width:92px;
- height:120px;
-
- opacity:0;
-
- z-index:5;
-
- transition:
-  opacity
-  1.8s
-  ease;
-}
-
-.resolving-tree.on{
- opacity:.70;
-}
-
-.branch{
- position:absolute;
-
- height:1.3px;
-
- background:#536750;
-
- transform-origin:
-  left center;
-}
-
-.tree-trunk{
- width:70px;
-
- left:42px;
- top:100px;
-
- transform:
-  rotate(-90deg);
-}
-
-.b1{
- width:31px;
-
- left:42px;
- top:60px;
-
- transform:
-  rotate(-138deg);
-}
-
-.b2{
- width:36px;
-
- left:42px;
- top:52px;
-
- transform:
-  rotate(-43deg);
-}
-
-.b3{
- width:24px;
-
- left:42px;
- top:40px;
-
- transform:
-  rotate(-130deg);
-}
-
-.return-caption{
- margin-top:-3px;
-
- text-align:center;
-
- font-family:Georgia,serif;
- font-style:italic;
- font-size:16px;
-
- color:#62645c;
-}
-
-
-@media(max-width:390px){
-
- .reel{
-  height:70px;
- }
-
- .current{
-  font-size:29px;
- }
-
- .alt{
-  font-size:16px;
- }
-
- .trace-stage{
-  height:365px;
- }
-
-}
+:root{--ink:#292a26;--paper:#e8ddc6;--cream:rgba(249,246,236,.94);--sage:#abc1ae;--blue:#a8c5d0;--ochre:#d4b46f;--mauve:#bca6bd}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif}
+body{overflow-x:hidden}
+button,input{font:inherit}
+#place{position:relative;min-height:100vh;overflow:hidden}
+.wrap{position:relative;width:min(94vw,520px);margin:auto;padding:max(30px,env(safe-area-inset-top)) 0 60px}
+header{text-align:center;margin:23px 0 17px}
+.brand{font-size:14px;font-weight:850;letter-spacing:.37em}
+.where{margin-top:15px;font:11px Georgia,serif;letter-spacing:.22em;text-transform:uppercase}
+.terrain-note{margin-top:6px;font:15px Georgia,serif;color:#5d5d54}
+.version-badge{display:inline-block;margin-top:12px;padding:5px 10px;border:1px solid #48484244;border-radius:999px;background:#f6f1e28c;font-size:8px;font-weight:850;letter-spacing:.22em;color:#5d6059}
+.entry{width:100%;border:0;background:transparent;color:inherit;cursor:pointer;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px;transition:opacity 1.35s,transform 1.55s,filter 1.45s}
+.entry-title{font:23px Georgia,serif}
+.entry-copy{margin-top:11px;font:italic 13px Georgia,serif;color:#666}
+.entry.entering{opacity:0;transform:scale(1.025);filter:blur(3px);pointer-events:none}
+.game{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.985);pointer-events:none;transition:opacity 2.05s,filter 2.3s,transform 2.3s}
+.game.visible{opacity:1;filter:none;transform:none;pointer-events:auto}
+.how-to{max-width:420px;margin:4px auto 14px;text-align:center;font-size:12px;line-height:1.5;color:#5d6059}
+.clue-area{text-align:center;min-height:110px;padding:10px}
+.progress{display:flex;justify-content:center;gap:10px;margin-bottom:14px}
+.dot{width:8px;height:8px;border-radius:50%;border:1px solid #777;background:#f8f5eb}
+.dot.d1{background:var(--sage);border:0}
+.dot.d2{background:var(--blue);border:0}
+.dot.d3{background:var(--ochre);border:0}
+.dot.d4{background:var(--mauve);border:0}
+.clue-label{font-size:9px;font-weight:800;letter-spacing:.26em;color:#60635d}
+#clue{margin:8px auto;font:22px/1.3 Georgia,serif}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;padding:10px 9px 6px}
+.reel{position:relative;height:76px;border:1px solid #3d403a3b;border-radius:17px;background:var(--cream);overflow:hidden;box-shadow:0 5px 13px #34312a1c,inset 0 1px #ffffffcc;user-select:none;touch-action:pan-y;transition:background .65s,transform .35s,box-shadow .35s}
+.strip{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1.28fr 1fr;align-items:center;text-align:center}
+.alt{font-size:17px;color:#898c86}
+.alt.remembered{color:#272925;font-weight:900}
+.current{font-size:31px;font-weight:850}
+.reel.c1,.pill.c1{background:var(--sage)}
+.reel.c2,.pill.c2{background:var(--blue)}
+.reel.c3,.pill.c3{background:var(--ochre)}
+.reel.c4,.pill.c4{background:var(--mauve)}
+.reel.m12{background:linear-gradient(135deg,var(--sage),var(--blue))}
+.reel.m13{background:linear-gradient(135deg,var(--sage),var(--ochre))}
+.reel.m14{background:linear-gradient(135deg,var(--sage),var(--mauve))}
+.reel.m23{background:linear-gradient(135deg,var(--blue),var(--ochre))}
+.reel.m24{background:linear-gradient(135deg,var(--blue),var(--mauve))}
+.reel.m34{background:linear-gradient(135deg,var(--ochre),var(--mauve))}
+.reel.pulse{animation:pulse 1.35s ease-in-out infinite;z-index:4}
+@keyframes pulse{50%{transform:scale(1.08);border-color:#697366;box-shadow:0 0 0 5px #f8f4e0d1,0 0 25px #4f634b66}}
+.reel.hint-known:after{content:"";position:absolute;inset:5px;border:1.5px solid #3e4c3b8c;border-radius:13px;pointer-events:none}
+.reel.confirm{transform:scale(1.045);box-shadow:0 0 0 3px #ffffff66,0 8px 18px #00000021}
+.controls{display:grid;grid-template-columns:1fr 1.65fr 1fr;gap:9px;padding:0 9px;margin-top:16px}
+.btn{min-height:49px;border:1px solid #34363266;border-radius:16px;background:#f7f3e8e0;font-size:10px;font-weight:800;letter-spacing:.14em}
+.btn:disabled{opacity:.5;cursor:default}
+.entry:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.primary{background:#30322e;color:#f8f5eb;border-color:#30322e}
+#message{min-height:42px;padding:10px 14px 0;text-align:center;font:italic 14px Georgia,serif;color:#55584f}
+.bank{min-height:38px;display:flex;justify-content:center;flex-wrap:wrap;gap:7px}
+.pill{padding:7px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.08em}
+.connection{display:none;text-align:center;margin:28px 10px 0;padding:25px 12px;border-top:1px solid #aaa}
+.connection.show{display:block}
+.connection-title,.final-kicker{font-size:9px;font-weight:800;letter-spacing:.27em}
+.connection-copy{margin:8px;font:20px Georgia,serif}
+.connection-length{margin:15px;font-size:20px;font-weight:800;letter-spacing:.32em}
+.connection-input{width:250px;max-width:80%;border:0;border-bottom:1px solid #696b63;background:transparent;text-align:center;text-transform:uppercase;outline:none;font-size:23px;font-weight:800;letter-spacing:.14em}
+.connection-actions{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.connection-actions .btn{padding:0 15px}
+#connectionHint{min-height:45px;margin:13px auto;font:italic 14px Georgia,serif}
+.final{display:none;text-align:center;padding:35px 10px 70px}
+.final.show{display:block}
+.final-title{margin-top:9px;font:29px Georgia,serif}
+.final-copy{margin:10px auto;max-width:330px;font:15px/1.55 Georgia,serif;color:#50534c}
+.paint-invitation{margin:18px auto 0;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.painter[hidden]{display:none}
+.painter{margin:22px auto 0;padding:20px 12px;border-top:1px solid #b7b1a3;max-width:430px}
+.painter h2{font:24px Georgia,serif;text-align:center;margin:0 0 8px}
+.paint-help{text-align:center;font-size:13px;line-height:1.5;margin:8px auto;max-width:340px;color:#50534c}
+.palette{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0 8px}
+.swatch{width:42px;height:42px;border:2px solid #faf7ed;border-radius:50%;box-shadow:0 0 0 1px #8b8b80;cursor:pointer;position:relative}
+.swatch[aria-pressed=true]{box-shadow:0 0 0 3px #292a26}
+.swatch[aria-pressed=true]:after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#292a26;font-weight:800}
+.paint-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.paint-tools .btn{font-size:10px;padding:10px}
+.tile{display:block;width:min(100%,340px);height:auto;margin:18px auto;border:1px solid #b4ae9f;border-radius:5px;background:#f6f2e7}
+.paint-part{cursor:pointer;stroke:#b4ae9f;stroke-width:1.2;stroke-dasharray:3 5}
+.paint-part:focus{outline:none;stroke:#292a26;stroke-width:3;stroke-dasharray:none}
+.motif{stroke:#444940;stroke-width:1.6;stroke-linejoin:round;stroke-dasharray:none}
+.tile-lines{fill:none;stroke:#5f665d;stroke-width:1.25;opacity:.65;pointer-events:none}
+.paint-status{font-size:12px;text-align:center;min-height:32px;line-height:1.4;color:#50534c}
+.paint-done{display:block;margin:16px auto 0}
+@media(max-width:390px){.reel{height:70px}.current{font-size:29px}.alt{font-size:16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
 </style>
 </head>
-
-
 <body>
-
 <div id="place">
-
- <div class="terrain">
-
-  <svg
-   class="contours"
-   viewBox="0 0 700 1200"
-   preserveAspectRatio="none"
-  >
-
-   <path
-    d="
-     M-70 145
-     C80 40 270 55 365 155
-     C460 255 610 225 770 105
-    "
-   />
-
-   <path
-    d="
-     M-70 190
-     C95 85 260 90 345 185
-     C430 285 590 280 770 150
-    "
-   />
-
-   <path
-    class="fine"
-    d="
-     M-80 235
-     C90 130 245 135 320 220
-     C405 315 570 330 780 200
-    "
-   />
-
-   <path
-    d="
-     M-90 390
-     C70 320 180 360 255 430
-     C350 520 500 485 780 350
-    "
-   />
-
-   <path
-    class="fine"
-    d="
-     M-90 430
-     C65 360 170 400 235 465
-     C330 555 500 525 780 390
-    "
-   />
-
-   <path
-    class="light"
-    d="
-     M-90 495
-     C80 420 200 450 285 520
-     C380 600 525 575 780 455
-    "
-   />
-
-   <path
-    d="
-     M-100 620
-     C80 530 245 540 355 645
-     C470 755 600 740 790 610
-    "
-   />
-
-   <path
-    class="fine"
-    d="
-     M-100 665
-     C85 575 245 580 335 680
-     C445 800 605 780 790 650
-    "
-   />
-
-   <path
-    d="
-     M-100 850
-     C85 755 280 760 390 870
-     C500 980 630 960 790 825
-    "
-   />
-
-  </svg>
-
-  <div class="vegetation"></div>
-  <div class="water"></div>
-  <div class="stone"></div>
-
- </div>
-
-
- <main class="wrap">
-
-  <header>
-
-   <div class="brand">
-    WORDLOCK
-   </div>
-
-   <div class="where">
-    Somewhere near the beginning
-   </div>
-
-   <div class="terrain-note">
-    Stone · water · first traces
-   </div>
-
-   <div class="version-badge">
-    PROTOTYPE #035 · RAISED TRACE
-   </div>
-
-  </header>
-
-
-  <section
-   class="entry"
-   id="entry"
-  >
-
-   <div class="entry-title">
-    Today’s place is waiting.
-   </div>
-
-   <div class="entry-copy">
-    Touch the place
-   </div>
-
-  </section>
-
-
-  <div
-   class="game"
-   id="game"
-  >
-
-
-   <section
-    class="clue-area"
-    id="clueArea"
-   >
-
-    <div class="progress">
-
-     <div class="dot"></div>
-     <div class="dot"></div>
-     <div class="dot"></div>
-     <div class="dot"></div>
-
-    </div>
-
-    <div
-     class="clue-label"
-     id="clueLabel"
-    ></div>
-
-    <div id="clue"></div>
-
-   </section>
-
-
-   <div
-    class="board"
-    id="board"
-   ></div>
-
-
-   <div
-    class="controls"
-    id="controls"
-   >
-
-    <button
-     class="btn"
-     id="resetBtn"
-    >
-     RESET
-    </button>
-
-    <button
-     class="btn primary"
-     id="unlockBtn"
-    >
-     UNLOCK
-    </button>
-
-    <button
-     class="btn"
-     id="hintBtn"
-    >
-     HINT
-    </button>
-
-   </div>
-
-
-   <div id="message"></div>
-
-   <div
-    class="bank"
-    id="bank"
-   ></div>
-
-
-   <section
-    class="connection"
-    id="connection"
-   >
-
-    <div class="connection-title">
-     THE CONNECTION
-    </div>
-
-    <div class="connection-copy">
-     What connects all four?
-    </div>
-
-    <div
-     class="connection-length"
-     id="connectionLength"
-    ></div>
-
-    <input
-     id="connectionInput"
-     class="connection-input"
-     autocomplete="off"
-     autocapitalize="characters"
-     spellcheck="false"
-    >
-
-    <div class="connection-actions">
-
-     <button
-      class="btn primary"
-      id="connectBtn"
-     >
-      CONNECT
-     </button>
-
-     <button
-      class="btn"
-      id="connectionHintBtn"
-     >
-      HINT
-     </button>
-
-     <button
-      class="btn"
-      id="revealBtn"
-     >
-      REVEAL
-     </button>
-
-    </div>
-
-    <div id="connectionHint"></div>
-
-   </section>
-
-
-   <section
-    class="final"
-    id="final"
-   >
-
-    <div class="final-kicker">
-     A FIRST TRACE
-    </div>
-
-    <div class="final-title">
-     Your path remains.
-    </div>
-
-    <div class="final-copy">
-     This place is a little different
-     because you passed through it.
-    </div>
-
-   </section>
-
-
-  </div>
-
-
-  <section
-   class="returned"
-   id="returned"
-  >
-
-   <div class="trace-stage">
-
-    <svg
-     id="traceSvg"
-     class="trace-svg"
-     viewBox="0 0 480 390"
-     preserveAspectRatio="xMidYMid meet"
-    >
-
-     <defs>
-
-      <!--
-       THE ONE SHARED FOOTPRINT.
-       Everything the player made lives inside this.
-      -->
-
-      <clipPath id="traceClip">
-
-       <path
-        d="
-         M 46 89
-
-         C 93 54,
-           158 48,
-           215 60
-
-         C 266 70,
-           307 91,
-           356 88
-
-         C 393 85,
-           420 74,
-           444 88
-
-         L 447 218
-
-         C 413 242,
-           380 259,
-           339 269
-
-         C 298 279,
-           266 276,
-           226 287
-
-         C 178 300,
-           135 298,
-           95 278
-
-         C 59 260,
-           40 226,
-           42 185
-
-         Z
-        "
-       />
-
-      </clipPath>
-
-
-      <!--
-       THE SUBTLE HEIGHT CUE
-      -->
-
-      <filter
-       id="zoneLift"
-       x="-25%"
-       y="-30%"
-       width="160%"
-       height="180%"
-      >
-
-       <feDropShadow
-        dx="0"
-        dy="8"
-        stdDeviation="7"
-        flood-color="#686052"
-        flood-opacity=".18"
-       />
-
-      </filter>
-
-
-      <filter
-       id="softBand"
-       x="-20%"
-       y="-20%"
-       width="140%"
-       height="140%"
-      >
-
-       <feGaussianBlur
-        stdDeviation=".65"
-       />
-
-      </filter>
-
-     </defs>
-
-
-     <!--
-      LOWER FACE:
-      tiny downward displacement creates
-      the suggestion of a raised map piece.
-     -->
-
-     <path
-      id="lowerFace"
-      d="
-       M 46 89
-
-       C 93 54,
-         158 48,
-         215 60
-
-       C 266 70,
-         307 91,
-         356 88
-
-       C 393 85,
-         420 74,
-         444 88
-
-       L 447 218
-
-       C 413 242,
-         380 259,
-         339 269
-
-       C 298 279,
-         266 276,
-         226 287
-
-       C 178 300,
-         135 298,
-         95 278
-
-       C 59 260,
-         40 226,
-         42 185
-
-       Z
-      "
-
-      transform="
-       translate(0 11)
-      "
-
-      fill="
-       rgba(91,88,78,.12)
-      "
-
-      opacity="0"
-     />
-
-
-     <g
-      id="personalTerrain"
-      class="personal-terrain"
-     >
-
-      <!--
-       ONE PALE CARTOGRAPHIC BODY
-      -->
-
-      <path
-       d="
-        M 46 89
-
-        C 93 54,
-          158 48,
-          215 60
-
-        C 266 70,
-          307 91,
-          356 88
-
-        C 393 85,
-          420 74,
-          444 88
-
-        L 447 218
-
-        C 413 242,
-          380 259,
-          339 269
-
-        C 298 279,
-          266 276,
-          226 287
-
-        C 178 300,
-          135 298,
-          95 278
-
-        C 59 260,
-          40 226,
-          42 185
-
-        Z
-       "
-
-       fill="
-        rgba(235,228,209,.32)
-       "
-
-       stroke="
-        rgba(92,96,86,.20)
-       "
-
-       stroke-width="1"
-
-       filter="url(#zoneLift)"
-      />
-
-
-      <!--
-       ACTUAL PLAYER ROUTES
-       ARE GENERATED HERE.
-      -->
-
-      <g
-       id="routeBands"
-       clip-path="url(#traceClip)"
-      ></g>
-
-
-      <!--
-       OPTION-6 STYLE INTERNAL STRUCTURE
-      -->
-
-      <g
-       class="structure"
-       clip-path="url(#traceClip)"
-      >
-
-
-       <!--
-        large sweeping line
-       -->
-
-       <path
-        d="
-         M 22 151
-
-         C 101 105,
-           168 110,
-           228 145
-
-         C 290 181,
-           350 208,
-           466 165
-        "
-
-        fill="none"
-
-        stroke="
-         rgba(247,240,221,.88)
-        "
-
-        stroke-width="1.5"
-       />
-
-
-       <!--
-        parallel sweep
-       -->
-
-       <path
-        d="
-         M 19 176
-
-         C 101 132,
-           167 137,
-           224 169
-
-         C 291 207,
-           356 231,
-           469 190
-        "
-
-        fill="none"
-
-        stroke="
-         rgba(247,240,221,.59)
-        "
-
-        stroke-width="1.05"
-       />
-
-
-       <!--
-        lower partial arc
-       -->
-
-       <path
-        d="
-         M 69 273
-
-         C 52 216,
-           66 161,
-           116 138
-
-         C 165 116,
-           211 139,
-           231 183
-        "
-
-        fill="none"
-
-        stroke="
-         rgba(247,240,221,.88)
-        "
-
-        stroke-width="1.4"
-       />
-
-
-       <!--
-        line continues beyond implied form
-       -->
-
-       <path
-        d="
-         M 231 183
-         C 246 216,
-           243 250,
-           255 292
-        "
-
-        fill="none"
-
-        stroke="
-         rgba(247,240,221,.55)
-        "
-
-        stroke-width="1"
-       />
-
-
-       <!--
-        dynamically positioned straight
-        division will be inserted here
-       -->
-
-       <g id="dynamicStructure"></g>
-
-
-      </g>
-
-
-      <!--
-       darker bones
-      -->
-
-      <g
-       class="structure"
-       clip-path="url(#traceClip)"
-       fill="none"
-       stroke="#667168"
-       stroke-width=".8"
-       opacity=".28"
-      >
-
-       <path
-        d="
-         M 46 89
-         C 93 54,
-           158 48,
-           215 60
-        "
-       />
-
-       <path
-        d="
-         M 95 278
-         C 135 298,
-           178 300,
-           226 287
-        "
-       />
-
-       <path
-        d="
-         M 339 269
-         C 380 259,
-           413 242,
-           447 218
-        "
-       />
-
-      </g>
-
-     </g>
-
-    </svg>
-
-
-    <div
-     class="resolving-tree"
-     id="tree"
-    >
-
-     <span class="branch tree-trunk"></span>
-     <span class="branch b1"></span>
-     <span class="branch b2"></span>
-     <span class="branch b3"></span>
-
-    </div>
-
-   </div>
-
-
-   <div class="return-caption">
-    Somewhere you have been.
-   </div>
-
-  </section>
-
-
- </main>
-
+<main class="wrap">
+<header>
+<div class="brand">WORDLOCK</div>
+<div class="where">Four clues. One connection.</div>
+<div class="terrain-note">Medium · Puzzle 037</div>
+<div class="version-badge">PROTOTYPE #037 · PUZZLE ONLY</div>
+</header>
+
+<button type="button" class="entry" id="entry" aria-label="Play WORDLOCK">
+<span class="entry-title">Your puzzle is ready.</span>
+<span class="entry-copy">Play WORDLOCK</span>
+</button>
+
+<div class="game" id="game">
+<p class="how-to">Swipe reels left or right. Make each answer along neighbouring reels, including diagonals, then press UNLOCK. A reel is used once per word.</p>
+<section class="clue-area" id="clueArea">
+<div class="progress">
+<div class="dot"></div><div class="dot"></div>
+<div class="dot"></div><div class="dot"></div>
+</div>
+<div class="clue-label" id="clueLabel"></div>
+<div id="clue"></div>
+</section>
+
+<div class="board" id="board"></div>
+<div class="controls" id="controls">
+<button class="btn" id="resetBtn">RESET</button>
+<button class="btn primary" id="unlockBtn">UNLOCK</button>
+<button class="btn" id="hintBtn">HINT</button>
+</div>
+<div id="message" role="status" aria-live="polite"></div>
+<div class="bank" id="bank"></div>
+
+<section class="connection" id="connection">
+<div class="connection-title">THE CONNECTION</div>
+<div class="connection-copy">What connects all four?</div>
+<div class="connection-length" id="connectionLength"></div>
+<input id="connectionInput" class="connection-input" aria-label="Connecting word" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false">
+<div class="connection-actions">
+<button class="btn primary" id="connectBtn">CONNECT</button>
+<button class="btn" id="connectionHintBtn">HINT</button>
+<button class="btn" id="revealBtn">REVEAL</button>
+</div>
+<div id="connectionHint" role="status" aria-live="polite"></div>
+</section>
+
+<section class="final" id="final">
+<div class="final-kicker">WORDLOCK COMPLETE</div>
+<div class="final-title">Nicely connected.</div>
+<div class="final-copy">Four clues, one connection. You’re done. Enjoy the rest of your day.</div>
+<div class="paint-invitation" id="paintInvitation">
+<button class="btn" id="paintOpen">PAINT YOUR TILE · OPTIONAL</button>
+<button class="btn" id="leaveTile">DONE FOR TODAY</button>
+</div>
+<p id="paintSummary" class="paint-help" role="status"></p>
+
+<section id="painter" class="painter" hidden aria-label="Optional tile painting">
+<h2>A little place of your own</h2>
+<p class="paint-help">Choose a paint, then tap an area, tree, tower or bridge. Every paint is unlimited. The puzzle is already complete.</p>
+<div class="palette" id="palette" role="group" aria-label="Paints earned from this puzzle"></div>
+<p id="selectedPaint" class="paint-help"></p>
+<div class="paint-tools">
+<button class="btn" id="fillTile">FILL WHOLE TILE</button>
+<button class="btn" id="paintUndo">UNDO</button>
+<button class="btn" id="clearTile">CLEAR TILE</button>
 </div>
 
+<svg class="tile" id="paintTile" viewBox="0 0 360 780" role="group" aria-label="Portrait tile with six paint areas and four paintable landmarks">
+<defs id="paintDefs"></defs>
+<path class="paint-part" data-part="a0" role="button" tabindex="0" aria-label="Paint upper left area" d="M0 0H190C155 80 210 175 170 260H0Z"/>
+<path class="paint-part" data-part="a1" role="button" tabindex="0" aria-label="Paint upper right area" d="M190 0H360V260H170C210 175 155 80 190 0Z"/>
+<path class="paint-part" data-part="a2" role="button" tabindex="0" aria-label="Paint middle left area" d="M0 260H170C125 355 205 410 190 520H0Z"/>
+<path class="paint-part" data-part="a3" role="button" tabindex="0" aria-label="Paint middle right area" d="M170 260H360V520H190C205 410 125 355 170 260Z"/>
+<path class="paint-part" data-part="a4" role="button" tabindex="0" aria-label="Paint lower left area" d="M0 520H190C230 610 150 665 180 780H0Z"/>
+<path class="paint-part" data-part="a5" role="button" tabindex="0" aria-label="Paint lower right area" d="M190 520H360V780H180C150 665 230 610 190 520Z"/>
+<g class="tile-lines">
+<path d="M-20 62Q75 22 156 72T390 38M-20 85Q75 45 156 95T390 61M-20 108Q75 68 156 118T390 84"/>
+<path d="M-20 316Q82 260 170 318T390 292M-20 339Q82 283 170 341T390 315"/>
+<path d="M0 582Q74 544 160 591T360 574M0 605Q74 567 160 614T360 597M0 628Q74 590 160 637T360 620M0 651Q74 613 160 660T360 643M0 674Q74 636 160 683T360 666M0 697Q74 659 160 706T360 689M0 720Q74 682 160 729T360 712"/>
+<path stroke-dasharray="1 10" stroke-linecap="round" d="M25 190H135M40 212H115M230 177H330M230 199H330M40 461H133M45 481H140"/>
+</g>
+<g class="paint-part motif" data-part="tree0" role="button" tabindex="0" aria-label="Paint left tree">
+<path d="M85 132L67 158H75L59 181H79V197H91V181H111L95 158H103Z"/>
+</g>
+<g class="paint-part motif" data-part="tree1" role="button" tabindex="0" aria-label="Paint right tree">
+<path d="M263 130L245 156H253L237 179H257V195H269V179H289L273 156H281Z"/>
+</g>
+<g class="paint-part motif" data-part="tower" role="button" tabindex="0" aria-label="Paint tower">
+<path d="M264 382V320H257V305H269V312H280V305H292V312H303V305H315V320H308V382Z"/>
+<path d="M279 382V360Q286 348 293 360V382" fill="none" pointer-events="none"/>
+<path d="M280 332H292V344H280Z" fill="none" pointer-events="none"/>
+</g>
+<g class="paint-part motif" data-part="bridge" role="button" tabindex="0" aria-label="Paint bridge">
+<path d="M105 641V619H115V627H135V619H145V627H165V619H175V627H195V619H205V641H190V656H178V641H132V656H120V641Z"/>
+</g>
+</svg>
+
+<p class="paint-status" id="paintStatus" role="status" aria-live="polite"></p>
+<button class="btn paint-done" id="paintClose">DONE FOR TODAY</button>
+</section>
+</section>
+</div>
+</main>
+</div>
 
 <script>
-
-/* ==================================================
-   PUZZLE
-   ================================================== */
-
 const P={
-
- wheels:[
-
-  ["R","G","C"],
-  ["H","W","B"],
-  ["R","B","X"],
-  ["K","Q","B"],
-
-  ["L","T","E"],
-  ["H","Q","A"],
-  ["G","J","E"],
-  ["E","D","K"],
-
-  ["A","F","X"],
-  ["D","N","B"],
-  ["F","H","A"],
-  ["P","A","X"],
-
-  ["Y","S","C"],
-  ["J","H","K"],
-  ["M","D","V"],
-  ["D","C","W"]
-
- ],
-
- initial:[
-
-  2,0,2,2,
-
-  1,2,1,1,
-
-  2,1,0,0,
-
-  0,1,2,2
-
- ],
-
- clues:[
-
-  {
-
-   answer:"DEAD",
-
-   clue:
-    "No longer functioning, as a battery",
-
-   colour:1,
-
-   route:
-    [9,6,11,15]
-
-  },
-
-  {
-
-   answer:"HEAD",
-
-   clue:
-    "Foam atop a pint",
-
-   colour:2,
-
-   route:
-    [5,4,8,9]
-
-  },
-
-  {
-
-   answer:"BREAD",
-
-   clue:
-    "Sourdough, for one",
-
-   colour:3,
-
-   route:
-    [1,2,7,10,14]
-
-  },
-
-  {
-
-   answer:"RED",
-
-   clue:
-    "Traditionally, the colour of financial loss",
-
-   colour:4,
-
-   route:
-    [0,4,9]
-
-  }
-
- ],
-
- connection:{
-
-  answer:"LINE",
-
-  hints:[
-
-   "The same word comes after all four.",
-
-   "Think of boundaries, headlines and deadlines.",
-
-   "DEAD, HEAD, BREAD and RED can all be followed by the same four letters."
-
-  ]
-
- }
-
+wheels:[
+["S","C","A"],["T","A","M"],["A","M","P"],["G","P","V"],
+["S","V","N"],["D","N","K"],["R","L","K"],["O","X","Q"],
+["W","Q","Z"],["O","L","Z"],["R","L","C"],["E","A","M"],
+["M","P","V"],["Y","P","V"],["D","V","N"],["J","N","K"]
+],
+initial:[0,2,0,0,0,0,1,2,0,1,2,0,1,2,0,0],
+clues:[
+{answer:"STAR",clue:"Someone with top billing",colour:1,route:[0,1,2,6]},
+{answer:"GOLD",clue:"Metal represented by Au",colour:2,route:[3,7,6,5]},
+{answer:"SWORD",clue:"Blade that hung above Damocles",colour:3,route:[4,8,9,10,14]},
+{answer:"JELLY",clue:"Wobbly dessert served with ice cream",colour:4,route:[15,11,10,9,13]}
+],
+connection:{answer:"FISH",hints:[
+"The same word follows all four answers.",
+"Think of creatures associated with water.",
+"The ending has four letters and begins with F."
+]}
 };
 
+let current=[...P.initial],clueStart=[...P.initial],clueIndex=0;
+let solved=[],solvedRoutes=[],touched=[];
+let histories=Array.from({length:16},()=>new Set());
+let remembered=Array.from({length:16},()=>new Set());
+let hintRoute=null,hintStep=0,revealedHintPositions=new Set();
+let audioCtx=null,entered=false,busy=false;
+let connectionHintNo=0,connectionFinishing=false;
 
-/* ==================================================
-   STATE
-   ================================================== */
+const entry=document.getElementById("entry");
+const game=document.getElementById("game");
+const board=document.getElementById("board");
+const clue=document.getElementById("clue");
+const clueLabel=document.getElementById("clueLabel");
+const clueArea=document.getElementById("clueArea");
+const controls=document.getElementById("controls");
+const message=document.getElementById("message");
+const bank=document.getElementById("bank");
+const resetBtn=document.getElementById("resetBtn");
+const unlockBtn=document.getElementById("unlockBtn");
+const hintBtn=document.getElementById("hintBtn");
+const connection=document.getElementById("connection");
+const connectionLength=document.getElementById("connectionLength");
+const connectionInput=document.getElementById("connectionInput");
+const connectBtn=document.getElementById("connectBtn");
+const connectionHintBtn=document.getElementById("connectionHintBtn");
+const revealBtn=document.getElementById("revealBtn");
+const connectionHint=document.getElementById("connectionHint");
+const final=document.getElementById("final");
 
-let current=
- [...P.initial];
+function setBusy(value){
+busy=value;
+[resetBtn,unlockBtn,hintBtn].forEach(b=>b.disabled=value);
+}
 
-let clueStart=
- [...P.initial];
-
-let clueIndex=0;
-
-let solved=[];
-
-
-/*
- This is new and important for #035.
-
- We preserve the ACTUAL route selected
- by route ownership for each solve.
-
- The returned Place therefore comes from
- the player's real journey.
-*/
-
-let solvedRoutes=[];
-
-
-let histories=
- Array.from(
-  {length:16},
-  ()=>new Set()
- );
-
-let remembered=
- Array.from(
-  {length:16},
-  ()=>new Set()
- );
-
-let touched=[];
-
-let hintRoute=null;
-let hintStep=0;
-
-let revealedHintPositions=
- new Set();
-
-let audioCtx=null;
-
-let entered=false;
-let busy=false;
-
-let connectionHintNo=0;
-
-
-/* ==================================================
-   DOM
-   ================================================== */
-
-const entry=
- document.getElementById(
-  "entry"
- );
-
-const game=
- document.getElementById(
-  "game"
- );
-
-const board=
- document.getElementById(
-  "board"
- );
-
-const clue=
- document.getElementById(
-  "clue"
- );
-
-const clueLabel=
- document.getElementById(
-  "clueLabel"
- );
-
-const clueArea=
- document.getElementById(
-  "clueArea"
- );
-
-const controls=
- document.getElementById(
-  "controls"
- );
-
-const message=
- document.getElementById(
-  "message"
- );
-
-const bank=
- document.getElementById(
-  "bank"
- );
-
-const resetBtn=
- document.getElementById(
-  "resetBtn"
- );
-
-const unlockBtn=
- document.getElementById(
-  "unlockBtn"
- );
-
-const hintBtn=
- document.getElementById(
-  "hintBtn"
- );
-
-const connection=
- document.getElementById(
-  "connection"
- );
-
-const connectionLength=
- document.getElementById(
-  "connectionLength"
- );
-
-const connectionInput=
- document.getElementById(
-  "connectionInput"
- );
-
-const connectBtn=
- document.getElementById(
-  "connectBtn"
- );
-
-const connectionHintBtn=
- document.getElementById(
-  "connectionHintBtn"
- );
-
-const revealBtn=
- document.getElementById(
-  "revealBtn"
- );
-
-const connectionHint=
- document.getElementById(
-  "connectionHint"
- );
-
-const final=
- document.getElementById(
-  "final"
- );
-
-const returned=
- document.getElementById(
-  "returned"
- );
-
-const personalTerrain=
- document.getElementById(
-  "personalTerrain"
- );
-
-const lowerFace=
- document.getElementById(
-  "lowerFace"
- );
-
-const routeBands=
- document.getElementById(
-  "routeBands"
- );
-
-const dynamicStructure=
- document.getElementById(
-  "dynamicStructure"
- );
-
-const tree=
- document.getElementById(
-  "tree"
- );
-
-
-/* ==================================================
-   NEIGHBOURS
-   ================================================== */
-
-const neighbours=
- Array.from(
-
-  {length:16},
-
-  (_,a)=>
-
-   Array.from(
-    {length:16},
-    (_,b)=>b
-   )
-
-   .filter(
-
-    b=>
-
-     Math.max(
-
-      Math.abs(
-       Math.floor(a/4)-
-       Math.floor(b/4)
-      ),
-
-      Math.abs(
-       a%4-
-       b%4
-      )
-
-     )===1
-
-   )
-
- );
-
-
-/* ==================================================
-   AUDIO
-   ================================================== */
+const neighbours=Array.from({length:16},(_,a)=>
+Array.from({length:16},(_,b)=>b).filter(b=>
+Math.max(
+Math.abs(Math.floor(a/4)-Math.floor(b/4)),
+Math.abs(a%4-b%4)
+)===1));
 
 function audio(){
-
- if(!audioCtx){
-
-  const A=
-   window.AudioContext||
-   window.webkitAudioContext;
-
-  if(A){
-   audioCtx=new A();
-  }
- }
-
- if(
-  audioCtx?.state===
-  "suspended"
- ){
-  audioCtx.resume();
- }
-
- return audioCtx;
+if(!audioCtx){
+const A=window.AudioContext||window.webkitAudioContext;
+if(A)audioCtx=new A();
+}
+if(audioCtx?.state==="suspended")audioCtx.resume();
+return audioCtx;
 }
 
-
-function tone(
- f,
- d=.25,
- v=.006,
- delay=0
-){
-
- const c=audio();
-
- if(!c)return;
-
- const o=
-  c.createOscillator();
-
- const g=
-  c.createGain();
-
- const n=
-  c.currentTime+
-  delay;
-
- o.frequency.value=f;
- o.type="sine";
-
- g.gain.setValueAtTime(
-  .0001,
-  n
- );
-
- g.gain.exponentialRampToValueAtTime(
-  v,
-  n+.015
- );
-
- g.gain.exponentialRampToValueAtTime(
-  .0001,
-  n+d
- );
-
- o.connect(g);
- g.connect(c.destination);
-
- o.start(n);
- o.stop(n+d+.05);
+function tone(f,d=.25,v=.006,delay=0){
+const c=audio();
+if(!c)return;
+const o=c.createOscillator(),g=c.createGain(),n=c.currentTime+delay;
+o.frequency.value=f;
+o.type="sine";
+g.gain.setValueAtTime(.0001,n);
+g.gain.exponentialRampToValueAtTime(v,n+.015);
+g.gain.exponentialRampToValueAtTime(.0001,n+d);
+o.connect(g);
+g.connect(c.destination);
+o.start(n);
+o.stop(n+d+.05);
 }
 
-
-function placeSound(){
-
- tone(110,1.5,.01);
-
- tone(
-  165,
-  1.8,
-  .005,
-  .08
- );
-
- tone(
-  220,
-  2,
-  .0025,
-  .16
- );
-}
-
-
-function reelSound(){
-
- tone(
-  185,
-  .22,
-  .009
- );
-
- tone(
-  370,
-  .3,
-  .002,
-  .04
- );
-}
-
-
-function goodSound(i){
-
- tone(
-  175+i*25,
-  .28,
-  .008
- );
-}
-
-
-function badSound(){
-
- tone(
-  95,
-  .18,
-  .012
- );
-}
-
-
-function terrainSound(){
-
- tone(
-  123,
-  1.8,
-  .0045
- );
-
- tone(
-  185,
-  2,
-  .003,
-  .16
- );
-
- tone(
-  247,
-  2.3,
-  .0017,
-  .40
- );
-}
-
-
-function landmarkSound(){
-
- tone(
-  196,
-  .8,
-  .003
- );
-
- tone(
-  294,
-  1.2,
-  .002,
-  .14
- );
-
- tone(
-  392,
-  1.5,
-  .0012,
-  .28
- );
-}
-
-
-/* ==================================================
-   ENTRY
-   ================================================== */
+function placeSound(){tone(110,1.5,.01);tone(165,1.8,.005,.08);tone(220,2,.0025,.16)}
+function reelSound(){tone(185,.22,.009);tone(370,.3,.002,.04)}
+function goodSound(i){tone(175+i*25,.28,.008)}
+function badSound(){tone(95,.18,.012)}
 
 entry.onclick=()=>{
-
- if(entered)return;
-
- entered=true;
-
- audio();
-
- placeSound();
-
- entry.classList.add(
-  "entering"
- );
-
- setTimeout(
-
-  ()=>{
-
-   entry.style.display=
-    "none";
-
-   game.classList.add(
-    "visible"
-   );
-
-  },
-
-  650
-
- );
-
+if(entered)return;
+entered=true;
+audio();
+placeSound();
+entry.classList.add("entering");
+setTimeout(()=>{
+entry.style.display="none";
+game.classList.add("visible");
+},650);
 };
 
+function letter(i,state=current){return P.wheels[i][state[i]]}
 
-/* ==================================================
-   PATH ENGINE
-   ================================================== */
-
-function letter(
- i,
- state=current
-){
-
- return P.wheels[i]
-  [state[i]];
-
+function findPaths(word,state=current){
+const out=[];
+function walk(pos,k,path){
+if(k===word.length){out.push([...path]);return}
+for(const n of neighbours[pos]){
+if(path.includes(n)||letter(n,state)!==word[k])continue;
+walk(n,k+1,[...path,n]);
+}
+}
+for(let i=0;i<16;i++){
+if(letter(i,state)===word[0])walk(i,1,[i]);
+}
+return out;
 }
 
-
-function findPaths(
- word,
- state=current
-){
-
- const out=[];
-
-
- function walk(
-  pos,
-  k,
-  path
- ){
-
-  if(
-   k===
-   word.length
-  ){
-
-   out.push(
-    [...path]
-   );
-
-   return;
-  }
-
-
-  for(
-   const n
-   of neighbours[pos]
-  ){
-
-   if(
-    path.includes(n)
-    ||
-    letter(n,state)!==
-    word[k]
-   ){
-    continue;
-   }
-
-   walk(
-    n,
-    k+1,
-    [...path,n]
-   );
-
-  }
-
- }
-
-
- for(
-  let i=0;
-  i<16;
-  i++
- ){
-
-  if(
-   letter(i,state)===
-   word[0]
-  ){
-
-   walk(
-    i,
-    1,
-    [i]
-   );
-
-  }
-
- }
-
- return out;
+function ownershipScore(path){
+let score=0;
+const uniqueTouched=new Set(touched);
+for(const p of path){
+if(uniqueTouched.has(p))score+=100;
+const last=touched.lastIndexOf(p);
+if(last>=0)score+=last+1;
+}
+return score;
 }
 
-
-/* ==================================================
-   ROUTE OWNERSHIP
-   ================================================== */
-
-function ownershipScore(
- path
-){
-
- let score=0;
-
- const uniqueTouched=
-  new Set(
-   touched
-  );
-
- for(
-  const p
-  of path
- ){
-
-  if(
-   uniqueTouched.has(p)
-  ){
-   score+=100;
-  }
-
-  const last=
-   touched.lastIndexOf(p);
-
-  if(last>=0){
-   score+=last+1;
-  }
-
- }
-
- return score;
+function choosePlayerRoute(paths){
+if(paths.length===1)return paths[0];
+const ranked=paths.map(p=>({path:p,score:ownershipScore(p),key:p.join("-")}));
+ranked.sort((a,b)=>b.score-a.score||a.key.localeCompare(b.key));
+return ranked[0].path;
 }
-
-
-function choosePlayerRoute(
- paths
-){
-
- if(
-  paths.length===1
- ){
-  return paths[0];
- }
-
- const ranked=
-  paths.map(
-
-   p=>({
-
-    path:p,
-
-    score:
-     ownershipScore(p),
-
-    key:
-     p.join("-")
-
-   })
-
-  );
-
-
- ranked.sort(
-
-  (a,b)=>
-
-   b.score-a.score
-   ||
-   a.key.localeCompare(
-    b.key
-   )
-
- );
-
-
- return ranked[0].path;
-}
-
-
-/* ==================================================
-   BOARD HISTORY
-   ================================================== */
 
 function historyClass(i){
-
- const a=
-  [...histories[i]]
-  .sort();
-
- if(
-  a.length===1
- ){
-  return "c"+a[0];
- }
-
- if(
-  a.length>=2
- ){
-
-  return (
-   "m"+
-   a[0]+
-   a[a.length-1]
-  );
-
- }
-
- return "";
+const a=[...histories[i]].sort();
+if(a.length===1)return "c"+a[0];
+if(a.length>=2)return "m"+a[0]+a[a.length-1];
+return "";
 }
-
-
-/* ==================================================
-   BOARD RENDER
-   ================================================== */
 
 function render(){
-
- board.innerHTML="";
-
-
- P.wheels.forEach(
-
-  (w,i)=>{
-
-   const r=
-    document.createElement(
-     "div"
-    );
-
-
-   r.className=
-    "reel "+
-    historyClass(i);
-
-
-   if(
-    revealedHintPositions
-    .has(i)
-   ){
-
-    r.classList.add(
-     "hint-known"
-    );
-
-   }
-
-
-   const c=
-    current[i];
-
-   const l=
-    (c+2)%3;
-
-   const rr=
-    (c+1)%3;
-
-
-   const strip=
-    document.createElement(
-     "div"
-    );
-
-   strip.className=
-    "strip";
-
-
-   [l,c,rr].forEach(
-
-    (idx,k)=>{
-
-     const x=
-      document.createElement(
-       "div"
-      );
-
-
-     x.className=
-      k===1
-      ?"current"
-      :"alt";
-
-
-     if(
-      k!==1
-      &&
-      remembered[i]
-      .has(w[idx])
-     ){
-
-      x.classList.add(
-       "remembered"
-      );
-
-     }
-
-
-     x.textContent=
-      w[idx];
-
-
-     strip.appendChild(x);
-
-    }
-
-   );
-
-
-   r.appendChild(strip);
-
-
-   let sx=null;
-
-
-   r.onpointerdown=
-    e=>{
-
-     if(busy)return;
-
-     audio();
-
-     sx=
-      e.clientX;
-
-    };
-
-
-   r.onpointerup=
-    e=>{
-
-     if(
-      busy
-      ||
-      sx===null
-     ){
-      return;
-     }
-
-
-     const dx=
-      e.clientX-
-      sx;
-
-
-     sx=null;
-
-
-     if(
-      Math.abs(dx)<15
-     ){
-      return;
-     }
-
-
-     current[i]=
-      (
-       current[i]+
-       (
-        dx<0
-        ?1
-        :2
-       )
-      )%3;
-
-
-     touched.push(i);
-
-
-     reelSound();
-
-     render();
-
-     applyHintPulse();
-
-    };
-
-
-   board.appendChild(r);
-
-  }
-
- );
-
-
- applyHintPulse();
-
+board.innerHTML="";
+P.wheels.forEach((w,i)=>{
+const r=document.createElement("div");
+r.className="reel "+historyClass(i);
+if(revealedHintPositions.has(i))r.classList.add("hint-known");
+const c=current[i],l=(c+2)%3,rr=(c+1)%3;
+const strip=document.createElement("div");
+strip.className="strip";
+[l,c,rr].forEach((idx,k)=>{
+const x=document.createElement("div");
+x.className=k===1?"current":"alt";
+if(k!==1&&remembered[i].has(w[idx]))x.classList.add("remembered");
+x.textContent=w[idx];
+strip.appendChild(x);
+});
+r.appendChild(strip);
+let sx=null;
+r.onpointerdown=e=>{
+if(busy)return;
+audio();
+sx=e.clientX;
+r.setPointerCapture(e.pointerId);
+};
+r.onpointerup=e=>{
+if(busy||sx===null)return;
+const dx=e.clientX-sx;
+sx=null;
+if(Math.abs(dx)<15)return;
+current[i]=(current[i]+(dx<0?1:2))%3;
+touched.push(i);
+reelSound();
+render();
+applyHintPulse();
+};
+r.onpointercancel=()=>{sx=null};
+board.appendChild(r);
+});
+applyHintPulse();
 }
-
-
-/* ==================================================
-   HINT PULSE
-   ================================================== */
 
 function applyHintPulse(){
-
- document
-  .querySelectorAll(
-   ".reel"
-  )
-  .forEach(
-
-   x=>
-    x.classList.remove(
-     "pulse"
-    )
-
-  );
-
-
- if(!hintRoute)return;
-
-
- if(
-  hintStep%2===1
- ){
-
-  const n=
-   Math.floor(
-    hintStep/2
-   );
-
-
-  if(
-   n<
-   hintRoute.length
-  ){
-
-   document
-    .querySelectorAll(
-     ".reel"
-    )
-    [hintRoute[n]]
-    ?.classList.add(
-     "pulse"
-    );
-
-  }
-
- }
-
+document.querySelectorAll(".reel").forEach(x=>x.classList.remove("pulse"));
+if(!hintRoute)return;
+if(hintStep%2===1){
+const n=Math.floor(hintStep/2);
+if(n<hintRoute.length){
+document.querySelectorAll(".reel")[hintRoute[n]]?.classList.add("pulse");
 }
-
-
-/* ==================================================
-   CLUES
-   ================================================== */
+}
+}
 
 function renderClue(){
-
- touched=[];
-
- hintRoute=null;
- hintStep=0;
-
- revealedHintPositions
-  .clear();
-
-
- const c=
-  P.clues[
-   clueIndex
-  ];
-
-
- clueLabel.textContent=
-  "CLUE "+
-  (clueIndex+1);
-
-
- clue.textContent=
-  c.clue+
-  " ("+
-  c.answer.length+
-  ")";
-
-
- hintBtn.textContent=
-  "HINT";
-
-
- message.textContent="";
-
-
- render();
-
+if(clueIndex>=P.clues.length)return;
+setBusy(false);
+touched=[];
+hintRoute=null;
+hintStep=0;
+revealedHintPositions.clear();
+const c=P.clues[clueIndex];
+clueLabel.textContent="CLUE "+(clueIndex+1);
+clue.textContent=c.clue+" ("+c.answer.length+")";
+hintBtn.textContent="HINT";
+message.textContent="";
+render();
 }
-
 
 function unlock(){
-
- if(busy)return;
-
-
- const c=
-  P.clues[
-   clueIndex
-  ];
-
-
- const paths=
-  findPaths(
-   c.answer
-  );
-
-
- if(
-  !paths.length
- ){
-
-  badSound();
-
-  message.textContent=
-   "Not quite. Try another way.";
-
-  return;
-
- }
-
-
- const route=
-  choosePlayerRoute(
-   paths
-  );
-
-
- solve(
-  c,
-  route
- );
-
+if(busy||clueIndex>=P.clues.length)return;
+const c=P.clues[clueIndex],paths=findPaths(c.answer);
+if(!paths.length){
+badSound();
+message.textContent="Not quite. Try another way.";
+return;
+}
+solve(c,choosePlayerRoute(paths));
 }
 
-
-/* ==================================================
-   SOLVE
-   ================================================== */
-
-function solve(
- c,
- route
-){
-
- busy=true;
-
- message.textContent="";
-
-
- route.forEach(
-
-  (p,n)=>
-
-   remembered[p]
-   .add(
-    c.answer[n]
-   )
-
- );
-
-
- let n=0;
-
-
- function step(){
-
-  if(
-   n===
-   route.length
-  ){
-
-   setTimeout(
-
-    ()=>finishWord(
-     c,
-     route
-    ),
-
-    350
-
-   );
-
-   return;
-
-  }
-
-
-  const p=
-   route[n];
-
-
-  histories[p]
-  .add(
-   c.colour
-  );
-
-
-  render();
-
-
-  const r=
-   document
-   .querySelectorAll(
-    ".reel"
-   )[p];
-
-
-  r?.classList.add(
-   "confirm"
-  );
-
-
-  goodSound(n);
-
-
-  setTimeout(
-
-   ()=>r?.classList.remove(
-    "confirm"
-   ),
-
-   280
-
-  );
-
-
-  n++;
-
-
-  setTimeout(
-   step,
-   170
-  );
-
- }
-
-
- step();
-
+function solve(c,route){
+setBusy(true);
+message.textContent="";
+route.forEach((p,n)=>remembered[p].add(c.answer[n]));
+let n=0;
+function step(){
+if(n===route.length){
+setTimeout(()=>finishWord(c,route),350);
+return;
+}
+const p=route[n];
+histories[p].add(c.colour);
+render();
+const r=document.querySelectorAll(".reel")[p];
+r?.classList.add("confirm");
+goodSound(n);
+setTimeout(()=>r?.classList.remove("confirm"),280);
+n++;
+setTimeout(step,170);
+}
+step();
 }
 
-
-/* ==================================================
-   FINISH WORD
-   ================================================== */
-
-function finishWord(
- c,
- route
-){
-
- solved.push(
-  c.answer
- );
-
-
- /*
-  Save the ACTUAL OWNED route.
- */
-
- solvedRoutes.push({
-
-  colour:
-   c.colour,
-
-  route:
-   [...route]
-
- });
-
-
- /*
-  Board ownership persists.
- */
-
- clueStart=[
-  ...current
- ];
-
-
- renderBank();
-
-
- document
- .querySelectorAll(
-  ".dot"
- )
- [clueIndex]
- .classList.add(
-  "d"+
-  (clueIndex+1)
- );
-
-
- message.textContent=
-  c.answer+
-  " found.";
-
-
- clueIndex++;
-
-
- busy=false;
-
-
- if(
-  clueIndex===4
- ){
-
-  setTimeout(
-   showConnection,
-   900
-  );
-
- }else{
-
-  setTimeout(
-   renderClue,
-   850
-  );
-
- }
-
+function finishWord(c,route){
+solved.push(c.answer);
+solvedRoutes.push({colour:c.colour,route:[...route]});
+clueStart=[...current];
+renderBank();
+document.querySelectorAll(".dot")[clueIndex].classList.add("d"+(clueIndex+1));
+message.textContent=c.answer+" found.";
+clueIndex++;
+if(clueIndex===P.clues.length)setTimeout(showConnection,900);
+else setTimeout(renderClue,850);
 }
-
-
-/* ==================================================
-   RESET
-   ================================================== */
 
 function reset(){
-
- current=[
-  ...clueStart
- ];
-
- touched=[];
-
- render();
-
- message.textContent="";
-
+if(busy||clueIndex>=P.clues.length)return;
+current=[...clueStart];
+touched=[];
+render();
+message.textContent="";
 }
-
-
-/* ==================================================
-   BANK
-   ================================================== */
 
 function renderBank(){
-
- bank.innerHTML="";
-
-
- solved.forEach(
-
-  (w,i)=>{
-
-   const p=
-    document.createElement(
-     "div"
-    );
-
-
-   p.className=
-    "pill c"+
-    (i+1);
-
-
-   p.textContent=w;
-
-
-   bank.appendChild(p);
-
-  }
-
- );
-
+bank.innerHTML="";
+solved.forEach((w,i)=>{
+const p=document.createElement("div");
+p.className="pill c"+(i+1);
+p.textContent=w;
+bank.appendChild(p);
+});
 }
 
-
-/* ==================================================
-   HINTS
-   ================================================== */
-
-function configureRoute(
- route,
- word
-){
-
- const s=[
-  ...current
- ];
-
-
- route.forEach(
-
-  (p,n)=>{
-
-   const idx=
-    P.wheels[p]
-    .indexOf(
-     word[n]
-    );
-
-
-   if(
-    idx>=0
-   ){
-    s[p]=idx;
-   }
-
-  }
-
- );
-
-
- return s;
-
+function configureRoute(route,word){
+const s=[...current];
+route.forEach((p,n)=>{
+const idx=P.wheels[p].indexOf(word[n]);
+if(idx>=0)s[p]=idx;
+});
+return s;
 }
-
 
 function chooseHintRoute(){
-
- const c=
-  P.clues[
-   clueIndex
-  ];
-
-
- const test=
-  configureRoute(
-   c.route,
-   c.answer
-  );
-
-
- if(
-
-  findPaths(
-   c.answer,
-   test
-  )
-
-  .some(
-
-   p=>
-    p.join()===
-    c.route.join()
-
-  )
-
- ){
-  return c.route;
- }
-
-
- const possible=
-  findPaths(
-   c.answer
-  );
-
-
- if(
-  possible.length
- ){
-  return choosePlayerRoute(
-   possible
-  );
- }
-
-
- return c.route;
-
+const c=P.clues[clueIndex],test=configureRoute(c.route,c.answer);
+if(findPaths(c.answer,test).some(p=>p.join()===c.route.join()))return c.route;
+const possible=findPaths(c.answer);
+if(possible.length)return choosePlayerRoute(possible);
+return c.route;
 }
-
 
 function doHint(){
-
- const c=
-  P.clues[
-   clueIndex
-  ];
-
-
- if(
-  !hintRoute
- ){
-  hintRoute=
-   chooseHintRoute();
- }
-
-
- const max=
-  hintRoute.length*
-  2;
-
-
- if(
-  hintStep>=max
- ){
-
-  message.textContent=
-   "One complete way is now showing.";
-
-  return;
-
- }
-
-
- hintStep++;
-
-
- const index=
-  Math.floor(
-   (hintStep-1)/2
-  );
-
-
- const p=
-  hintRoute[index];
-
-
- if(
-  hintStep%2===1
- ){
-
-  message.textContent=
-   index===0
-   ?"One possible place to start."
-   :"A possible next place.";
-
-
-  render();
-
-  applyHintPulse();
-
- }else{
-
-
-  const wanted=
-   c.answer[index];
-
-
-  const idx=
-   P.wheels[p]
-   .indexOf(
-    wanted
-   );
-
-
-  current[p]=idx;
-
-
-  touched.push(p);
-
-
-  revealedHintPositions
-  .add(p);
-
-
-  reelSound();
-
-
-  message.textContent=
-   "That place turns to "+
-   wanted+
-   ".";
-
-
-  render();
-
- }
-
-
- hintBtn.textContent=
-  "ANOTHER HINT";
-
+if(busy||clueIndex>=P.clues.length)return;
+const c=P.clues[clueIndex];
+if(!hintRoute)hintRoute=chooseHintRoute();
+if(hintStep>=hintRoute.length*2){
+message.textContent="One complete way is now showing.";
+return;
 }
-
-
-/* ==================================================
-   CONNECTION
-   ================================================== */
+hintStep++;
+const index=Math.floor((hintStep-1)/2),p=hintRoute[index];
+if(hintStep%2===1){
+message.textContent=index===0?"One possible place to start.":"A possible next place.";
+render();
+applyHintPulse();
+}else{
+const wanted=c.answer[index];
+current[p]=P.wheels[p].indexOf(wanted);
+touched.push(p);
+revealedHintPositions.add(p);
+reelSound();
+message.textContent="That place turns to "+wanted+".";
+render();
+}
+hintBtn.textContent="ANOTHER HINT";
+}
 
 function showConnection(){
-
- controls.style.display=
-  "none";
-
- clueArea.style.display=
-  "none";
-
- message.textContent="";
-
-
- connection.classList.add(
-  "show"
- );
-
-
- connectionLength.textContent=
-  "•".repeat(
-   P.connection
-   .answer.length
-  );
-
+controls.style.display="none";
+clueArea.style.display="none";
+message.textContent="";
+connection.classList.add("show");
+connectionLength.textContent="•".repeat(P.connection.answer.length);
 }
-
 
 function tryConnection(){
-
- const g=
-  connectionInput
-  .value
-  .trim()
-  .toUpperCase();
-
-
- if(
-  g===
-  P.connection.answer
- ){
-
-  finishConnection();
-
- }else{
-
-  badSound();
-
-  connectionHint.textContent=
-   "That doesn't connect all four.";
-
- }
-
+if(connectionFinishing||!connection.classList.contains("show"))return;
+const g=connectionInput.value.trim().toUpperCase();
+if(g===P.connection.answer)finishConnection();
+else{
+badSound();
+connectionHint.textContent="That doesn't connect all four.";
 }
-
+}
 
 function connectionHintFn(){
-
- if(
-  connectionHintNo>=3
- ){
-  return;
- }
-
-
- connectionHint.textContent=
-  P.connection
-  .hints[
-   connectionHintNo
-  ];
-
-
- connectionHintNo++;
-
+if(connectionFinishing||connectionHintNo>=P.connection.hints.length)return;
+connectionHint.textContent=P.connection.hints[connectionHintNo];
+connectionHintNo++;
+if(connectionHintNo===P.connection.hints.length)connectionHintBtn.disabled=true;
 }
-
 
 function finishConnection(){
-
- const a=
-  P.connection.answer;
-
-
- connectionInput.value=
-  a;
-
- connectionInput.disabled=
-  true;
-
-
- connectionLength.textContent=
-  a;
-
-
- connectBtn.disabled=
-  true;
-
- connectionHintBtn.disabled=
-  true;
-
- revealBtn.disabled=
-  true;
-
-
- const forms=
-  solved.map(
-   x=>x+a
-  );
-
-
- let n=0;
-
-
- connectionHint.textContent="";
-
-
- function add(){
-
-  if(
-   n===
-   forms.length
-  ){
-
-   setTimeout(
-    showFinal,
-    1000
-   );
-
-   return;
-
-  }
-
-
-  connectionHint.textContent+=
-   (
-    n
-    ?"  ·  "
-    :""
-   )
-   +
-   forms[n];
-
-
-  tone(
-   180+n*30,
-   .3,
-   .006
-  );
-
-
-  n++;
-
-
-  setTimeout(
-   add,
-   420
-  );
-
- }
-
-
- add();
-
+if(connectionFinishing)return;
+connectionFinishing=true;
+const a=P.connection.answer;
+connectionInput.value=a;
+connectionInput.disabled=true;
+connectionLength.textContent=a;
+connectBtn.disabled=true;
+connectionHintBtn.disabled=true;
+revealBtn.disabled=true;
+const forms=solved.map(x=>x+a);
+let n=0;
+connectionHint.textContent="";
+function add(){
+if(n===forms.length){setTimeout(showFinal,1000);return}
+connectionHint.textContent+=(n?"  ·  ":"")+forms[n];
+tone(180+n*30,.3,.006);
+n++;
+setTimeout(add,420);
 }
-
+add();
+}
 
 function revealConnection(){
-
- connectionInput.value=
-  P.connection.answer;
-
-
- setTimeout(
-  finishConnection,
-  400
- );
-
+if(connectionFinishing||!connection.classList.contains("show"))return;
+finishConnection();
 }
-
 
 function showFinal(){
-
- connection.style.display=
-  "none";
-
-
- final.classList.add(
-  "show"
- );
-
-
- setTimeout(
-  returnToPlace,
-  3900
- );
-
+connection.style.display="none";
+document.querySelector(".how-to").style.display="none";
+final.classList.add("show");
+initialisePainting();
 }
 
+unlockBtn.onclick=unlock;
+resetBtn.onclick=reset;
+hintBtn.onclick=doHint;
+connectBtn.onclick=tryConnection;
+connectionHintBtn.onclick=connectionHintFn;
+revealBtn.onclick=revealConnection;
+connectionInput.onkeydown=e=>{if(e.key==="Enter")tryConnection()};
 
-/* ==================================================
-   #035
-   BOARD POSITION -> COMPACT CARTOGRAPHY
-   ================================================== */
+const paintBase={
+1:{name:"Sage",value:"#abc1ae"},
+2:{name:"Blue",value:"#a8c5d0"},
+3:{name:"Ochre",value:"#d4b46f"},
+4:{name:"Mauve",value:"#bca6bd"}
+};
+const paintingKey="wordlock-037-paint-v1";
+let earnedPaints=[],selectedPaint=null,paintState={},paintUndoStack=[],paintingReady=false;
+const paintParts=[...document.querySelectorAll("[data-part]")];
 
+function paintByKey(key){return earnedPaints.find(p=>p.key===key)}
 
-/*
- Board coordinates become latent points
- inside the tighter raised region.
-
- IMPORTANT:
- These are NOT rendered as cells.
- They are only anchors for the broad bands.
-*/
-
-function mapCell(i){
-
- const row=
-  Math.floor(i/4);
-
- const col=
-  i%4;
-
-
- /*
-  compressed 4 × 4 geography
- */
-
- return {
-
-  x:
-   91+
-   col*96,
-
-  y:
-   91+
-   row*58
-
- };
-
+function paintFill(key){
+const p=paintByKey(key);
+return p?(p.colours.length===1?p.colours[0]:"url(#paint-"+p.key+")"):"#f6f2e7";
 }
 
-
-/*
- Route colours.
-*/
-
-function routeColour(c){
-
- return {
-
-  1:"#abc1ae",
-  2:"#a8c5d0",
-  3:"#d4b46f",
-  4:"#bca6bd"
-
- }[c];
-
+function refreshPainting(){
+for(const el of paintParts)el.setAttribute("fill",paintFill(paintState[el.dataset.part]));
+for(const b of document.querySelectorAll(".swatch")){
+b.setAttribute("aria-pressed",String(b.dataset.paint===selectedPaint));
+}
+const p=paintByKey(selectedPaint);
+document.getElementById("selectedPaint").textContent=p?p.name+" selected · unlimited":"";
+document.getElementById("paintUndo").disabled=paintUndoStack.length===0;
 }
 
-
-/*
- Hybrid route geometry.
-
- Odd-coloured routes:
- smoother.
-
- Even-coloured routes:
- retain a little more straight geometry.
-
- This deliberately mixes curve and structure,
- as in Option 6.
-*/
-
-function routePath(
- route,
- colour
-){
-
- const pts=
-  route.map(
-   mapCell
-  );
-
-
- if(
-  pts.length<2
- ){
-  return "";
- }
-
-
- let d=
-  `M ${pts[0].x} ${pts[0].y}`;
-
-
- if(
-  colour===2
-  ||
-  colour===4
- ){
-
-  /*
-   STRAIGHTER FAMILY
-  */
-
-  for(
-   let i=1;
-   i<pts.length;
-   i++
-  ){
-
-   if(
-    i===pts.length-1
-   ){
-
-    d+=
-     ` L ${pts[i].x} ${pts[i].y}`;
-
-   }else{
-
-    const mx=
-     (
-      pts[i].x+
-      pts[i+1].x
-     )/2;
-
-    const my=
-     (
-      pts[i].y+
-      pts[i+1].y
-     )/2;
-
-
-    d+=
-     ` L ${pts[i].x} ${pts[i].y}`;
-
-    d+=
-     ` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
-
-   }
-
-  }
-
- }else{
-
-  /*
-   CURVED FAMILY
-  */
-
-  for(
-   let i=1;
-   i<pts.length-1;
-   i++
-  ){
-
-   const mx=
-    (
-     pts[i].x+
-     pts[i+1].x
-    )/2;
-
-   const my=
-    (
-     pts[i].y+
-     pts[i+1].y
-    )/2;
-
-
-   d+=
-    ` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
-
-  }
-
-
-  const last=
-   pts[
-    pts.length-1
-   ];
-
-
-  d+=
-   ` T ${last.x} ${last.y}`;
-
- }
-
-
- return d;
-
+function savePainting(){
+try{
+localStorage.setItem(paintingKey,JSON.stringify({
+state:paintState,
+completed:{current,histories:histories.map(h=>[...h]),solvedRoutes}
+}));
+document.getElementById("paintStatus").textContent="Saved on this device. Leave whenever you like.";
+}catch(e){
+document.getElementById("paintStatus").textContent="Painting works, but this browser could not save it. Keep this page open to retain it.";
+}
 }
 
-
-/*
- Build actual personal terrain.
-*/
-
-function buildReturnedTerrain(){
-
- routeBands.innerHTML="";
- dynamicStructure.innerHTML="";
-
-
- /*
-  The bands are deliberately WIDE.
-  This is the opposite of #034's
-  isolated little shapes.
-
-  Together they create ONE mass.
- */
-
- solvedRoutes.forEach(
-
-  (item,index)=>{
-
-   const path=
-    document.createElementNS(
-     "http://www.w3.org/2000/svg",
-     "path"
-    );
-
-
-   path.setAttribute(
-    "d",
-    routePath(
-     item.route,
-     item.colour
-    )
-   );
-
-
-   path.setAttribute(
-    "fill",
-    "none"
-   );
-
-
-   path.setAttribute(
-    "stroke",
-    routeColour(
-     item.colour
-    )
-   );
-
-
-   /*
-    Slight width variation stops the
-    bands feeling mechanically identical.
-   */
-
-   const widths={
-    1:88,
-    2:82,
-    3:92,
-    4:78
-   };
-
-
-   path.setAttribute(
-    "stroke-width",
-    widths[
-     item.colour
-    ]
-   );
-
-
-   path.setAttribute(
-    "stroke-linecap",
-    item.colour===2
-    ||
-    item.colour===4
-    ?"square"
-    :"round"
-   );
-
-
-   path.setAttribute(
-    "stroke-linejoin",
-    "round"
-   );
-
-
-   path.setAttribute(
-    "opacity",
-    index===2
-    ?".54"
-    :".50"
-   );
-
-
-   /*
-    Very slight softening:
-    still geometric,
-    not fuzzy/blob-like.
-   */
-
-   path.setAttribute(
-    "filter",
-    "url(#softBand)"
-   );
-
-
-   routeBands.appendChild(
-    path
-   );
-
-  }
-
- );
-
-
- /*
-  STRUCTURAL STRAIGHT LINE
-
-  Look at top-row activity.
-  Where neighbouring used board positions
-  sit beside one another, preserve ONE
-  vertical memory of that division.
-
-  This is exactly the kind of subtle
-  board echo we liked in Option 6.
- */
-
- const topActive=[];
-
-
- for(
-  let c=0;
-  c<4;
-  c++
- ){
-
-  const i=c;
-
-  if(
-   histories[i].size
-  ){
-   topActive.push(c);
-  }
-
- }
-
-
- let separator=null;
-
-
- for(
-  let i=0;
-  i<
-  topActive.length-1;
-  i++
- ){
-
-  if(
-   topActive[i+1]-
-   topActive[i]===1
-  ){
-
-   separator=
-    topActive[i];
-
-   break;
-
-  }
-
- }
-
-
- if(
-  separator!==null
- ){
-
-  const left=
-   mapCell(
-    separator
-   );
-
-  const right=
-   mapCell(
-    separator+1
-   );
-
-
-  const x=
-   (
-    left.x+
-    right.x
-   )/2;
-
-
-  const line=
-   document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "path"
-   );
-
-
-  line.setAttribute(
-   "d",
-   `M ${x} 54 L ${x} 150`
-  );
-
-
-  line.setAttribute(
-   "fill",
-   "none"
-  );
-
-
-  line.setAttribute(
-   "stroke",
-   "rgba(247,240,221,.82)"
-  );
-
-
-  line.setAttribute(
-   "stroke-width",
-   "1.35"
-  );
-
-
-  dynamicStructure.appendChild(
-   line
-  );
-
- }
-
-
- /*
-  A second geometric echo derived from the
-  overall visited footprint.
-
-  It does NOT outline cells.
- */
-
- const used=[];
-
-
- histories.forEach(
-
-  (set,i)=>{
-
-   if(
-    set.size
-   ){
-    used.push(
-     mapCell(i)
-    );
-   }
-
-  }
-
- );
-
-
- if(
-  used.length
- ){
-
-  const minX=
-   Math.min(
-    ...used.map(
-     p=>p.x
-    )
-   );
-
-  const maxX=
-   Math.max(
-    ...used.map(
-     p=>p.x
-    )
-   );
-
-  const minY=
-   Math.min(
-    ...used.map(
-     p=>p.y
-    )
-   );
-
-  const maxY=
-   Math.max(
-    ...used.map(
-     p=>p.y
-    )
-   );
-
-
-  const sweep=
-   document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "path"
-   );
-
-
-  sweep.setAttribute(
-   "d",
-
-   `
-    M ${Math.max(38,minX-54)}
-      ${Math.min(300,maxY+25)}
-
-    C ${minX+15}
-      ${maxY+48},
-
-      ${maxX-28}
-      ${minY+40},
-
-      ${Math.min(449,maxX+48)}
-      ${Math.min(280,maxY+3)}
-   `
-  );
-
-
-  sweep.setAttribute(
-   "fill",
-   "none"
-  );
-
-
-  sweep.setAttribute(
-   "stroke",
-   "rgba(247,240,221,.48)"
-  );
-
-
-  sweep.setAttribute(
-   "stroke-width",
-   "1.05"
-  );
-
-
-  dynamicStructure.appendChild(
-   sweep
-  );
-
- }
-
+function editPainting(next){
+if(JSON.stringify(next)===JSON.stringify(paintState))return;
+paintUndoStack.push({...paintState});
+if(paintUndoStack.length>50)paintUndoStack.shift();
+paintState={...next};
+refreshPainting();
+savePainting();
 }
 
-
-/* ==================================================
-   RETURN TO PLACE
-   ================================================== */
-
-function returnToPlace(){
-
- buildReturnedTerrain();
-
-
- final.style.opacity=
-  "0";
-
-
- game.classList.add(
-  "leaving"
- );
-
-
- setTimeout(
-
-  ()=>{
-
-   game.style.display=
-    "none";
-
-
-   returned.classList.add(
-    "show"
-   );
-
-
-   requestAnimationFrame(
-
-    ()=>requestAnimationFrame(
-
-     ()=>returned
-     .classList.add(
-      "awake"
-     )
-
-    )
-
-   );
-
-  },
-
-  1450
-
- );
-
-
- /*
-  FIRST:
-  the whole transformed zone rises.
- */
-
- setTimeout(
-
-  ()=>{
-
-   lowerFace.style.opacity=
-    "1";
-
-
-   personalTerrain
-   .classList.add(
-    "risen"
-   );
-
-
-   terrainSound();
-
-  },
-
-  2250
-
- );
-
-
- /*
-  THEN:
-  the Place reveals its landmark.
- */
-
- setTimeout(
-
-  ()=>{
-
-   tree.classList.add(
-    "on"
-   );
-
-
-   landmarkSound();
-
-  },
-
-  5250
-
- );
-
+function paintPart(id){
+if(!paintingReady||!paintByKey(selectedPaint))return;
+editPainting({...paintState,[id]:selectedPaint});
 }
 
+function initialisePainting(){
+if(paintingReady)return;
+const keys=new Set(solvedRoutes.map(r=>"c"+r.colour));
+histories.forEach((h,i)=>{
+const key=historyClass(i);
+if(key)keys.add(key);
+});
+earnedPaints=[...keys].sort().map(key=>{
+const ids=key.slice(1).split("").map(Number);
+return{
+key,
+name:ids.map(id=>paintBase[id].name).join(" + "),
+colours:ids.map(id=>paintBase[id].value)
+};
+});
+const defs=document.getElementById("paintDefs"),palette=document.getElementById("palette");
+defs.innerHTML="";
+palette.innerHTML="";
+for(const p of earnedPaints){
+if(p.colours.length===2){
+const g=document.createElementNS("http://www.w3.org/2000/svg","linearGradient");
+g.id="paint-"+p.key;
+g.setAttribute("x1","0%");
+g.setAttribute("y1","0%");
+g.setAttribute("x2","100%");
+g.setAttribute("y2","100%");
+p.colours.forEach((colour,i)=>{
+const s=document.createElementNS("http://www.w3.org/2000/svg","stop");
+s.setAttribute("offset",i?"100%":"0%");
+s.setAttribute("stop-color",colour);
+g.appendChild(s);
+});
+defs.appendChild(g);
+}
+const b=document.createElement("button");
+b.className="swatch";
+b.type="button";
+b.dataset.paint=p.key;
+b.title=p.name;
+b.setAttribute("aria-label",p.name+", unlimited");
+b.style.background=p.colours.length===1?p.colours[0]:"linear-gradient(135deg,"+p.colours.join(",")+")";
+b.onclick=()=>{selectedPaint=p.key;refreshPainting()};
+palette.appendChild(b);
+}
+selectedPaint=earnedPaints[0]?.key||null;
+try{
+const saved=JSON.parse(localStorage.getItem(paintingKey)||"null");
+if(saved&&saved.state&&typeof saved.state==="object"){
+for(const el of paintParts){
+const id=el.dataset.part;
+if(paintByKey(saved.state[id]))paintState[id]=saved.state[id];
+}
+}
+}catch(e){}
+paintingReady=true;
+refreshPainting();
+savePainting();
+document.getElementById("paintStatus").textContent="Six areas and four landmarks. Nothing else to complete.";
+}
 
-/* ==================================================
-   EVENTS
-   ================================================== */
+for(const el of paintParts){
+el.setAttribute("fill","#f6f2e7");
+el.onclick=()=>paintPart(el.dataset.part);
+el.onkeydown=e=>{
+if(e.key==="Enter"||e.key===" "){
+e.preventDefault();
+paintPart(el.dataset.part);
+}
+};
+}
 
-unlockBtn.onclick=
- unlock;
+document.getElementById("paintOpen").onclick=()=>{
+document.getElementById("painter").hidden=false;
+document.getElementById("paintInvitation").hidden=true;
+document.getElementById("paintSummary").textContent="";
+document.getElementById("painter").scrollIntoView({behavior:"smooth",block:"start"});
+};
 
-resetBtn.onclick=
- reset;
+function closePainting(){
+document.getElementById("painter").hidden=true;
+document.getElementById("paintInvitation").hidden=false;
+document.getElementById("paintSummary").textContent=Object.keys(paintState).length
+?"Your colours are saved. Enjoy the rest of your day."
+:"All done. Painting is there whenever you fancy it.";
+document.getElementById("paintOpen").textContent=Object.keys(paintState).length
+?"REVISIT YOUR TILE":"PAINT YOUR TILE · OPTIONAL";
+}
 
-hintBtn.onclick=
- doHint;
+document.getElementById("leaveTile").onclick=closePainting;
+document.getElementById("paintClose").onclick=closePainting;
 
-connectBtn.onclick=
- tryConnection;
+document.getElementById("fillTile").onclick=()=>{
+const next={};
+for(const el of paintParts)next[el.dataset.part]=selectedPaint;
+editPainting(next);
+};
 
-connectionHintBtn.onclick=
- connectionHintFn;
+document.getElementById("paintUndo").onclick=()=>{
+if(!paintUndoStack.length)return;
+paintState=paintUndoStack.pop();
+refreshPainting();
+savePainting();
+};
 
-revealBtn.onclick=
- revealConnection;
+document.getElementById("clearTile").onclick=()=>editPainting({});
 
+function restoreCompletedPuzzle(){
+try{
+const saved=JSON.parse(localStorage.getItem(paintingKey)||"null"),c=saved?.completed;
+if(!c||!Array.isArray(c.current)||c.current.length!==16||
+!c.current.every((n,i)=>Number.isInteger(n)&&n>=0&&n<P.wheels[i].length))return;
 
-connectionInput.onkeydown=
- e=>{
+if(!Array.isArray(c.histories)||c.histories.length!==16||
+!c.histories.every(h=>Array.isArray(h)&&h.every(n=>Number.isInteger(n)&&n>=1&&n<=4)))return;
 
-  if(
-   e.key==="Enter"
-  ){
-   tryConnection();
-  }
+if(!Array.isArray(c.solvedRoutes)||c.solvedRoutes.length!==4||
+!c.solvedRoutes.every((r,i)=>
+r.colour===P.clues[i].colour&&Array.isArray(r.route)&&
+r.route.length===P.clues[i].answer.length&&
+new Set(r.route).size===r.route.length&&
+r.route.every((p,n)=>
+Number.isInteger(p)&&p>=0&&p<16&&
+P.wheels[p].includes(P.clues[i].answer[n])&&
+(!n||neighbours[r.route[n-1]].includes(p))
+)))return;
 
- };
-
-
-/* START */
+current=[...c.current];
+histories=c.histories.map(h=>new Set(h));
+solvedRoutes=c.solvedRoutes;
+solved=P.clues.map(c=>c.answer);
+clueIndex=P.clues.length;
+entered=true;
+connectionFinishing=true;
+setBusy(true);
+entry.style.display="none";
+game.classList.add("visible");
+controls.style.display="none";
+clueArea.style.display="none";
+document.querySelector(".how-to").style.display="none";
+render();
+renderBank();
+showFinal();
+}catch(e){}
+}
 
 renderClue();
-
+restoreCompletedPuzzle();
 </script>
-
 </body>
 </html>
