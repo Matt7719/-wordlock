@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#e7ddc9">
-<title>WORDLOCK — Prototype #037</title>
+<title>WORDLOCK — Prototype #038</title>
 <style>
 :root{--ink:#292a26;--paper:#e8ddc6;--cream:rgba(249,246,236,.94);--sage:#abc1ae;--blue:#a8c5d0;--ochre:#d4b46f;--mauve:#bca6bd}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif}
 body{overflow-x:hidden}
 button,input{font:inherit}
+[hidden]{display:none!important}
 #place{position:relative;min-height:100vh;overflow:hidden}
 .wrap{position:relative;width:min(94vw,520px);margin:auto;padding:max(30px,env(safe-area-inset-top)) 0 60px}
 header{text-align:center;margin:23px 0 17px}
@@ -76,7 +77,8 @@ header{text-align:center;margin:23px 0 17px}
 .final-title{margin-top:9px;font:29px Georgia,serif}
 .final-copy{margin:10px auto;max-width:330px;font:15px/1.55 Georgia,serif;color:#50534c}
 .paint-invitation{margin:18px auto 0;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-.painter[hidden]{display:none}
+.paint-invitation .btn{padding:0 14px}
+.replay{margin:14px auto 0;padding:0 18px}
 .painter{margin:22px auto 0;padding:20px 12px;border-top:1px solid #b7b1a3;max-width:430px}
 .painter h2{font:24px Georgia,serif;text-align:center;margin:0 0 8px}
 .paint-help{text-align:center;font-size:13px;line-height:1.5;margin:8px auto;max-width:340px;color:#50534c}
@@ -86,11 +88,17 @@ header{text-align:center;margin:23px 0 17px}
 .swatch[aria-pressed=true]:after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#292a26;font-weight:800}
 .paint-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
 .paint-tools .btn{font-size:10px;padding:10px}
-.tile{display:block;width:min(100%,340px);height:auto;margin:18px auto;border:1px solid #b4ae9f;border-radius:5px;background:#f6f2e7}
-.paint-part{cursor:pointer;stroke:#b4ae9f;stroke-width:1.2;stroke-dasharray:3 5}
-.paint-part:focus{outline:none;stroke:#292a26;stroke-width:3;stroke-dasharray:none}
-.motif{stroke:#444940;stroke-width:1.6;stroke-linejoin:round;stroke-dasharray:none}
-.tile-lines{fill:none;stroke:#5f665d;stroke-width:1.25;opacity:.65;pointer-events:none}
+.tile{display:block;width:min(100%,340px);height:auto;margin:18px auto;border:1px solid #b4ae9f55;border-radius:8px;background:#f6f2e7;overflow:hidden}
+.paint-part{cursor:pointer;outline:none}
+.area-hit{fill:transparent;stroke:none;pointer-events:all}
+.paint-part .edge{fill:none;stroke:#716e612c;stroke-width:.65;pointer-events:none}
+.paint-part:focus-visible .edge{stroke:#56594f;stroke-width:1.6}
+.paint-layer{pointer-events:none}
+.landmark .edge{stroke:#60685c44;stroke-width:.7}
+.landmark .hit{fill:transparent;stroke:none;pointer-events:all}
+.tile-lines{fill:none;stroke:#62695d;stroke-width:.85;opacity:.38;pointer-events:none}
+.tile-detail{fill:none;stroke:#646c60;stroke-width:.65;opacity:.28;pointer-events:none}
+.landmark-lines{fill:none;stroke:#535f51;stroke-width:1;opacity:.48;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .paint-status{font-size:12px;text-align:center;min-height:32px;line-height:1.4;color:#50534c}
 .paint-done{display:block;margin:16px auto 0}
 @media(max-width:390px){.reel{height:70px}.current{font-size:29px}.alt{font-size:16px}}
@@ -104,7 +112,7 @@ header{text-align:center;margin:23px 0 17px}
 <div class="brand">WORDLOCK</div>
 <div class="where">Four clues. One connection.</div>
 <div class="terrain-note">Medium · Puzzle 037</div>
-<div class="version-badge">PROTOTYPE #037 · PUZZLE ONLY</div>
+<div class="version-badge">PROTOTYPE #038 · MEDIUM REPLAY</div>
 </header>
 
 <button type="button" class="entry" id="entry" aria-label="Play WORDLOCK">
@@ -122,7 +130,6 @@ header{text-align:center;margin:23px 0 17px}
 <div class="clue-label" id="clueLabel"></div>
 <div id="clue"></div>
 </section>
-
 <div class="board" id="board"></div>
 <div class="controls" id="controls">
 <button class="btn" id="resetBtn">RESET</button>
@@ -153,6 +160,7 @@ header{text-align:center;margin:23px 0 17px}
 <button class="btn" id="paintOpen">PAINT YOUR TILE · OPTIONAL</button>
 <button class="btn" id="leaveTile">DONE FOR TODAY</button>
 </div>
+<button class="btn replay" id="replayBtn">PLAY AGAIN</button>
 <p id="paintSummary" class="paint-help" role="status"></p>
 
 <section id="painter" class="painter" hidden aria-label="Optional tile painting">
@@ -166,33 +174,91 @@ header{text-align:center;margin:23px 0 17px}
 <button class="btn" id="clearTile">CLEAR TILE</button>
 </div>
 
-<svg class="tile" id="paintTile" viewBox="0 0 360 780" role="group" aria-label="Portrait tile with six paint areas and four paintable landmarks">
+<svg class="tile" id="paintTile" viewBox="0 0 360 780" role="group" aria-label="Portrait landscape with six paint areas and four paintable landmarks">
 <defs id="paintDefs"></defs>
-<path class="paint-part" data-part="a0" role="button" tabindex="0" aria-label="Paint upper left area" d="M0 0H190C155 80 210 175 170 260H0Z"/>
-<path class="paint-part" data-part="a1" role="button" tabindex="0" aria-label="Paint upper right area" d="M190 0H360V260H170C210 175 155 80 190 0Z"/>
-<path class="paint-part" data-part="a2" role="button" tabindex="0" aria-label="Paint middle left area" d="M0 260H170C125 355 205 410 190 520H0Z"/>
-<path class="paint-part" data-part="a3" role="button" tabindex="0" aria-label="Paint middle right area" d="M170 260H360V520H190C205 410 125 355 170 260Z"/>
-<path class="paint-part" data-part="a4" role="button" tabindex="0" aria-label="Paint lower left area" d="M0 520H190C230 610 150 665 180 780H0Z"/>
-<path class="paint-part" data-part="a5" role="button" tabindex="0" aria-label="Paint lower right area" d="M190 520H360V780H180C150 665 230 610 190 520Z"/>
+<g class="paint-part" data-part="a0" role="button" tabindex="0" aria-label="Paint the upper slopes">
+<g class="paint-layers"><path d="M0 0H240C208 76 221 155 185 238C125 254 68 216 0 202Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M0 0H240C208 76 221 155 185 238C125 254 68 216 0 202Z"/>
+<path class="area-hit" d="M0 0H240C208 76 221 155 185 238C125 254 68 216 0 202Z"/>
+</g>
+<g class="paint-part" data-part="a1" role="button" tabindex="0" aria-label="Paint the woodland">
+<g class="paint-layers"><path d="M240 0H360V273C295 286 244 222 185 238C221 155 208 76 240 0Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M240 0H360V273C295 286 244 222 185 238C221 155 208 76 240 0Z"/>
+<path class="area-hit" d="M240 0H360V273C295 286 244 222 185 238C221 155 208 76 240 0Z"/>
+</g>
+<g class="paint-part" data-part="a2" role="button" tabindex="0" aria-label="Paint the meadow">
+<g class="paint-layers"><path d="M0 202C68 216 125 254 185 238C148 314 192 408 160 490C97 516 56 430 0 442Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M0 202C68 216 125 254 185 238C148 314 192 408 160 490C97 516 56 430 0 442Z"/>
+<path class="area-hit" d="M0 202C68 216 125 254 185 238C148 314 192 408 160 490C97 516 56 430 0 442Z"/>
+</g>
+<g class="paint-part" data-part="a3" role="button" tabindex="0" aria-label="Paint the village slopes">
+<g class="paint-layers"><path d="M185 238C244 222 295 286 360 273V522C293 548 221 464 160 490C192 408 148 314 185 238Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M185 238C244 222 295 286 360 273V522C293 548 221 464 160 490C192 408 148 314 185 238Z"/>
+<path class="area-hit" d="M185 238C244 222 295 286 360 273V522C293 548 221 464 160 490C192 408 148 314 185 238Z"/>
+</g>
+<g class="paint-part" data-part="a4" role="button" tabindex="0" aria-label="Paint the water">
+<g class="paint-layers"><path d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z"/>
+<path class="area-hit" d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z"/>
+</g>
+<g class="paint-part" data-part="a5" role="button" tabindex="0" aria-label="Paint the lower fields">
+<g class="paint-layers"><path d="M160 490C221 464 293 548 360 522V780H200C236 665 126 580 160 490Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M160 490C221 464 293 548 360 522V780H200C236 665 126 580 160 490Z"/>
+<path class="area-hit" d="M160 490C221 464 293 548 360 522V780H200C236 665 126 580 160 490Z"/>
+</g>
+
+<defs>
+<clipPath id="waterClip"><path d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z"/></clipPath>
+<pattern id="fieldDots" width="17" height="19" patternUnits="userSpaceOnUse">
+<circle cx="5" cy="7" r=".85" fill="#62695d" opacity=".22"/>
+</pattern>
+<clipPath id="fieldClip"><path d="M236 567Q291 548 360 580V780H229Q247 674 236 567Z"/></clipPath>
+</defs>
+
 <g class="tile-lines">
-<path d="M-20 62Q75 22 156 72T390 38M-20 85Q75 45 156 95T390 61M-20 108Q75 68 156 118T390 84"/>
-<path d="M-20 316Q82 260 170 318T390 292M-20 339Q82 283 170 341T390 315"/>
-<path d="M0 582Q74 544 160 591T360 574M0 605Q74 567 160 614T360 597M0 628Q74 590 160 637T360 620M0 651Q74 613 160 660T360 643M0 674Q74 636 160 683T360 666M0 697Q74 659 160 706T360 689M0 720Q74 682 160 729T360 712"/>
-<path stroke-dasharray="1 10" stroke-linecap="round" d="M25 190H135M40 212H115M230 177H330M230 199H330M40 461H133M45 481H140"/>
+<path d="M-25 71C80 38 131 84 188 138S297 198 389 164M-24 109C61 81 130 112 173 162S283 238 382 203"/>
+<path d="M35 190C37 129 85 105 132 119C181 134 212 195 184 246C160 287 88 288 55 248C42 232 35 211 35 190Z" opacity=".6"/>
+<path d="M49 190C53 146 89 126 125 136C165 148 191 191 170 231C150 267 94 268 67 239C55 225 48 210 49 190Z" opacity=".38"/>
+<path d="M-28 302C55 277 104 290 152 334S266 416 391 373M-28 326C51 303 100 318 144 358S254 442 387 399"/>
+<path d="M-20 413C52 389 111 431 159 465S288 500 384 477" opacity=".55"/>
+<path d="M193 276C219 325 209 387 186 438S150 508 174 557S236 637 224 706" stroke-width="1.2" opacity=".55"/>
+<path d="M199 275C225 327 216 387 193 442S157 508 181 554S243 636 231 706" stroke-width=".65" opacity=".35"/>
+<path d="M-20 691C99 654 136 712 244 727S331 711 385 699"/>
 </g>
-<g class="paint-part motif" data-part="tree0" role="button" tabindex="0" aria-label="Paint left tree">
-<path d="M85 132L67 158H75L59 181H79V197H91V181H111L95 158H103Z"/>
+<g class="tile-detail" clip-path="url(#waterClip)">
+<path d="M-15 490C55 475 87 524 150 525M-15 510C48 494 98 544 161 544M-15 542C64 521 115 572 173 568M-15 576C72 553 117 596 178 595M-15 611C64 589 132 622 195 625M-15 646C86 623 138 656 207 659M-15 683C74 661 143 690 216 695M-15 724C75 703 143 731 213 731M-15 758C69 744 142 767 205 763"/>
 </g>
-<g class="paint-part motif" data-part="tree1" role="button" tabindex="0" aria-label="Paint right tree">
-<path d="M263 130L245 156H253L237 179H257V195H269V179H289L273 156H281Z"/>
+<rect x="219" y="550" width="141" height="230" fill="url(#fieldDots)" clip-path="url(#fieldClip)" pointer-events="none"/>
+<g class="tile-detail">
+<path d="M30 340l8 -5m8 9l8 -5m-24 19l8 -5m11 8l8 -5m-30 18l8 -5m13 7l8 -5M283 294l5 10m7 -15l5 10m7 -16l5 10m8 -14l5 10"/>
+<path d="M244 432l12 -4 6 12 -12 4Zm27 12l14 -5 5 12 -14 5Zm-31 15l12 -4 4 10 -12 4Z"/>
+<path d="M249 406Q232 451 265 475T312 484" stroke-dasharray="2 6"/>
 </g>
-<g class="paint-part motif" data-part="tower" role="button" tabindex="0" aria-label="Paint tower">
-<path d="M264 382V320H257V305H269V312H280V305H292V312H303V305H315V320H308V382Z"/>
-<path d="M279 382V360Q286 348 293 360V382" fill="none" pointer-events="none"/>
-<path d="M280 332H292V344H280Z" fill="none" pointer-events="none"/>
+
+<g class="paint-part landmark" data-part="tree0" role="button" tabindex="0" aria-label="Paint the woodland tree">
+<g class="paint-layers"><path d="M250 126C239 117 249 101 260 103C266 91 280 96 281 107C298 111 292 125 282 129C273 140 259 137 250 126Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M250 126C239 117 249 101 260 103C266 91 280 96 281 107C298 111 292 125 282 129C273 140 259 137 250 126Z"/>
+<rect class="hit" x="241" y="89" width="57" height="68"/>
 </g>
-<g class="paint-part motif" data-part="bridge" role="button" tabindex="0" aria-label="Paint bridge">
-<path d="M105 641V619H115V627H135V619H145V627H165V619H175V627H195V619H205V641H190V656H178V641H132V656H120V641Z"/>
+<g class="paint-part landmark" data-part="tree1" role="button" tabindex="0" aria-label="Paint the meadow tree">
+<g class="paint-layers"><path d="M68 350C57 340 67 327 77 329C81 315 96 320 96 331C110 336 104 351 94 353C85 362 74 359 68 350Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M68 350C57 340 67 327 77 329C81 315 96 320 96 331C110 336 104 351 94 353C85 362 74 359 68 350Z"/>
+<rect class="hit" x="54" y="310" width="59" height="69"/>
+</g>
+<g class="paint-part landmark" data-part="tower" role="button" tabindex="0" aria-label="Paint the small tower">
+<g class="paint-layers"><path d="M262 398V365L273 349L284 365V398Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M262 398V365L273 349L284 365V398Z"/>
+<rect class="hit" x="248" y="344" width="49" height="65"/>
+</g>
+<g class="paint-part landmark" data-part="bridge" role="button" tabindex="0" aria-label="Paint the bridge">
+<g class="paint-layers"><path d="M153 558Q173 544 193 558L196 565Q173 552 150 565Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M153 558Q173 544 193 558L196 565Q173 552 150 565Z"/>
+<rect class="hit" x="146" y="535" width="54" height="45"/>
+</g>
+<g class="landmark-lines">
+<path d="M269 153V107M269 128l-15 -14m15 7l13 -13m-13 29l-12 -11m12 4l15 -13M84 375V329m0 22l-15 -13m15 4l12 -12m-12 30l13 -12"/>
+<path d="M260 398h26m-18 -21v-6h4v6m5 -7v7m-7 20v-10q3 -5 6 0v10m-3 -43v-8m-4 5h8"/>
+<path d="M152 557l-2 -5m9 1l-1 -5m29 5l1 -5m5 9l2 -5m-41 15q19 -12 38 0m-35 -1v5m32 -5v5"/>
 </g>
 </svg>
 
@@ -598,9 +664,16 @@ const paintBase={
 3:{name:"Ochre",value:"#d4b46f"},
 4:{name:"Mauve",value:"#bca6bd"}
 };
-const paintingKey="wordlock-037-paint-v1";
-let earnedPaints=[],selectedPaint=null,paintState={},paintUndoStack=[],paintingReady=false;
+const paintingKey="wordlock-038-v1";
 const paintParts=[...document.querySelectorAll("[data-part]")];
+const earnedKeys=new Set();
+const fadeTimers=new Map();
+let earnedPaints=[],selectedPaint=null,paintState={},paintUndoStack=[];
+let paintingReady=false,puzzleComplete=false;
+
+function validPaint(key){
+return typeof key==="string"&&/^(c[1-4]|m12|m13|m14|m23|m24|m34)$/.test(key);
+}
 
 function paintByKey(key){return earnedPaints.find(p=>p.key===key)}
 
@@ -609,8 +682,39 @@ const p=paintByKey(key);
 return p?(p.colours.length===1?p.colours[0]:"url(#paint-"+p.key+")"):"#f6f2e7";
 }
 
-function refreshPainting(){
-for(const el of paintParts)el.setAttribute("fill",paintFill(paintState[el.dataset.part]));
+function reducedMotion(){
+return !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+}
+
+function renderPaint(el,key,animate){
+const wanted=key||"";
+if(el.dataset.shown===wanted)return;
+el.dataset.shown=wanted;
+const layers=el.querySelector(".paint-layers");
+const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+path.setAttribute("d",layers.firstElementChild.getAttribute("d"));
+path.setAttribute("fill",paintFill(key));
+path.classList.add("paint-layer");
+clearTimeout(fadeTimers.get(el));
+if(!animate||reducedMotion()){
+layers.replaceChildren(path);
+fadeTimers.delete(el);
+return;
+}
+path.style.opacity="0";
+path.style.transition="opacity 1.05s ease-in-out";
+layers.appendChild(path);
+window.getComputedStyle(path).opacity;
+path.style.opacity="1";
+fadeTimers.set(el,setTimeout(()=>{
+path.style.transition="none";
+layers.replaceChildren(path);
+fadeTimers.delete(el);
+},1100));
+}
+
+function refreshPainting(animate=false){
+for(const el of paintParts)renderPaint(el,paintState[el.dataset.part],animate);
 for(const b of document.querySelectorAll(".swatch")){
 b.setAttribute("aria-pressed",String(b.dataset.paint===selectedPaint));
 }
@@ -621,22 +725,24 @@ document.getElementById("paintUndo").disabled=paintUndoStack.length===0;
 
 function savePainting(){
 try{
+const completed=puzzleComplete?{current,histories:histories.map(h=>[...h]),solvedRoutes}:null;
 localStorage.setItem(paintingKey,JSON.stringify({
-state:paintState,
-completed:{current,histories:histories.map(h=>[...h]),solvedRoutes}
+state:paintState,earned:[...earnedKeys],completed
 }));
 document.getElementById("paintStatus").textContent="Saved on this device. Leave whenever you like.";
+return true;
 }catch(e){
 document.getElementById("paintStatus").textContent="Painting works, but this browser could not save it. Keep this page open to retain it.";
+return false;
 }
 }
 
 function editPainting(next){
-if(JSON.stringify(next)===JSON.stringify(paintState))return;
+if(!paintingReady||JSON.stringify(next)===JSON.stringify(paintState))return;
 paintUndoStack.push({...paintState});
 if(paintUndoStack.length>50)paintUndoStack.shift();
 paintState={...next};
-refreshPainting();
+refreshPainting(true);
 savePainting();
 }
 
@@ -645,14 +751,8 @@ if(!paintingReady||!paintByKey(selectedPaint))return;
 editPainting({...paintState,[id]:selectedPaint});
 }
 
-function initialisePainting(){
-if(paintingReady)return;
-const keys=new Set(solvedRoutes.map(r=>"c"+r.colour));
-histories.forEach((h,i)=>{
-const key=historyClass(i);
-if(key)keys.add(key);
-});
-earnedPaints=[...keys].sort().map(key=>{
+function buildPalette(){
+earnedPaints=[...earnedKeys].sort().map(key=>{
 const ids=key.slice(1).split("").map(Number);
 return{
 key,
@@ -660,11 +760,11 @@ name:ids.map(id=>paintBase[id].name).join(" + "),
 colours:ids.map(id=>paintBase[id].value)
 };
 });
-const defs=document.getElementById("paintDefs"),palette=document.getElementById("palette");
-defs.innerHTML="";
-palette.innerHTML="";
+const defs=document.getElementById("paintDefs");
+const palette=document.getElementById("palette");
+palette.replaceChildren();
 for(const p of earnedPaints){
-if(p.colours.length===2){
+if(p.colours.length===2&&!document.getElementById("paint-"+p.key)){
 const g=document.createElementNS("http://www.w3.org/2000/svg","linearGradient");
 g.id="paint-"+p.key;
 g.setAttribute("x1","0%");
@@ -689,24 +789,25 @@ b.style.background=p.colours.length===1?p.colours[0]:"linear-gradient(135deg,"+p
 b.onclick=()=>{selectedPaint=p.key;refreshPainting()};
 palette.appendChild(b);
 }
-selectedPaint=earnedPaints[0]?.key||null;
-try{
-const saved=JSON.parse(localStorage.getItem(paintingKey)||"null");
-if(saved&&saved.state&&typeof saved.state==="object"){
-for(const el of paintParts){
-const id=el.dataset.part;
-if(paintByKey(saved.state[id]))paintState[id]=saved.state[id];
+if(!paintByKey(selectedPaint))selectedPaint=earnedPaints[0]?.key||null;
 }
-}
-}catch(e){}
+
+function initialisePainting(){
+puzzleComplete=true;
+solvedRoutes.forEach(r=>earnedKeys.add("c"+r.colour));
+histories.forEach((h,i)=>{
+const key=historyClass(i);
+if(key)earnedKeys.add(key);
+});
+buildPalette();
 paintingReady=true;
 refreshPainting();
 savePainting();
-document.getElementById("paintStatus").textContent="Six areas and four landmarks. Nothing else to complete.";
+document.getElementById("paintOpen").textContent=Object.keys(paintState).length
+?"REVISIT YOUR TILE":"PAINT YOUR TILE · OPTIONAL";
 }
 
 for(const el of paintParts){
-el.setAttribute("fill","#f6f2e7");
 el.onclick=()=>paintPart(el.dataset.part);
 el.onkeydown=e=>{
 if(e.key==="Enter"||e.key===" "){
@@ -719,15 +820,19 @@ paintPart(el.dataset.part);
 document.getElementById("paintOpen").onclick=()=>{
 document.getElementById("painter").hidden=false;
 document.getElementById("paintInvitation").hidden=true;
+document.getElementById("replayBtn").hidden=true;
 document.getElementById("paintSummary").textContent="";
-document.getElementById("painter").scrollIntoView({behavior:"smooth",block:"start"});
+document.getElementById("painter").scrollIntoView({
+behavior:reducedMotion()?"auto":"smooth",block:"start"
+});
 };
 
 function closePainting(){
 document.getElementById("painter").hidden=true;
 document.getElementById("paintInvitation").hidden=false;
+document.getElementById("replayBtn").hidden=false;
 document.getElementById("paintSummary").textContent=Object.keys(paintState).length
-?"Your colours are saved. Enjoy the rest of your day."
+?"Your tile is here whenever you want to revisit it."
 :"All done. Painting is there whenever you fancy it.";
 document.getElementById("paintOpen").textContent=Object.keys(paintState).length
 ?"REVISIT YOUR TILE":"PAINT YOUR TILE · OPTIONAL";
@@ -737,40 +842,114 @@ document.getElementById("leaveTile").onclick=closePainting;
 document.getElementById("paintClose").onclick=closePainting;
 
 document.getElementById("fillTile").onclick=()=>{
+if(!paintByKey(selectedPaint))return;
 const next={};
 for(const el of paintParts)next[el.dataset.part]=selectedPaint;
 editPainting(next);
 };
 
 document.getElementById("paintUndo").onclick=()=>{
-if(!paintUndoStack.length)return;
+if(!paintingReady||!paintUndoStack.length)return;
 paintState=paintUndoStack.pop();
-refreshPainting();
+refreshPainting(true);
 savePainting();
 };
 
 document.getElementById("clearTile").onclick=()=>editPainting({});
 
-function restoreCompletedPuzzle(){
-try{
-const saved=JSON.parse(localStorage.getItem(paintingKey)||"null"),c=saved?.completed;
+function replayPuzzle(){
+if(!puzzleComplete)return;
+puzzleComplete=false;
+paintingReady=false;
+current=[...P.initial];
+clueStart=[...P.initial];
+clueIndex=0;
+solved=[];
+solvedRoutes=[];
+touched=[];
+histories=Array.from({length:16},()=>new Set());
+remembered=Array.from({length:16},()=>new Set());
+hintRoute=null;
+hintStep=0;
+revealedHintPositions.clear();
+connectionHintNo=0;
+connectionFinishing=false;
+document.querySelectorAll(".dot").forEach(d=>d.className="dot");
+connection.classList.remove("show");
+connection.style.display="";
+connectionInput.value="";
+connectionInput.disabled=false;
+[connectBtn,connectionHintBtn,revealBtn].forEach(b=>b.disabled=false);
+connectionHint.textContent="";
+connectionLength.textContent="";
+final.classList.remove("show");
+controls.style.display="";
+clueArea.style.display="";
+document.querySelector(".how-to").style.display="";
+document.getElementById("painter").hidden=true;
+document.getElementById("paintInvitation").hidden=false;
+document.getElementById("replayBtn").hidden=false;
+document.getElementById("paintSummary").textContent="";
+renderBank();
+renderClue();
+savePainting();
+document.querySelector("header").scrollIntoView({
+behavior:reducedMotion()?"auto":"smooth",block:"start"
+});
+}
+
+document.getElementById("replayBtn").onclick=replayPuzzle;
+
+function validCompleted(c){
 if(!c||!Array.isArray(c.current)||c.current.length!==16||
-!c.current.every((n,i)=>Number.isInteger(n)&&n>=0&&n<P.wheels[i].length))return;
+!c.current.every((n,i)=>Number.isInteger(n)&&n>=0&&n<P.wheels[i].length))return false;
 
 if(!Array.isArray(c.histories)||c.histories.length!==16||
-!c.histories.every(h=>Array.isArray(h)&&h.every(n=>Number.isInteger(n)&&n>=1&&n<=4)))return;
+!c.histories.every(h=>Array.isArray(h)&&h.every(n=>Number.isInteger(n)&&n>=1&&n<=4)))return false;
 
 if(!Array.isArray(c.solvedRoutes)||c.solvedRoutes.length!==4||
 !c.solvedRoutes.every((r,i)=>
-r.colour===P.clues[i].colour&&Array.isArray(r.route)&&
+r&&r.colour===P.clues[i].colour&&Array.isArray(r.route)&&
 r.route.length===P.clues[i].answer.length&&
 new Set(r.route).size===r.route.length&&
 r.route.every((p,n)=>
 Number.isInteger(p)&&p>=0&&p<16&&
 P.wheels[p].includes(P.clues[i].answer[n])&&
 (!n||neighbours[r.route[n-1]].includes(p))
-)))return;
+)))return false;
 
+const expected=Array.from({length:16},()=>new Set());
+c.solvedRoutes.forEach(r=>r.route.forEach(p=>expected[p].add(r.colour)));
+return expected.every((h,i)=>
+[...h].sort().join()===[...new Set(c.histories[i])].sort().join());
+}
+
+function restoreSaved(){
+let saved;
+try{
+saved=JSON.parse(localStorage.getItem(paintingKey)||"null");
+}catch(e){return}
+if(!saved||typeof saved!=="object")return;
+if(Array.isArray(saved.earned)){
+saved.earned.filter(validPaint).forEach(k=>earnedKeys.add(k));
+}
+const c=saved.completed;
+if(validCompleted(c)){
+c.solvedRoutes.forEach(r=>earnedKeys.add("c"+r.colour));
+c.histories.forEach(h=>{
+const a=[...new Set(h)].sort();
+if(a.length)earnedKeys.add(a.length===1?"c"+a[0]:"m"+a[0]+a[a.length-1]);
+});
+}
+buildPalette();
+if(saved.state&&typeof saved.state==="object"&&!Array.isArray(saved.state)){
+for(const el of paintParts){
+const id=el.dataset.part;
+if(earnedKeys.has(saved.state[id]))paintState[id]=saved.state[id];
+}
+}
+refreshPainting();
+if(!validCompleted(c))return;
 current=[...c.current];
 histories=c.histories.map(h=>new Set(h));
 solvedRoutes=c.solvedRoutes;
@@ -779,19 +958,21 @@ clueIndex=P.clues.length;
 entered=true;
 connectionFinishing=true;
 setBusy(true);
+c.solvedRoutes.forEach((r,i)=>{
+r.route.forEach((p,n)=>remembered[p].add(P.clues[i].answer[n]));
+});
+document.querySelectorAll(".dot").forEach((d,i)=>d.classList.add("d"+(i+1)));
 entry.style.display="none";
 game.classList.add("visible");
 controls.style.display="none";
 clueArea.style.display="none";
-document.querySelector(".how-to").style.display="none";
 render();
 renderBank();
 showFinal();
-}catch(e){}
 }
 
 renderClue();
-restoreCompletedPuzzle();
+restoreSaved();
 </script>
 </body>
 </html>
