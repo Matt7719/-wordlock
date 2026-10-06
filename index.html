@@ -2,107 +2,136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=yes">
 <meta name="theme-color" content="#e7ddc9">
-<title>WORDLOCK — Prototype #038</title>
+<title>WORDLOCK — Prototype #039</title>
 <style>
-:root{--ink:#292a26;--paper:#e8ddc6;--cream:rgba(249,246,236,.94);--sage:#abc1ae;--blue:#a8c5d0;--ochre:#d4b46f;--mauve:#bca6bd}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif}
-body{overflow-x:hidden}
-button,input{font:inherit}
-[hidden]{display:none!important}
-#place{position:relative;min-height:100vh;overflow:hidden}
-.wrap{position:relative;width:min(94vw,520px);margin:auto;padding:max(30px,env(safe-area-inset-top)) 0 60px}
-header{text-align:center;margin:23px 0 17px}
-.brand{font-size:14px;font-weight:850;letter-spacing:.37em}
-.where{margin-top:15px;font:11px Georgia,serif;letter-spacing:.22em;text-transform:uppercase}
-.terrain-note{margin-top:6px;font:15px Georgia,serif;color:#5d5d54}
-.version-badge{display:inline-block;margin-top:12px;padding:5px 10px;border:1px solid #48484244;border-radius:999px;background:#f6f1e28c;font-size:8px;font-weight:850;letter-spacing:.22em;color:#5d6059}
-.entry{width:100%;border:0;background:transparent;color:inherit;cursor:pointer;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px;transition:opacity 1.35s,transform 1.55s,filter 1.45s}
-.entry-title{font:23px Georgia,serif}
-.entry-copy{margin-top:11px;font:italic 13px Georgia,serif;color:#666}
-.entry.entering{opacity:0;transform:scale(1.025);filter:blur(3px);pointer-events:none}
-.game{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.985);pointer-events:none;transition:opacity 2.05s,filter 2.3s,transform 2.3s}
-.game.visible{opacity:1;filter:none;transform:none;pointer-events:auto}
-.how-to{max-width:420px;margin:4px auto 14px;text-align:center;font-size:12px;line-height:1.5;color:#5d6059}
-.clue-area{text-align:center;min-height:110px;padding:10px}
-.progress{display:flex;justify-content:center;gap:10px;margin-bottom:14px}
-.dot{width:8px;height:8px;border-radius:50%;border:1px solid #777;background:#f8f5eb}
-.dot.d1{background:var(--sage);border:0}
-.dot.d2{background:var(--blue);border:0}
-.dot.d3{background:var(--ochre);border:0}
-.dot.d4{background:var(--mauve);border:0}
-.clue-label{font-size:9px;font-weight:800;letter-spacing:.26em;color:#60635d}
-#clue{margin:8px auto;font:22px/1.3 Georgia,serif}
-.board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;padding:10px 9px 6px}
-.reel{position:relative;height:76px;border:1px solid #3d403a3b;border-radius:17px;background:var(--cream);overflow:hidden;box-shadow:0 5px 13px #34312a1c,inset 0 1px #ffffffcc;user-select:none;touch-action:pan-y;transition:background .65s,transform .35s,box-shadow .35s}
-.strip{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1.28fr 1fr;align-items:center;text-align:center}
-.alt{font-size:17px;color:#898c86}
-.alt.remembered{color:#272925;font-weight:900}
-.current{font-size:31px;font-weight:850}
-.reel.c1,.pill.c1{background:var(--sage)}
-.reel.c2,.pill.c2{background:var(--blue)}
-.reel.c3,.pill.c3{background:var(--ochre)}
-.reel.c4,.pill.c4{background:var(--mauve)}
-.reel.m12{background:linear-gradient(135deg,var(--sage),var(--blue))}
-.reel.m13{background:linear-gradient(135deg,var(--sage),var(--ochre))}
-.reel.m14{background:linear-gradient(135deg,var(--sage),var(--mauve))}
-.reel.m23{background:linear-gradient(135deg,var(--blue),var(--ochre))}
-.reel.m24{background:linear-gradient(135deg,var(--blue),var(--mauve))}
-.reel.m34{background:linear-gradient(135deg,var(--ochre),var(--mauve))}
-.reel.pulse{animation:pulse 1.35s ease-in-out infinite;z-index:4}
-@keyframes pulse{50%{transform:scale(1.08);border-color:#697366;box-shadow:0 0 0 5px #f8f4e0d1,0 0 25px #4f634b66}}
-.reel.hint-known:after{content:"";position:absolute;inset:5px;border:1.5px solid #3e4c3b8c;border-radius:13px;pointer-events:none}
-.reel.confirm{transform:scale(1.045);box-shadow:0 0 0 3px #ffffff66,0 8px 18px #00000021}
-.controls{display:grid;grid-template-columns:1fr 1.65fr 1fr;gap:9px;padding:0 9px;margin-top:16px}
-.btn{min-height:49px;border:1px solid #34363266;border-radius:16px;background:#f7f3e8e0;font-size:10px;font-weight:800;letter-spacing:.14em}
-.btn:disabled{opacity:.5;cursor:default}
-.entry:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
-.primary{background:#30322e;color:#f8f5eb;border-color:#30322e}
-#message{min-height:42px;padding:10px 14px 0;text-align:center;font:italic 14px Georgia,serif;color:#55584f}
-.bank{min-height:38px;display:flex;justify-content:center;flex-wrap:wrap;gap:7px}
-.pill{padding:7px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.08em}
-.connection{display:none;text-align:center;margin:28px 10px 0;padding:25px 12px;border-top:1px solid #aaa}
-.connection.show{display:block}
-.connection-title,.final-kicker{font-size:9px;font-weight:800;letter-spacing:.27em}
-.connection-copy{margin:8px;font:20px Georgia,serif}
-.connection-length{margin:15px;font-size:20px;font-weight:800;letter-spacing:.32em}
-.connection-input{width:250px;max-width:80%;border:0;border-bottom:1px solid #696b63;background:transparent;text-align:center;text-transform:uppercase;outline:none;font-size:23px;font-weight:800;letter-spacing:.14em}
-.connection-actions{display:flex;justify-content:center;gap:8px;margin-top:14px}
-.connection-actions .btn{padding:0 15px}
-#connectionHint{min-height:45px;margin:13px auto;font:italic 14px Georgia,serif}
-.final{display:none;text-align:center;padding:35px 10px 70px}
-.final.show{display:block}
-.final-title{margin-top:9px;font:29px Georgia,serif}
-.final-copy{margin:10px auto;max-width:330px;font:15px/1.55 Georgia,serif;color:#50534c}
-.paint-invitation{margin:18px auto 0;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-.paint-invitation .btn{padding:0 14px}
-.replay{margin:14px auto 0;padding:0 18px}
-.painter{margin:22px auto 0;padding:20px 12px;border-top:1px solid #b7b1a3;max-width:430px}
-.painter h2{font:24px Georgia,serif;text-align:center;margin:0 0 8px}
-.paint-help{text-align:center;font-size:13px;line-height:1.5;margin:8px auto;max-width:340px;color:#50534c}
-.palette{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0 8px}
-.swatch{width:42px;height:42px;border:2px solid #faf7ed;border-radius:50%;box-shadow:0 0 0 1px #8b8b80;cursor:pointer;position:relative}
-.swatch[aria-pressed=true]{box-shadow:0 0 0 3px #292a26}
-.swatch[aria-pressed=true]:after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#292a26;font-weight:800}
-.paint-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
-.paint-tools .btn{font-size:10px;padding:10px}
-.tile{display:block;width:min(100%,340px);height:auto;margin:18px auto;border:1px solid #b4ae9f55;border-radius:8px;background:#f6f2e7;overflow:hidden}
-.paint-part{cursor:pointer;outline:none}
-.area-hit{fill:transparent;stroke:none;pointer-events:all}
-.paint-part .edge{fill:none;stroke:#716e612c;stroke-width:.65;pointer-events:none}
-.paint-part:focus-visible .edge{stroke:#56594f;stroke-width:1.6}
-.paint-layer{pointer-events:none}
-.landmark .edge{stroke:#60685c44;stroke-width:.7}
-.landmark .hit{fill:transparent;stroke:none;pointer-events:all}
-.tile-lines{fill:none;stroke:#62695d;stroke-width:.85;opacity:.38;pointer-events:none}
-.tile-detail{fill:none;stroke:#646c60;stroke-width:.65;opacity:.28;pointer-events:none}
-.landmark-lines{fill:none;stroke:#535f51;stroke-width:1;opacity:.48;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
-.paint-status{font-size:12px;text-align:center;min-height:32px;line-height:1.4;color:#50534c}
-.paint-done{display:block;margin:16px auto 0}
-@media(max-width:390px){.reel{height:70px}.current{font-size:29px}.alt{font-size:16px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+:root{--ink:#292a26;--paper:#e8ddc6;--cream:rgba(249,246,236,.94);--sage:#abc1ae;--blue:#a8c5d0;--ochre:#d4b46f;--mauve:#bca6bd;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Avenir Next","Segoe UI",sans-serif;}
+body{overflow-x:hidden;}
+button,input{font:inherit;}
+#place{position:relative;min-height:100vh;overflow:hidden;background:var(--paper);}
+.how-to{max-width:420px;margin:4px auto 14px;text-align:center;font-size:12px;line-height:1.5;color:#5d6059;}
+.btn:disabled{opacity:.5;cursor:default;}
+.entry:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:4px;}
+.wrap{position:relative;z-index:2;width:min(94vw,520px);margin:auto;padding:max(30px,env(safe-area-inset-top)) 0 60px;}
+header{text-align:center;margin:23px 0 17px;}
+.brand{font-size:14px;font-weight:850;letter-spacing:.37em;}
+.where{margin-top:15px;font-family:Georgia,serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;}
+.terrain-note{margin-top:6px;font-family:Georgia,serif;font-size:15px;color:#5d5d54;}
+.version-badge{display:inline-block;margin-top:12px;padding:5px 10px;border:1px solid rgba(69,72,66,.26);border-radius:999px;background:rgba(246,241,226,.55);font-size:8px;font-weight:850;letter-spacing:.22em;color:#5d6059;}
+.entry{width:100%;border:0;background:transparent;color:inherit;cursor:pointer;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-bottom:40px;transition:opacity 1.35s,transform 1.55s,filter 1.45s;}
+.entry-title{font-family:Georgia,serif;font-size:23px;}
+.entry-copy{margin-top:11px;font-family:Georgia,serif;font-size:13px;font-style:italic;color:#666;}
+.entry.entering{opacity:0;transform:scale(1.025);filter:blur(3px);pointer-events:none;}
+.game{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.985);pointer-events:none;transition:opacity 2.05s,filter 2.3s,transform 2.3s;}
+.game.visible{opacity:1;filter:none;transform:none;pointer-events:auto;}
+.game.leaving{opacity:0;filter:blur(10px);transform:scale(.985);pointer-events:none;}
+.clue-area{text-align:center;min-height:110px;padding:10px;}
+.progress{display:flex;justify-content:center;gap:10px;margin-bottom:14px;}
+.dot{width:8px;height:8px;border-radius:50%;border:1px solid #777;background:#f8f5eb;}
+.dot.d1{background:var(--sage);border:0;}
+.dot.d2{background:var(--blue);border:0;}
+.dot.d3{background:var(--ochre);border:0;}
+.dot.d4{background:var(--mauve);border:0;}
+.clue-label{font-size:9px;font-weight:800;letter-spacing:.26em;color:#60635d;}
+#clue{margin:8px auto;font-family:Georgia,serif;font-size:22px;line-height:1.3;}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;padding:10px 9px 6px;}
+.reel{position:relative;height:76px;border:1px solid rgba(61,64,58,.23);border-radius:17px;background:var(--cream);overflow:hidden;box-shadow:0 5px 13px rgba(52,49,42,.11),inset 0 1px rgba(255,255,255,.8);user-select:none;touch-action:pan-y;transition:background .65s,transform .35s,box-shadow .35s;}
+.strip{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1.28fr 1fr;align-items:center;text-align:center;}
+.alt{font-size:17px;color:#898c86;}
+.alt.remembered{color:#272925;font-weight:900;}
+.current{font-size:31px;font-weight:850;}
+.reel.c1{background:var(--sage);}
+.reel.c2{background:var(--blue);}
+.reel.c3{background:var(--ochre);}
+.reel.c4{background:var(--mauve);}
+.reel.m12{background:linear-gradient(135deg,var(--sage),var(--blue));}
+.reel.m13{background:linear-gradient(135deg,var(--sage),var(--ochre));}
+.reel.m14{background:linear-gradient(135deg,var(--sage),var(--mauve));}
+.reel.m23{background:linear-gradient(135deg,var(--blue),var(--ochre));}
+.reel.m24{background:linear-gradient(135deg,var(--blue),var(--mauve));}
+.reel.m34{background:linear-gradient(135deg,var(--ochre),var(--mauve));}
+.reel.pulse{animation:pulse 1.35s ease-in-out infinite;z-index:4;}
+@keyframes pulse{50%{transform:scale(1.08);border-color:#697366;box-shadow:0 0 0 5px rgba(248,244,224,.82),0 0 25px rgba(79,99,75,.4);}}
+.reel.hint-known:after{content:"";position:absolute;inset:5px;border:1.5px solid rgba(62,76,59,.55);border-radius:13px;pointer-events:none;}
+.reel.confirm{transform:scale(1.045);box-shadow:0 0 0 3px rgba(255,255,255,.4),0 8px 18px rgba(0,0,0,.13);}
+.controls{display:grid;grid-template-columns:1fr 1.65fr 1fr;gap:9px;padding:0 9px;margin-top:16px;}
+.btn{min-height:49px;border:1px solid rgba(52,54,50,.4);border-radius:16px;background:rgba(247,243,232,.88);font-size:10px;font-weight:800;letter-spacing:.14em;}
+.primary{background:#30322e;color:#f8f5eb;border-color:#30322e;}
+#message{min-height:42px;padding:10px 14px 0;text-align:center;font-family:Georgia,serif;font-style:italic;font-size:14px;color:#55584f;}
+.bank{min-height:38px;display:flex;justify-content:center;flex-wrap:wrap;gap:7px;}
+.pill{padding:7px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.08em;}
+.pill.c1{background:var(--sage);}
+.pill.c2{background:var(--blue);}
+.pill.c3{background:var(--ochre);}
+.pill.c4{background:var(--mauve);}
+.connection{display:none;text-align:center;margin:28px 10px 0;padding:25px 12px;border-top:1px solid #aaa;}
+.connection.show{display:block;}
+.connection-title{font-size:9px;font-weight:800;letter-spacing:.27em;}
+.connection-copy{margin:8px;font-family:Georgia,serif;font-size:20px;}
+.connection-length{margin:15px;font-size:20px;font-weight:800;letter-spacing:.32em;}
+.connection-input{width:250px;max-width:80%;border:0;border-bottom:1px solid #696b63;background:transparent;text-align:center;text-transform:uppercase;outline:none;font-size:23px;font-weight:800;letter-spacing:.14em;}
+.connection-actions{display:flex;justify-content:center;gap:8px;margin-top:14px;}
+.connection-actions .btn{padding:0 15px;}
+#connectionHint{min-height:45px;margin:13px auto;font-family:Georgia,serif;font-style:italic;font-size:14px;}
+.final{display:none;text-align:center;padding:35px 10px 70px;}
+.final.show{display:block;}
+.final-kicker{font-size:9px;font-weight:800;letter-spacing:.27em;}
+.final-title{margin-top:9px;font-family:Georgia,serif;font-size:29px;}
+.final-copy{margin:10px auto;max-width:330px;font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#50534c;}
+@media(max-width:390px){.reel{height:70px;}.current{font-size:29px;}.alt{font-size:16px;}}
+.paint-invitation{margin:18px auto 0;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.painter[hidden]{display:none;}
+.painter{margin:22px auto 0;padding:20px 12px;border-top:1px solid #b7b1a3;max-width:430px;}
+.painter h2{font:24px Georgia,serif;text-align:center;margin:0 0 8px;}
+.paint-help{text-align:center;font-size:13px;line-height:1.5;margin:8px auto;max-width:340px;color:#50534c;}
+.palette{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0 8px;}
+.swatch{width:42px;height:42px;border:2px solid #faf7ed;border-radius:50%;box-shadow:0 0 0 1px #8b8b80;cursor:pointer;position:relative;}
+.swatch[aria-pressed=true]{box-shadow:0 0 0 3px #292a26;}
+.swatch[aria-pressed=true]:after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:#292a26;font-weight:800;}
+.paint-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0;}
+.paint-tools .btn{font-size:10px;padding:10px;}
+.tile{display:block;width:min(100%,340px);height:auto;margin:18px auto;border:1px solid #b4ae9f55;border-radius:8px;background:#f6f2e7;overflow:hidden;}
+.paint-part{cursor:pointer;outline:none;}
+[hidden]{display:none!important;}
+.area-hit{fill:transparent;stroke:none;pointer-events:all;}
+.paint-part .edge{fill:none;stroke:#716e612c;stroke-width:.65;pointer-events:none;}
+.paint-part:focus-visible .edge{stroke:#56594f;stroke-width:1.6;}
+.paint-layer{pointer-events:none;}
+.landmark .edge{stroke:#60685c44;stroke-width:.7;}
+.landmark .hit{fill:transparent;stroke:none;pointer-events:all;}
+.tile-lines{fill:none;stroke:#62695d;stroke-width:.85;opacity:.38;pointer-events:none;}
+.tile-detail{fill:none;stroke:#646c60;stroke-width:.65;opacity:.28;pointer-events:none;}
+.landmark-lines{fill:none;stroke:#535f51;stroke-width:1;opacity:.48;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+.paint-status{font-size:12px;text-align:center;min-height:32px;line-height:1.4;color:#50534c;}
+.paint-done{display:block;margin:16px auto 0;}
+.replay{margin:14px auto 0;padding:0 18px;}
+.paint-invitation .btn{padding:0 14px;}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;}}
+.difficulty-options{display:flex;justify-content:center;gap:12px;margin:24px 0;flex-wrap:wrap}
+.difficulty{min-width:95px;min-height:65px;padding:12px 10px;border:1px solid #72746755;border-radius:16px;background:#f8f4e780;color:var(--ink);font-size:11px;font-weight:800;letter-spacing:.16em;cursor:pointer}
+.level-status{display:block;min-height:15px;margin-top:7px;font-size:9px;font-weight:400;letter-spacing:.05em;color:#686c60}
+.save-note{font-size:12px;line-height:1.5;max-width:320px;color:#62665c;margin:14px auto}
+.game-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 9px 12px;font-size:10px;color:#62665c}
+.quiet-btn{border:0;background:transparent;min-height:44px;color:#5b6254;font-size:9px;font-weight:800;letter-spacing:.12em;cursor:pointer}
+.quiet-btn:disabled{opacity:.4}
+.difficulty:focus-visible,.quiet-btn:focus-visible,.swatch:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.paint-modes,.motif-palette,.atmosphere-palette{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:14px 0}
+.paint-modes .btn{padding:0 12px}
+.paint-modes [aria-pressed=true]{border-color:#414b3c;background:#dce0d4}
+.choice{width:54px;min-height:66px;border:1px solid #9a9d8c77;border-radius:22px;background:#f6f2e7;color:#555f4e;font-size:9px;cursor:pointer}
+.choice .motif-shape{stroke:#65705c;stroke-width:.8}.choice .motif-lines{fill:none;stroke:#65705c;stroke-width:.8}
+.choice svg{display:block;width:32px;height:32px;margin:0 auto 5px}
+.choice[aria-pressed=true]{box-shadow:0 0 0 2px #62695d}
+.choice:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.slot-hit{fill:transparent;stroke:none;pointer-events:all;cursor:pointer}
+.slot-ring{fill:none;stroke:#747b6755;stroke-width:.7;stroke-dasharray:2 5;pointer-events:none}
+#extraMotifs .motif-shape{stroke:#65705c66;stroke-width:.75;stroke-linejoin:round;pointer-events:none}
+#extraMotifs .motif-lines{fill:none;stroke:#58655088;stroke-width:.8;pointer-events:none}
+#atmosphereWash{transition:fill 1.05s,opacity 1.05s;pointer-events:none}
+.tile.motif-select .paint-part{cursor:default}
 </style>
 </head>
 <body>
@@ -111,17 +140,29 @@ header{text-align:center;margin:23px 0 17px}
 <header>
 <div class="brand">WORDLOCK</div>
 <div class="where">Four clues. One connection.</div>
-<div class="terrain-note">Medium · Puzzle 037</div>
-<div class="version-badge">PROTOTYPE #038 · MEDIUM REPLAY</div>
+<div class="terrain-note">One place · Three puzzles</div>
+<div class="version-badge">PROTOTYPE #039</div>
 </header>
 
-<button type="button" class="entry" id="entry" aria-label="Play WORDLOCK">
+<section class="entry" id="entry" aria-label="Choose your difficulty">
 <span class="entry-title">Your puzzle is ready.</span>
-<span class="entry-copy">Play WORDLOCK</span>
-</button>
+<span class="entry-copy">Choose your difficulty.</span>
+<div class="difficulty-options">
+<button class="difficulty" data-level="easy">EASY<span class="level-status" id="status-easy"></span></button>
+<button class="difficulty" data-level="medium">MEDIUM<span class="level-status" id="status-medium"></span></button>
+<button class="difficulty" data-level="hard">HARD<span class="level-status" id="status-hard"></span></button>
+</div>
+<button class="btn" id="landingPaint" hidden>REVISIT YOUR TILE</button>
+<p class="save-note" id="saveNote" role="status" aria-live="polite"></p>
+</section>
 
 <div class="game" id="game">
+<div class="game-nav">
+<button class="quiet-btn" id="chooseDifficulty">CHOOSE DIFFICULTY</button>
+<span id="activeLabel"></span>
+</div>
 <p class="how-to">Swipe reels left or right. Make each answer along neighbouring reels, including diagonals, then press UNLOCK. A reel is used once per word.</p>
+
 <section class="clue-area" id="clueArea">
 <div class="progress">
 <div class="dot"></div><div class="dot"></div>
@@ -130,6 +171,7 @@ header{text-align:center;margin:23px 0 17px}
 <div class="clue-label" id="clueLabel"></div>
 <div id="clue"></div>
 </section>
+
 <div class="board" id="board"></div>
 <div class="controls" id="controls">
 <button class="btn" id="resetBtn">RESET</button>
@@ -158,9 +200,10 @@ header{text-align:center;margin:23px 0 17px}
 <div class="final-copy">Four clues, one connection. You’re done. Enjoy the rest of your day.</div>
 <div class="paint-invitation" id="paintInvitation">
 <button class="btn" id="paintOpen">PAINT YOUR TILE · OPTIONAL</button>
-<button class="btn" id="leaveTile">DONE FOR TODAY</button>
+<button class="btn" id="leaveTile">CHOOSE DIFFICULTY</button>
 </div>
 <button class="btn replay" id="replayBtn">PLAY AGAIN</button>
+<p class="paint-help" id="rewardMessage" role="status"></p>
 <p id="paintSummary" class="paint-help" role="status"></p>
 
 <section id="painter" class="painter" hidden aria-label="Optional tile painting">
@@ -168,6 +211,18 @@ header{text-align:center;margin:23px 0 17px}
 <p class="paint-help">Choose a paint, then tap an area, tree, tower or bridge. Every paint is unlimited. The puzzle is already complete.</p>
 <div class="palette" id="palette" role="group" aria-label="Paints earned from this puzzle"></div>
 <p id="selectedPaint" class="paint-help"></p>
+<div class="paint-modes" id="paintModes" hidden>
+<button class="btn" id="colourMode" aria-pressed="true">COLOUR PAINT</button>
+<button class="btn" id="motifMode" aria-pressed="false">MOTIF PAINT</button>
+</div>
+<div id="motifTools" hidden>
+<p class="paint-help">Choose a motif and a paint, then tap a marked place. Choose Empty to remove it.</p>
+<div class="motif-palette" id="motifPalette"></div>
+</div>
+<div id="atmosphereTools" hidden>
+<p class="paint-help">A little atmosphere, if you fancy it.</p>
+<div class="atmosphere-palette" id="atmospherePalette"></div>
+</div>
 <div class="paint-tools">
 <button class="btn" id="fillTile">FILL WHOLE TILE</button>
 <button class="btn" id="paintUndo">UNDO</button>
@@ -176,8 +231,14 @@ header{text-align:center;margin:23px 0 17px}
 
 <svg class="tile" id="paintTile" viewBox="0 0 360 780" role="group" aria-label="Portrait landscape with six paint areas and four paintable landmarks">
 <defs id="paintDefs"></defs>
+<defs>
+<radialGradient id="bare-a0"><stop stop-color="#e5e3dc"/><stop offset="1" stop-color="#f6f2e7"/></radialGradient>
+<linearGradient id="bare-a4" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4e4dd"/><stop offset="1" stop-color="#f6f2e7"/></linearGradient>
+<radialGradient id="bare-a3"><stop stop-color="#eeece4"/><stop offset="1" stop-color="#f6f2e7"/></radialGradient>
+</defs>
+
 <g class="paint-part" data-part="a0" role="button" tabindex="0" aria-label="Paint the upper slopes">
-<g class="paint-layers"><path d="M0 0H240C208 76 221 155 185 238C125 254 68 216 0 202Z" fill="#f6f2e7"/></g>
+<g class="paint-layers"><path d="M0 0H240C208 76 221 155 185 238C125 254 68 216 0 202Z" fill="url(#bare-a0)"/></g>
 <path class="edge" d="M0 0H240C208 76 221 155 185 238C125 254 68 216 0 202Z"/>
 <path class="area-hit" d="M0 0H240C208 76 221 155 185 238C125 254 68 216 0 202Z"/>
 </g>
@@ -192,12 +253,12 @@ header{text-align:center;margin:23px 0 17px}
 <path class="area-hit" d="M0 202C68 216 125 254 185 238C148 314 192 408 160 490C97 516 56 430 0 442Z"/>
 </g>
 <g class="paint-part" data-part="a3" role="button" tabindex="0" aria-label="Paint the village slopes">
-<g class="paint-layers"><path d="M185 238C244 222 295 286 360 273V522C293 548 221 464 160 490C192 408 148 314 185 238Z" fill="#f6f2e7"/></g>
+<g class="paint-layers"><path d="M185 238C244 222 295 286 360 273V522C293 548 221 464 160 490C192 408 148 314 185 238Z" fill="url(#bare-a3)"/></g>
 <path class="edge" d="M185 238C244 222 295 286 360 273V522C293 548 221 464 160 490C192 408 148 314 185 238Z"/>
 <path class="area-hit" d="M185 238C244 222 295 286 360 273V522C293 548 221 464 160 490C192 408 148 314 185 238Z"/>
 </g>
 <g class="paint-part" data-part="a4" role="button" tabindex="0" aria-label="Paint the water">
-<g class="paint-layers"><path d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z" fill="#f6f2e7"/></g>
+<g class="paint-layers"><path d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z" fill="url(#bare-a4)"/></g>
 <path class="edge" d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z"/>
 <path class="area-hit" d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z"/>
 </g>
@@ -209,12 +270,9 @@ header{text-align:center;margin:23px 0 17px}
 
 <defs>
 <clipPath id="waterClip"><path d="M0 442C56 430 97 516 160 490C126 580 236 665 200 780H0Z"/></clipPath>
-<pattern id="fieldDots" width="17" height="19" patternUnits="userSpaceOnUse">
-<circle cx="5" cy="7" r=".85" fill="#62695d" opacity=".22"/>
-</pattern>
+<pattern id="fieldDots" width="17" height="19" patternUnits="userSpaceOnUse"><circle cx="5" cy="7" r=".85" fill="#62695d" opacity=".22"/></pattern>
 <clipPath id="fieldClip"><path d="M236 567Q291 548 360 580V780H229Q247 674 236 567Z"/></clipPath>
 </defs>
-
 <g class="tile-lines">
 <path d="M-25 71C80 38 131 84 188 138S297 198 389 164M-24 109C61 81 130 112 173 162S283 238 382 203"/>
 <path d="M35 190C37 129 85 105 132 119C181 134 212 195 184 246C160 287 88 288 55 248C42 232 35 211 35 190Z" opacity=".6"/>
@@ -236,30 +294,32 @@ header{text-align:center;margin:23px 0 17px}
 </g>
 
 <g class="paint-part landmark" data-part="tree0" role="button" tabindex="0" aria-label="Paint the woodland tree">
-<g class="paint-layers"><path d="M250 126C239 117 249 101 260 103C266 91 280 96 281 107C298 111 292 125 282 129C273 140 259 137 250 126Z" fill="#f6f2e7"/></g>
-<path class="edge" d="M250 126C239 117 249 101 260 103C266 91 280 96 281 107C298 111 292 125 282 129C273 140 259 137 250 126Z"/>
-<rect class="hit" x="241" y="89" width="57" height="68"/>
+<g class="paint-layers"><path d="M247 119C242 107 252 98 262 102C269 94 282 99 283 110C294 114 288 127 276 128C265 136 249 130 247 119Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M247 119C242 107 252 98 262 102C269 94 282 99 283 110C294 114 288 127 276 128C265 136 249 130 247 119Z"/>
+<rect class="hit" x="239" y="91" width="60" height="60"/>
 </g>
 <g class="paint-part landmark" data-part="tree1" role="button" tabindex="0" aria-label="Paint the meadow tree">
-<g class="paint-layers"><path d="M68 350C57 340 67 327 77 329C81 315 96 320 96 331C110 336 104 351 94 353C85 362 74 359 68 350Z" fill="#f6f2e7"/></g>
-<path class="edge" d="M68 350C57 340 67 327 77 329C81 315 96 320 96 331C110 336 104 351 94 353C85 362 74 359 68 350Z"/>
-<rect class="hit" x="54" y="310" width="59" height="69"/>
+<g class="paint-layers"><path d="M69 343C62 334 72 326 81 329C87 322 97 330 94 337C103 343 94 353 85 351C77 357 67 351 69 343Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M69 343C62 334 72 326 81 329C87 322 97 330 94 337C103 343 94 353 85 351C77 357 67 351 69 343Z"/>
+<rect class="hit" x="55" y="316" width="57" height="55"/>
 </g>
-<g class="paint-part landmark" data-part="tower" role="button" tabindex="0" aria-label="Paint the small tower">
-<g class="paint-layers"><path d="M262 398V365L273 349L284 365V398Z" fill="#f6f2e7"/></g>
-<path class="edge" d="M262 398V365L273 349L284 365V398Z"/>
-<rect class="hit" x="248" y="344" width="49" height="65"/>
+<g class="paint-part landmark" data-part="tower" role="button" tabindex="0" aria-label="Paint the church">
+<g class="paint-layers"><path d="M247 375L270 356L295 372V407L269 418L247 398Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M247 375L270 356L295 372V407L269 418L247 398Z"/>
+<rect class="hit" x="240" y="347" width="63" height="77"/>
 </g>
 <g class="paint-part landmark" data-part="bridge" role="button" tabindex="0" aria-label="Paint the bridge">
-<g class="paint-layers"><path d="M153 558Q173 544 193 558L196 565Q173 552 150 565Z" fill="#f6f2e7"/></g>
-<path class="edge" d="M153 558Q173 544 193 558L196 565Q173 552 150 565Z"/>
-<rect class="hit" x="146" y="535" width="54" height="45"/>
+<g class="paint-layers"><path d="M159 558L184 550L188 556L163 565Z" fill="#f6f2e7"/></g>
+<path class="edge" d="M159 558L184 550L188 556L163 565Z"/>
+<rect class="hit" x="149" y="535" width="50" height="50"/>
 </g>
 <g class="landmark-lines">
-<path d="M269 153V107M269 128l-15 -14m15 7l13 -13m-13 29l-12 -11m12 4l15 -13M84 375V329m0 22l-15 -13m15 4l12 -12m-12 30l13 -12"/>
-<path d="M260 398h26m-18 -21v-6h4v6m5 -7v7m-7 20v-10q3 -5 6 0v10m-3 -43v-8m-4 5h8"/>
-<path d="M152 557l-2 -5m9 1l-1 -5m29 5l1 -5m5 9l2 -5m-41 15q19 -12 38 0m-35 -1v5m32 -5v5"/>
+<path d="M267 136L267 111m0 7l-12 -6m12 10l11 -9m-11 5l9 4M84 359L83 335m0 10l-9 -6m9 2l7 -5"/>
+<path d="M247 375l22 18 26 -21m-25 -16l-1 37v25m-15 -26l7 6v8l-7 -6Zm24 -2l8 -3v9l-8 3Zm-6 -33v-14m-5 7l10 -3"/>
+<path d="M159 558l25 -8m-21 15l25 -9m-25 5v4m21 -11v4"/>
 </g>
+<g id="extraMotifs"></g>
+<rect id="atmosphereWash" width="360" height="780" fill="#f6f2e7" opacity="0" pointer-events="none"/>
 </svg>
 
 <p class="paint-status" id="paintStatus" role="status" aria-live="polite"></p>
@@ -271,34 +331,40 @@ header{text-align:center;margin:23px 0 17px}
 </div>
 
 <script>
-const P={
-wheels:[
-["S","C","A"],["T","A","M"],["A","M","P"],["G","P","V"],
-["S","V","N"],["D","N","K"],["R","L","K"],["O","X","Q"],
-["W","Q","Z"],["O","L","Z"],["R","L","C"],["E","A","M"],
-["M","P","V"],["Y","P","V"],["D","V","N"],["J","N","K"]
-],
-initial:[0,2,0,0,0,0,1,2,0,1,2,0,1,2,0,0],
-clues:[
-{answer:"STAR",clue:"Someone with top billing",colour:1,route:[0,1,2,6]},
-{answer:"GOLD",clue:"Metal represented by Au",colour:2,route:[3,7,6,5]},
-{answer:"SWORD",clue:"Blade that hung above Damocles",colour:3,route:[4,8,9,10,14]},
-{answer:"JELLY",clue:"Wobbly dessert served with ice cream",colour:4,route:[15,11,10,9,13]}
-],
-connection:{answer:"FISH",hints:[
-"The same word follows all four answers.",
-"Think of creatures associated with water.",
-"The ending has four letters and begins with F."
-]}
-};
+const PUZZLES={easy:{
+wheels:[["F","I","R"],["O","G","E"],["T","R","V"],["S","U","I"],["B","R","G"],["W","M","O"],["A","P","G"],["V","E","W"],["H","D","Y"],["A","G","T"],["K","O","B"],["E","Z","C"],["D","O","S"],["S","W","U"],["S","C","E"],["T","C","N"]],
+initial:[0,2,0,1,0,2,1,0,1,2,0,0,2,2,2,1],clues:[{answer:"FOOT",clue:"Body part inside a shoe",colour:1,route:[0,5,1,2]},{answer:"BASKET",
+clue:"Woven container for carrying shopping",colour:2,route:[4,9,13,10,14,15]},{answer:"BASE",clue:"The bottom supporting part",colour:3,route:[10,6,3,7]},{answer:"SNOW",
+clue:"Frozen flakes falling from clouds",colour:4,route:[14,15,10,13]}],connection:{answer:"BALL",
+hints:["The same word follows each answer.","Think of something round that can be thrown or rolled.","Four letters, beginning with B."]}},medium:{
+wheels:[["N","D","B"],["T","V","E"],["E","U","F"],["T","W","L"],["R","N","C"],["W","O","E"],["R","K","W"],["G","V","A"],["W","A","V"],["N","L","W"],["D","P","T"],["S","M","N"],["S","L","R"],["U","A","I"],["Y","C","B"],["W","F","A"]],
+initial:[2,2,2,1,1,0,0,0,1,2,1,0,2,2,2,0],clues:[{answer:"NOTE",clue:"A brief written reminder",colour:1,route:[4,5,1,2]},{answer:"WALL",
+clue:"Barrier a marathon runner may figuratively hit",colour:2,route:[8,13,12,9]},{answer:"SAND",clue:"What measures time in an hourglass",colour:3,route:[12,8,9,10]},{
+answer:"NEWS",clue:"It may break without making a sound",colour:4,route:[0,5,6,11]}],connection:{answer:"PAPER",
+hints:["The same word follows each answer.","Think of something used for writing, covering or smoothing.","Five letters, beginning with P."]}},hard:{
+wheels:[["V","K","C"],["C","E","B"],["Y","T","M"],["L","P","O"],["C","R","G"],["G","N","Y"],["T","R","Y"],["R","G","E"],["B","S","U"],["B","P","Z"],["S","A","E"],["S","O","W"],["S","Z","U"],["C","B","N"],["U","N","S"],["A","S","P"]],
+initial:[0,1,2,0,2,0,2,1,2,0,2,1,0,2,1,2],clues:[{answer:"CROSS",clue:"Shape formed by a saltire",colour:1,route:[1,6,11,14,10]},{answer:"KEY",
+clue:"A cryptanalyst seeks this secret",colour:2,route:[0,1,5]},{answer:"PASS",clue:"A gap in a mountain ridge used as a route",colour:3,route:[9,10,15,11]},{answer:"BUZZ",
+clue:"A hum, or a sense of anticipation",colour:4,route:[13,8,12,9]}],connection:{answer:"WORD",
+hints:["The same word follows each answer.","The combinations concern language and communication.","Four letters, beginning with W."]}}};
 
-let current=[...P.initial],clueStart=[...P.initial],clueIndex=0;
-let solved=[],solvedRoutes=[],touched=[];
-let histories=Array.from({length:16},()=>new Set());
-let remembered=Array.from({length:16},()=>new Set());
-let hintRoute=null,hintStep=0,revealedHintPositions=new Set();
-let audioCtx=null,entered=false,busy=false;
-let connectionHintNo=0,connectionFinishing=false;
+let P=PUZZLES.easy,activeDifficulty=null;
+let current=[...P.initial];
+let clueStart=[...P.initial];
+let clueIndex=0;
+let solved=[];
+let solvedRoutes=[];
+let histories=Array.from({length:16},()=>new Set);
+let remembered=Array.from({length:16},()=>new Set);
+let touched=[];
+let hintRoute=null;
+let hintStep=0;
+let revealedHintPositions=new Set;
+let audioCtx=null;
+let entered=false;
+let busy=false;
+let connectionHintNo=0;
+let connectionFinishing=false;
 
 const entry=document.getElementById("entry");
 const game=document.getElementById("game");
@@ -323,20 +389,16 @@ const final=document.getElementById("final");
 
 function setBusy(value){
 busy=value;
-[resetBtn,unlockBtn,hintBtn].forEach(b=>b.disabled=value);
+[resetBtn,unlockBtn,hintBtn,document.getElementById("chooseDifficulty")].forEach(b=>b.disabled=value);
 }
 
-const neighbours=Array.from({length:16},(_,a)=>
-Array.from({length:16},(_,b)=>b).filter(b=>
-Math.max(
-Math.abs(Math.floor(a/4)-Math.floor(b/4)),
-Math.abs(a%4-b%4)
-)===1));
+const neighbours=Array.from({length:16},(_,a)=>Array.from({length:16},(_,b)=>b).filter(b=>
+Math.max(Math.abs(Math.floor(a/4)-Math.floor(b/4)),Math.abs(a%4-b%4))===1));
 
 function audio(){
 if(!audioCtx){
 const A=window.AudioContext||window.webkitAudioContext;
-if(A)audioCtx=new A();
+if(A)audioCtx=new A;
 }
 if(audioCtx?.state==="suspended")audioCtx.resume();
 return audioCtx;
@@ -348,9 +410,9 @@ if(!c)return;
 const o=c.createOscillator(),g=c.createGain(),n=c.currentTime+delay;
 o.frequency.value=f;
 o.type="sine";
-g.gain.setValueAtTime(.0001,n);
+g.gain.setValueAtTime(1e-4,n);
 g.gain.exponentialRampToValueAtTime(v,n+.015);
-g.gain.exponentialRampToValueAtTime(.0001,n+d);
+g.gain.exponentialRampToValueAtTime(1e-4,n+d);
 o.connect(g);
 g.connect(c.destination);
 o.start(n);
@@ -361,19 +423,6 @@ function placeSound(){tone(110,1.5,.01);tone(165,1.8,.005,.08);tone(220,2,.0025,
 function reelSound(){tone(185,.22,.009);tone(370,.3,.002,.04)}
 function goodSound(i){tone(175+i*25,.28,.008)}
 function badSound(){tone(95,.18,.012)}
-
-entry.onclick=()=>{
-if(entered)return;
-entered=true;
-audio();
-placeSound();
-entry.classList.add("entering");
-setTimeout(()=>{
-entry.style.display="none";
-game.classList.add("visible");
-},650);
-};
-
 function letter(i,state=current){return P.wheels[i][state[i]]}
 
 function findPaths(word,state=current){
@@ -411,9 +460,9 @@ return ranked[0].path;
 
 function historyClass(i){
 const a=[...histories[i]].sort();
-if(a.length===1)return "c"+a[0];
-if(a.length>=2)return "m"+a[0]+a[a.length-1];
-return "";
+if(a.length===1)return"c"+a[0];
+if(a.length>=2)return"m"+a[0]+a[a.length-1];
+return"";
 }
 
 function render(){
@@ -447,6 +496,7 @@ sx=null;
 if(Math.abs(dx)<15)return;
 current[i]=(current[i]+(dx<0?1:2))%3;
 touched.push(i);
+saveProgress();
 reelSound();
 render();
 applyHintPulse();
@@ -462,9 +512,7 @@ document.querySelectorAll(".reel").forEach(x=>x.classList.remove("pulse"));
 if(!hintRoute)return;
 if(hintStep%2===1){
 const n=Math.floor(hintStep/2);
-if(n<hintRoute.length){
-document.querySelectorAll(".reel")[hintRoute[n]]?.classList.add("pulse");
-}
+if(n<hintRoute.length)document.querySelectorAll(".reel")[hintRoute[n]]?.classList.add("pulse");
 }
 }
 
@@ -525,6 +573,10 @@ renderBank();
 document.querySelectorAll(".dot")[clueIndex].classList.add("d"+(clueIndex+1));
 message.textContent=c.answer+" found.";
 clueIndex++;
+hintRoute=null;
+hintStep=0;
+revealedHintPositions.clear();
+saveProgress();
 if(clueIndex===P.clues.length)setTimeout(showConnection,900);
 else setTimeout(renderClue,850);
 }
@@ -535,6 +587,7 @@ current=[...clueStart];
 touched=[];
 render();
 message.textContent="";
+saveProgress();
 }
 
 function renderBank(){
@@ -568,7 +621,8 @@ function doHint(){
 if(busy||clueIndex>=P.clues.length)return;
 const c=P.clues[clueIndex];
 if(!hintRoute)hintRoute=chooseHintRoute();
-if(hintStep>=hintRoute.length*2){
+const max=hintRoute.length*2;
+if(hintStep>=max){
 message.textContent="One complete way is now showing.";
 return;
 }
@@ -588,6 +642,7 @@ message.textContent="That place turns to "+wanted+".";
 render();
 }
 hintBtn.textContent="ANOTHER HINT";
+saveProgress();
 }
 
 function showConnection(){
@@ -596,11 +651,14 @@ clueArea.style.display="none";
 message.textContent="";
 connection.classList.add("show");
 connectionLength.textContent="•".repeat(P.connection.answer.length);
+document.getElementById("chooseDifficulty").disabled=false;
+saveProgress();
 }
 
 function tryConnection(){
 if(connectionFinishing||!connection.classList.contains("show"))return;
 const g=connectionInput.value.trim().toUpperCase();
+saveProgress();
 if(g===P.connection.answer)finishConnection();
 else{
 badSound();
@@ -609,15 +667,18 @@ connectionHint.textContent="That doesn't connect all four.";
 }
 
 function connectionHintFn(){
-if(connectionFinishing||connectionHintNo>=P.connection.hints.length)return;
+if(connectionFinishing)return;
+if(connectionHintNo>=P.connection.hints.length)return;
 connectionHint.textContent=P.connection.hints[connectionHintNo];
 connectionHintNo++;
+saveProgress();
 if(connectionHintNo===P.connection.hints.length)connectionHintBtn.disabled=true;
 }
 
 function finishConnection(){
 if(connectionFinishing)return;
 connectionFinishing=true;
+document.getElementById("chooseDifficulty").disabled=true;
 const a=P.connection.answer;
 connectionInput.value=a;
 connectionInput.disabled=true;
@@ -647,7 +708,7 @@ function showFinal(){
 connection.style.display="none";
 document.querySelector(".how-to").style.display="none";
 final.classList.add("show");
-initialisePainting();
+completeDifficulty();
 }
 
 unlockBtn.onclick=unlock;
@@ -658,32 +719,291 @@ connectionHintBtn.onclick=connectionHintFn;
 revealBtn.onclick=revealConnection;
 connectionInput.onkeydown=e=>{if(e.key==="Enter")tryConnection()};
 
+const difficultyNames={easy:"Easy",medium:"Medium",hard:"Hard"};
+const storageKey="wordlock-039-v1";
 const paintBase={
 1:{name:"Sage",value:"#abc1ae"},
 2:{name:"Blue",value:"#a8c5d0"},
 3:{name:"Ochre",value:"#d4b46f"},
 4:{name:"Mauve",value:"#bca6bd"}
 };
-const paintingKey="wordlock-038-v1";
 const paintParts=[...document.querySelectorAll("[data-part]")];
-const earnedKeys=new Set();
-const fadeTimers=new Map();
-let earnedPaints=[],selectedPaint=null,paintState={},paintUndoStack=[];
-let paintingReady=false,puzzleComplete=false;
+const earnedKeys=new Set,fadeTimers=new Map;
+let games={},completions={},earnedPaints=[],selectedPaint=null,paintState={},slotState={},atmosphere="clear";
+let paintUndoStack=[],paintingReady=false,puzzleComplete=false,paintMode="colour",selectedMotif="tree",selecting=false;
+const slotPositions={s0:[113,183],s1:[98,403],s2:[289,665]};
+const atmosphereOptions={
+clear:{name:"Clear",colour:"#f6f2e7",opacity:0,icon:"☀"},
+mist:{name:"Mist",colour:"#faf9f1",opacity:.13,icon:"☁"},
+dusk:{name:"Dusk",colour:"#77748e",opacity:.1,icon:"☾"},
+warm:{name:"Warm",colour:"#efd9a0",opacity:.1,icon:"☀"}
+};
+const motifNames={empty:"Empty",tree:"Tree",grove:"Grove",stones:"Stones",hut:"Hut"};
 
-function validPaint(key){
-return typeof key==="string"&&/^(c[1-4]|m12|m13|m14|m23|m24|m34)$/.test(key);
+function rewardStage(){return Object.keys(completions).length}
+
+function validPaint(k){
+return typeof k==="string"&&/^(c[1-4]|m12|m13|m14|m23|m24|m34)$/.test(k);
+}
+
+function reducedMotion(){
+return!!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+}
+
+function validArrayState(a,p){
+return Array.isArray(a)&&a.length===16&&a.every((v,i)=>Number.isInteger(v)&&v>=0&&v<p.wheels[i].length);
+}
+
+function validRoute(route,word,p){
+return Array.isArray(route)&&route.length===word.length&&new Set(route).size===route.length&&route.every((r,n)=>
+Number.isInteger(r)&&r>=0&&r<16&&p.wheels[r].includes(word[n])&&(!n||neighbours[route[n-1]].includes(r)));
+}
+
+function validSnapshot(s,p){
+if(!s||typeof s!=="object"||!validArrayState(s.current,p)||!validArrayState(s.clueStart,p)||!Number.isInteger(s.clueIndex)||s.clueIndex<0||s.clueIndex>4)return false;
+if(!Array.isArray(s.solvedRoutes)||s.solvedRoutes.length!==s.clueIndex||!s.solvedRoutes.every((r,i)=>r&&r.colour===p.clues[i].colour&&validRoute(r.route,p.clues[i].answer,p)))return false;
+if(!Array.isArray(s.histories)||s.histories.length!==16||!s.histories.every(h=>Array.isArray(h)&&h.every(v=>Number.isInteger(v)&&v>=1&&v<=4)))return false;
+const expected=Array.from({length:16},()=>new Set);
+s.solvedRoutes.forEach(r=>r.route.forEach(i=>expected[i].add(r.colour)));
+if(!expected.every((h,i)=>[...h].sort().join()===[...new Set(s.histories[i])].sort().join()))return false;
+return typeof s.completed==="boolean"&&(!s.completed||s.clueIndex===4);
+}
+
+function snapshot(){
+return{
+current:[...current],
+clueStart:[...clueStart],
+clueIndex,
+solvedRoutes:solvedRoutes.map(r=>({colour:r.colour,route:[...r.route]})),
+histories:histories.map(h=>[...h]),
+hintRoute:hintRoute?[...hintRoute]:null,
+hintStep,
+known:[...revealedHintPositions],
+touched:[...touched],
+connectionHintNo,
+connectionValue:connectionInput.value,
+completed:puzzleComplete
+};
+}
+
+function saveProgress(){
+if(activeDifficulty)games[activeDifficulty]=snapshot();
+try{
+localStorage.setItem(storageKey,JSON.stringify({
+version:1,games,completions,earned:[...earnedKeys],paintState,slotState,atmosphere
+}));
+document.getElementById("saveNote").textContent="";
+document.getElementById("paintStatus").textContent="Saved on this device. Leave whenever you like.";
+return true;
+}catch(e){
+const text="This browser could not save your progress. You can still play and paint while this page stays open.";
+document.getElementById("saveNote").textContent=text;
+document.getElementById("paintStatus").textContent=text;
+return false;
+}
+}
+
+function loadSaved(){
+let s;
+try{s=JSON.parse(localStorage.getItem(storageKey)||"null")}catch(e){return}
+if(!s||s.version!==1)return;
+for(const level of Object.keys(PUZZLES)){
+if(validSnapshot(s.games?.[level],PUZZLES[level]))games[level]=s.games[level];
+const c=s.completions?.[level];
+if(validSnapshot(c,PUZZLES[level])&&c.completed)completions[level]=c;
+}
+if(rewardStage()){
+if(Array.isArray(s.earned))s.earned.filter(validPaint).forEach(k=>earnedKeys.add(k));
+for(const c of Object.values(completions)){
+c.solvedRoutes.forEach(r=>earnedKeys.add("c"+r.colour));
+c.histories.forEach(h=>{
+const a=[...new Set(h)].sort();
+if(a.length)earnedKeys.add(a.length===1?"c"+a[0]:"m"+a[0]+a.at(-1));
+});
+}
+if(s.paintState&&typeof s.paintState==="object"){
+for(const el of paintParts){
+const id=el.dataset.part;
+if(earnedKeys.has(s.paintState[id]))paintState[id]=s.paintState[id];
+}
+}
+}
+if(rewardStage()>=2&&s.slotState&&typeof s.slotState==="object"){
+for(const id of Object.keys(slotPositions)){
+const v=s.slotState[id];
+if(v&&Object.hasOwn(motifNames,v.kind)&&v.kind!=="empty"&&earnedKeys.has(v.paint)){
+slotState[id]={kind:v.kind,paint:v.paint};
+}
+}
+}
+if(rewardStage()>=3&&Object.hasOwn(atmosphereOptions,s.atmosphere))atmosphere=s.atmosphere;
+}
+
+function updateChooser(){
+for(const level of Object.keys(PUZZLES)){
+document.getElementById("status-"+level).textContent=completions[level]?"Solved":games[level]?"Continue":"";
+}
+document.getElementById("landingPaint").hidden=rewardStage()===0;
+}
+
+function resetPuzzleState(){
+current=[...P.initial];
+clueStart=[...P.initial];
+clueIndex=0;
+solved=[];
+solvedRoutes=[];
+touched=[];
+histories=Array.from({length:16},()=>new Set);
+remembered=Array.from({length:16},()=>new Set);
+hintRoute=null;
+hintStep=0;
+revealedHintPositions.clear();
+connectionHintNo=0;
+connectionFinishing=false;
+puzzleComplete=false;
+connection.classList.remove("show");
+connection.style.display="";
+connectionInput.value="";
+connectionInput.disabled=false;
+connectionInput.maxLength=P.connection.answer.length;
+[connectBtn,connectionHintBtn,revealBtn].forEach(b=>b.disabled=false);
+connectionHint.textContent="";
+connectionLength.textContent="";
+final.classList.remove("show");
+controls.style.display="";
+clueArea.style.display="";
+board.hidden=false;
+document.querySelector(".how-to").style.display="";
+document.querySelectorAll(".dot").forEach(d=>d.className="dot");
+document.getElementById("painter").hidden=true;
+document.getElementById("paintInvitation").hidden=false;
+document.getElementById("replayBtn").hidden=false;
+document.getElementById("paintSummary").textContent="";
+document.getElementById("rewardMessage").textContent="";
+document.querySelector(".final-kicker").textContent="WORDLOCK COMPLETE";
+document.querySelector(".final-title").textContent="Nicely connected.";
+document.querySelector(".final-copy").textContent="Four clues, one connection. You’re done. Enjoy the rest of your day.";
+renderBank();
+renderClue();
+}
+
+function restorePuzzle(s){
+current=[...s.current];
+clueStart=[...s.clueStart];
+clueIndex=s.clueIndex;
+solvedRoutes=s.solvedRoutes.map(r=>({colour:r.colour,route:[...r.route]}));
+solved=P.clues.slice(0,clueIndex).map(c=>c.answer);
+histories=s.histories.map(h=>new Set(h));
+remembered=Array.from({length:16},()=>new Set);
+solvedRoutes.forEach((r,i)=>r.route.forEach((p,n)=>remembered[p].add(P.clues[i].answer[n])));
+document.querySelectorAll(".dot").forEach((d,i)=>d.className="dot"+(i<clueIndex?" d"+(i+1):""));
+connectionHintNo=Number.isInteger(s.connectionHintNo)?Math.max(0,Math.min(3,s.connectionHintNo)):0;
+connectionHintBtn.disabled=connectionHintNo===3;
+connectionInput.value=typeof s.connectionValue==="string"?s.connectionValue.slice(0,P.connection.answer.length):"";
+renderBank();
+if(clueIndex<4){
+renderClue();
+if(validRoute(s.hintRoute,P.clues[clueIndex].answer,P)&&Number.isInteger(s.hintStep)&&s.hintStep>=0&&s.hintStep<=s.hintRoute.length*2){
+hintRoute=[...s.hintRoute];
+hintStep=s.hintStep;
+revealedHintPositions=new Set(hintRoute.slice(0,Math.floor(hintStep/2)));
+hintBtn.textContent=hintStep?"ANOTHER HINT":"HINT";
+}
+touched=Array.isArray(s.touched)?s.touched.filter(i=>Number.isInteger(i)&&i>=0&&i<16).slice(-5000):[];
+render();
+}else{
+setBusy(true);
+render();
+if(s.completed){
+puzzleComplete=true;
+connectionFinishing=true;
+showFinal();
+}else{
+showConnection();
+if(connectionHintNo)connectionHint.textContent=P.connection.hints[connectionHintNo-1];
+}
+}
+}
+
+function selectDifficulty(level){
+if(selecting||!Object.hasOwn(PUZZLES,level))return;
+selecting=true;
+audio();
+placeSound();
+activeDifficulty=level;
+P=PUZZLES[level];
+resetPuzzleState();
+if(games[level])restorePuzzle(games[level]);
+document.getElementById("activeLabel").textContent=difficultyNames[level];
+document.querySelector(".terrain-note").textContent=difficultyNames[level]+" · One shared place";
+document.querySelectorAll(".difficulty").forEach(b=>b.disabled=true);
+entry.classList.add("entering");
+game.classList.remove("visible");
+game.hidden=true;
+saveProgress();
+setTimeout(()=>{
+entry.hidden=true;
+entry.style.display="";
+game.hidden=false;
+game.classList.add("visible");
+selecting=false;
+document.querySelectorAll(".difficulty").forEach(b=>b.disabled=false);
+},reducedMotion()?0:650);
+}
+
+function goChooser(){
+if(selecting||busy&&!puzzleComplete&&!(connection.classList.contains("show")&&!connectionFinishing))return;
+saveProgress();
+activeDifficulty=null;
+game.hidden=true;
+game.classList.remove("visible");
+entry.hidden=false;
+entry.style.display="";
+entry.classList.remove("entering");
+document.querySelector(".terrain-note").textContent="One place · Three puzzles";
+updateChooser();
+entry.scrollIntoView({behavior:reducedMotion()?"auto":"smooth",block:"start"});
+}
+
+function completeDifficulty(){
+if(!activeDifficulty||clueIndex!==4)return;
+const previous=rewardStage();
+puzzleComplete=true;
+completions[activeDifficulty]=snapshot();
+solvedRoutes.forEach(r=>earnedKeys.add("c"+r.colour));
+histories.forEach((h,i)=>{
+const key=historyClass(i);
+if(key)earnedKeys.add(key);
+});
+buildPalette();
+paintingReady=true;
+refreshPainting();
+updateRewardControls();
+saveProgress();
+updateChooser();
+document.getElementById("chooseDifficulty").disabled=false;
+document.getElementById("rewardMessage").textContent=rewardStage()>previous?[
+"",
+"Your colours are ready. Paint as much or as little as you like.",
+"You can now add a few motifs to your place.",
+"You can now choose a little atmosphere."
+][rewardStage()]:"Your tile and paints are here whenever you fancy them.";
+document.getElementById("paintOpen").textContent=Object.keys(paintState).length||Object.keys(slotState).length?"REVISIT YOUR TILE":"PAINT YOUR TILE · OPTIONAL";
+}
+
+function replayPuzzle(){
+if(!activeDifficulty||!puzzleComplete)return;
+resetPuzzleState();
+saveProgress();
+document.querySelector("header").scrollIntoView({behavior:reducedMotion()?"auto":"smooth",block:"start"});
 }
 
 function paintByKey(key){return earnedPaints.find(p=>p.key===key)}
 
-function paintFill(key){
+function paintFill(key,id){
 const p=paintByKey(key);
-return p?(p.colours.length===1?p.colours[0]:"url(#paint-"+p.key+")"):"#f6f2e7";
-}
-
-function reducedMotion(){
-return !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+return p?(p.colours.length===1?p.colours[0]:"url(#paint-"+p.key+")"):
+(["a0","a3","a4"].includes(id)?"url(#bare-"+id+")":"#f6f2e7");
 }
 
 function renderPaint(el,key,animate){
@@ -693,7 +1013,7 @@ el.dataset.shown=wanted;
 const layers=el.querySelector(".paint-layers");
 const path=document.createElementNS("http://www.w3.org/2000/svg","path");
 path.setAttribute("d",layers.firstElementChild.getAttribute("d"));
-path.setAttribute("fill",paintFill(key));
+path.setAttribute("fill",paintFill(key,el.dataset.part));
 path.classList.add("paint-layer");
 clearTimeout(fadeTimers.get(el));
 if(!animate||reducedMotion()){
@@ -713,44 +1033,6 @@ fadeTimers.delete(el);
 },1100));
 }
 
-function refreshPainting(animate=false){
-for(const el of paintParts)renderPaint(el,paintState[el.dataset.part],animate);
-for(const b of document.querySelectorAll(".swatch")){
-b.setAttribute("aria-pressed",String(b.dataset.paint===selectedPaint));
-}
-const p=paintByKey(selectedPaint);
-document.getElementById("selectedPaint").textContent=p?p.name+" selected · unlimited":"";
-document.getElementById("paintUndo").disabled=paintUndoStack.length===0;
-}
-
-function savePainting(){
-try{
-const completed=puzzleComplete?{current,histories:histories.map(h=>[...h]),solvedRoutes}:null;
-localStorage.setItem(paintingKey,JSON.stringify({
-state:paintState,earned:[...earnedKeys],completed
-}));
-document.getElementById("paintStatus").textContent="Saved on this device. Leave whenever you like.";
-return true;
-}catch(e){
-document.getElementById("paintStatus").textContent="Painting works, but this browser could not save it. Keep this page open to retain it.";
-return false;
-}
-}
-
-function editPainting(next){
-if(!paintingReady||JSON.stringify(next)===JSON.stringify(paintState))return;
-paintUndoStack.push({...paintState});
-if(paintUndoStack.length>50)paintUndoStack.shift();
-paintState={...next};
-refreshPainting(true);
-savePainting();
-}
-
-function paintPart(id){
-if(!paintingReady||!paintByKey(selectedPaint))return;
-editPainting({...paintState,[id]:selectedPaint});
-}
-
 function buildPalette(){
 earnedPaints=[...earnedKeys].sort().map(key=>{
 const ids=key.slice(1).split("").map(Number);
@@ -760,8 +1042,7 @@ name:ids.map(id=>paintBase[id].name).join(" + "),
 colours:ids.map(id=>paintBase[id].value)
 };
 });
-const defs=document.getElementById("paintDefs");
-const palette=document.getElementById("palette");
+const defs=document.getElementById("paintDefs"),palette=document.getElementById("palette");
 palette.replaceChildren();
 for(const p of earnedPaints){
 if(p.colours.length===2&&!document.getElementById("paint-"+p.key)){
@@ -792,19 +1073,170 @@ palette.appendChild(b);
 if(!paintByKey(selectedPaint))selectedPaint=earnedPaints[0]?.key||null;
 }
 
-function initialisePainting(){
-puzzleComplete=true;
-solvedRoutes.forEach(r=>earnedKeys.add("c"+r.colour));
-histories.forEach((h,i)=>{
-const key=historyClass(i);
-if(key)earnedKeys.add(key);
-});
-buildPalette();
+function motifMarkup(kind,fill){
+const tree='<path class="motif-shape" fill="'+fill+'" d="M-12 -3C-17 -12 -6 -18 0 -13C6 -20 16 -11 12 -5C20 3 10 11 3 8C-6 15 -17 7 -12 -3Z"/><path class="motif-lines" d="M0 14V-9m0 7l-8 -5m8 8l8 -7"/>';
+if(kind==="tree")return tree;
+if(kind==="grove")return'<g transform="translate(-10 1) scale(.65)">'+tree+'</g><g transform="translate(8 -8) scale(.8)">'+tree+'</g><g transform="translate(10 14) scale(.55)">'+tree+"</g>";
+if(kind==="stones")return'<path class="motif-shape" fill="'+fill+'" d="M-15 2Q-18 -4 -10 -6Q-3 -6 -3 1Q-9 7 -15 2ZM2 -9Q2 -16 10 -14Q18 -9 12 -4Q4 0 2 -9ZM2 10Q3 4 12 6Q18 13 10 16Q3 18 2 10Z"/><path class="motif-lines" d="M-12 -3l4 2m14 -10l5 2m-5 20l5 1"/>';
+if(kind==="hut")return'<path class="motif-shape" fill="'+fill+'" d="M-17 -3L0 -13L17 -3V13L0 19L-17 8Z"/><path class="motif-lines" d="M-17 -3L0 8L17 -3M0 -13V8v11m-10 -15l5 3v7l-5 -3m15 -4l6 -2v6l-6 2"/>';
+return"";
+}
+
+function renderSlots(){
+const container=document.getElementById("extraMotifs");
+if(rewardStage()<2){container.replaceChildren();return}
+for(const[id,[x,y]]of Object.entries(slotPositions)){
+const v=slotState[id];
+let g=container.querySelector('[data-slot="'+id+'"]');
+if(!v&&paintMode==="colour"){
+if(g){
+clearTimeout(fadeTimers.get(g));
+fadeTimers.delete(g);
+g.remove();
+}
+continue;
+}
+if(!g){
+g=document.createElementNS("http://www.w3.org/2000/svg","g");
+g.dataset.slot=id;
+g.setAttribute("transform","translate("+x+" "+y+")");
+g.setAttribute("role","button");
+g.setAttribute("tabindex","0");
+g.innerHTML='<g class="slot-layers"></g><circle class="slot-ring" r="26"/><circle class="slot-hit" r="28"/>';
+g.onclick=()=>editSlot(id);
+g.onkeydown=e=>{
+if(e.key==="Enter"||e.key===" "){
+e.preventDefault();
+editSlot(id);
+}
+};
+container.appendChild(g);
+}
+g.setAttribute("aria-label",(v?"Change "+motifNames[v.kind]:"Add a motif")+" at "+id.slice(1));
+g.querySelector(".slot-ring").style.display=paintMode==="motif"?"":"none";
+const key=v?v.kind+"|"+v.paint:"";
+if(g.dataset.shown!==key){
+const layers=g.querySelector(".slot-layers");
+const layer=document.createElementNS("http://www.w3.org/2000/svg","g");
+layer.innerHTML=v?motifMarkup(v.kind,paintFill(v.paint)):"";
+const wasShown=g.dataset.shown!==undefined;
+g.dataset.shown=key;
+clearTimeout(fadeTimers.get(g));
+if(!wasShown||reducedMotion()){
+layers.replaceChildren(layer);
+fadeTimers.delete(g);
+}else{
+layer.style.opacity="0";
+layer.style.transition="opacity 1.05s ease-in-out";
+layers.appendChild(layer);
+window.getComputedStyle(layer).opacity;
+layer.style.opacity="1";
+if(!v){
+for(const old of[...layers.children].slice(0,-1)){
+old.style.transition="opacity 1.05s ease-in-out";
+old.style.opacity="0";
+}
+}
+fadeTimers.set(g,setTimeout(()=>{
+layer.style.transition="none";
+layers.replaceChildren(layer);
+fadeTimers.delete(g);
+},1100));
+}
+}
+}
+}
+
+function refreshPainting(animate=false){
+for(const el of paintParts)renderPaint(el,paintState[el.dataset.part],animate);
+for(const b of document.querySelectorAll(".swatch")){
+b.setAttribute("aria-pressed",String(b.dataset.paint===selectedPaint));
+}
+const p=paintByKey(selectedPaint);
+document.getElementById("selectedPaint").textContent=p?p.name+" selected · unlimited":"";
+document.getElementById("paintUndo").disabled=!paintUndoStack.length;
+renderSlots();
+const a=atmosphereOptions[atmosphere],wash=document.getElementById("atmosphereWash");
+wash.setAttribute("fill",a.colour);
+wash.setAttribute("opacity",String(a.opacity));
+for(const b of document.querySelectorAll("[data-atmosphere]")){
+b.setAttribute("aria-pressed",String(b.dataset.atmosphere===atmosphere));
+}
+}
+
+function artwork(){
+return{
+paintState:{...paintState},
+slotState:Object.fromEntries(Object.entries(slotState).map(([k,v])=>[k,{...v}])),
+atmosphere
+};
+}
+
+function editArtwork(next){
+if(!paintingReady||JSON.stringify(artwork())===JSON.stringify(next))return;
+paintUndoStack.push(artwork());
+if(paintUndoStack.length>50)paintUndoStack.shift();
+paintState={...next.paintState};
+slotState=Object.fromEntries(Object.entries(next.slotState).map(([k,v])=>[k,{...v}]));
+atmosphere=next.atmosphere;
+refreshPainting(true);
+saveProgress();
+}
+
+function paintPart(id){
+if(!paintingReady||!paintByKey(selectedPaint)||paintMode!=="colour")return;
+editArtwork({...artwork(),paintState:{...paintState,[id]:selectedPaint}});
+}
+
+function editSlot(id){
+if(!paintingReady||rewardStage()<2)return;
+const next=artwork();
+if(paintMode==="motif"){
+if(selectedMotif==="empty")delete next.slotState[id];
+else if(paintByKey(selectedPaint))next.slotState[id]={kind:selectedMotif,paint:selectedPaint};
+}else if(next.slotState[id]&&paintByKey(selectedPaint)){
+next.slotState[id].paint=selectedPaint;
+}
+editArtwork(next);
+}
+
+function setPaintMode(mode){
+if(mode==="motif"&&rewardStage()<2)return;
+paintMode=mode;
+document.getElementById("motifTools").hidden=mode!=="motif";
+document.getElementById("colourMode").setAttribute("aria-pressed",String(mode==="colour"));
+document.getElementById("motifMode").setAttribute("aria-pressed",String(mode==="motif"));
+document.getElementById("paintTile").classList.toggle("motif-select",mode==="motif");
+renderSlots();
+}
+
+function updateRewardControls(){
+document.getElementById("paintModes").hidden=rewardStage()<2;
+document.getElementById("atmosphereTools").hidden=rewardStage()<3;
+if(rewardStage()<2)setPaintMode("colour");
+}
+
+function openPainting(){
+if(!rewardStage())return;
 paintingReady=true;
+buildPalette();
+setPaintMode("colour");
+updateRewardControls();
 refreshPainting();
-savePainting();
-document.getElementById("paintOpen").textContent=Object.keys(paintState).length
-?"REVISIT YOUR TILE":"PAINT YOUR TILE · OPTIONAL";
+document.getElementById("painter").hidden=false;
+document.getElementById("paintInvitation").hidden=true;
+document.getElementById("replayBtn").hidden=true;
+document.getElementById("paintSummary").textContent="";
+document.getElementById("painter").scrollIntoView({behavior:reducedMotion()?"auto":"smooth",block:"start"});
+}
+
+function closePainting(){
+if(!activeDifficulty){goChooser();return}
+document.getElementById("painter").hidden=true;
+document.getElementById("paintInvitation").hidden=false;
+document.getElementById("replayBtn").hidden=false;
+document.getElementById("paintSummary").textContent="Your place is here whenever you want to revisit it.";
+document.getElementById("paintOpen").textContent="REVISIT YOUR TILE";
 }
 
 for(const el of paintParts){
@@ -817,162 +1249,100 @@ paintPart(el.dataset.part);
 };
 }
 
-document.getElementById("paintOpen").onclick=()=>{
-document.getElementById("painter").hidden=false;
-document.getElementById("paintInvitation").hidden=true;
-document.getElementById("replayBtn").hidden=true;
-document.getElementById("paintSummary").textContent="";
-document.getElementById("painter").scrollIntoView({
-behavior:reducedMotion()?"auto":"smooth",block:"start"
-});
+for(const[kind,name]of Object.entries(motifNames)){
+const b=document.createElement("button");
+b.className="choice";
+b.type="button";
+b.dataset.motif=kind;
+b.setAttribute("aria-label",name);
+b.setAttribute("aria-pressed",String(kind===selectedMotif));
+b.innerHTML='<svg viewBox="-25 -25 50 50" aria-hidden="true">'+
+(kind==="empty"?'<circle cx="0" cy="0" r="13" fill="none" stroke="#65705c" stroke-width="1"/>':motifMarkup(kind,"#d9decf"))+"</svg>"+name;
+b.onclick=()=>{
+selectedMotif=kind;
+for(const x of document.querySelectorAll("[data-motif]")){
+x.setAttribute("aria-pressed",String(x.dataset.motif===kind));
+}
 };
-
-function closePainting(){
-document.getElementById("painter").hidden=true;
-document.getElementById("paintInvitation").hidden=false;
-document.getElementById("replayBtn").hidden=false;
-document.getElementById("paintSummary").textContent=Object.keys(paintState).length
-?"Your tile is here whenever you want to revisit it."
-:"All done. Painting is there whenever you fancy it.";
-document.getElementById("paintOpen").textContent=Object.keys(paintState).length
-?"REVISIT YOUR TILE":"PAINT YOUR TILE · OPTIONAL";
+document.getElementById("motifPalette").appendChild(b);
 }
 
-document.getElementById("leaveTile").onclick=closePainting;
+for(const[key,a]of Object.entries(atmosphereOptions)){
+const b=document.createElement("button");
+b.className="choice";
+b.type="button";
+b.dataset.atmosphere=key;
+b.setAttribute("aria-label",a.name+" atmosphere");
+b.innerHTML='<span style="display:block;font-size:24px;margin-bottom:7px">'+a.icon+"</span>"+a.name;
+b.onclick=()=>{
+if(rewardStage()>=3)editArtwork({...artwork(),atmosphere:key});
+};
+document.getElementById("atmospherePalette").appendChild(b);
+}
+
+document.querySelectorAll(".difficulty").forEach(b=>b.onclick=()=>selectDifficulty(b.dataset.level));
+document.getElementById("chooseDifficulty").onclick=goChooser;
+document.getElementById("leaveTile").onclick=goChooser;
+document.getElementById("replayBtn").onclick=replayPuzzle;
+document.getElementById("paintOpen").onclick=openPainting;
 document.getElementById("paintClose").onclick=closePainting;
+document.getElementById("colourMode").onclick=()=>setPaintMode("colour");
+document.getElementById("motifMode").onclick=()=>setPaintMode("motif");
 
 document.getElementById("fillTile").onclick=()=>{
 if(!paintByKey(selectedPaint))return;
-const next={};
-for(const el of paintParts)next[el.dataset.part]=selectedPaint;
-editPainting(next);
+const next=artwork();
+for(const el of paintParts)next.paintState[el.dataset.part]=selectedPaint;
+for(const v of Object.values(next.slotState))v.paint=selectedPaint;
+editArtwork(next);
 };
+
+document.getElementById("clearTile").onclick=()=>editArtwork({
+paintState:{},slotState:{},atmosphere:"clear"
+});
 
 document.getElementById("paintUndo").onclick=()=>{
 if(!paintingReady||!paintUndoStack.length)return;
-paintState=paintUndoStack.pop();
+const prev=paintUndoStack.pop();
+paintState=prev.paintState;
+slotState=prev.slotState;
+atmosphere=prev.atmosphere;
 refreshPainting(true);
-savePainting();
+saveProgress();
 };
 
-document.getElementById("clearTile").onclick=()=>editPainting({});
-
-function replayPuzzle(){
-if(!puzzleComplete)return;
-puzzleComplete=false;
-paintingReady=false;
-current=[...P.initial];
-clueStart=[...P.initial];
-clueIndex=0;
-solved=[];
-solvedRoutes=[];
-touched=[];
-histories=Array.from({length:16},()=>new Set());
-remembered=Array.from({length:16},()=>new Set());
-hintRoute=null;
-hintStep=0;
-revealedHintPositions.clear();
-connectionHintNo=0;
-connectionFinishing=false;
-document.querySelectorAll(".dot").forEach(d=>d.className="dot");
-connection.classList.remove("show");
-connection.style.display="";
-connectionInput.value="";
-connectionInput.disabled=false;
-[connectBtn,connectionHintBtn,revealBtn].forEach(b=>b.disabled=false);
-connectionHint.textContent="";
-connectionLength.textContent="";
-final.classList.remove("show");
-controls.style.display="";
-clueArea.style.display="";
-document.querySelector(".how-to").style.display="";
-document.getElementById("painter").hidden=true;
-document.getElementById("paintInvitation").hidden=false;
-document.getElementById("replayBtn").hidden=false;
-document.getElementById("paintSummary").textContent="";
-renderBank();
-renderClue();
-savePainting();
-document.querySelector("header").scrollIntoView({
-behavior:reducedMotion()?"auto":"smooth",block:"start"
-});
-}
-
-document.getElementById("replayBtn").onclick=replayPuzzle;
-
-function validCompleted(c){
-if(!c||!Array.isArray(c.current)||c.current.length!==16||
-!c.current.every((n,i)=>Number.isInteger(n)&&n>=0&&n<P.wheels[i].length))return false;
-
-if(!Array.isArray(c.histories)||c.histories.length!==16||
-!c.histories.every(h=>Array.isArray(h)&&h.every(n=>Number.isInteger(n)&&n>=1&&n<=4)))return false;
-
-if(!Array.isArray(c.solvedRoutes)||c.solvedRoutes.length!==4||
-!c.solvedRoutes.every((r,i)=>
-r&&r.colour===P.clues[i].colour&&Array.isArray(r.route)&&
-r.route.length===P.clues[i].answer.length&&
-new Set(r.route).size===r.route.length&&
-r.route.every((p,n)=>
-Number.isInteger(p)&&p>=0&&p<16&&
-P.wheels[p].includes(P.clues[i].answer[n])&&
-(!n||neighbours[r.route[n-1]].includes(p))
-)))return false;
-
-const expected=Array.from({length:16},()=>new Set());
-c.solvedRoutes.forEach(r=>r.route.forEach(p=>expected[p].add(r.colour)));
-return expected.every((h,i)=>
-[...h].sort().join()===[...new Set(c.histories[i])].sort().join());
-}
-
-function restoreSaved(){
-let saved;
-try{
-saved=JSON.parse(localStorage.getItem(paintingKey)||"null");
-}catch(e){return}
-if(!saved||typeof saved!=="object")return;
-if(Array.isArray(saved.earned)){
-saved.earned.filter(validPaint).forEach(k=>earnedKeys.add(k));
-}
-const c=saved.completed;
-if(validCompleted(c)){
-c.solvedRoutes.forEach(r=>earnedKeys.add("c"+r.colour));
-c.histories.forEach(h=>{
-const a=[...new Set(h)].sort();
-if(a.length)earnedKeys.add(a.length===1?"c"+a[0]:"m"+a[0]+a[a.length-1]);
-});
-}
-buildPalette();
-if(saved.state&&typeof saved.state==="object"&&!Array.isArray(saved.state)){
-for(const el of paintParts){
-const id=el.dataset.part;
-if(earnedKeys.has(saved.state[id]))paintState[id]=saved.state[id];
-}
-}
-refreshPainting();
-if(!validCompleted(c))return;
-current=[...c.current];
-histories=c.histories.map(h=>new Set(h));
-solvedRoutes=c.solvedRoutes;
-solved=P.clues.map(c=>c.answer);
-clueIndex=P.clues.length;
-entered=true;
-connectionFinishing=true;
+document.getElementById("landingPaint").onclick=()=>{
+if(!rewardStage())return;
+activeDifficulty=null;
+puzzleComplete=true;
 setBusy(true);
-c.solvedRoutes.forEach((r,i)=>{
-r.route.forEach((p,n)=>remembered[p].add(P.clues[i].answer[n]));
-});
-document.querySelectorAll(".dot").forEach((d,i)=>d.classList.add("d"+(i+1)));
-entry.style.display="none";
+document.getElementById("chooseDifficulty").disabled=false;
+entry.hidden=true;
+game.hidden=false;
 game.classList.add("visible");
+board.hidden=true;
 controls.style.display="none";
 clueArea.style.display="none";
-render();
-renderBank();
-showFinal();
-}
+connection.style.display="none";
+document.querySelector(".how-to").style.display="none";
+bank.innerHTML="";
+message.textContent="";
+document.querySelector(".final-kicker").textContent="YOUR PLACE";
+document.querySelector(".final-title").textContent="A little place of your own";
+document.querySelector(".final-copy").textContent="Paint, add a detail, or simply enjoy your place.";
+final.classList.add("show");
+document.getElementById("rewardMessage").textContent="";
+document.getElementById("activeLabel").textContent="";
+openPainting();
+};
 
-renderClue();
-restoreSaved();
+connectionInput.oninput=()=>saveProgress();
+loadSaved();
+buildPalette();
+refreshPainting();
+updateRewardControls();
+updateChooser();
+game.hidden=true;
 </script>
 </body>
 </html>
